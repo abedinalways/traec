@@ -1,0 +1,416 @@
+[00:00:00.704] Server  LOG      ✓ Ready in 513ms
+[00:00:04.005] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve './globals.css'
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import "./globals.css";
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:04.914] Browser ERROR   uncaughtError: Error: ./src/app/layout.tsx:3:1
+Module not found: Can't resolve './globals.css'
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import "./globals.css";
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:05.089] Browser ERROR   ./src/app/layout.tsx:3:1
+Module not found: Can't resolve './globals.css'
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import "./globals.css";
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+https://nextjs.org/docs/messages/module-not-found
+[00:00:05.251] Browser ERROR   ./src/app/layout.tsx:3:1
+Module not found: Can't resolve './globals.css'
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import "./globals.css";
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+https://nextjs.org/docs/messages/module-not-found
+[00:00:13.385] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:18.760] Browser ERROR   ./src/app/layout.tsx:5:1
+Parsing ecmascript source code failed
+  3 | import 
+  4 |
+> 5 | const geistSans = Geist({
+    | ^^^^^
+  6 |   variable: "--font-geist-sans",
+  7 |   subsets: ["latin"],
+  8 | });
+
+Expected 'from', got 'const'
+[00:00:20.303] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve ''
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import ''
+    | ^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:20.303] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve ''
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import ''
+    | ^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:20.304] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve ''
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import ''
+    | ^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:20.304] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve ''
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import ''
+    | ^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:20.304] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve ''
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import ''
+    | ^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:20.305] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve ''
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import ''
+    | ^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:20.305] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve ''
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import ''
+    | ^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:20.759] Browser ERROR   ./src/app/layout.tsx:3:1
+Module not found: Can't resolve ''
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import ''
+    | ^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+https://nextjs.org/docs/messages/module-not-found
+[00:00:22.650] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve '../'
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import '../'
+    | ^^^^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:22.651] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve '../'
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import '../'
+    | ^^^^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:22.651] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve '../'
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import '../'
+    | ^^^^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:22.652] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve '../'
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import '../'
+    | ^^^^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:22.653] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve '../'
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import '../'
+    | ^^^^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:22.654] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve '../'
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import '../'
+    | ^^^^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:22.654] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve '../'
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import '../'
+    | ^^^^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:23.759] Browser ERROR   ./src/app/layout.tsx:3:1
+Module not found: Can't resolve '../'
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import '../'
+    | ^^^^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+https://nextjs.org/docs/messages/module-not-found
+[00:00:25.668] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve '../styles'
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import '../styles'
+    | ^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:25.669] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve '../styles'
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import '../styles'
+    | ^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:25.669] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve '../styles'
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import '../styles'
+    | ^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:25.669] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve '../styles'
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import '../styles'
+    | ^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:25.670] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve '../styles'
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import '../styles'
+    | ^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:25.671] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve '../styles'
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import '../styles'
+    | ^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:25.671] Server  ERROR    ⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve '../styles'
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import '../styles'
+    | ^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:26.760] Browser ERROR   ./src/app/layout.tsx:3:1
+Module not found: Can't resolve '../styles'
+  1 | import type { Metadata } from "next";
+  2 | import { Geist, Geist_Mono } from "next/font/google";
+> 3 | import '../styles'
+    | ^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const geistSans = Geist({
+  6 |   variable: "--font-geist-sans",
+
+https://nextjs.org/docs/messages/module-not-found
+[00:00:27.760] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:28.760] Browser WARN    Image with src "http://localhost:3000/vercel.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:05:07.801] Server  LOG      ✓ Compiled in 42ms
