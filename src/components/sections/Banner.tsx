@@ -4,9 +4,10 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 
+
 const Banner= () => {
   return (
-    <div className="bg-gradient-to-br from-orange-50 via-white to-white py-10">
+    <div className="bg-gradient-to-br from-orange-100 via-white to-white py-10">
       <div className="custom-container mx-auto px-4 md:px-0 py-8 lg:py-16">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           {/* Left Content */}
