@@ -1,0 +1,38 @@
+[
+  {
+    "id": "dj_services",
+    "name": "DJ Services",
+    "imageUrl": "https://placehold.co/600x400/D0F0C0/333333?text=DJ",
+    "bgColorClass": "bg-green-50"
+  },
+  {
+    "id": "decorators",
+    "name": "Decorators",
+    "imageUrl": "https://placehold.co/600x400/F0E0D0/333333?text=Decor",
+    "bgColorClass": "bg-amber-50"
+  },
+  {
+    "id": "catering",
+    "name": "Catering",
+    "imageUrl": "https://placehold.co/600x400/D0F0F0/333333?text=Food",
+    "bgColorClass": "bg-cyan-50"
+  },
+  {
+    "id": "rentals",
+    "name": "Rentals",
+    "imageUrl": "https://placehold.co/600x400/E0D0F0/333333?text=Rent",
+    "bgColorClass": "bg-indigo-50"
+  },
+  {
+    "id": "photography",
+    "name": "Photography",
+    "imageUrl": "https://placehold.co/600x400/F0D0E0/333333?text=Photo",
+    "bgColorClass": "bg-pink-50"
+  },
+  {
+    "id": "entertainment",
+    "name": "Entertainment",
+    "imageUrl": "https://placehold.co/600x400/D0D0F0/333333?text=Party",
+    "bgColorClass": "bg-violet-50"
+  }
+]
