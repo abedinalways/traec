@@ -1,6 +1,6 @@
-import Banner from "@/components/sections/Banner";
-import Featured from "@/components/sections/Featured";
-import Functions from "@/components/sections/Functions";
+import Banner from "@/components/home/Banner";
+import Featured from "@/components/home/Featured";
+import Functions from "@/components/home/Functions";
 
 export default function Home() {
   return (

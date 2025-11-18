@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Glory, Inter } from "next/font/google";
 import '../styles/globals.css'
-import Navbar from "@/components/layout/Navbar";
+import Navbar from "@/components/reusable/Navbar";
 
 const glory= Glory({
   variable: "--font-glory",
