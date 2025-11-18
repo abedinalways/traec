@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Glory, Inter } from "next/font/google";
 import '../styles/globals.css'
-import Navbar from "@/components/layout/Navbar";
+import Navbar from "@/components/reusable/Navbar";
 
 const glory= Glory({
   variable: "--font-glory",
@@ -41,7 +41,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${glory.variable} ${geistMono.variable} ${inter.variable} antialiased`}
       >
         <Navbar/>
-        <main className="">{children}</main>
+        <main className="mt-16">{children}</main>
 
       </body>
     </html>
