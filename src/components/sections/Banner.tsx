@@ -6,6 +6,7 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 
 
+
 const Banner= () => {
   return (
     <div className="bg-gradient-to-br from-orange-100 via-white to-white py-10">
