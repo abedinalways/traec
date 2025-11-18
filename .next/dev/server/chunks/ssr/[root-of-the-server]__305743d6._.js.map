@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 18, "column": 0}, "map": {"version":3,"sources":["file:///home/minhajul-abedin/Documents/Projects/trace/src/app/page.tsx"],"sourcesContent":["\n\nexport default function Home() {\n  return (\n    <div>\n        <h2>Home Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam odit, repellendus eum quaerat ad voluptates ipsam, quidem porro atque placeat natus aliquid esse consequuntur exercitationem reprehenderit nesciunt minus aliquam ea.</h2>\n    </div>\n  );\n}\n"],"names":[],"mappings":";;;;;;AAEe,SAAS;IACtB,qBACE,8OAAC;kBACG,cAAA,8OAAC;sBAAG;;;;;;;;;;;AAGZ"}}]
-}

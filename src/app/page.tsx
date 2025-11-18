@@ -1,17 +1,18 @@
-import Banner from "@/components/sections/Banner";
-import Experts from "@/components/sections/Experts";
-import Featured from "@/components/sections/Featured";
-import Functions from "@/components/sections/Functions";
-import Stories from "@/components/sections/Stories";
+import Banner from "@/components/home/Banner";
+import Experts from "@/components/home/Experts";
+import Featured from "@/components/home/Featured";
+import Functions from "@/components/home/Functions";
+import Stories from "@/components/home/Stories";
+
 
 export default function Home() {
   return (
     <div>
       <Banner />
       <Featured />
-      <Functions />
-      <Stories />
-      <Experts/>
+      <Functions/>
+      <Stories/>
+      <Experts />
     </div>
   );
 }

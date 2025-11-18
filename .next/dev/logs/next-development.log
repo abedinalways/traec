@@ -743,3 +743,76 @@ Import trace:
 [01:48:42.160] Server  LOG      ✓ Compiled in 21ms
 [01:48:50.563] Server  LOG      ✓ Compiled in 13ms
 [01:48:53.349] Server  LOG      ✓ Compiled in 15ms
+[01:55:35.658] Server  ERROR    ⨯ Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/server/app/page/build-manifest.json'
+[01:55:35.688] Server  LOG      ✓ Compiled in 16.5s
+[01:55:36.108] Server  ERROR   Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/server/app/page/build-manifest.json'
+[01:55:36.168] Server  ERROR   Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/routes-manifest.json'
+[01:55:36.198] Server  ERROR    ⨯ Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/server/app/page/app-paths-manifest.json'
+[01:55:36.225] Server  ERROR   Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/server/app/page/app-paths-manifest.json'
+[01:55:36.239] Server  ERROR   Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/routes-manifest.json'
+[01:55:36.261] Server  ERROR    ⨯ Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/server/app/page/app-paths-manifest.json'
+[01:55:36.282] Server  ERROR   Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/server/app/page/app-paths-manifest.json'
+[01:55:36.294] Server  ERROR   Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/routes-manifest.json'
+[01:55:36.316] Server  ERROR    ⨯ Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/server/app/page/app-paths-manifest.json'
+[01:55:36.336] Server  ERROR   Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/server/app/page/app-paths-manifest.json'
+[01:55:36.351] Server  ERROR   Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/routes-manifest.json'
+[01:55:36.378] Server  ERROR    ⨯ Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/server/app/page/app-paths-manifest.json'
+[01:55:36.396] Server  ERROR   Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/server/app/page/app-paths-manifest.json'
+[01:55:36.397] Browser ERROR   ./src/app/page.tsx:11:1
+Parsing ecmascript source code failed
+   9 | import Featured from "@/components/home/Featured";
+  10 | import Functions from "@/components/home/Functions";
+> 11 | >>>>>>> 4658a6db82ef9bf7743f931e8cc1f19a7eedd7e1
+     | ^^^^^^^
+  12 |
+  13 | export default function Home() {
+  14 |   return (
+
+Merge conflict marker encountered.
+[01:55:36.397] Browser ERROR   ./src/app/page.tsx:11:1
+Parsing ecmascript source code failed
+   9 | import Featured from "@/components/home/Featured";
+  10 | import Functions from "@/components/home/Functions";
+> 11 | >>>>>>> 4658a6db82ef9bf7743f931e8cc1f19a7eedd7e1
+     | ^^^^^^^
+  12 |
+  13 | export default function Home() {
+  14 |   return (
+
+Merge conflict marker encountered.
+[01:55:36.397] Browser ERROR   ./src/app/page.tsx:11:1
+Parsing ecmascript source code failed
+   9 | import Featured from "@/components/home/Featured";
+  10 | import Functions from "@/components/home/Functions";
+> 11 | >>>>>>> 4658a6db82ef9bf7743f931e8cc1f19a7eedd7e1
+     | ^^^^^^^
+  12 |
+  13 | export default function Home() {
+  14 |   return (
+
+Merge conflict marker encountered.
+[01:55:36.397] Browser ERROR   ./src/app/page.tsx:11:1
+Parsing ecmascript source code failed
+   9 | import Featured from "@/components/home/Featured";
+  10 | import Functions from "@/components/home/Functions";
+> 11 | >>>>>>> 4658a6db82ef9bf7743f931e8cc1f19a7eedd7e1
+     | ^^^^^^^
+  12 |
+  13 | export default function Home() {
+  14 |   return (
+
+Merge conflict marker encountered.
+[01:55:36.407] Server  ERROR   Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/routes-manifest.json'
+[01:55:36.434] Server  ERROR    ⨯ Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/server/app/page/app-paths-manifest.json'
+[01:55:36.450] Server  ERROR   Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/server/app/page/app-paths-manifest.json'
+[01:55:36.462] Server  ERROR   Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/routes-manifest.json'
+[01:55:36.487] Server  ERROR    ⨯ Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/server/app/page/app-paths-manifest.json'
+[01:55:36.506] Server  ERROR   Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/server/app/page/app-paths-manifest.json'
+[01:55:36.519] Server  ERROR   Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/routes-manifest.json'
+[01:55:36.539] Server  ERROR    ⨯ Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/server/app/page/app-paths-manifest.json'
+[01:55:36.561] Server  ERROR   Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/server/app/page/app-paths-manifest.json'
+[01:55:36.572] Server  ERROR   Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/routes-manifest.json'
+[01:55:36.597] Server  ERROR    ⨯ Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/server/app/page/app-paths-manifest.json'
+[01:55:36.618] Server  ERROR   Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/server/app/page/app-paths-manifest.json'
+[01:55:36.631] Server  ERROR   Error: ENOENT: no such file or directory, open '/home/minhajul-abedin/Documents/Projects/trace/.next/dev/routes-manifest.json'
+[01:56:14.680] Server  LOG      ✓ Compiled in 1ms
