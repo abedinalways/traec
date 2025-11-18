@@ -1,5 +1,6 @@
+import ExpertsCarousel from "../reusable/ExpertCarousel";
 
-import ExpertsCarousel from '../shared/ExpertCarousel';
+
 export default function Experts() {
   return (
     <div className="w-full mx-auto py-12 px-4 md:px-8 relative bg-[#FFFBF7]">
