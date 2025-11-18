@@ -3,7 +3,9 @@ import Experts from "@/components/home/Experts";
 import Featured from "@/components/home/Featured";
 import Functions from "@/components/home/Functions";
 import JoinAsProvider from "@/components/home/JoinAsProvider";
+import Locations from "@/components/home/Locations";
 import Stories from "@/components/home/Stories";
+import Testimonial from "@/components/home/Testimonial";
 
 
 export default function Home() {
@@ -14,7 +16,9 @@ export default function Home() {
       <Functions/>
       <Stories/>
       <Experts />
-      <JoinAsProvider/>
+      <JoinAsProvider />
+      <Locations />
+      <Testimonial/>
     </div>
   );
 }
