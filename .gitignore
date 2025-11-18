@@ -9,7 +9,7 @@ node_modules/
 .env.production.local
 
 # Next.js
-.next/
+.next/dev
 out/
 
 # Logs
