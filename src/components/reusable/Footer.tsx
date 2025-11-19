@@ -14,13 +14,14 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-// This component uses Tailwind CSS and shadcn-style UI imports (Button used as example).
-// Replace or remove shadcn imports if your project differs.
+interface FooterProps {
+  className?: string;
+}
 
-export default function Footer() {
+export default function Footer({ className }: FooterProps) {
   return (
-    <footer className="relative text-white">
-      {/* Background image (blurred/dimmed) - using the local path you provided */}
+    <footer className={`relative text-white ${className || ''}`}>
+      {/* Background image */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <Image
           src={'/images/footer.png'}
@@ -187,9 +188,9 @@ export default function Footer() {
             </div>
           </div>
         </div>
-            <div className="mt-8 border-t border-white/10 pt-6 text-xs text-gray-300 w-full text-center hidden md:flex justify-center">
-              <p>Copyright Evoke · All rights reserved.</p>
-            </div>
+        <div className="mt-8 border-t border-white/10 pt-6 text-xs text-gray-300 w-full text-center hidden md:flex justify-center">
+          <p>Copyright Evoke · All rights reserved.</p>
+        </div>
 
         {/* Small screen layout - make sure copyright aligned center */}
         <div className="mt-10 md:hidden text-center text-xs text-gray-300">
