@@ -1,8 +1,11 @@
 import React from 'react';
 import { Search, Star, CheckCircle2} from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+
 import Image from 'next/image';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+
+
 
 
 const Banner= () => {
@@ -35,7 +38,7 @@ const Banner= () => {
                   className="relative pl-12 pr-6 py-6 text-base border-0 focus:ring-0 focus:outline-none bg-transparent z-20 rounded-xl placeholder:text-gray-400"
                 />
               </div>
-              <Button className="btn-gradient text-white px-8 py-6 text-base font-semibold  rounded-xl z-20">
+      <Button className="btn-gradient text-white px-8 py-6 text-base font-semibold  rounded-xl z-20">
                 Find Event Services
               </Button>
             </div>
