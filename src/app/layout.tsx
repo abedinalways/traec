@@ -1,18 +1,19 @@
+/** @format */
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Glory, Inter } from "next/font/google";
-import '../styles/globals.css'
-import Navbar from "@/components/reusable/Navbar";
+import "../styles/globals.css";
 
-const glory= Glory({
+const glory = Glory({
   variable: "--font-glory",
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 const inter = Inter({
-  variable: '--font-inter',
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 const geistSans = Geist({
@@ -26,8 +27,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Evoke',
-  description: 'Event-Planning-Marketplace',
+  title: "Evoke",
+  description: "Event-Planning-Marketplace",
 };
 
 export default function RootLayout({
@@ -36,13 +37,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang='en'>
       <body
-        className={`${geistSans.variable} ${glory.variable} ${geistMono.variable} ${inter.variable} antialiased`}
-      >
-        <Navbar/>
-        <main className="mt-16">{children}</main>
-
+        className={`${geistSans.variable} ${glory.variable} ${geistMono.variable} ${inter.variable} antialiased`}>
+        <main className='mt-16'>{children}</main>
       </body>
     </html>
   );
