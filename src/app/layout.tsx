@@ -12,6 +12,7 @@ import {
 } from "next/font/google";
 import "../styles/globals.css";
 import "../styles/fonts.css";
+import { Toaster } from "sonner";
 
 const glory = Glory({
   variable: "--font-glory",
