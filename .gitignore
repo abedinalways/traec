@@ -32,3 +32,5 @@ build/
 .vscode/
 .idea/
 *.swp
+
+# sample line for resolve conflict, delete this line after seeing it
