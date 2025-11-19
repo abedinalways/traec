@@ -6,12 +6,13 @@ import Functions from "@/components/home/Functions";
 import JoinAsProvider from "@/components/home/JoinAsProvider";
 import Locations from "@/components/home/Locations";
 import Stories from "@/components/home/Stories";
+import Subscribe from "@/components/home/Subscribe";
 import Testimonial from "@/components/home/Testimonial";
 
 
 export default function Home() {
   return (
-    <div>
+    <div className="relative">
       <Banner />
       <Featured />
       <Functions/>
@@ -20,7 +21,10 @@ export default function Home() {
       <JoinAsProvider />
       <Locations />
       <Testimonial />
-      <FAQ/>
+      <FAQ />
+      <div className="absolute md:top-1474 md:right-108 top-2190">
+        <Subscribe />
+      </div>
     </div>
   );
 }

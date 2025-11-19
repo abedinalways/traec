@@ -167,3 +167,7 @@
    background: linear-gradient(115deg, #fffbf7 0%, #ffeae9 100%);
   opacity: 0.8;
 }
+
+.bg-gradient-email{
+  background: linear-gradient(90deg, #ffac47 0%, #ff2a24 100%);
+}
