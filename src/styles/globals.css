@@ -127,6 +127,9 @@
   margin: 0 auto;
 }
 
+.mt-negative-32 {
+  margin-top: -8rem !important;
+}
 /* Add this to your global CSS file (e.g., globals.css or index.css) */
 
 .btn-gradient {
