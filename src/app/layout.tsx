@@ -3,6 +3,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Glory, Inter } from "next/font/google";
 import "../styles/globals.css";
+import { Toaster } from "sonner";
 
 const glory = Glory({
   variable: "--font-glory",
@@ -37,10 +38,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <body
-        className={`${geistSans.variable} ${glory.variable} ${geistMono.variable} ${inter.variable} antialiased`}>
-        <main className='mt-16'>{children}</main>
+        className={`${geistSans.variable} ${glory.variable} ${geistMono.variable} ${inter.variable} antialiased`}
+      >
+        <main className="mt-16">
+          {children}
+          <Toaster/>
+        </main>
       </body>
     </html>
   );

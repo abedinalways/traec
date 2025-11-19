@@ -1,5 +1,6 @@
 /** @format */
 
+import Footer from "@/components/reusable/Footer";
 import Navbar from "@/components/reusable/Navbar";
 import React from "react";
 
@@ -12,7 +13,7 @@ export default function ClientLayout({
     <div className='flex flex-col min-h-screen'>
       <Navbar />
       <div className='flex-grow'>{children}</div>
-      {/* <Footer /> */}
+      <Footer/>
     </div>
   );
 }
