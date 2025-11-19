@@ -1,0 +1,70 @@
+[00:00:01.955] Server  LOG      ✓ Ready in 1314ms
+[00:00:14.191] Server  LOG      ○ Compiling / ...
+[00:00:16.169] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:16.726] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <SegmentViewNode type="layout" pagePath="layout.tsx">
+      <SegmentTrieNode>
+      <link>
+      <script>
+      <script>
+      <script>
+      <RootLayout>
+        <html lang="en">
+          <body className="geist_a715...">
+            <Navbar>
+              <header className="w-full fix...">
+                <div className="custom-con...">
+                  <LinkComponent>
+                  <nav>
+                  <div>
+                  <div>
+                  <div className="md:hidden ...">
+                    <Sheet>
+                      <Dialog data-slot="sheet">
+                        <DialogProvider scope={undefined} triggerRef={{current:null}} contentRef={{current:null}} ...>
+                          <SheetTrigger>
+                            <DialogTrigger data-slot="sheet-trigger">
+                              <Primitive.button type="button" aria-haspopup="dialog" aria-expanded={false} ...>
+                                <button
+                                  type="button"
+                                  aria-haspopup="dialog"
+                                  aria-expanded={false}
++                                 aria-controls="radix-_R_5lb_"
+-                                 aria-controls="radix-_R_llb_"
+                                  data-state="closed"
+                                  data-slot="sheet-trigger"
+                                  onClick={function handleEvent}
+                                  ref={function}
+                                >
+                          ...
+            ...
+
+[00:00:16.727] Browser WARN    Image with src "/images/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:00:16.968] Browser WARN    Image with src "/images/featured01.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:16.968] Browser WARN    Image with src "/images/featured02.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:16.968] Browser WARN    Image with src "/images/featured03.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:16.968] Browser WARN    Image with src "/images/featured04.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:16.968] Browser WARN    Image with src "/images/featured05.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:16.968] Browser WARN    Image with src "/images/featured06.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:16.968] Browser WARN    Image with src "/images/ellipse.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:07:37.319] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:37.606] Browser WARN    Image with src "/images/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:07:37.759] Browser WARN    Image with src "/images/featured01.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:07:37.759] Browser WARN    Image with src "/images/featured02.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:07:37.759] Browser WARN    Image with src "/images/featured03.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:07:37.759] Browser WARN    Image with src "/images/featured04.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:07:37.759] Browser WARN    Image with src "/images/featured05.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:07:37.759] Browser WARN    Image with src "/images/featured06.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:07:37.759] Browser WARN    Image with src "/images/ellipse.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
