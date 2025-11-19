@@ -150,7 +150,7 @@
   cursor: not-allowed;
   opacity: 0.6;
 }
-.bg-gradient {
+.bg-gradient{
   background: linear-gradient(115deg, #fde7d3 0%, #f8c3a4 15%, #ffffff 80%);
   opacity: 0.6;
 }
@@ -161,4 +161,9 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   text-fill-color: transparent;
+}
+
+.background-color{
+   background: linear-gradient(115deg, #fffbf7 0%, #ffeae9 100%);
+  opacity: 0.8;
 }

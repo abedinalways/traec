@@ -1,5 +1,6 @@
 import Banner from "@/components/home/Banner";
 import Experts from "@/components/home/Experts";
+import FAQ from "@/components/home/FAQ";
 import Featured from "@/components/home/Featured";
 import Functions from "@/components/home/Functions";
 import JoinAsProvider from "@/components/home/JoinAsProvider";
@@ -18,7 +19,8 @@ export default function Home() {
       <Experts />
       <JoinAsProvider />
       <Locations />
-      <Testimonial/>
+      <Testimonial />
+      <FAQ/>
     </div>
   );
 }
