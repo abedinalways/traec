@@ -19,6 +19,7 @@ interface EventBannerProps {
   className?: string;
   decorationLeft?: string; // image url
   decorationRight?: string; // image url
+  backgroundImage?: string;
 }
 
 export function Banner({
@@ -29,13 +30,24 @@ export function Banner({
   className,
   decorationLeft,
   decorationRight,
+  backgroundImage,
 }: EventBannerProps) {
   return (
     <div
       className={cn(
-        'relative w-full py-20 flex flex-col items-center text-center bg-gradient-to-r from-orange-50 to-white overflow-hidden',
+        'relative w-full py-20 flex flex-col items-center text-center  overflow-hidden',
         className
       )}
+      style={
+        backgroundImage
+          ? {
+              backgroundImage: `url(${backgroundImage})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }
+          : {}
+      }
+
     >
       {/* Left Decoration */}
       {decorationLeft && (
