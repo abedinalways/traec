@@ -42,7 +42,7 @@ export default function AccountDashboard() {
     {
       icon: Bell,
       title: "Notification Preferences",
-      href: "/profile/notification",
+      href: "/profile/notifications",
       desc: "Control how you receive updates",
     },
     {
