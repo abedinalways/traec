@@ -10,7 +10,7 @@ export default function page() {
         href={"/profile"}
         className="flex items-center max-w-38 rounded-sm p-2 text-sm border  text-gray-600 hover:text-black mb-4"
       >
-        <MdKeyboardArrowLeft size={24} className="pt-1" />
+        <MdKeyboardArrowLeft size={24} />
         Back To Account
       </Link>
 
@@ -71,7 +71,7 @@ export default function page() {
         <div>
           <label className="text-sm text-gray-700">Bio</label>
           <textarea
-            rows="3"
+            rows={3}
             placeholder="e.g. Party enthusiast and mom who loves creating memorable celebrations for family and friends..."
             className="mt-1 w-full rounded-md border px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/10"
           ></textarea>
