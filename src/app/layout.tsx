@@ -11,8 +11,6 @@ import {
   Open_Sans,
 } from "next/font/google";
 import "../styles/globals.css";
-import "../styles/fonts.css";
-import { Toaster } from "sonner";
 
 const glory = Glory({
   variable: "--font-glory",
@@ -62,11 +60,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang='en'>
       <body
-        className={`${geistSans.variable} ${glory.variable} ${geistMono.variable} ${inter.variable} ${manrope.variable} ${openSans.variable} ${lexend.variable} antialiased`}
-      >
-        <main className="mt-16">{children}</main>
+        className={`${geistSans.variable} ${glory.variable} ${geistMono.variable} ${inter.variable} antialiased`}>
+        <main className='mt-16'>{children}</main>
       </body>
     </html>
   );
