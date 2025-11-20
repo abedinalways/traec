@@ -36,7 +36,7 @@ export default function AccountDashboard() {
     {
       icon: Clock,
       title: "Order History",
-      href: "/profile/order-history",
+      href: "/profile/orders-history",
       desc: "See your past events and bookings",
     },
     {
