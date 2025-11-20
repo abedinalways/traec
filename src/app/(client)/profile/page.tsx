@@ -1,7 +1,6 @@
 import { Card } from "@/components/ui/card";
 import {
   ChevronRight,
-  CheckCircle,
   Pencil,
   Settings,
   CreditCard,
@@ -10,10 +9,6 @@ import {
   HelpCircle,
   LogOut,
 } from "lucide-react";
-import Image from "next/image";
-import { HiOutlineCalendarDateRange } from "react-icons/hi2";
-import { GrLocation } from "react-icons/gr";
-import { MdOutlineMailOutline } from "react-icons/md";
 import Link from "next/link";
 import ProfileView from "@/components/reusable/ProfileView";
 

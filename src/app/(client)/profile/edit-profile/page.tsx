@@ -97,13 +97,3 @@ export default function page() {
     </div>
   );
 }
-
-/* Placeholder Component - replace with your actual code */
-function ProfileImageSection() {
-  return (
-    <div className="text-gray-400">
-      {/* Replace this with your real image upload section */}
-      Your Profile Image Section Goes Here
-    </div>
-  );
-}

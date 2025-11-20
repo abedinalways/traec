@@ -7,8 +7,8 @@ import { Trash2, CircleAlert } from "lucide-react";
 import { ActionDialog } from "@/components/reusable/ActionDialog";
 
 export default function Page() {
-  const [openDeactivate, setOpenDeactivate] = useState(false);
-  const [openDelete, setOpenDelete] = useState(false);
+  const [isDeactivateDialogModal, setIsDeactivateDialogModal] = useState(false);
+  const [isDeleteDialogModal, setIsDeleteDialogModal] = useState(false);
 
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-10">
@@ -81,7 +81,7 @@ export default function Page() {
         </div>
 
         <button
-          onClick={() => setOpenDeactivate(true)}
+          onClick={() => setIsDeactivateDialogModal(true)}
           className="border rounded-md cursor-pointer px-4 py-2 hover:bg-gray-50"
         >
           Deactivate
@@ -98,17 +98,16 @@ export default function Page() {
         </div>
 
         <button
-          onClick={() => setOpenDelete(true)}
+          onClick={() => setIsDeleteDialogModal(true)}
           className="bg-black text-white cursor-pointer rounded-md px-4 py-2 hover:bg-black/90"
         >
           Delete Account
         </button>
       </div>
 
-      {/* Reusable Deactivate Dialog */}
       <ActionDialog
-        open={openDeactivate}
-        setOpen={setOpenDeactivate}
+        open={isDeactivateDialogModal}
+        setOpen={setIsDeactivateDialogModal}
         icon={<CircleAlert className="h-7 w-7 text-red-500" />}
         title="Account Deactivate"
         description="Are you sure you want to Deactivate your Account?"
@@ -118,10 +117,9 @@ export default function Page() {
         }}
       />
 
-      {/* Reusable Delete Dialog */}
       <ActionDialog
-        open={openDelete}
-        setOpen={setOpenDelete}
+        open={isDeleteDialogModal}
+        setOpen={setIsDeleteDialogModal}
         icon={<Trash2 className="h-7 w-7 text-red-500" />}
         title="Account Delete"
         description="Are you sure you want to Delete your Account?"

@@ -3,7 +3,7 @@
 import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
-interface ActionDialogProps {
+interface IActionDialogProps {
   open: boolean;
   setOpen: (value: boolean) => void;
   icon: React.ReactNode;
@@ -23,7 +23,7 @@ export function ActionDialog({
   confirmLabel,
   cancelLabel = "Cancel",
   onConfirm,
-}: ActionDialogProps) {
+}: IActionDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="py-8 max-w-[384px]! rounded-2xl">
