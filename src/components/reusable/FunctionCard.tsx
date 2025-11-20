@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 // Import Lucide icons to match the design style
-import { Search, Users, Calendar, Star, LucideIcon } from 'lucide-react';
-import Image from 'next/image';
+import { Search, Users, Calendar, Star, LucideIcon } from "lucide-react";
+import Image from "next/image";
 
 // --- Interfaces and Data (Updated for array type) ---
 
@@ -24,32 +24,32 @@ const iconMap = {
 // Use the data structure provided by the user (corrected to be an array of CardItem)
 const cards: CardItem[] = [
   {
-    step: '01.',
-    title: 'Browse Evoke',
-    icon: 'Search',
+    step: "01.",
+    title: "Browse Evoke",
+    icon: "Search",
     description:
-      'Review provider profiles, check availability, and compare prices. View photos and read customer reviews.',
+      "Review provider profiles, check availability, and compare prices. View photos and read customer reviews.",
   },
   {
-    step: '02.',
-    title: 'Compare & Choose',
-    icon: 'Users',
+    step: "02.",
+    title: "Compare & Choose",
+    icon: "Users",
     description:
-      'Review provider profiles, check availability, and compare prices. View photos and read customer reviews.',
+      "Review provider profiles, check availability, and compare prices. View photos and read customer reviews.",
   },
   {
-    step: '03.',
-    title: 'Book & Schedule',
-    icon: 'Calendar',
+    step: "03.",
+    title: "Book & Schedule",
+    icon: "Calendar",
     description:
-      'Secure your rental with easy online booking. Schedule delivery, setup, and pickup times that work for you.',
+      "Secure your rental with easy online booking. Schedule delivery, setup, and pickup times that work for you.",
   },
   {
-    step: '04.',
-    title: 'Party & Review',
-    icon: 'Star',
+    step: "04.",
+    title: "Party & Review",
+    icon: "Star",
     description:
-      'Enjoy your stress-free event while we handle the setup and takedown. Your guests will have a blast!',
+      "Enjoy your stress-free event while we handle the setup and takedown. Your guests will have a blast!",
   },
 ];
 
@@ -63,7 +63,7 @@ const ProcessCard: React.FC<{ data: CardItem }> = ({ data }) => {
 
   // Custom Tailwind class to generate the soft orange gradient border effect
   const gradientBorderClass =
-    'p-[1px] rounded-2xl bg-gradient-to-br from-orange-200/50 via-red-200/80 to-orange-100/90';
+    "p-[1px] rounded-2xl bg-gradient-to-br from-orange-200/50 via-red-200/80 to-orange-100/90";
 
   return (
     // Outer div creates the gradient border effect
@@ -90,8 +90,8 @@ const ProcessCard: React.FC<{ data: CardItem }> = ({ data }) => {
             style={{
               // Gradient to match the soft glow around the icon circle
               background:
-                'radial-gradient(circle at 50% 50%, rgba(255, 204, 189, 0.5), rgba(255, 255, 255, 0) 70%)',
-              boxShadow: '0 0 10px rgba(255, 170, 150, 0.3)',
+                "radial-gradient(circle at 50% 50%, rgba(255, 204, 189, 0.5), rgba(255, 255, 255, 0) 70%)",
+              boxShadow: "0 0 10px rgba(255, 170, 150, 0.3)",
             }}
           />
 
@@ -133,7 +133,7 @@ const FunctionCard = () => {
       <div className="w-full max-w-7xl">
         {/* The responsive grid layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {cards.map(stepData => (
+          {cards.map((stepData) => (
             <ProcessCard key={stepData.step} data={stepData} />
           ))}
         </div>
