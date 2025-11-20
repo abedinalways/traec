@@ -5,56 +5,13 @@ import React, { useState } from "react";
 import { CiLocationOn } from "react-icons/ci";
 import { FaStar } from "react-icons/fa";
 import { BsTrainFrontFill } from "react-icons/bs";
+import AboutProvider from "@/app/(client)/_components/providers/AboutProvider";
+import Projects from "@/app/(client)/_components/providers/Projects";
+import Reviews from "@/app/(client)/_components/providers/Reviews";
+import Services from "@/app/(client)/_components/providers/Services";
 
 // JSON Data
 const overViewData = {
-  features: [
-    {
-      title: "Boost Visibility with Vinyl Banners",
-      description:
-        "Use our simple design tool to create your banner Use our simple design tool to create your banner Use our simple design tool to create your banner…",
-    },
-    {
-      title: "Durable & Weather-Resistant",
-      description:
-        "Use our simple design tool to create your banner Use our simple design tool to create your banner Use our simple design tool to create your banner",
-    },
-    {
-      title: "Simple to Design & Display",
-      description:
-        "Use our simple design tool to create your banner Use our simple design tool to create your banner Use our simple design tool to create your banner",
-    },
-  ],
-  specifications: [
-    { name: "Material", detail: "Acrylic glass" },
-    {
-      name: "Colors",
-      detail: "Clear, Black, Transparent Black, White, Mirror Gold, Frosted",
-    },
-    {
-      name: "Thickness Options",
-      detail: '⅛" (0.125"), ¼" (0.25"), ⅜" (0.375")',
-    },
-    { name: "Size Range", detail: 'Minimum: 4" x 4", Maximum: 48" x 96"' },
-    {
-      name: "Printing Surface",
-      detail: "Standard printing, Second-surface printing (clear only)",
-    },
-    {
-      name: "Printing Sides",
-      detail: "Single-sided (all colors), Double-sided (black only)",
-    },
-    {
-      name: "Predrilled Holes",
-      detail: "Available in multiple placement options",
-    },
-    { name: "Standoff Options", detail: "Silver, Black, Gold" },
-    {
-      name: "Installation Accessories",
-      detail: "Command strips, Easel backs, Suction cup and hook",
-    },
-    { name: "Lifespan", detail: "15+ years indoors, 5+ years outdoors" },
-  ],
   reviews: [
     {
       id: 20,
@@ -62,26 +19,21 @@ const overViewData = {
       image: "https://i.ibb.co.com/ycw3xZCF/Rectangle-19-3.png",
       location: "Los Angeles, CA",
       date: "2022",
-      rating: 4.9,
+      rating: 3,
       reviews: 45,
       category: "Anniversary",
+      likes: 13,
       name: "Kathryn Murphy",
+      serviceName: "Kids Birthday Party DJ Package",
       description:
         "Professional DJ with 8+ years of experience specializing in children's parties, weddings, and corporate events.  I bring high-energy entertainment with age-appropriate music and interactive games that keep the party going",
     },
-    // {
-    //   name: "Kathryn Murphy",
-    //   date: "23 June, 2024",
-    //   rating: 5,
-    //   description:
-    //     "Professional DJ with 8+ years of experience specializing in children's parties, weddings, and corporate events.  I bring high-energy entertainment with age-appropriate music and interactive games that keep the party going",
-    // },
   ],
 };
 
 export default function ProvidersDetailsPage() {
   const [activeTab, setActiveTab] = useState<
-    "Services" | "reviews" | "Projects" | "About"
+    "Services" | "Reviews" | "Projects" | "About"
   >("Services");
   return (
     <div>
@@ -160,9 +112,9 @@ export default function ProvidersDetailsPage() {
                 </button>
 
                 <button
-                  onClick={() => setActiveTab("reviews")}
+                  onClick={() => setActiveTab("Reviews")}
                   className={`whitespace-nowrap pb-2 ${
-                    activeTab === "reviews"
+                    activeTab === "Reviews"
                       ? "text-blue-600 border-b-2 border-blue-600"
                       : "text-gray-500 hover:text-black"
                   }`}>
@@ -191,108 +143,17 @@ export default function ProvidersDetailsPage() {
               <div className='w-full h-px -mt-2 bg-gray-300' />
             </div>
 
-            {/* ================= OVERVIEW CONTENT ================= */}
-            {activeTab === "Services" && (
-              <div className='px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 pt-10'>
-                <div className='space-y-6 sm:space-y-8'>
-                  {overViewData.features.map((feature, index) => (
-                    <div key={index}>
-                      <h3 className='text-xl sm:text-2xl font-semibold text-gray-900'>
-                        {feature.title}
-                      </h3>
-                      <p className='mt-3 text-gray-600 leading-relaxed max-w-lg'>
-                        {feature.description}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className='flex justify-center items-center bg-gray-100 rounded-xl p-4'>
-                  <Image
-                    src='https://i.ibb.co.com/bMnhwC9c/Ellipse-71.png'
-                    alt='Vinyl Banner'
-                    width={600}
-                    height={400}
-                    className='object-contain w-full h-auto'
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* ================= SPECIFICATIONS CONTENT ================= */}
-            {activeTab === "Projects" && (
-              <div className='container mx-auto px-4 sm:px-6 overflow-x-auto pt-10'>
-                <table className='min-w-full text-sm text-left text-gray-900'>
-                  <thead className='bg-gray-100'>
-                    <tr>
-                      <th className='px-4 py-3 font-medium text-gray-700 border-b'>
-                        Specification
-                      </th>
-                      <th className='px-4 py-3 font-medium text-gray-700 border-b'>
-                        Details
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {overViewData.specifications.map((spec, index) => (
-                      <tr
-                        key={index}
-                        className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                        <td className='px-4 py-3 border-b'>{spec.name}</td>
-                        <td className='px-4 py-3 border-b'>{spec.detail}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
+            {/* ================= Services CONTENT ================= */}
+            {activeTab === "Services" && <Services />}
 
             {/* ================= REVIEWS CONTENT ================= */}
-            {activeTab === "reviews" && (
-              <div className='container mx-auto px-4 sm:px-6 pt-10'>
-                {/* Existing Reviews */}
-                <div className='space-y-6 mt-6'>
-                  {overViewData.reviews.map((review, index) => (
-                    <div
-                      key={index}
-                      className='p-4 border-b border-gray-300 space-y-3'>
-                      <div className='flex'>
-                        {[...Array(5)].map((_, i) => (
-                          <span
-                            key={i}
-                            className={`text-xl ${
-                              i < review.rating
-                                ? "text-yellow-400"
-                                : "text-gray-300"
-                            }`}>
-                            ★
-                          </span>
-                        ))}
-                      </div>
+            {activeTab === "Reviews" && <Reviews />}
 
-                      <div className='flex gap-3 items-center'>
-                        <Image
-                          src='https://i.ibb.co.com/bMnhwC9c/Ellipse-71.png'
-                          alt='Reviewer'
-                          width={52}
-                          height={52}
-                          className='object-contain'
-                        />
+            {/* ================= Projects CONTENT ================= */}
+            {activeTab === "Projects" && <Projects />}
 
-                        <div>
-                          <h3 className='font-semibold text-lg'>
-                            {review.name}
-                          </h3>
-                          <p className='text-sm text-gray-500'>{review.date}</p>
-                        </div>
-                      </div>
-
-                      <p className='text-gray-700'>{review.description}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            {/* ================= About CONTENT ================= */}
+            {activeTab === "About" && <AboutProvider />}
           </div>
         </div>
 
