@@ -5,20 +5,27 @@ import Testimonial from "../../../components/home/Testimonial";
 
 export default function HowItWorks() {
   return (
-    <main className="min-h-screen">
-      
-       
-       <Howbanner
-       title="How Evoke Works"
-       subtitle="From browsing to bouncing in just 4 simple steps. We make renting evokes easy, safe, and stress-free for your perfect party."
-       
-       decorationLeft="/images/banner/right.png"
-       decorationRight="/images/banner/left.png"
-       
-     />
-      <Main />
-      <Banner />
-      <Testimonial />
+    <main className="min-h-screen w-full overflow-x-hidden px-4 sm:px-6 md:px-10 lg:px-20 xl:px-32 py-6 space-y-14">
+
+      <Howbanner
+        title="How Evoke Works"
+        subtitle="From browsing to bouncing in just 4 simple steps. We make renting evokes easy, safe, and stress-free for your perfect party."
+        decorationLeft="/images/banner/right.png"
+        decorationRight="/images/banner/left.png"
+      />
+
+      <div className="w-full max-w-7xl mx-auto overflow-x-hidden">
+        <Main />
+      </div>
+
+      <div className="w-full max-w-7xl mx-auto overflow-x-hidden">
+        <Banner />
+      </div>
+
+      <div className="w-full max-w-7xl mx-auto mb-10 overflow-x-hidden">
+        <Testimonial />
+      </div>
+
     </main>
   );
 }
