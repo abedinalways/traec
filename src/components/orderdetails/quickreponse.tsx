@@ -18,24 +18,26 @@ export default function QuickResponse({ onSend }: QuickResponseProps) {
   };
 
   return (
-    <div className="w-full border rounded-xl p-5 bg-white shadow-sm">
-      
+    <div className="w-full max-w-4xl mx-auto border rounded-xl p-5 bg-white shadow-sm">
+
       {/* Header */}
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2">
         <div className="flex items-center gap-2">
           <Image
-            src="/images/avataro.png" // You can replace with your avatar
+            src="/images/avataro.png"
             alt="user"
             width={30}
             height={30}
             className="rounded-full"
           />
-          <span className="font-medium text-gray-700">Use a quick response</span>
+          <span className="font-medium text-gray-700 text-sm sm:text-base">
+            Use a quick response
+          </span>
         </div>
 
-        <div className="text-xs text-gray-500">
+        <div className="text-[10px] sm:text-xs text-gray-500 flex flex-wrap gap-1 sm:gap-2">
           <span>1:34 PM local time</span>
-          <span className="mx-2">|</span>
+          <span className="mx-1 sm:mx-2">|</span>
           <span>Last seen 1 minute ago</span>
         </div>
       </div>
@@ -61,7 +63,7 @@ export default function QuickResponse({ onSend }: QuickResponseProps) {
       </div>
 
       {/* Footer Icons + Send */}
-      <div className="flex justify-between items-center mt-3">
+      <div className="flex justify-between items-center mt-3 flex-wrap gap-3">
         <div className="flex items-center gap-4 text-gray-500">
           <Paperclip className="h-5 w-5 cursor-pointer" />
           <Smile className="h-5 w-5 cursor-pointer" />
@@ -72,6 +74,7 @@ export default function QuickResponse({ onSend }: QuickResponseProps) {
           className="
             flex items-center gap-2 bg-black text-white 
             px-5 py-2 rounded-full hover:bg-gray-800 transition
+            text-sm
           "
         >
           Send

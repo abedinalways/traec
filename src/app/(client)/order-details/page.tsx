@@ -6,9 +6,9 @@ import RightCard from "@/components/orderdetails/rightcard";
 
 export default function OrderdetailsPage() {
   return (
-    <main className=" custom-container min-h-screen bg-white px-4 sm:px-6 md:px-10 lg:px-16 py-8">
+    <main className="custom-container min-h-screen bg-white px-4 sm:px-6 md:px-10 lg:px-16 py-8 overflow-x-hidden">
 
-      {/* HEADER BREADCRUMB (Optional if you already have) */}
+      {/* HEADER BREADCRUMB */}
       <p className="text-sm text-gray-500 mb-6">
         My orders <span className="text-gray-400">›</span> Order Details
       </p>
@@ -36,22 +36,21 @@ export default function OrderdetailsPage() {
               { label: "In Progress", time: "Dec 15, 05:50 PM", status: "done" },
               { label: "Complete order", time: "Dec 15, 05:50 PM", status: "pending" },
             ]}
-            isEventOngoing={true}
-            clientCompletion="pending"
-            providerCompletion="pending"
-            onComplete={() => console.log("Event marked completed")}
           />
         </div>
 
       </div>
 
-      {/* QUICK RESPONSE BOX UNDER BOTH COLUMNS */}
-      <div className=" custom-container mt-6 pl-14 pr-120 ">
-        <QuickResponse
-          onSend={(message) => {
-            console.log("Sent message:", message);
-          }}
-        />
+      {/* QUICK RESPONSE (Perfectly aligned with MainOrder width) */}
+      <div className="custom-container  mt-10 lg:col-span-2 max-w-3xl max-w-full">
+        <div className="max-w-3xl w-full"> 
+          {/*  same width as the MainOrder column */}
+          <QuickResponse
+            onSend={(message) => {
+              console.log("Sent message:", message);
+            }}
+          />
+        </div>
       </div>
 
     </main>
