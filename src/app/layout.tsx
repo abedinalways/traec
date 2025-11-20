@@ -1,15 +1,7 @@
 /** @format */
 
 import type { Metadata } from "next";
-import {
-  Geist,
-  Geist_Mono,
-  Glory,
-  Inter,
-  Lexend,
-  Manrope,
-  Open_Sans,
-} from "next/font/google";
+import { Geist, Geist_Mono, Glory, Inter } from "next/font/google";
 import "../styles/globals.css";
 
 const glory = Glory({
@@ -22,21 +14,6 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
-});
-
-const manrope = Manrope({
-  variable: "--font-manrope",
-  subsets: ["latin"],
-});
-
-const openSans = Open_Sans({
-  variable: "--font-open-sans",
-  subsets: ["latin"],
-});
-
-const lexend = Lexend({
-  variable: "--font-lexend",
-  subsets: ["latin"],
 });
 
 const geistSans = Geist({
@@ -60,10 +37,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <body
-        className={`${geistSans.variable} ${glory.variable} ${geistMono.variable} ${inter.variable} antialiased`}>
-        <main className='mt-16'>{children}</main>
+        className={`${geistSans.variable} ${glory.variable} ${geistMono.variable} ${inter.variable} antialiased`}
+      >
+        <main className="mt-16">{children}</main>
       </body>
     </html>
   );

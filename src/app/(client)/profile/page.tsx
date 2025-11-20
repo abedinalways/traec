@@ -35,7 +35,7 @@ export default function AccountDashboard() {
     {
       icon: CreditCard,
       title: "Payment Method",
-      href: "/profile/payment-method",
+      href: "/profile/payment-methods",
       desc: "Manage your billing information",
     },
     {
@@ -99,7 +99,7 @@ export default function AccountDashboard() {
               <p className="text-sm text-gray-500">Sign out of your account</p>
             </div>
           </div>
-          <button className="px-4 py-1 cursor-pointer bg-black text-[16px] font-medium text-white rounded-lg hover:bg-gray-800 transition">
+          <button className="px-4 py-2 cursor-pointer bg-black text-[16px] font-medium text-white rounded-lg hover:bg-gray-800 transition">
             Logout
           </button>
         </Card>
