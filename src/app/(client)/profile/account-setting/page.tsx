@@ -1,7 +1,15 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import { MdKeyboardArrowLeft } from "react-icons/md";
+import { Trash2, CircleAlert } from "lucide-react";
+import { ActionDialog } from "@/components/reusable/ActionDialog";
 
 export default function Page() {
+  const [isDeactivateDialogModal, setIsDeactivateDialogModal] = useState(false);
+  const [isDeleteDialogModal, setIsDeleteDialogModal] = useState(false);
+
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-10">
       {/* Back Button */}
@@ -9,7 +17,7 @@ export default function Page() {
         href={"/profile"}
         className="flex items-center max-w-38 rounded-sm p-2 text-sm border text-gray-600 hover:text-black mb-4"
       >
-        <MdKeyboardArrowLeft size={24} className="pt-1" />
+        <MdKeyboardArrowLeft size={24} />
         Back To Account
       </Link>
 
@@ -48,19 +56,22 @@ export default function Page() {
             </label>
             <input
               type="password"
-              placeholder="Enter Confirm password"
+              placeholder="Enter confirm password"
               className="mt-1 w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black/10"
             />
           </div>
         </div>
 
         {/* Save Button */}
-        <button className="bg-black text-white px-6 py-2 rounded-md hover:bg-black/90">
+        <button
+          type="button"
+          className="bg-black text-white px-6 py-2 rounded-md hover:bg-black/90"
+        >
           Save Changes
         </button>
       </form>
 
-      {/* Deactivate Account */}
+      {/* Deactivate Account Section */}
       <div className="mt-12 border rounded-xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h3 className="font-medium">Deactivate Account</h3>
@@ -69,12 +80,15 @@ export default function Page() {
           </p>
         </div>
 
-        <button className="border rounded-md px-4 py-2 hover:bg-gray-50">
+        <button
+          onClick={() => setIsDeactivateDialogModal(true)}
+          className="border rounded-md cursor-pointer px-4 py-2 hover:bg-gray-50"
+        >
           Deactivate
         </button>
       </div>
 
-      {/* Delete Account */}
+      {/* Delete Account Section */}
       <div className="mt-6 border rounded-xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h3 className="font-medium">Delete Account</h3>
@@ -83,10 +97,37 @@ export default function Page() {
           </p>
         </div>
 
-        <button className="bg-black text-white rounded-md px-4 py-2 hover:bg-black/90">
+        <button
+          onClick={() => setIsDeleteDialogModal(true)}
+          className="bg-black text-white cursor-pointer rounded-md px-4 py-2 hover:bg-black/90"
+        >
           Delete Account
         </button>
       </div>
+
+      <ActionDialog
+        open={isDeactivateDialogModal}
+        setOpen={setIsDeactivateDialogModal}
+        icon={<CircleAlert className="h-7 w-7 text-red-500" />}
+        title="Account Deactivate"
+        description="Are you sure you want to Deactivate your Account?"
+        confirmLabel="Deactivate"
+        onConfirm={() => {
+          console.log("Account deactivated");
+        }}
+      />
+
+      <ActionDialog
+        open={isDeleteDialogModal}
+        setOpen={setIsDeleteDialogModal}
+        icon={<Trash2 className="h-7 w-7 text-red-500" />}
+        title="Account Delete"
+        description="Are you sure you want to Delete your Account?"
+        confirmLabel="Delete"
+        onConfirm={() => {
+          console.log("Account deleted");
+        }}
+      />
     </div>
   );
 }

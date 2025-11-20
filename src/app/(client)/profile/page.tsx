@@ -1,7 +1,7 @@
+"use client";
 import { Card } from "@/components/ui/card";
 import {
   ChevronRight,
-  CheckCircle,
   Pencil,
   Settings,
   CreditCard,
@@ -10,55 +10,54 @@ import {
   HelpCircle,
   LogOut,
 } from "lucide-react";
-import Image from "next/image";
-import { HiOutlineCalendarDateRange } from "react-icons/hi2";
-import { GrLocation } from "react-icons/gr";
-import { MdOutlineMailOutline } from "react-icons/md";
 import Link from "next/link";
 import ProfileView from "@/components/reusable/ProfileView";
+import { ActionDialog } from "@/components/reusable/ActionDialog";
+import { useState } from "react";
+import { IoMdLogOut } from "react-icons/io";
 
+const menu = [
+  {
+    icon: Pencil,
+    title: "Edit Profile",
+    href: "/profile/edit-profile",
+    desc: "Update your personal information",
+  },
+  {
+    icon: Settings,
+    title: "Account Settings",
+    href: "/profile/account-setting",
+
+    desc: "Privacy, security, and preferences",
+  },
+  {
+    icon: CreditCard,
+    title: "Payment Method",
+    href: "/profile/payment-methods",
+    desc: "Manage your billing information",
+  },
+  {
+    icon: Clock,
+    title: "Order History",
+    href: "/profile/orders-history",
+    desc: "See your past events and bookings",
+  },
+  {
+    icon: Bell,
+    title: "Notification Preferences",
+    href: "/profile/notifications",
+    desc: "Control how you receive updates",
+  },
+  {
+    icon: HelpCircle,
+    title: "Help & Support",
+    href: "/profile/help-support",
+
+    desc: "Get help or customer service",
+  },
+];
 export default function AccountDashboard() {
-  const menu = [
-    {
-      icon: Pencil,
-      title: "Edit Profile",
-      href: "/profile/edit-profile",
-      desc: "Update your personal information",
-    },
-    {
-      icon: Settings,
-      title: "Account Settings",
-      href: "/profile/account-setting",
-
-      desc: "Privacy, security, and preferences",
-    },
-    {
-      icon: CreditCard,
-      title: "Payment Method",
-      href: "/profile/payment-method",
-      desc: "Manage your billing information",
-    },
-    {
-      icon: Clock,
-      title: "Order History",
-      href: "/profile/order-history",
-      desc: "See your past events and bookings",
-    },
-    {
-      icon: Bell,
-      title: "Notification Preferences",
-      href: "/profile/notification",
-      desc: "Control how you receive updates",
-    },
-    {
-      icon: HelpCircle,
-      title: "Help & Support",
-      href: "/profile/help-support",
-
-      desc: "Get help or customer service",
-    },
-  ];
-
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   return (
     <div className="w-full flex justify-center py-10 px-4">
       <div className="w-full max-w-[780px] space-y-8">
@@ -99,11 +98,25 @@ export default function AccountDashboard() {
               <p className="text-sm text-gray-500">Sign out of your account</p>
             </div>
           </div>
-          <button className="px-4 py-1 cursor-pointer bg-black text-[16px] font-medium text-white rounded-lg hover:bg-gray-800 transition">
+          <button
+            onClick={() => setIsLogoutModalOpen(true)}
+            className="px-4 py-2 cursor-pointer bg-black text-[16px] font-medium text-white rounded-lg hover:bg-gray-800 transition"
+          >
             Logout
           </button>
         </Card>
       </div>
+      <ActionDialog
+        open={isLogoutModalOpen}
+        setOpen={setIsLogoutModalOpen}
+        icon={<IoMdLogOut className="h-7 w-7 text-red-500" />}
+        title="Log Out"
+        description="Are you sure you want to log out?"
+        confirmLabel="Yes. Log Out"
+        onConfirm={() => {
+          console.log("yes, log out");
+        }}
+      />
     </div>
   );
 }
