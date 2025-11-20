@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Search } from 'lucide-react';
-import Image from 'next/image';
+import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Search } from "lucide-react";
+import Image from "next/image";
 
 interface BannerButton {
   label: string;
@@ -17,6 +17,9 @@ interface EventBannerProps {
   placeholder?: string;
   buttons?: BannerButton[];
   className?: string;
+  bannerMola?: string;
+  bannerStar?: string;
+  bannerRocket?: string;
   decorationLeft?: string; // image url
   decorationRight?: string; // image url
   backgroundImage?: string;
@@ -25,34 +28,36 @@ interface EventBannerProps {
 export function Banner({
   title,
   subtitle,
-  placeholder = 'Search…',
+  placeholder = "Search…",
   buttons = [],
   className,
   decorationLeft,
   decorationRight,
   backgroundImage,
+  bannerMola,
+  bannerStar,
+  bannerRocket,
 }: EventBannerProps) {
   return (
     <div
       className={cn(
-        'relative w-full py-20 flex flex-col items-center text-center  overflow-hidden',
+        "relative w-full py-20 flex flex-col items-center text-center  overflow-hidden",
         className
       )}
       style={
         backgroundImage
           ? {
               backgroundImage: `url(${backgroundImage})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
+              backgroundSize: "cover",
+              backgroundPosition: "center",
             }
           : {}
       }
-
     >
       {/* Left Decoration */}
       {decorationLeft && (
         <Image
-          src="/images/banner/right.png"
+          src={decorationLeft}
           alt="left"
           width={238}
           height={715}
@@ -63,7 +68,7 @@ export function Banner({
       {/* Right Decoration */}
       {decorationRight && (
         <Image
-          src="/images/banner/left.png"
+          src={decorationRight}
           alt=""
           width={150}
           height={150}
@@ -71,28 +76,34 @@ export function Banner({
         />
       )}
 
-      <Image
-        src="/images/banner/star.png"
-        alt=""
-        width={50}
-        height={50}
-        className="absolute  top-4 opacity-100"
-      />
-      <Image
-        src="/images/banner/mola.png"
-        alt=""
-        width={50}
-        height={50}
-        className="absolute  bottom-18 left-50 opacity-100"
-      />
+      {bannerStar && (
+        <Image
+          src={bannerStar}
+          alt=""
+          width={50}
+          height={50}
+          className="absolute  top-4 opacity-100"
+        />
+      )}
+      {bannerMola && (
+        <Image
+          src={bannerMola}
+          alt=""
+          width={50}
+          height={50}
+          className="absolute  bottom-18 left-50 opacity-100"
+        />
+      )}
 
-      <Image
-        src="/images/banner/rocket.png"
-        alt=""
-        width={50}
-        height={50}
-        className="absolute  bottom-14 right-90 opacity-100"
-      />
+      {bannerRocket && (
+        <Image
+          src={bannerRocket}
+          alt=""
+          width={50}
+          height={50}
+          className="absolute  bottom-14 right-90 opacity-100"
+        />
+      )}
 
       <h1 className="md:text-5xl text-2xl font-bold text-gray-900 font-[glory]">
         {title}
