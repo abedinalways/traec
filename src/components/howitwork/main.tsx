@@ -13,7 +13,6 @@ export default function HowItWorks() {
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
-
       // LEFT IMAGES – animate left → center
       gsap.utils.toArray(".how-image-left").forEach((img: any) => {
         gsap.fromTo(
@@ -27,8 +26,7 @@ export default function HowItWorks() {
             scrollTrigger: {
               trigger: img,
               start: "top 80%",
-              onEnter: () =>
-                gsap.to(img, { x: 0, opacity: 1, duration: 1 }),
+              onEnter: () => gsap.to(img, { x: 0, opacity: 1, duration: 1 }),
               onEnterBack: () =>
                 gsap.to(img, { x: 0, opacity: 1, duration: 1 }),
             },
@@ -49,8 +47,7 @@ export default function HowItWorks() {
             scrollTrigger: {
               trigger: img,
               start: "top 80%",
-              onEnter: () =>
-                gsap.to(img, { x: 0, opacity: 1, duration: 1 }),
+              onEnter: () => gsap.to(img, { x: 0, opacity: 1, duration: 1 }),
               onEnterBack: () =>
                 gsap.to(img, { x: 0, opacity: 1, duration: 1 }),
             },
@@ -79,15 +76,21 @@ export default function HowItWorks() {
           }
         );
       });
-
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={sectionRef} className="px-6 md:px-16 py-16 max-w-6xl mx-auto">
-
+    <section
+      ref={sectionRef}
+      className="
+        px-4 sm:px-6 md:px-10 lg:px-16 
+        py-12 sm:py-16 
+        max-w-6xl mx-auto 
+        overflow-x-hidden
+      "
+    >
       {/* 01 Search & Browse */}
       <div className="grid md:grid-cols-2 gap-10 items-center mb-16">
         <Image
@@ -95,20 +98,23 @@ export default function HowItWorks() {
           alt="Search & Browse"
           width={300}
           height={300}
-          className="mx-auto how-image-left"
+          className="
+            mx-auto how-image-left
+            w-full max-w-[260px] sm:max-w-[300px]
+          "
         />
 
         <div className="how-text">
-          <h2 className="text-orange-500 font-bold text-xl mb-3">
+          <h2 className="text-orange-500 font-bold text-xl sm:text-2xl mb-3">
             01. Search & Browse
           </h2>
 
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600 mb-4 text-sm sm:text-base">
             Find the perfect Evoke from our wide selection of bounce houses,
             water slides, and party equipment.
           </p>
 
-          <ul className="text-gray-700 space-y-3">
+          <ul className="text-gray-700 space-y-3 text-sm sm:text-base">
             <li className="flex gap-3 items-start">
               <GradientBullet />
               Browse by category or theme
@@ -131,18 +137,17 @@ export default function HowItWorks() {
 
       {/* 02 Compare & Choose */}
       <div className="grid md:grid-cols-2 gap-10 items-center mb-16">
-        
         <div className="order-2 md:order-1 how-text">
-          <h2 className="text-orange-500 font-bold text-xl mb-3">
+          <h2 className="text-orange-500 font-bold text-xl sm:text-2xl mb-3">
             02. Compare & Choose
           </h2>
 
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600 mb-4 text-sm sm:text-base">
             Review verified providers, read customer reviews, and compare prices
             to find the best fit for your event.
           </p>
 
-          <ul className="text-gray-700 space-y-3">
+          <ul className="text-gray-700 space-y-3 text-sm sm:text-base">
             <li className="flex gap-3 items-start">
               <GradientBullet />
               All providers are background checked
@@ -167,7 +172,11 @@ export default function HowItWorks() {
           alt="Compare & Choose"
           width={300}
           height={300}
-          className="mx-auto order-1 md:order-2 how-image-right"
+          className="
+            mx-auto how-image-right 
+            order-1 md:order-2 
+            w-full max-w-[260px] sm:max-w-[300px]
+          "
         />
       </div>
 
@@ -178,20 +187,23 @@ export default function HowItWorks() {
           alt="Book & Schedule"
           width={300}
           height={300}
-          className="mx-auto how-image-left"
+          className="
+            mx-auto how-image-left 
+            w-full max-w-[260px] sm:max-w-[300px]
+          "
         />
 
         <div className="how-text">
-          <h2 className="text-orange-500 font-bold text-xl mb-3">
+          <h2 className="text-orange-500 font-bold text-xl sm:text-2xl mb-3">
             03. Book & Schedule
           </h2>
 
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600 mb-4 text-sm sm:text-base">
             Secure your rental with easy online booking. Schedule delivery,
             setup, and pickup times that work for you.
           </p>
 
-          <ul className="text-gray-700 space-y-3">
+          <ul className="text-gray-700 space-y-3 text-sm sm:text-base">
             <li className="flex gap-3 items-start">
               <GradientBullet />
               Instant booking confirmation
@@ -215,16 +227,16 @@ export default function HowItWorks() {
       {/* 04 Party Time */}
       <div className="grid md:grid-cols-2 gap-10 items-center">
         <div className="order-2 md:order-1 how-text">
-          <h2 className="text-orange-500 font-bold text-xl mb-3">
+          <h2 className="text-orange-500 font-bold text-xl sm:text-2xl mb-3">
             04. Party Time!
           </h2>
 
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600 mb-4 text-sm sm:text-base">
             Enjoy your stress-free event while we handle the setup and
             teardown. Your guests will have a blast!
           </p>
 
-          <ul className="text-gray-700 space-y-3">
+          <ul className="text-gray-700 space-y-3 text-sm sm:text-base">
             <li className="flex gap-3 items-start">
               <GradientBullet />
               Professional setup and safety check
@@ -249,10 +261,13 @@ export default function HowItWorks() {
           alt="Party Time"
           width={300}
           height={300}
-          className="mx-auto order-1 md:order-2 how-image-right"
+          className="
+            mx-auto how-image-right 
+            order-1 md:order-2 
+            w-full max-w-[260px] sm:max-w-[300px]
+          "
         />
       </div>
-
     </section>
   );
 }
