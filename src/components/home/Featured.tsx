@@ -1,5 +1,5 @@
 import React from 'react';
-import CategoryCarousel from './CategoryCarousel';
+import CategoryCarousel from '../reusable/CategoryCarousel';
 
 const Featured = () => {
   return (
