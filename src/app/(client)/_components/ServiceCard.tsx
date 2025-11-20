@@ -23,16 +23,16 @@ export type Service = {
 const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
   return (
     <div className='bg-white shadow-lg rounded-lg overflow-hidden border p-5'>
-      <div className='max-h-[150px]'>
-        {" "}
+      {/* Image Section */}
+      <div className='w-full h-[250px] lg:h-[200px] relative'>
         <Image
           src={service.image}
           alt={service.title}
-          width={500}
-          height={500}
-          className='object-cover'
+          fill
+          className='object-cover rounded-md'
         />
       </div>
+      {/* Content Section */}
       <div className='py-5'>
         <h3 className='text-xl font-semibold text-gray-800'>{service.title}</h3>
         <p className='text-sm text-gray-500 mt-2'>{service.category}</p>
