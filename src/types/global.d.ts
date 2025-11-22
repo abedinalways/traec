@@ -13,7 +13,7 @@ export interface BookingData {
     eventType: string;
     eventName: string;
     guestsCount: number;
-    eventDuration: string;
+    eventDuration: number;
     eventDescription: string;
   };
   step3: {
@@ -31,7 +31,7 @@ export interface BookingData {
     additionalNotes: string;
   };
   step5: {
-    addons: string[];
+    addons: number[];
     totalPrice: number;
   };
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
