@@ -63,13 +63,13 @@ const ProcessCard: React.FC<{ data: CardItem }> = ({ data }) => {
 
   // Custom Tailwind class to generate the soft orange gradient border effect
   const gradientBorderClass =
-    "p-[1px] rounded-2xl bg-gradient-to-br from-orange-200/50 via-red-200/80 to-orange-100/90";
+    "border-b-2 border-r-2 border-transparent  bg-linear-to-r from-[#FFAC47] to-[#FF2A24] bg-linear-to-b from-[#FFAC47] to-[#FF2A24] rounded-md ";
 
   return (
     // Outer div creates the gradient border effect
     <div className={gradientBorderClass}>
       {/* Inner div contains the card content */}
-      <div className="bg-white p-6 rounded-[calc(1rem-1px)] h-full transition-shadow duration-300 hover:shadow-xl hover:shadow-orange-50/50 relative overflow-hidden">
+      <div className="bg-white p-6  h-full relative overflow-hidden rounded-md">
         {/* Background ellipse image positioned at top-left corner */}
         <div className="absolute top-0 left-0 w-32 h-32 -translate-x-8 -translate-y-8 pointer-events-none">
           <Image
@@ -132,7 +132,7 @@ const FunctionCard = () => {
     <div className="flex items-center justify-center py-16 font-sans antialiased">
       <div className="w-full max-w-7xl">
         {/* The responsive grid layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 ">
           {cards.map((stepData) => (
             <ProcessCard key={stepData.step} data={stepData} />
           ))}

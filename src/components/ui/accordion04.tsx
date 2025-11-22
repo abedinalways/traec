@@ -1,33 +1,33 @@
-'use client';
+"use client";
 
-import { Plus, Minus } from 'lucide-react';
-import * as AccordionPrimitive from '@radix-ui/react-accordion';
+import { Plus, Minus } from "lucide-react";
+import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import {
   Accordion,
   AccordionItem,
   AccordionContent,
-} from '@/components/ui/accordion';
+} from "@/components/ui/accordion";
 
 const items = [
   {
-    title: 'Do I need an account to use the platform?',
+    title: "Do I need an account to use the platform?",
     content:
-      'Yes. To book a service or list your business, you must create a free account.',
+      "Yes. To book a service or list your business, you must create a free account.",
   },
   {
-    title: 'How do payments work?',
+    title: "How do payments work?",
     content:
-      'Payments are securely processed through trusted payment partners.',
+      "Payments are securely processed through trusted payment partners.",
   },
   {
-    title: 'Can I cancel or reschedule my booking?',
+    title: "Can I cancel or reschedule my booking?",
     content:
-      'You may cancel or reschedule before the provider confirms the booking.',
+      "You may cancel or reschedule before the provider confirms the booking.",
   },
   {
-    title: 'Is this platform available worldwide?',
+    title: "Is this platform available worldwide?",
     content:
-      'The platform is available in most regions depending on local support.',
+      "The platform is available in most regions depending on local support.",
   },
 ];
 
@@ -37,7 +37,7 @@ const Accordion04 = () => {
       type="single"
       collapsible
       defaultValue="item-1"
-      className="md:w-[875px] space-y-3 mx-auto py-10"
+      className="space-y-3 py-10"
     >
       {items.map((item, index) => (
         <AccordionItem
