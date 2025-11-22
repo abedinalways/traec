@@ -1,7 +1,6 @@
 import OrderHistory from "../../_components/profile/OrdersHistory";
 
 export default function Page() {
-  // Dummy data for orders (You can replace with real API later)
   const orders = [
     {
       id: 1,
@@ -10,7 +9,7 @@ export default function Page() {
       date: "1/15/2024",
       price: 545,
       status: "Complete",
-      thumbnail: "/images/orderWomanImg.png", // Replace with your image
+      thumbnail: "/images/orderWomanImg.png",
     },
     {
       id: 2,
