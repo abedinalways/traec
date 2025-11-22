@@ -63,7 +63,7 @@ export default function AccountDashboard() {
       <div className="w-full max-w-[780px] space-y-8">
         {/* Profile Header */}
         <ProfileCard
-          name="Cameron Diana"
+          name="Darlene Robertson"
           avatar="/images/provider-profile-img.svg"
           location="Los Angeles, CA"
           joined="Joined Jan 2021"
