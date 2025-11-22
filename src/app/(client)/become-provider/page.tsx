@@ -1,6 +1,9 @@
 import React from "react";
 import BecomeProviderBanner from "../_components/becomeProvider/BecomeProviderBanner";
 import FunctionCard from "@/components/reusable/FunctionCard";
+import Experts from "@/components/home/Experts";
+import FAQ from "@/components/home/FAQ";
+import JoinAsProvider from "@/components/home/JoinAsProvider";
 
 export default function BecomeProviderPage() {
   return (
@@ -19,18 +22,9 @@ export default function BecomeProviderPage() {
           <FunctionCard />
         </div>
       </div>
-      <div className="custom-container py-10">
-        <div
-          className="
-    border-b-2 border-r-2 border-transparent  bg-linear-to-r from-[#FF2A24] to-[#FFAC47] 
-            [mask:border-box] rounded-lg "
-        >
-          <div className="bg-white rounded-lg p-4">Your content</div>
-          <div className="bg-white rounded-lg p-4">Your content</div>
-          <div className="bg-white rounded-lg p-4">Your content</div>
-          <div className="bg-white rounded-lg p-4">Your content</div>
-        </div>
-      </div>
+      <Experts />
+      <JoinAsProvider />
+      <FAQ />
     </div>
   );
 }

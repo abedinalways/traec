@@ -1,7 +1,28 @@
+"use client";
+import React, { useState } from "react";
 import Image from "next/image";
-import React from "react";
+import SignUpModal from "../modal/SignUpModal";
+import LogInModal from "../modal/LogInModal";
+import ForgotPasswordModal from "../modal/ForgotPasswordModal";
 
 export default function BecomeProviderBanner() {
+  const [openSignup, setOpenSignup] = useState(false);
+  const [openLogin, setOpenLogin] = useState(false);
+  const [openForgotPassword, setOpenForgotPassword] = useState(false);
+
+  const openSignupModal = () => {
+    setOpenSignup(true);
+    setOpenLogin(false);
+  };
+
+  const openLoginModal = () => {
+    setOpenLogin(true);
+    setOpenSignup(false);
+  };
+  const openForgotPasswordModal = () => {
+    setOpenForgotPassword(true);
+    setOpenLogin(false);
+  };
   return (
     <div className="relative w-full h-[50vh]">
       {/* Background Image */}
@@ -26,10 +47,31 @@ export default function BecomeProviderBanner() {
           to decorators and venues all in one place.
         </p>
 
-        <button className="mt-6 bg-linear-to-r from-[#FFAC47] to-[#FF2A24] px-6 py-3 rounded-md font-semibold">
+        <button
+          onClick={openSignupModal}
+          className="mt-6 bg-linear-to-r from-[#FFAC47] to-[#FF2A24] px-6 py-3 rounded-md font-semibold"
+        >
           Become a Provider
         </button>
       </div>
+      {/* Modals */}
+      <SignUpModal
+        isOpen={openSignup}
+        onClose={() => setOpenSignup(false)}
+        openLogin={openLoginModal}
+      />
+
+      <LogInModal
+        isOpen={openLogin}
+        onClose={() => setOpenLogin(false)}
+        openSignup={openSignupModal}
+      />
+
+      <ForgotPasswordModal
+        isOpen={openForgotPassword}
+        onClose={() => setOpenForgotPassword(false)}
+        openSignup={openSignupModal}
+      />
     </div>
   );
 }
