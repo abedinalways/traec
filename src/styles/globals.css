@@ -177,6 +177,22 @@
   text-fill-color: transparent;
 }
 
+/* Remove default date icon */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  display: none;
+}
+
+/* Remove time icon */
+input[type="time"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  display: none;
+}
+
+/* Ensures the cursor looks correct */
+input[type="date"],
+input[type="time"] {
+  position: relative;
 .background-color{
    background: linear-gradient(115deg, #fffbf7 0%, #ffeae9 100%);
   opacity: 0.8;

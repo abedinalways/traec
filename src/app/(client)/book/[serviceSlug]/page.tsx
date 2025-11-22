@@ -1,21 +1,29 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { useSearchParams } from "next/navigation";
+
 import Step6Review from "./_components/steps/Step6Review";
 import Step5Addons from "./_components/steps/Step5Addons";
 import Step4Questionnaire from "./_components/steps/Step4Questionnaire";
 import Step3DateTime from "./_components/steps/Step3DateTime";
 import Step2EventDetails from "./_components/steps/Step2EventDetails";
 import Step1Location from "./_components/steps/Step1Location";
-import { BookingData } from "@/types/global";
 
-const BookingPage = ({ params }) => {
+import { BookingData } from "@/types/global";
+import { useBooking } from "../context/BookingContext";
+
+interface BookingPageProps {
+  step: number;
+  setStep: (n: number) => void;
+  serviceSlug: string;
+}
+
+export default function BookingPage({ serviceSlug }: BookingPageProps) {
+  const { step, setStep } = useBooking();
+
   const searchParams = useSearchParams();
   const plan = searchParams.get("plan") || "basic";
-
-  const [step, setStep] = useState(1);
 
   const [bookingData, setBookingData] = useState<BookingData>({
     step1: {
@@ -30,17 +38,23 @@ const BookingPage = ({ params }) => {
     },
     step2: {
       eventType: "",
-      guestsCount: "",
-      indoorsOutdoors: "",
-      eventNotes: "",
+      eventName: "",
+      guestsCount: 0,
+      eventDuration: 0,
+      eventDescription: "",
     },
     step3: {
-      eventDate: "",
-      startTime: "",
-      endTime: "",
+      eventStartDate: "",
+      eventEndDate: "",
+      eventStartTime: "",
+      eventEndTime: "",
     },
     step4: {
-      preferences: [],
+      partyTheme: "",
+      musicPreference: "",
+      mustPlaySongs: "",
+      partyGames: "",
+      entranceStyle: "",
       additionalNotes: "",
     },
     step5: {
@@ -50,14 +64,14 @@ const BookingPage = ({ params }) => {
     step6: {},
   });
 
-  const serviceSlug = params.serviceSlug;
-
   useEffect(() => {
     console.log("Booking Data Updated:", bookingData);
   }, [bookingData]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleNext = (stepKey: keyof boolean, data: any) => {
+  const handleNext = <K extends keyof BookingData>(
+    stepKey: K,
+    data: Partial<BookingData[K]>
+  ) => {
     setBookingData((prev) => ({
       ...prev,
       [stepKey]: {
@@ -112,7 +126,6 @@ const BookingPage = ({ params }) => {
             data={bookingData.step5}
             onNext={(data) => handleNext("step5", data)}
             onPrevious={handlePrevious}
-            plan={plan}
           />
         );
       case 6:
@@ -124,6 +137,7 @@ const BookingPage = ({ params }) => {
             onPrevious={handlePrevious}
           />
         );
+
       default:
         return null;
     }
@@ -156,6 +170,4 @@ const BookingPage = ({ params }) => {
       {renderStep()}
     </div>
   );
-};
-
-export default BookingPage;
+}
