@@ -164,28 +164,7 @@ const Step4Questionnaire = ({ data, onNext, onPrevious }: Step4Props) => {
               )}
             />
 
-            {/* 6. Entrance Styles */}
-            <FormField
-              control={form.control}
-              name="entranceStyle"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="capitalize font-inter text-sm text-[#4a4c56]">
-                    5. How would you like the birthday child’s entrance to be?
-                  </FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Write the description"
-                      className="pl-4 text-black placeholder:capitalize font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 min-h-[140px]"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* 7. Addition Notes */}
+            {/* 6. Addition Notes */}
             <FormField
               control={form.control}
               name="additionalNotes"
