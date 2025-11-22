@@ -21,7 +21,6 @@ export default function page() {
       </p>
 
       {/* Profile Image Section */}
-      {/* Profile Header */}
       <ProfileCard
         name="Cameron Diana"
         avatar="/images/featured06.png"
@@ -31,7 +30,6 @@ export default function page() {
         verified={true}
       />
 
-      {/* ---- BELOW SECTION: Form ---- */}
       <form className="bg-white rounded-xl mt-6 space-y-6">
         {/* First & Last Name */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
