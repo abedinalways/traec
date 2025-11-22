@@ -102,10 +102,12 @@ export default function Step6Review({
         </p>
 
         {/* Description */}
-        <p className="text-[#4a4c56]">Description:</p>
-        <p className="text-[#4a4c56] pt-3 whitespace-pre-line">
-          {step2.eventDescription}
-        </p>
+        <div className="flex flex-col">
+          <p className="text-[#4a4c56]">Description:</p>
+          <p className="text-[#4a4c56] whitespace-pre-line">
+            {step2.eventDescription}
+          </p>
+        </div>
 
         {/* If screenshot fields missing (commented) */}
         {/* <p className="text-[#4a4c56]"><b>Setup:</b> {step2.setup}</p> */}
@@ -124,15 +126,6 @@ export default function Step6Review({
         <p className="text-[#4a4c56]">
           <span>Time:</span> {step3.eventStartTime} – {step3.eventEndTime}
         </p>
-
-        {/* Description */}
-        <p className="text-[#4a4c56]">Description:</p>
-        <p className="text-[#4a4c56] pt-3 whitespace-pre-line">
-          {step2.eventDescription}
-        </p>
-
-        {/* If screenshot fields missing (commented) */}
-        {/* <p className="text-[#4a4c56]"><b>Setup:</b> {step2.setup}</p> */}
       </div>
 
       {/* === LOCATION CARD === */}
