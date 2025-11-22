@@ -17,9 +17,6 @@ interface EventBannerProps {
   placeholder?: string;
   buttons?: BannerButton[];
   className?: string;
-  bannerMola?: string;
-  bannerStar?: string;
-  bannerRocket?: string;
   decorationLeft?: string; // image url
   decorationRight?: string; // image url
   backgroundImage?: string;
@@ -34,9 +31,6 @@ export function Banner({
   decorationLeft,
   decorationRight,
   backgroundImage,
-  bannerMola,
-  bannerStar,
-  bannerRocket,
 }: EventBannerProps) {
   return (
     <div
@@ -57,7 +51,7 @@ export function Banner({
       {/* Left Decoration */}
       {decorationLeft && (
         <Image
-          src={decorationLeft}
+          src="/images/banner/right.png"
           alt="left"
           width={238}
           height={715}
@@ -68,7 +62,7 @@ export function Banner({
       {/* Right Decoration */}
       {decorationRight && (
         <Image
-          src={decorationRight}
+          src="/images/banner/left.png"
           alt=""
           width={150}
           height={150}
@@ -76,34 +70,28 @@ export function Banner({
         />
       )}
 
-      {bannerStar && (
-        <Image
-          src={bannerStar}
-          alt=""
-          width={50}
-          height={50}
-          className="absolute  top-4 opacity-100"
-        />
-      )}
-      {bannerMola && (
-        <Image
-          src={bannerMola}
-          alt=""
-          width={50}
-          height={50}
-          className="absolute  bottom-18 left-50 opacity-100"
-        />
-      )}
+      <Image
+        src="/images/banner/star.png"
+        alt=""
+        width={50}
+        height={50}
+        className="absolute  top-4 opacity-100"
+      />
+      <Image
+        src="/images/banner/mola.png"
+        alt=""
+        width={50}
+        height={50}
+        className="absolute  bottom-18 left-50 opacity-100"
+      />
 
-      {bannerRocket && (
-        <Image
-          src={bannerRocket}
-          alt=""
-          width={50}
-          height={50}
-          className="absolute  bottom-14 right-90 opacity-100"
-        />
-      )}
+      <Image
+        src="/images/banner/rocket.png"
+        alt=""
+        width={50}
+        height={50}
+        className="absolute  bottom-14 right-90 opacity-100"
+      />
 
       <h1 className="md:text-5xl text-2xl font-bold text-gray-900 font-[glory]">
         {title}
