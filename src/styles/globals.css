@@ -138,6 +138,9 @@
   margin: 0 auto;
 }
 
+.mt-negative-32 {
+  margin-top: -8rem !important;
+}
 /* Add this to your global CSS file (e.g., globals.css or index.css) */
 
 .btn-gradient {
@@ -161,7 +164,7 @@
   cursor: not-allowed;
   opacity: 0.6;
 }
-.bg-gradient {
+.bg-gradient{
   background: linear-gradient(115deg, #fde7d3 0%, #f8c3a4 15%, #ffffff 80%);
   opacity: 0.6;
 }
@@ -190,4 +193,11 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 input[type="date"],
 input[type="time"] {
   position: relative;
+.background-color{
+   background: linear-gradient(115deg, #fffbf7 0%, #ffeae9 100%);
+  opacity: 0.8;
+}
+
+.bg-gradient-email{
+  background: linear-gradient(90deg, #ffac47 0%, #ff2a24 100%);
 }
