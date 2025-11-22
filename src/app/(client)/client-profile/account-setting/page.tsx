@@ -1,4 +1,4 @@
-import AccountSettingsForm from "../../_components/account-setting/AccountSettingForm";
+import AccountSettingsForm from "../../_components/profile/AccountSettingForm";
 
 export default function Page() {
   return (
