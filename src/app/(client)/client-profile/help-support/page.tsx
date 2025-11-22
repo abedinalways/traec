@@ -14,7 +14,7 @@ export default function HelpSupport() {
     <div className="w-full max-w-4xl mx-auto px-4 py-10">
       {/* Back Button */}
       <Link
-        href="/profile"
+        href="/client-profile"
         className="flex items-center max-w-38 rounded-sm p-2 text-sm border text-gray-600 hover:text-black mb-6"
       >
         <MdKeyboardArrowLeft size={22} />

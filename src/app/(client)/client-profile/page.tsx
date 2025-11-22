@@ -11,47 +11,47 @@ import {
   LogOut,
 } from "lucide-react";
 import Link from "next/link";
-import ProfileView from "@/components/reusable/ProfileView";
 import { ActionDialog } from "@/components/reusable/ActionDialog";
 import { useState } from "react";
 import { IoMdLogOut } from "react-icons/io";
+import ProfileCard from "@/components/reusable/ProfileView";
 
 const menu = [
   {
     icon: Pencil,
     title: "Edit Profile",
-    href: "/profile/edit-profile",
+    href: "/client-profile/edit-profile",
     desc: "Update your personal information",
   },
   {
     icon: Settings,
     title: "Account Settings",
-    href: "/profile/account-setting",
+    href: "/client-profile/account-setting",
 
     desc: "Privacy, security, and preferences",
   },
   {
     icon: CreditCard,
     title: "Payment Method",
-    href: "/profile/payment-methods",
+    href: "/client-profile/payment-methods",
     desc: "Manage your billing information",
   },
   {
     icon: Clock,
     title: "Order History",
-    href: "/profile/orders-history",
+    href: "/client-profile/orders-history",
     desc: "See your past events and bookings",
   },
   {
     icon: Bell,
     title: "Notification Preferences",
-    href: "/profile/notifications",
+    href: "/client-profile/notifications",
     desc: "Control how you receive updates",
   },
   {
     icon: HelpCircle,
     title: "Help & Support",
-    href: "/profile/help-support",
+    href: "/client-profile/help-support",
 
     desc: "Get help or customer service",
   },
@@ -62,7 +62,14 @@ export default function AccountDashboard() {
     <div className="w-full flex justify-center py-10 px-4">
       <div className="w-full max-w-[780px] space-y-8">
         {/* Profile Header */}
-        <ProfileView />
+        <ProfileCard
+          name="Cameron Diana"
+          avatar="/images/featured06.png"
+          location="Los Angeles, CA"
+          joined="Joined Jan 2021"
+          email="maria@email.com"
+          verified={true}
+        />
 
         {/* Menu Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

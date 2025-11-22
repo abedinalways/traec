@@ -223,7 +223,7 @@ export default function Page() {
     <div className="w-full max-w-5xl mx-auto px-4 py-10">
       {/* Back Button */}
       <Link
-        href="/profile"
+        href="/client-profile"
         className="flex items-center w-fit gap-1 px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-50 transition mb-6"
       >
         <MdKeyboardArrowLeft size={20} />
