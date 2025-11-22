@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
@@ -24,10 +25,12 @@ export default function SignUpModal({
   const { register, handleSubmit } = useForm<SignUpFormData>();
   const [showPass, setShowPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
+  const router = useRouter();
 
   const onSubmit = (data: SignUpFormData) => {
     console.log("Form Submitted:", data);
     onClose();
+    router.push("/");
   };
   return (
     <>

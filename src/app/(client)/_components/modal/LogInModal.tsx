@@ -6,24 +6,33 @@ import Image from "next/image";
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
+import { useRouter } from "next/navigation";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   openSignup: () => void;
+  openForgotPassword: () => void;
 }
 interface LogInFormData {
   email: string;
   password: string;
 }
 
-export default function LogInModal({ isOpen, onClose, openSignup }: Props) {
+export default function LogInModal({
+  isOpen,
+  onClose,
+  openSignup,
+  openForgotPassword,
+}: Props) {
   const { register, handleSubmit } = useForm<LogInFormData>();
   const [showPass, setShowPass] = useState(false);
+  const router = useRouter();
 
   const onSubmit = (data: LogInFormData) => {
     console.log("Form Submitted:", data);
     onClose();
+    router.push("/");
   };
 
   return (
@@ -84,8 +93,10 @@ export default function LogInModal({ isOpen, onClose, openSignup }: Props) {
                   )}
                 </button>
               </div>
-              <div className="flex justify-end items-center">
-                <p className="cursor-pointer">Forgot password?</p>
+              <div className="flex justify-end items-center cursor-pointer">
+                <p onClick={openForgotPassword} className="cursor-pointer">
+                  Forgot password?
+                </p>
               </div>
               <button
                 type="submit"
