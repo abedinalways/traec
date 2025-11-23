@@ -1,5 +1,7 @@
+'use client';
+
 import React from 'react';
-import Masonry from '../reusable/Masonary'
+import Masonry from '../reusable/Masonary';
 
 const items = [
   {
@@ -57,11 +59,12 @@ const items = [
     tag: 'Concert',
   },
 ];
+
 const Stories = () => {
   return (
     <div className="w-full min-h-screen py-16 px-4 md:px-0">
       <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
+        {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             Recent Event Success{' '}
@@ -70,12 +73,13 @@ const Stories = () => {
             </span>
           </h2>
           <p className="text-gray-600 text-sm md:text-md max-w-2xl mx-auto font-[inter]">
-            Take a look at some of the amazing events our providers have created recently
+            Take a look at some of the amazing events our providers have created
+            recently
           </p>
         </div>
 
-        {/* Masonry Grid */}
-        <div className="w-full">
+        {/* Desktop/Tablet Masonry — with animation */}
+        <div className="hidden sm:block w-full">
           <Masonry
             items={items}
             ease="power3.out"
@@ -89,11 +93,23 @@ const Stories = () => {
           />
         </div>
 
-        
+        {/* Mobile Masonry — no animation */}
+        <div className="block sm:hidden w-full">
+          <Masonry
+            items={items}
+            ease="none"
+            duration={0}
+            stagger={0}
+            animateFrom={undefined}
+            scaleOnHover={false}
+            hoverScale={1}
+            blurToFocus={false}
+            colorShiftOnHover={false}
+          />
+        </div>
       </div>
     </div>
   );
 };
- 
 
 export default Stories;
