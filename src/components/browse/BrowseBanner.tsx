@@ -1,5 +1,5 @@
-import React from 'react';
-import { Banner } from '../reusable/Banner';
+import React from "react";
+import { Banner } from "../reusable/Banner";
 
 const BrowseBanner = () => {
   return (
@@ -11,12 +11,12 @@ const BrowseBanner = () => {
       decorationRight="/right-decoration.png"
       backgroundImage="/images/banner.png"
       buttons={[
-        { label: 'Catering' },
-        { label: 'DJ Services' },
-        { label: 'Decorators' },
-        { label: 'Rentals' },
-        { label: 'Photography' },
-        { label: 'Entertainment' },
+        { label: "Catering" },
+        { label: "DJ Services" },
+        { label: "Decorators" },
+        { label: "Rentals" },
+        { label: "Photography" },
+        { label: "Entertainment" },
       ]}
     />
   );

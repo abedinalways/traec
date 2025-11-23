@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { Input } from '@/components/ui/input';
-import { Search, Menu } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
+import Link from "next/link";
+import { Input } from "@/components/ui/input";
+import { Search, Menu } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import {
   Sheet,
   SheetTrigger,
@@ -12,7 +12,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetClose,
-} from '@/components/ui/sheet';
+} from "@/components/ui/sheet";
 
 export default function Navbar() {
   return (
@@ -48,9 +48,12 @@ export default function Navbar() {
           </Link>
 
           {/* Gradient Button */}
-          <Button className="rounded-full px-6 text-white font-medium btn-gradient cursor-pointer">
-            Join Now
-          </Button>
+          <Link href="/signin">
+            {" "}
+            <Button className="rounded-full px-6 text-white font-medium btn-gradient cursor-pointer">
+              Join Now
+            </Button>
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}

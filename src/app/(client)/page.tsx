@@ -1,3 +1,5 @@
+/** @format */
+
 import Banner from "@/components/home/Banner";
 import Experts from "@/components/home/Experts";
 import FAQ from "@/components/home/FAQ";
@@ -9,14 +11,13 @@ import Stories from "@/components/home/Stories";
 import Subscribe from "@/components/home/Subscribe";
 import Testimonial from "@/components/home/Testimonial";
 
-
 export default function Home() {
   return (
     <div className="relative">
       <Banner />
       <Featured />
-      <Functions/>
-      <Stories/>
+      <Functions />
+      <Stories />
       <Experts />
       <JoinAsProvider />
       <Locations />
