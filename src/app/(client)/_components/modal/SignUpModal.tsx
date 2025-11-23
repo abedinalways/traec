@@ -35,7 +35,7 @@ export default function SignUpModal({
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <div className="grid grid-cols-1 md:grid-cols-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2">
           {/* LEFT IMAGE */}
           <div className="flex items-center justify-center">
             <div className="w-full h-full flex items-center justify-center">
@@ -44,13 +44,13 @@ export default function SignUpModal({
                 width={700}
                 height={700}
                 alt="provider"
-                className="w-full h-full object-cover rounded-3xl"
+                className="w-full h-full object-cover rounded-3xl hidden lg:block"
               />
             </div>
           </div>
 
           {/* RIGHT FORM */}
-          <div className="flex items-center justify-center bg-white lg:-ml-16 rounded-l-4xl rounded-r-2xl">
+          <div className="flex items-center justify-center bg-white lg:-ml-16 rounded-2xl lg:rounded-l-4xl lg:rounded-r-2xl">
             <div className="w-full max-w-md p-8 md:p-10 rounded-3xl">
               {/* Logo */}
               <div className="w-full flex justify-center mb-6">
