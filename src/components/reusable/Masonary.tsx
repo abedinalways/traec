@@ -19,12 +19,16 @@ const useMedia = (
   values: number[],
   defaultValue: number
 ): number => {
-  const get = useCallback(
-    () =>
-      values[queries.findIndex((q) => matchMedia(q).matches)] ?? defaultValue,
-    [queries, values, defaultValue]
-  );
+  const get = useCallback(() => {
+    if (typeof window === "undefined") {
+      return defaultValue;
+    }
 
+    return (
+      values[queries.findIndex((q) => window.matchMedia(q).matches)] ??
+      defaultValue
+    );
+  }, [queries, values, defaultValue]);
   const [value, setValue] = useState<number>(get);
 
   useEffect(() => {
