@@ -40,23 +40,21 @@ function Wrapper({
       .join(" ") || "";
 
   return (
-    <div className="custom-container py-5.5">
-      {/* Breadcrumb */}
-      <ServiceBreadcrumb step={step} />
+    <div className="my-10">
+      <div className="custom-container mx-auto">
+        <ServiceBreadcrumb step={step} />
+        {/* Header */}
+        <div className="flex flex-col gap-1 mb-4">
+          <h3 className="font-inter text-2xl font-medium">Book Your Service</h3>
 
-      {/* Header */}
-      <div className="flex flex-col gap-1 mb-4">
-        <h1 className="font-inter text-2xl font-medium">Book Your Service</h1>
-
-        <p className="font-inter text-base text-[#dfe1e7]">{serviceName}</p>
-      </div>
-
-      <div className="flex gap-6 mt-6">
-        {/* Left Progress Bar */}
-        <BookingSidebar step={step} />
-
-        {/* Right: Step content */}
-        <div className="flex-1">{children}</div>
+          <p className="font-inter text-base text-[#dfe1e7]">{serviceName}</p>
+        </div>
+        <div className="flex flex-col lg:flex-row gap-5 ">
+          <div className="w-full lg:w-[30%]">
+            <BookingSidebar step={step} />
+          </div>
+          <main className="w-full lg:w-[70%]">{children}</main>
+        </div>
       </div>
     </div>
   );
