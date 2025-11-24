@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form";
 const BookingForm = () => {
   const form = useForm();
 
-  function onSubmit(values) {
+  function onSubmit(values: unknown) {
     console.log(values);
   }
   return (
