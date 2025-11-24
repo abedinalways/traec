@@ -1,8 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-
+ 
 @custom-variant dark (&:is(.dark *));
-
+ 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -44,7 +44,7 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
-
+ 
 :root {
   --font-sf-pro: "SF Pro Display", sans-serif;
   --radius: 0.625rem;
@@ -80,7 +80,7 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 }
-
+ 
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -114,7 +114,7 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
-
+ 
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -123,7 +123,7 @@
     @apply bg-background text-foreground;
   }
 }
-
+ 
 @layer utilities {
   .s_gra_bg {
     @apply bg-[linear-gradient(90deg,#ffac47_0%,#ff2a24_100%)];
@@ -132,32 +132,32 @@
     @apply bg-[linear-gradient(90deg,#ffac47_0%,#ff2a24_100%)] text-transparent bg-clip-text;
   }
 }
-
+ 
 .custom-container {
   max-width: 1320px;
   margin: 0 auto;
 }
-
+ 
 .mt-negative-32 {
   margin-top: -8rem !important;
 }
 /* Add this to your global CSS file (e.g., globals.css or index.css) */
-
+ 
 .btn-gradient {
   background: linear-gradient(90deg, #ff6a00 0%, #ee0979 100%);
 }
-
+ 
 /* Optional: Add hover effect */
 .btn-gradient:hover {
   background: linear-gradient(90deg, #ee0979 0%, #ff6a00 100%);
   transition: background 0.3s ease;
 }
-
+ 
 /* Optional: Add active/pressed state */
 .btn-gradient:active {
   background: linear-gradient(90deg, #e6005f 0%, #e66000 100%);
 }
-
+ 
 /* Optional: Disabled state */
 .btn-gradient:disabled {
   background: linear-gradient(90deg, #ccc 0%, #999 100%);
@@ -168,7 +168,7 @@
   background: linear-gradient(115deg, #fde7d3 0%, #f8c3a4 15%, #ffffff 80%);
   opacity: 0.6;
 }
-
+ 
 .text-gradient {
   background: linear-gradient(90deg, #ff6a00 0%, #ee0979 100%);
   -webkit-background-clip: text;
@@ -176,35 +176,30 @@
   background-clip: text;
   text-fill-color: transparent;
 }
-
+ 
 /* Remove default date icon */
 input[type="date"]::-webkit-calendar-picker-indicator {
   opacity: 0;
   display: none;
 }
-
+ 
 /* Remove time icon */
 input[type="time"]::-webkit-calendar-picker-indicator {
   opacity: 0;
   display: none;
 }
-
+ 
 /* Ensures the cursor looks correct */
-/* input[type="date"],
+input[type="date"],
 input[type="time"] {
   position: relative;
   .background-color {
     background: linear-gradient(115deg, #fffbf7 0%, #ffeae9 100%);
     opacity: 0.8;
   }
-
-<<<<<<< HEAD
-.bg-gradient-email{
-  background: linear-gradient(90deg, #ffac47 0%, #ff2a24 100%);
-} */
-=======
+ 
   .bg-gradient-email {
     background: linear-gradient(90deg, #ffac47 0%, #ff2a24 100%);
   }
 }
->>>>>>> 80594956124948337c8a57f44cf4663ca177a9a4
+ 
