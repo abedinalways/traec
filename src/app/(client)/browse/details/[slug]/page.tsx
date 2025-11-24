@@ -1,7 +1,10 @@
 "use client";
 import BasicServices from "@/app/(client)/_components/browse/BasicServices";
+import CustomerReviewsSummary from "@/app/(client)/_components/browse/CustomerReviewsSummary";
 import PremiumServices from "@/app/(client)/_components/browse/PremiumServices";
 import StandardServices from "@/app/(client)/_components/browse/StandardServices";
+import Reviews from "@/app/(client)/_components/providers/Reviews";
+import Accordion04 from "@/components/ui/accordion04";
 import { Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,7 +16,7 @@ import {
   FaRegLightbulb,
   FaUserFriends,
 } from "react-icons/fa";
-import { IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowBack, IoIosInformationCircleOutline } from "react-icons/io";
 
 export default function ServiceDetailsPage() {
   const [mainImage, setMainImage] = useState("/images/browser/img07.png");
@@ -96,7 +99,6 @@ export default function ServiceDetailsPage() {
                 ))}
               </div>
             </div>
-
             <div className="space-y-6 rounded-xl border border-gray-200 bg-white mt-5 p-4 shadow-sm">
               <h2 className="text-3xl font-semibold  mb-6">About</h2>
               <p className="text-lg text-gray-700 mb-4">
@@ -158,12 +160,40 @@ export default function ServiceDetailsPage() {
                 setup and lighting.
               </p>
 
-              <div className="text-center mt-6">
+              <div className="mt-6">
                 <p className="text-xl font-semibold text-gray-800">
                   Interested in making your event unforgettable? Let’s chat!
                 </p>
               </div>
             </div>
+            <div className="space-y-6 rounded-xl border border-gray-200 bg-white mt-5 p-4 shadow-sm">
+              <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                <IoIosInformationCircleOutline />
+                Event Setup Preference
+              </h2>
+              <p className="text-lg text-gray-700 mb-4">
+                Please let us know if you have any special preferences for setup
+                style, sound levels, or lighting effects. For example: quieter
+                background music during dinner, spotlight for the entrance, or
+                bubble machine for kids’ parties.
+              </p>
+            </div>
+            <div className="space-y-6 rounded-xl border border-gray-200 bg-white mt-5 p-4 shadow-sm">
+              <h2 className="text-xl font-semibold  mb-6 flex items-center gap-2">
+                <IoIosInformationCircleOutline />
+                Respect Venue & Sound Rules
+              </h2>
+              <p className="text-lg text-gray-700 mb-4">
+                Please inform us of any venue restrictions such as sound
+                curfews, power limits, or noise regulations. We will adjust our
+                equipment and performance style accordingly to ensure compliance
+                and avoid interruptions.
+              </p>
+            </div>
+            <h3 className="mt-5 text-2xl">FAQ</h3>
+            <Accordion04 />
+            <CustomerReviewsSummary />
+            <Reviews />
           </div>
           {/* Right Section (Stats) */}
           <div className="w-full lg:w-[30%] ">

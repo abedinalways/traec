@@ -23,7 +23,7 @@ export default function Home() {
       <Locations />
       <Testimonial />
       <FAQ />
-      <div className="absolute md:top-1474 md:right-108 top-2250">
+      <div className="absolute md:top-1504 md:right-158 top-2300">
         <Subscribe />
       </div>
     </div>
