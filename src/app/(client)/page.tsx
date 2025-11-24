@@ -13,7 +13,7 @@ import Testimonial from "@/components/home/Testimonial";
 
 export default function Home() {
   return (
-    <div className='relative'>
+    <div className="relative">
       <Banner />
       <Featured />
       <Functions />
@@ -23,7 +23,7 @@ export default function Home() {
       <Locations />
       <Testimonial />
       <FAQ />
-      <div className='absolute md:top-1474 md:right-108 top-2190'>
+      <div className="absolute md:top-1474 md:right-108 top-2250">
         <Subscribe />
       </div>
     </div>
