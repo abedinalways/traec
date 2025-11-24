@@ -15,32 +15,46 @@ export default function Page() {
           className="w-full h-full object-cover"
         />
 
-        {/* Optional Dark Overlay */}
         <div className="absolute inset-0 bg-black/20"></div>
       </div>
 
-      {/* ===== MAIN CONTENT WRAPPER (Profile Left + Overview Right) ===== */}
-      <div className="
-        w-full max-w-7xl mx-auto 
-        px-4 sm:px-6 md:px-10 lg:px-12
-        -mt-24 relative z-10
-      ">
+      {/* ===== MAIN CONTENT WRAPPER ===== */}
+      <div
+        className="
+          w-full max-w-7xl mx-auto 
+          px-4 sm:px-6 md:px-10 lg:px-12
+          -mt-24 relative z-10
+        "
+      >
+        {/* GRID LAYOUT */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
 
-        {/* GRID LAYOUT (PROFILE LEFT + OVERVIEW RIGHT) */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-          {/* LEFT COLUMN — Profile Card */}
-          <div className="lg:col-span-1">
-            <Editprofile />
+          {/* LEFT — PROFILE CARD */}
+          <div
+            className="
+              lg:col-span-1 
+              w-full
+              flex justify-center lg:justify-start
+            "
+          >
+            <div
+              className="
+                w-full 
+                max-w-xs 
+                lg:w-[360px] 
+                lg:h-[904px]
+              "
+            >
+              <Editprofile />
+            </div>
           </div>
 
-          {/* RIGHT COLUMN — Overview */}
-          <div className="lg:col-span-2">
+          {/* RIGHT — OVERVIEW */}
+          <div className="lg:col-span-2 w-full">
             <Overview />
           </div>
 
         </div>
-
       </div>
 
     </main>

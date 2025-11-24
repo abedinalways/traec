@@ -190,7 +190,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 /* Ensures the cursor looks correct */
-input[type="date"],
+/* input[type="date"],
 input[type="time"] {
   position: relative;
 .background-color{
@@ -200,4 +200,4 @@ input[type="time"] {
 
 .bg-gradient-email{
   background: linear-gradient(90deg, #ffac47 0%, #ff2a24 100%);
-}
+} */
