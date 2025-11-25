@@ -1,7 +1,14 @@
+"use client";
+import { useState } from "react";
 import Link from "next/link";
 import { MdKeyboardArrowLeft } from "react-icons/md";
+import AccountDeactivateModal from "../../_components/modal/AccountDeactivateModal";
+import AccountDeleteModal from "../../_components/modal/AccountDeleteModal";
 
 export default function Page() {
+  const [isOpenDeactivate, setIsOpenDeactivate] = useState(false);
+  const [isOpenDelete, setIsOpenDelete] = useState(false);
+
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-10">
       {/* Back Button */}
@@ -21,7 +28,6 @@ export default function Page() {
 
       {/* Change Password Form */}
       <form className="bg-white rounded-xl space-y-6">
-        {/* Current Password */}
         <div>
           <label className="text-sm text-gray-700">Current Password</label>
           <input
@@ -31,7 +37,6 @@ export default function Page() {
           />
         </div>
 
-        {/* New Password & Confirm Password */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="text-sm text-gray-700">New Password</label>
@@ -54,7 +59,6 @@ export default function Page() {
           </div>
         </div>
 
-        {/* Save Button */}
         <button className="bg-black text-white px-6 py-2 rounded-md hover:bg-black/90">
           Save Changes
         </button>
@@ -69,7 +73,10 @@ export default function Page() {
           </p>
         </div>
 
-        <button className="border rounded-md px-4 py-2 hover:bg-gray-50">
+        <button
+          onClick={() => setIsOpenDeactivate(true)}
+          className="border rounded-md px-4 py-2 hover:bg-gray-50"
+        >
           Deactivate
         </button>
       </div>
@@ -83,10 +90,28 @@ export default function Page() {
           </p>
         </div>
 
-        <button className="bg-black text-white rounded-md px-4 py-2 hover:bg-black/90">
+        <button
+          onClick={() => setIsOpenDelete(true)}
+          className="bg-black text-white rounded-md px-4 py-2 hover:bg-black/90"
+        >
           Delete Account
         </button>
       </div>
+
+      {/* Modal Only Shows When isOpen === true */}
+      {isOpenDeactivate && (
+        <AccountDeactivateModal
+          isOpen={isOpenDeactivate}
+          onClose={() => setIsOpenDeactivate(false)}
+        />
+      )}
+
+      {isOpenDelete && (
+        <AccountDeleteModal
+          isOpen={isOpenDelete}
+          onClose={() => setIsOpenDelete(false)}
+        />
+      )}
     </div>
   );
 }
