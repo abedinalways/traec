@@ -50,7 +50,13 @@ export default function Page() {
           </div>
 
           {/* RIGHT — OVERVIEW */}
-          <div className="lg:col-span-2 w-full">
+          <div
+            className="
+              lg:col-span-2
+              w-full
+              min-h-screen
+            "
+          >
             <Overview />
           </div>
 

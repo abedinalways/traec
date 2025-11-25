@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import MyOrder from "../myorder/myorder";
+import MessagePage from "../messege/message";
+import ReviewPage from "../review/review"
 
 import {
   CalendarDays,
@@ -24,7 +26,7 @@ export default function Overview() {
       {/* ============================  
                 NAVIGATION TABS 
       ============================ */}
-      <div className="rounded-2xl bg-white border shadow-sm px-4 sm:px-6 md:px-8 py-3 flex flex-wrap gap-6 sm:gap-8 items-center">
+      <div className="rounded-2xl bg-white border shadow-sm px-4 sm:px-6 md:px-8 py-3 flex flex-wrap gap-4 md:gap-8 items-center">
         {tabs.map((tab) => (
           <button
             key={tab}
@@ -47,44 +49,18 @@ export default function Overview() {
         <div className="py-6 w-full">
 
           {/* ======= TOP 4 STATS ======= */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <StatBox
-              icon={<CalendarDays className="text-red-500" size={20} />}
-              value="02"
-              label="Upcoming Events"
-              bg="bg-red-100"
-            />
-
-            <StatBox
-              icon={<Clock className="text-blue-500" size={20} />}
-              value="11"
-              label="Past Orders"
-              bg="bg-blue-100"
-            />
-
-            <StatBox
-              icon={<MessageCircle className="text-green-500" size={20} />}
-              value="06"
-              label="Unread Messages"
-              bg="bg-green-100"
-            />
-
-            <StatBox
-              icon={<Star className="text-yellow-500" size={20} />}
-              value="4.9"
-              label="Avg Rating Score"
-              bg="bg-yellow-100"
-            />
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <StatBox icon={<CalendarDays className="text-red-500" size={20} />} value="02" label="Upcoming Events" bg="bg-red-100" />
+            <StatBox icon={<Clock className="text-blue-500" size={20} />} value="11" label="Past Orders" bg="bg-blue-100" />
+            <StatBox icon={<MessageCircle className="text-green-500" size={20} />} value="06" label="Unread Messages" bg="bg-green-100" />
+            <StatBox icon={<Star className="text-yellow-500" size={20} />} value="4.9" label="Avg Rating Score" bg="bg-yellow-100" />
           </div>
 
           {/* ======= MAIN GRID ======= */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
             {/* LEFT — Recent Orders */}
-            <div
-              className="lg:col-span-6 rounded-3xl border shadow-sm bg-[#ECEFF3] p-4 w-full"
-              style={{ height: "490px" }}
-            >
+            <div className="lg:col-span-6 rounded-3xl border shadow-sm bg-[#ECEFF3] p-4 w-full min-h-[380px] md:min-h-[450px] lg:h-[490px]">
               <SectionTitle title="Recent Orders" />
 
               <div className="space-y-3">
@@ -134,15 +110,19 @@ export default function Overview() {
                MESSAGES TAB  
       ============================ */}
       {activeTab === "Messages" && (
-        <div className="py-20 text-center text-gray-500">Messages Page Coming Soon…</div>
+        <div className="pt-4 w-full h-[80vh] md:h-[calc(100vh-150px)] overflow-hidden rounded-xl">
+          <MessagePage />
+        </div>
       )}
 
       {/* ============================  
                 REVIEWS TAB  
       ============================ */}
       {activeTab === "Reviews" && (
-        <div className="py-20 text-center text-gray-500">Reviews Page Coming Soon…</div>
-      )}
+  // <div className="pt-4 w-full min-h-[80vh]">
+    <ReviewPage />
+  // </div>
+)}
     </div>
   );
 }
@@ -195,7 +175,7 @@ function OrderItem({ title, vendor, date, status, statusColor }: any) {
       </div>
 
       <div className="text-right">
-        <span className={`px-3 py-1 rounded-full text-xs ${badgeColor[statusColor as keyof typeof badgeColor]}`}>
+        <span className={`px-3 py-1 rounded-full text-xs ${badgeColor[String(statusColor) as keyof typeof badgeColor]}`}>
           {status}
         </span>
 
@@ -217,10 +197,7 @@ function ActivityItem({ text, time, dotColor }: any) {
   return (
     <div className="flex justify-between items-center py-2 w-full">
       <p className="flex items-center gap-2 text-sm text-gray-700">
-        <Dot
-          size={20}
-          className={dotClass[dotColor as keyof typeof dotClass] || ""}
-        />
+        <Dot size={20} className={dotClass[String(dotColor) as keyof typeof dotClass]} />
         {text}
       </p>
       <span className="text-xs text-gray-400">{time}</span>
