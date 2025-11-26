@@ -27,7 +27,7 @@ export default function PersonalInformationPage() {
   const onSubmit = (data: PersonalInformationType) => {
     console.log(data);
     reset();
-    router.push("/personal-information/preferences");
+    router.push("/become-provider/personal-information/preferences");
   };
   return (
     <div>

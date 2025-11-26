@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import PersonalInformationSuccessfullyModal from "../../_components/modal/PersonalInformationSuccessfullyModal";
+import PersonalInformationSuccessfullyModal from "../../../_components/modal/PersonalInformationSuccessfullyModal";
 
 export default function AccountSummaryPage() {
   const [

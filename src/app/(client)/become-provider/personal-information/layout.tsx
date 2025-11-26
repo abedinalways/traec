@@ -28,8 +28,12 @@ export default function PersonalInformationLayout({
               <div className="flex items-center gap-2 pt-4">
                 <button
                   className={`p-2 rounded-full border border-[#FFAC47] text-[#FFAC47] ${
-                    isActive("/personal-information/preferences") ||
-                    isActive("/personal-information/account-summary")
+                    isActive(
+                      "/become-provider/personal-information/preferences"
+                    ) ||
+                    isActive(
+                      "/become-provider/personal-information/account-summary"
+                    )
                       ? "bg-linear-to-r from-[#FFAC47] to-[#FF2A24] border border-[#FFAC47] text-white"
                       : ""
                   }`}
@@ -44,11 +48,15 @@ export default function PersonalInformationLayout({
               <div className="flex items-center gap-2 pt-4">
                 <button
                   className={`${
-                    isActive("/personal-information/preferences")
+                    isActive(
+                      "/become-provider/personal-information/preferences"
+                    )
                       ? "p-2 rounded-full border border-[#FFAC47] text-[#FFAC47]"
                       : "p-2 rounded-full border border-gray-300"
                   }  ${
-                    isActive("/personal-information/account-summary")
+                    isActive(
+                      "/become-provider/personal-information/account-summary"
+                    )
                       ? "bg-linear-to-r from-[#FFAC47] to-[#FF2A24] border border-[#FFAC47] text-white"
                       : ""
                   }`}
@@ -63,7 +71,9 @@ export default function PersonalInformationLayout({
               <div className="flex items-center gap-2 pt-4">
                 <button
                   className={`${
-                    isActive("/personal-information/account-summary")
+                    isActive(
+                      "/become-provider/personal-information/account-summary"
+                    )
                       ? "p-2 rounded-full border border-[#FFAC47] text-[#FFAC47]"
                       : "p-2 rounded-full border border-gray-300"
                   }`}

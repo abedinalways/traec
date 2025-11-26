@@ -92,27 +92,27 @@ export default function Projects() {
   return (
     <>
       {" "}
-      <div className='px-4 sm:px-6'>
-        <h3 className='border-l-2 border-gray-400 pl-3 my-5'>All Projects</h3>
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5'>
+      <div className="px-4 sm:px-6">
+        <h3 className="border-l-2 border-gray-400 pl-3 my-5">All Projects</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5">
           {overViewData.services.map((service, index) => (
             <div key={index}>
-              <div className='bg-white shadow-lg rounded-lg overflow-hidden border p-5'>
+              <div className="bg-white shadow-lg rounded-lg overflow-hidden border p-5">
                 {/* Image Section */}
-                <div className='w-full h-[250px] relative'>
+                <div className="w-full h-[250px] relative">
                   <Image
                     src={service.image}
                     alt={service.title}
                     fill
-                    className='object-cover rounded-md'
+                    className="object-cover rounded-md"
                   />
                 </div>
                 {/* Content Section */}
-                <div className='flex justify-between items-center gap-4 mt-4'>
-                  <p className='truncate flex-1'>{service.description}</p>
+                <div className="flex justify-between items-center gap-4 mt-4">
+                  <p className="truncate flex-1">{service.description}</p>
 
-                  <Link href={`/providers/details/${service?.id}`}>
-                    <button className='bg-[#DFE1E7] w-32 p-2 rounded-md cursor-pointer'>
+                  <Link href={`/client-profile/details/${service?.id}`}>
+                    <button className="bg-[#DFE1E7] w-32 p-2 rounded-md cursor-pointer">
                       View Details
                     </button>
                   </Link>

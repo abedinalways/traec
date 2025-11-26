@@ -18,7 +18,7 @@ import { MdOutlineAddLocationAlt } from "react-icons/md";
 import { CgMail } from "react-icons/cg";
 import Link from "next/link";
 import { useState } from "react";
-import LogoutModal from "../_components/modal/LogoutModal";
+import LogoutModal from "../_components/modal/AuthModal/LogoutModal";
 
 export default function AccountDashboard() {
   const [isOpenLogoutModal, setIsOpenLogoutModale] = useState(false);
