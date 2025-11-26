@@ -1,12 +1,12 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import Modal from "./Modal";
 import Image from "next/image";
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/navigation";
+import Modal from "../Modal";
 
 interface Props {
   isOpen: boolean;
@@ -25,19 +25,20 @@ export default function LogInModal({
   openSignup,
   openForgotPassword,
 }: Props) {
-  const { register, handleSubmit } = useForm<LogInFormData>();
+  const { register, handleSubmit, reset } = useForm<LogInFormData>();
   const [showPass, setShowPass] = useState(false);
   const router = useRouter();
 
   const onSubmit = (data: LogInFormData) => {
     console.log("Form Submitted:", data);
     onClose();
-    router.push("/");
+    reset();
+    // router.push("/");
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="grid grid-cols-1 lg:grid-cols-2">
+      <div className="grid grid-cols-1 lg:grid-cols-2 z-50">
         {/* LEFT IMAGE */}
         <div className="flex items-center justify-center">
           <div className="w-full h-full flex items-center justify-center">

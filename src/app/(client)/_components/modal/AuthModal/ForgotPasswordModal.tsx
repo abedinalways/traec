@@ -1,7 +1,8 @@
+"use client";
 import React from "react";
-import Modal from "./Modal";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
+import Modal from "../Modal";
 
 interface Props {
   isOpen: boolean;

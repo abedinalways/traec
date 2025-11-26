@@ -1,9 +1,10 @@
 "use client";
 import React, { useEffect, useRef } from "react";
-import Modal from "./Modal";
+
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import Modal from "../Modal";
 interface Props {
   isOpen: boolean;
   onClose: () => void;

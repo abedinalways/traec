@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -5,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import Modal from "./Modal";
+import Modal from "../Modal";
+
 interface SignUpModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -22,7 +24,7 @@ export default function SignUpModal({
   onClose,
   openLogin,
 }: SignUpModalProps) {
-  const { register, handleSubmit } = useForm<SignUpFormData>();
+  const { register, handleSubmit, reset } = useForm<SignUpFormData>();
   const [showPass, setShowPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
   const router = useRouter();
@@ -30,7 +32,8 @@ export default function SignUpModal({
   const onSubmit = (data: SignUpFormData) => {
     console.log("Form Submitted:", data);
     onClose();
-    router.push("/");
+    reset();
+    // router.push("/");
   };
   return (
     <>

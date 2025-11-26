@@ -94,47 +94,47 @@ export default function Services() {
   return (
     <>
       {" "}
-      <div className='px-4 sm:px-6'>
-        <h3 className='border-l-2 border-gray-400 pl-3 my-5'>All Services</h3>
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5'>
+      <div className="px-4 sm:px-6">
+        <h3 className="border-l-2 border-gray-400 pl-3 my-5">All Services</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5">
           {overViewData.services.map((service, index) => (
             <div key={index}>
-              <div className='bg-white shadow-lg rounded-lg overflow-hidden border p-5'>
+              <div className="bg-white shadow-lg rounded-lg overflow-hidden border p-5">
                 {/* Image Section */}
-                <div className='w-full h-[250px] relative'>
+                <div className="w-full h-[250px] relative">
                   <Image
                     src={service.image}
                     alt={service.title}
                     fill
-                    className='object-cover rounded-md'
+                    className="object-cover rounded-md"
                   />
                 </div>
                 {/* Content Section */}
-                <div className='mt-4'>
-                  <div className='flex items-center justify-between'>
-                    <div className='flex gap-1 items-center'>
+                <div className="mt-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex gap-1 items-center">
                       <CiLocationOn />
                       <p>{service.location}</p>
                     </div>
-                    <div className='flex items-center text-yellow-500'>
-                      <FaStar className='text-yellow-500' />
-                      <span className='ml-2 text-black font-bold '>
+                    <div className="flex items-center text-yellow-500">
+                      <FaStar className="text-yellow-500" />
+                      <span className="ml-2 text-black font-bold ">
                         {service.rating}
                       </span>
-                      <span className='ml-2 text-sm text-gray-600'>
+                      <span className="ml-2 text-sm text-gray-600">
                         ({service.reviews})
                       </span>
                     </div>
                   </div>
                 </div>
-                <p className='truncate py-5'>{service.description}</p>
-                <div className='flex justify-between items-center'>
-                  <p className='text-[#F92E25] font-bold'>
+                <p className="truncate py-5">{service.description}</p>
+                <div className="flex justify-between items-center">
+                  <p className="text-[#F92E25] font-bold">
                     ${service?.price}{" "}
-                    <span className='text-[#4A4C56]'>/Per Hours</span>
+                    <span className="text-[#4A4C56]">/Per Hours</span>
                   </p>
-                  <Link href={`/providers/details/${service?.id}`}>
-                    <button className='bg-[#DFE1E7] w-full p-2 rounded-md cursor-pointer'>
+                  <Link href={`/client-profile/details/${service?.id}`}>
+                    <button className="bg-[#DFE1E7] w-full p-2 rounded-md cursor-pointer">
                       View Details
                     </button>
                   </Link>

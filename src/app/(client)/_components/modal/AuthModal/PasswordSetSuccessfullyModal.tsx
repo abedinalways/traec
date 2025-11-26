@@ -1,8 +1,8 @@
 import React from "react";
-import Modal from "./Modal";
 import Image from "next/image";
 import Link from "next/link";
 import { MdArrowForwardIos } from "react-icons/md";
+import Modal from "../Modal";
 
 interface Props {
   isOpen: boolean;
@@ -40,7 +40,10 @@ export default function PasswordSetSuccessfullyModal({
             </div>
             <Link href={"/"}>
               {" "}
-              <button className="flex w-full items-center gap-3 border border-gray-200 rounded-2xl p-4 cursor-pointer">
+              <button
+                onClick={onClose}
+                className="flex w-full items-center gap-3 border border-gray-200 rounded-2xl p-4 cursor-pointer"
+              >
                 Go to Home page
                 <MdArrowForwardIos />
               </button>{" "}

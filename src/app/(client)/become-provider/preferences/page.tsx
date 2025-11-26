@@ -52,7 +52,7 @@ export default function PreferencesForm() {
 
     clearErrors("services");
     console.log("Form Submitted:", data);
-    router.push("/personal-information/account-summary");
+    router.push("/become-provider/personal-information/account-summary");
   };
 
   return (

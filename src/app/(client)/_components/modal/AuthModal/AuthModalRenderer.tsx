@@ -1,20 +1,28 @@
 "use client";
-import React, { useState } from "react";
-import SignUpModal from "../_components/modal/SignUpModal";
-import LogInModal from "../_components/modal/LogInModal";
-import ForgotPasswordModal from "../_components/modal/ForgotPasswordModal";
-import OTPModal from "../_components/modal/OTPModal";
-import SetNewPasswordModal from "../_components/modal/SetNewPasswordModal";
-import PasswordSetSuccessfullyModal from "../_components/modal/PasswordSetSuccessfullyModal";
 
-export default function SiginPage() {
-  const [openLogin, setOpenLogin] = useState(true);
-  const [openSignup, setOpenSignup] = useState(false);
-  const [openForgotPassword, setOpenForgotPassword] = useState(false);
-  const [openOTP, setOpenOTP] = useState(false);
-  const [openSetNewPassword, setOpenSetNewPassword] = useState(false);
-  const [openPasswordSetSuccessfully, setOpenPasswordSetSuccessfully] =
-    useState(false);
+import { useAuthModal } from "@/app/context/AuthModalContext";
+import LogInModal from "./LogInModal";
+import SignUpModal from "./SignUpModal";
+import ForgotPasswordModal from "./ForgotPasswordModal";
+import OTPModal from "./OTPModal";
+import SetNewPasswordModal from "../SetNewPasswordModal";
+import PasswordSetSuccessfullyModal from "./PasswordSetSuccessfullyModal";
+
+export default function AuthModalRenderer() {
+  const {
+    openLogin,
+    setOpenLogin,
+    openSignup,
+    setOpenSignup,
+    openForgotPassword,
+    setOpenForgotPassword,
+    openOTP,
+    setOpenOTP,
+    openSetNewPassword,
+    setOpenSetNewPassword,
+    openPasswordSetSuccessfully,
+    setOpenPasswordSetSuccessfully,
+  } = useAuthModal();
 
   const openSignupModal = () => {
     setOpenSignup(true);
@@ -42,10 +50,9 @@ export default function SiginPage() {
     setOpenPasswordSetSuccessfully(true);
     setOpenOTP(false);
   };
+
   return (
-    <div>
-      {" "}
-      {/* Modals */}
+    <>
       <LogInModal
         isOpen={openLogin}
         onClose={() => setOpenLogin(false)}
@@ -76,6 +83,6 @@ export default function SiginPage() {
         isOpen={openPasswordSetSuccessfully}
         onClose={() => setOpenPasswordSetSuccessfully(false)}
       />
-    </div>
+    </>
   );
 }

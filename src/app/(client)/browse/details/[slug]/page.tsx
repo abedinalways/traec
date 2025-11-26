@@ -274,9 +274,12 @@ export default function ServiceDetailsPage() {
                 </div>
                 <p>Usually responds within 1 hour</p>
                 <p>Member since 2022</p>
-                <button className="w-full mt-3 border py-3 rounded-lg text-gray-700 font-medium cursor-pointer">
-                  View Profile
-                </button>
+                <Link href={"/provider-profile/details/1"}>
+                  {" "}
+                  <button className="w-full mt-3 border py-3 rounded-lg text-gray-700 font-medium cursor-pointer">
+                    View Profile
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

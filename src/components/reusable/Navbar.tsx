@@ -13,8 +13,10 @@ import {
   SheetTitle,
   SheetClose,
 } from "@/components/ui/sheet";
+import { useAuthModal } from "@/app/context/AuthModalContext";
 
 export default function Navbar() {
+  const { setOpenLogin, setOpenSignup } = useAuthModal();
   return (
     <header className="w-full fixed top-0 left-0 bg-white z-50 font-[inter]">
       <div className="custom-container mx-auto flex items-center justify-between py-4 gap-4">
@@ -43,17 +45,19 @@ export default function Navbar() {
 
         {/* Desktop Auth Buttons */}
         <div className="hidden md:flex items-center gap-6">
-          <Link href="/signin" className="text-sm font-medium">
+          <Button
+            onClick={() => setOpenLogin(true)}
+            className="text-sm font-medium"
+          >
             Sign In
-          </Link>
-
-          {/* Gradient Button */}
-          <Link href="/signin">
-            {" "}
-            <Button className="rounded-full px-6 text-white font-medium btn-gradient cursor-pointer">
-              Join Now
-            </Button>
-          </Link>
+          </Button>
+          {/* Gradient Button */}{" "}
+          <Button
+            onClick={() => setOpenSignup(true)}
+            className="rounded-full px-6 text-white font-medium btn-gradient cursor-pointer"
+          >
+            Join Now
+          </Button>
         </div>
 
         {/* Mobile Menu Button */}
@@ -100,11 +104,16 @@ export default function Navbar() {
 
                 {/* Mobile Auth */}
                 <div className="pt-6 flex flex-col gap-4 ">
-                  <Button className="rounded-full text-white font-medium btn-gradient">
+                  <Button
+                    onClick={() => setOpenLogin(true)}
+                    className="rounded-full text-white font-medium btn-gradient"
+                  >
                     Sign In
-                  </Button>
-
-                  <Button className="rounded-full text-white font-medium btn-gradient">
+                  </Button>{" "}
+                  <Button
+                    onClick={() => setOpenSignup(true)}
+                    className="rounded-full text-white font-medium btn-gradient"
+                  >
                     Join Now
                   </Button>
                 </div>
