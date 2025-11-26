@@ -8,8 +8,7 @@ export const serviceData = [
       img: "/images/img01.png",
       rating: "4.9",
       reviews: "234",
-      imgWidth: 48,
-    imgHeight: 48,
+      
      
     },
     {

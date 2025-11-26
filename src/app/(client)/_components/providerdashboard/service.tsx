@@ -28,13 +28,15 @@ export default function ServiceSection({ services = [] }: any) {
           >
             {/* LEFT SIDE */}
             <div className="flex gap-3">
-              <Image
-                src={service.img}
-                alt={service.title}
-                width={service.imgWidth || 48}
-                height={service.imgHeight || 48}
-                className="rounded-full object-cover"
-              />
+  <div className="flex gap-3">
+    <Image
+      src={service.img}
+      alt={service.title}
+      width={48}
+      height={48}
+      className="rounded-full object-cover w-12 h-12"
+    />
+  </div>
 
               <div>
                 <p className="font-semibold text-gray-900 text-sm">
