@@ -48,7 +48,7 @@ export default function Overview() {
                  OVERVIEW TAB CONTENT
       ============================ */}
       {activeTab === "Overview" && (
-        <div className="py-6 w-full">
+        <div className="py-8 w-full">
 
           {/* ======= TOP 4 ICON STATS ======= */}
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -82,7 +82,7 @@ export default function Overview() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
             {/* LEFT — TOP SERVICES (UPDATED) */}
-            <div className="lg:col-span-6 rounded-3xl border shadow-sm bg-[#ECEFF3] p-4 w-full min-h-[380px] md:min-h-[620px] lg:h-[490px]">
+            <div className="lg:col-span-6 rounded-3xl border shadow-sm bg-[#ECEFF3] p-6 w-full min-h-[380px] md:min-h-[620px] lg:h-[490px]">
               <SectionTitle title="Top Services" />
 
               <div className="space-y-3">
@@ -123,14 +123,14 @@ export default function Overview() {
                   reviews="140"
                 />
 
-                <ServiceItem
+                {/* <ServiceItem
                   image="/images/Rectangle 19.png"
                   title="Elegant Wedding Event"
                   desc="I will provide decorators to design and style your events beautifully."
                   price="$760"
                   rating="4.4"
                   reviews="140"
-                />
+                /> */}
 
               </div>
             </div>
