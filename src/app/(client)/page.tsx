@@ -8,7 +8,6 @@ import Functions from "@/components/home/Functions";
 import JoinAsProvider from "@/components/home/JoinAsProvider";
 import Locations from "@/components/home/Locations";
 import Stories from "@/components/home/Stories";
-import Subscribe from "@/components/home/Subscribe";
 import Testimonial from "@/components/home/Testimonial";
 
 export default function Home() {
@@ -23,9 +22,6 @@ export default function Home() {
       <Locations />
       <Testimonial />
       <FAQ />
-      <div className="absolute md:top-1504 md:right-158 top-2300">
-        <Subscribe />
-      </div>
     </div>
   );
 }

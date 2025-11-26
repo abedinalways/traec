@@ -43,9 +43,7 @@ const items = [
 
 const Accordion04 = () => {
   return (
-    <section className="w-full flex flex-col items-center py-20 px-4 ">
-      
-
+    <section className="w-full flex flex-col items-center pt-20 px-4 ">
       <Accordion
         type="single"
         collapsible
