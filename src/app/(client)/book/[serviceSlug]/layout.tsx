@@ -1,46 +1,63 @@
-import { FC, ReactNode } from "react";
+"use client";
+
+import { FC, ReactNode, use } from "react";
 import ServiceBreadcrumb from "./_components/ServiceBreadcrumb";
 import BookingSidebar from "./_components/BookingSidebar";
+import BookingProvider, { useBooking } from "../context/BookingContext";
 
 interface BookingLayoutProps<T> {
   children: ReactNode;
-  params: T;
+  params: Promise<T>;
 }
+
 const BookingLayout: FC<BookingLayoutProps<{ serviceSlug: string }>> = ({
   children,
   params,
 }) => {
-  const serviceName =
-    params?.serviceSlug
-      ?.split("-")
-      ?.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      ?.join(" ") || "";
+  const resolvedParams = use(params);
+  const { serviceSlug } = resolvedParams;
 
   return (
-    <div className="custom-container py-5.5">
-      {/* Breadcrumb */}
-      <ServiceBreadcrumb />
+    <BookingProvider>
+      <Wrapper serviceSlug={serviceSlug}>{children}</Wrapper>
+    </BookingProvider>
+  );
+};
 
-      {/* Header */}
-      <div className="flex flex-col gap-1">
-        <h1 className="font-inter text-2xl font-medium mb-4">
-          Book Your Service
-        </h1>
+function Wrapper({
+  children,
+  serviceSlug,
+}: {
+  children: ReactNode;
+  serviceSlug: string;
+}) {
+  const { step } = useBooking();
 
-        <p className="font-inter font-normal text-base leading-6 tracking-[0.01em] text-[#dfe1e7]">
-          {serviceName}
-        </p>
-      </div>
+  const serviceName =
+    serviceSlug
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ") || "";
 
-      <div className="flex gap-6 mt-6">
-        {/* Left Progress Bar */}
-        <BookingSidebar />
+  return (
+    <div className="my-10">
+      <div className="custom-container mx-auto">
+        <ServiceBreadcrumb step={step} />
+        {/* Header */}
+        <div className="flex flex-col gap-1 mb-4">
+          <h3 className="font-inter text-2xl font-medium">Book Your Service</h3>
 
-        {/* Right: Step content */}
-        <div className="flex-1">{children}</div>
+          <p className="font-inter text-base text-[#dfe1e7]">{serviceName}</p>
+        </div>
+        <div className="flex flex-col lg:flex-row gap-5 ">
+          <div className="w-full lg:w-[30%]">
+            <BookingSidebar step={step} />
+          </div>
+          <main className="w-full lg:w-[70%]">{children}</main>
+        </div>
       </div>
     </div>
   );
-};
+}
 
 export default BookingLayout;

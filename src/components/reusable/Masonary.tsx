@@ -1,15 +1,16 @@
-'use client';
+"use client";
 import React, {
+  useCallback,
   useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
   useState,
-} from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+} from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
@@ -18,19 +19,26 @@ const useMedia = (
   values: number[],
   defaultValue: number
 ): number => {
-  const get = () =>
-    values[queries.findIndex(q => matchMedia(q).matches)] ?? defaultValue;
+  const get = useCallback(() => {
+    if (typeof window === "undefined") {
+      return defaultValue;
+    }
 
+    return (
+      values[queries.findIndex((q) => window.matchMedia(q).matches)] ??
+      defaultValue
+    );
+  }, [queries, values, defaultValue]);
   const [value, setValue] = useState<number>(get);
 
   useEffect(() => {
     const handler = () => setValue(get);
-    queries.forEach(q => matchMedia(q).addEventListener('change', handler));
+    queries.forEach((q) => matchMedia(q).addEventListener("change", handler));
     return () =>
-      queries.forEach(q =>
-        matchMedia(q).removeEventListener('change', handler)
+      queries.forEach((q) =>
+        matchMedia(q).removeEventListener("change", handler)
       );
-  }, [queries]);
+  }, [queries, get]);
 
   return value;
 };
@@ -55,8 +63,8 @@ const useMeasure = <T extends HTMLElement>() => {
 const preloadImages = async (urls: string[]): Promise<void> => {
   await Promise.all(
     urls.map(
-      src =>
-        new Promise<void>(resolve => {
+      (src) =>
+        new Promise<void>((resolve) => {
           const img = new Image();
           img.src = src;
           img.onload = img.onerror = () => resolve();
@@ -87,30 +95,30 @@ interface MasonryProps {
   ease?: string;
   duration?: number;
   stagger?: number;
-  animateFrom?: 'bottom' | 'top' | 'left' | 'right' | 'center' | 'random';
+  animateFrom?: "bottom" | "top" | "left" | "right" | "center" | "random";
   scaleOnHover?: boolean;
   hoverScale?: number;
   blurToFocus?: boolean;
   colorShiftOnHover?: boolean;
   enableScrollAnimation?: boolean;
-  scrollAnimationType?: 'fade' | 'slide' | 'scale' | 'rotate' | 'mixed';
+  scrollAnimationType?: "fade" | "slide" | "scale" | "rotate" | "mixed";
 }
 
 const Masonry: React.FC<MasonryProps> = ({
   items,
-  ease = 'power3.out',
+  ease = "power3.out",
   duration = 0.6,
   stagger = 0.05,
-  animateFrom = 'bottom',
+  animateFrom = "bottom",
   scaleOnHover = true,
   hoverScale = 1.02,
   blurToFocus = true,
   colorShiftOnHover = false,
   enableScrollAnimation = true,
-  scrollAnimationType = 'mixed',
+  scrollAnimationType = "mixed",
 }) => {
   const columns = useMedia(
-    ['(min-width:1500px)', '(min-width:1000px)', '(min-width:600px)'],
+    ["(min-width:1500px)", "(min-width:1000px)", "(min-width:600px)"],
     [3, 2, 1],
     1
   );
@@ -120,7 +128,7 @@ const Masonry: React.FC<MasonryProps> = ({
   const scrollTriggersRef = useRef<ScrollTrigger[]>([]);
 
   useEffect(() => {
-    preloadImages(items.map(i => i.img)).then(() => setImagesReady(true));
+    preloadImages(items.map((i) => i.img)).then(() => setImagesReady(true));
   }, [items]);
 
   const grid = useMemo<GridItem[]>(() => {
@@ -130,7 +138,7 @@ const Masonry: React.FC<MasonryProps> = ({
     const totalGaps = (columns - 1) * gap;
     const columnWidth = (width - totalGaps) / columns;
 
-    return items.map(child => {
+    return items.map((child) => {
       const col = colHeights.indexOf(Math.min(...colHeights));
       const x = col * (columnWidth + gap);
       const height = (child.height * columnWidth) / 400;
@@ -144,7 +152,7 @@ const Masonry: React.FC<MasonryProps> = ({
   // ⭐ NEW — FIX FOR SMALL SCREEN HEIGHT COLLAPSE
   const totalHeight = useMemo(() => {
     if (!grid.length) return 0;
-    return Math.max(...grid.map(item => item.y + item.h));
+    return Math.max(...grid.map((item) => item.y + item.h));
   }, [grid]);
 
   const hasMounted = useRef(false);
@@ -152,7 +160,7 @@ const Masonry: React.FC<MasonryProps> = ({
   useLayoutEffect(() => {
     if (!imagesReady) return;
 
-    scrollTriggersRef.current.forEach(trigger => trigger.kill());
+    scrollTriggersRef.current.forEach((trigger) => trigger.kill());
     scrollTriggersRef.current = [];
 
     grid.forEach((item, index) => {
@@ -174,15 +182,15 @@ const Masonry: React.FC<MasonryProps> = ({
             width: item.w,
             height: item.h,
             scale: 0.8,
-            ...(blurToFocus && { filter: 'blur(10px)' }),
+            ...(blurToFocus && { filter: "blur(10px)" }),
           },
           {
             opacity: 1,
             scale: 1,
             ...animProps,
-            ...(blurToFocus && { filter: 'blur(0px)' }),
+            ...(blurToFocus && { filter: "blur(0px)" }),
             duration: 0.8,
-            ease: 'power3.out',
+            ease: "power3.out",
             delay: index * stagger,
           }
         );
@@ -191,7 +199,7 @@ const Masonry: React.FC<MasonryProps> = ({
           ...animProps,
           duration,
           ease,
-          overwrite: 'auto',
+          overwrite: "auto",
         });
       }
 
@@ -199,14 +207,14 @@ const Masonry: React.FC<MasonryProps> = ({
       if (enableScrollAnimation && hasMounted.current) {
         const trigger = ScrollTrigger.create({
           trigger: selector,
-          start: 'top bottom-=100',
-          end: 'bottom top+=100',
-          toggleActions: 'play none none reverse',
+          start: "top bottom-=100",
+          end: "bottom top+=100",
+          toggleActions: "play none none reverse",
           onEnter: () => {
             gsap.fromTo(
               selector,
               { opacity: 0, y: item.y + 50 },
-              { opacity: 1, y: item.y, duration: 0.8, ease: 'power3.out' }
+              { opacity: 1, y: item.y, duration: 0.8, ease: "power3.out" }
             );
           },
           onLeaveBack: () => {
@@ -214,7 +222,7 @@ const Masonry: React.FC<MasonryProps> = ({
               opacity: 0,
               y: item.y + 50,
               duration: 0.5,
-              ease: 'power2.in',
+              ease: "power2.in",
             });
           },
         });
@@ -226,7 +234,7 @@ const Masonry: React.FC<MasonryProps> = ({
     hasMounted.current = true;
 
     return () => {
-      scrollTriggersRef.current.forEach(trigger => trigger.kill());
+      scrollTriggersRef.current.forEach((trigger) => trigger.kill());
       scrollTriggersRef.current = [];
     };
   }, [
@@ -246,17 +254,17 @@ const Masonry: React.FC<MasonryProps> = ({
       gsap.to(`[data-key="${id}"]`, {
         scale: hoverScale,
         duration: 0.4,
-        ease: 'power2.out',
+        ease: "power2.out",
         zIndex: 10,
       });
     }
 
-    const textOverlay = element.querySelector('.text-overlay') as HTMLElement;
+    const textOverlay = element.querySelector(".text-overlay") as HTMLElement;
     if (textOverlay) {
       gsap.to(textOverlay, {
         opacity: 1,
         duration: 0.3,
-        ease: 'power2.out',
+        ease: "power2.out",
       });
     }
   };
@@ -266,7 +274,7 @@ const Masonry: React.FC<MasonryProps> = ({
       gsap.to(`[data-key="${id}"]`, {
         scale: 1,
         duration: 0.4,
-        ease: 'power2.out',
+        ease: "power2.out",
         zIndex: 1,
       });
     }
@@ -274,18 +282,18 @@ const Masonry: React.FC<MasonryProps> = ({
 
   const getTagColor = (tag: string) => {
     switch (tag) {
-      case 'Wedding':
-        return 'bg-gradient-to-r from-orange-500 to-pink-500';
-      case 'Corporate':
-        return 'bg-gradient-to-r from-orange-600 to-red-500';
-      case 'Birthday':
-        return 'bg-gradient-to-r from-orange-500 to-yellow-500';
-      case 'Concert':
-        return 'bg-gradient-to-r from-orange-500 to-purple-500';
-      case 'Party':
-        return 'bg-gradient-to-r from-orange-600 to-pink-600';
+      case "Wedding":
+        return "bg-gradient-to-r from-orange-500 to-pink-500";
+      case "Corporate":
+        return "bg-gradient-to-r from-orange-600 to-red-500";
+      case "Birthday":
+        return "bg-gradient-to-r from-orange-500 to-yellow-500";
+      case "Concert":
+        return "bg-gradient-to-r from-orange-500 to-purple-500";
+      case "Party":
+        return "bg-gradient-to-r from-orange-600 to-pink-600";
       default:
-        return 'bg-gradient-to-r from-orange-500 to-red-500';
+        return "bg-gradient-to-r from-orange-500 to-red-500";
     }
   };
 
@@ -293,20 +301,20 @@ const Masonry: React.FC<MasonryProps> = ({
     <div
       ref={containerRef}
       className="relative w-full"
-      style={{ height: totalHeight }} // ⭐ FIX APPLIED HERE
+      style={{ height: totalHeight }} //  FIX APPLIED HERE
     >
-      {grid.map(item => (
+      {grid.map((item) => (
         <div
           key={item.id}
           data-key={item.id}
           className="absolute box-content cursor-pointer"
           style={{
-            willChange: 'transform, width, height, opacity',
+            willChange: "transform, width, height, opacity",
             zIndex: 1,
           }}
-          onClick={() => window.open(item.url, '_blank', 'noopener')}
-          onMouseEnter={e => handleMouseEnter(item.id, e.currentTarget)}
-          onMouseLeave={e => handleMouseLeave(item.id, e.currentTarget)}
+          onClick={() => window.open(item.url, "_blank", "noopener")}
+          onMouseEnter={(e) => handleMouseEnter(item.id, e.currentTarget)}
+          onMouseLeave={(e) => handleMouseLeave(item.id, e.currentTarget)}
         >
           <div
             className="relative w-full h-full bg-cover bg-center rounded-xl shadow-lg overflow-hidden transition-shadow duration-300 hover:shadow-2xl"

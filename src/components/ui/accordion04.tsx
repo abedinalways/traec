@@ -1,72 +1,90 @@
-'use client';
+"use client";
 
-import { Plus, Minus } from 'lucide-react';
-import * as AccordionPrimitive from '@radix-ui/react-accordion';
+import { Plus, Minus } from "lucide-react";
+import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import {
   Accordion,
   AccordionItem,
   AccordionContent,
-} from '@/components/ui/accordion';
+} from "@/components/ui/accordion";
 
 const items = [
   {
-    title: 'Do I need an account to use the platform?',
+    title: "Do I need an account to use the platform?",
     content:
-      'Yes. To book a service or list your business, you must create a free account.',
+      "Yes. To book a service or list your business, you need to create a free account. Buyers and service providers have separate profiles to keep things simple.",
   },
   {
-    title: 'How do payments work?',
+    title: "How do payments work?",
     content:
-      'Payments are securely processed through trusted payment partners.',
+      "Payments are securely processed through trusted payment partners.",
   },
   {
-    title: 'Can I cancel or reschedule my booking?',
+    title: "Can I cancel or reschedule my booking?",
     content:
-      'You may cancel or reschedule before the provider confirms the booking.',
+      "You may cancel or reschedule before the provider confirms the booking.",
   },
   {
-    title: 'Is this platform available worldwide?',
+    title: "Is this platform available worldwide?",
     content:
-      'The platform is available in most regions depending on local support.',
+      "The platform is available in most regions depending on local support.",
+  },
+  {
+    title: "Is this platform available worldwide?",
+    content:
+      "The platform is available in most regions depending on local support.",
+  },
+  {
+    title: "Is this platform available worldwide?",
+    content:
+      "The platform is available in most regions depending on local support.",
   },
 ];
 
 const Accordion04 = () => {
   return (
-    <Accordion
-      type="single"
-      collapsible
-      defaultValue="item-1"
-      className="md:w-[875px] space-y-3 mx-auto py-10"
-    >
-      {items.map((item, index) => (
-        <AccordionItem
-          key={index}
-          value={`item-${index + 1}`}
-          className="rounded-xl border border-red-100 data-[state=open]:bg-red-50/50 transition-all bg-white"
-        >
-          <AccordionPrimitive.Header>
-            <AccordionPrimitive.Trigger
-              className="flex w-full items-center justify-between px-4 py-4 text-left text-base font-medium rounded-xl
-                transition-all focus-visible:outline-none focus-visible:ring-2
-                data-[state=open]:text-red-600"
-            >
-              {item.title}
+    <section className="w-full flex flex-col items-center pt-20 px-4 ">
+      <Accordion
+        type="single"
+        collapsible
+        defaultValue="item-1"
+        className="w-full max-w-3xl space-y-4"
+      >
+        {items.map((item, index) => (
+          <AccordionItem
+            key={index}
+            value={`item-${index + 1}`}
+            className={`rounded-xl bg-white 
+              border transition-all
+              ${
+                index === 0
+                  ? "data-[state=open]:border-red-300 border-red-200"
+                  : "border-gray-200 data-[state=open]:border-gray-300"
+              }
+            `}
+          >
+            <AccordionPrimitive.Header>
+              <AccordionPrimitive.Trigger
+                className={`flex w-full items-center justify-between rounded-xl px-5 py-4 
+                  text-left text-base font-medium transition-all focus-visible:outline-none 
+                  data-[state=open]:text-red-600 cursor-pointer`}
+              >
+                {item.title}
 
-              {/* ✔ ICON: changes using data-state */}
-              <span className="flex items-center justify-center">
-                <Plus className="size-5 text-gray-500 data-[state=open]:hidden transition-all" />
-                <Minus className="size-5 text-red-500 hidden data-[state=open]:block transition-all" />
-              </span>
-            </AccordionPrimitive.Trigger>
-          </AccordionPrimitive.Header>
+                <span className="flex items-center justify-center">
+                  <Plus className="size-5 text-gray-500 data-[state=open]:hidden transition-all" />
+                  <Minus className="size-5 text-red-500 hidden data-[state=open]:block transition-all" />
+                </span>
+              </AccordionPrimitive.Trigger>
+            </AccordionPrimitive.Header>
 
-          <AccordionContent className="px-4 pb-4 pt-1 text-sm text-gray-600 leading-relaxed">
-            {item.content}
-          </AccordionContent>
-        </AccordionItem>
-      ))}
-    </Accordion>
+            <AccordionContent className="px-5 pb-4 pt-1 text-sm text-gray-600 leading-relaxed">
+              {item.content}
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    </section>
   );
 };
 

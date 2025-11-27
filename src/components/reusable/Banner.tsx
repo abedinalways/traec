@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Search } from 'lucide-react';
-import Image from 'next/image';
+import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Search } from "lucide-react";
+import Image from "next/image";
 
 interface BannerButton {
   label: string;
@@ -25,7 +25,7 @@ interface EventBannerProps {
 export function Banner({
   title,
   subtitle,
-  placeholder = 'Search…',
+  placeholder = "Search…",
   buttons = [],
   className,
   decorationLeft,
@@ -35,19 +35,18 @@ export function Banner({
   return (
     <div
       className={cn(
-        'relative w-full py-20 flex flex-col items-center text-center  overflow-hidden',
+        "relative w-full py-20 flex flex-col items-center text-center  overflow-hidden",
         className
       )}
       style={
         backgroundImage
           ? {
               backgroundImage: `url(${backgroundImage})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
+              backgroundSize: "cover",
+              backgroundPosition: "center",
             }
           : {}
       }
-
     >
       {/* Left Decoration */}
       {decorationLeft && (

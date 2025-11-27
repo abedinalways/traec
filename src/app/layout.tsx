@@ -3,6 +3,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Glory, Inter } from "next/font/google";
 import "../styles/globals.css";
+import { AuthModalProvider } from "./context/AuthModalContext";
 
 const glory = Glory({
   variable: "--font-glory",
@@ -41,7 +42,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${glory.variable} ${geistMono.variable} ${inter.variable} antialiased`}
       >
-        <main className="mt-16">{children}</main>
+        <main className="mt-16">
+          {" "}
+          <AuthModalProvider> {children}</AuthModalProvider>
+        </main>
       </body>
     </html>
   );

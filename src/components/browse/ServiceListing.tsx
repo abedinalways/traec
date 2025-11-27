@@ -1,155 +1,157 @@
-'use client'
-import React, { useState, useMemo } from 'react';
-import { Star, MapPin, ChevronDown, ChevronUp, Search } from 'lucide-react';
+"use client";
+import React, { useState, useMemo } from "react";
+import { Star, MapPin, ChevronDown, ChevronUp, Search } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
 
 // Service data structure
 const servicesData = [
   {
     id: 1,
-    providerName: 'Jhon Doe',
-    providerImage: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John1',
-    title: 'I will provide DJ services to make your events unforgettable.',
+    providerName: "Jhon Doe",
+    providerImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=John1",
+    title: "I will provide DJ services to make your events unforgettable.",
     rating: 4.9,
     reviewCount: 2541,
-    location: 'New York NY',
+    location: "New York NY",
     price: 16,
-    image: '/images/browser/img01.png',
-    category: 'Entertainment',
+    image: "/images/browser/img01.png",
+    category: "Entertainment",
   },
   {
     id: 2,
-    providerName: 'Jhon Doe',
-    providerImage: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John2',
-    title: 'I will provide professional catering services for your events.',
+    providerName: "Jhon Doe",
+    providerImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=John2",
+    title: "I will provide professional catering services for your events.",
     rating: 4.9,
     reviewCount: 2541,
-    location: 'New York NY',
+    location: "New York NY",
     price: 16,
-    image: '/images/browser/img02.png',
-    category: 'Catering',
+    image: "/images/browser/img02.png",
+    category: "Catering",
   },
   {
     id: 3,
-    providerName: 'Jhon Doe',
-    providerImage: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John3',
+    providerName: "Jhon Doe",
+    providerImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=John3",
     title:
-      'I will provide decorators to design and style your events beautifully.',
+      "I will provide decorators to design and style your events beautifully.",
     rating: 4.9,
     reviewCount: 2541,
-    location: 'New York NY',
+    location: "New York NY",
     price: 16,
-    image: '/images/browser/img03.png',
-    category: 'Decorators',
+    image: "/images/browser/img03.png",
+    category: "Decorators",
   },
   {
     id: 4,
-    providerName: 'Jhon Doe',
-    providerImage: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John4',
-    title: 'I will provide rentals for all your event needs.',
+    providerName: "Jhon Doe",
+    providerImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=John4",
+    title: "I will provide rentals for all your event needs.",
     rating: 4.9,
     reviewCount: 2541,
-    location: 'New York NY',
+    location: "New York NY",
     price: 16,
-    image: '/images/browser/img03.png',
-    category: 'Rentals',
+    image: "/images/browser/img03.png",
+    category: "Rentals",
   },
   {
     id: 5,
-    providerName: 'Jhon Doe',
-    providerImage: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John5',
+    providerName: "Jhon Doe",
+    providerImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=John5",
     title:
-      'I will provide professional catering services for your local and private photo.',
+      "I will provide professional catering services for your local and private photo.",
     rating: 4.9,
     reviewCount: 2541,
-    location: 'New York NY',
+    location: "New York NY",
     price: 16,
-    image: '/images/browser/img04.png',
-    category: 'Photography',
+    image: "/images/browser/img03.png",
+    category: "Photography",
   },
   {
     id: 6,
-    providerName: 'Jhon Doe',
-    providerImage: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John6',
+    providerName: "Jhon Doe",
+    providerImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=John6",
     title:
-      'I will provide entertainment services to engage and delight your guests.',
+      "I will provide entertainment services to engage and delight your guests.",
     rating: 4.9,
     reviewCount: 2541,
-    location: 'New York NY',
+    location: "New York NY",
     price: 30,
-    image: '/images/browser/img05.png',
-    category: 'Entertainment',
+    image: "/images/browser/img05.png",
+    category: "Entertainment",
   },
   {
     id: 7,
-    providerName: 'Jhon Doe',
-    providerImage: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John7',
+    providerName: "Jhon Doe",
+    providerImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=John7",
     title:
-      'I will provide entertainment services to engage and delight your guests.',
+      "I will provide entertainment services to engage and delight your guests.",
     rating: 4.9,
     reviewCount: 2541,
-    location: 'New York NY',
+    location: "New York NY",
     price: 16,
-    image: '/images/browser/img06.png',
-    category: 'Entertainment',
+    image: "/images/browser/img06.png",
+    category: "Entertainment",
   },
   {
     id: 8,
-    providerName: 'Jhon Doe',
-    providerImage: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John8',
+    providerName: "Jhon Doe",
+    providerImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=John8",
     title:
-      'I will provide professional catering services for your local and private photo.',
+      "I will provide professional catering services for your local and private photo.",
     rating: 4.9,
     reviewCount: 2541,
-    location: 'New York NY',
+    location: "New York NY",
     price: 24,
-    image: '/images/browser/img07.png',
-    category: 'Catering',
+    image: "/images/browser/img07.png",
+    category: "Catering",
   },
   {
     id: 9,
-    providerName: 'Jhon Doe',
-    providerImage: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John9',
+    providerName: "Jhon Doe",
+    providerImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=John9",
     title:
-      'I will provide entertainment services to engage and delight your guests.',
+      "I will provide entertainment services to engage and delight your guests.",
     rating: 4.9,
     reviewCount: 2541,
-    location: 'New York NY',
+    location: "New York NY",
     price: 40,
-    image: '/images/browser/img08.png',
-    category: 'Entertainment',
+    image: "/images/browser/img08.png",
+    category: "Entertainment",
   },
 ];
 
 const categories = [
   {
-    name: 'Catering',
+    name: "Catering",
     subcategories: [
-      'Full-service catering',
-      'Private chefs',
-      'Food Trucks',
-      'Dessert Tables',
+      "Full-service catering",
+      "Private chefs",
+      "Food Trucks",
+      "Dessert Tables",
     ],
   },
-  { name: 'DJ Services', subcategories: [] },
-  { name: 'Decorators', subcategories: [] },
-  { name: 'Rentals', subcategories: [] },
-  { name: 'Photography', subcategories: [] },
-  { name: 'Entertainment', subcategories: [] },
+  { name: "DJ Services", subcategories: [] },
+  { name: "Decorators", subcategories: [] },
+  { name: "Rentals", subcategories: [] },
+  { name: "Photography", subcategories: [] },
+  { name: "Entertainment", subcategories: [] },
 ];
 
 export default function ServiceListing() {
-  const [locationFilter, setLocationFilter] = useState('');
+  const [locationFilter, setLocationFilter] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState([0, 600]);
-  const [searchRadius, setSearchRadius] = useState('Within 10 miles');
+  const [searchRadius, setSearchRadius] = useState("Within 10 miles");
   const [currentPage, setCurrentPage] = useState(1);
   const [expandedCategory, setExpandedCategory] = useState<string | null>(
-    'Catering'
+    "Catering"
   );
   const itemsPerPage = 9;
 
   const filteredServices = useMemo(() => {
-    return servicesData.filter(service => {
+    return servicesData.filter((service) => {
       const matchesCategory =
         selectedCategories.length === 0 ||
         selectedCategories.includes(service.category);
@@ -169,9 +171,9 @@ export default function ServiceListing() {
   );
 
   const toggleCategory = (category: string) => {
-    setSelectedCategories(prev =>
+    setSelectedCategories((prev) =>
       prev.includes(category)
-        ? prev.filter(c => c !== category)
+        ? prev.filter((c) => c !== category)
         : [...prev, category]
     );
     setCurrentPage(1);
@@ -182,7 +184,7 @@ export default function ServiceListing() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar Filters */}
-          <aside className="w-full lg:w-64 flex-shrink-0">
+          <aside className="w-full lg:w-64">
             <div className="bg-white rounded-lg shadow-sm p-6 space-y-6 sticky top-8">
               {/* Location Filter */}
               <div>
@@ -196,7 +198,7 @@ export default function ServiceListing() {
                     type="text"
                     placeholder="Enter city, state, or zip code"
                     value={locationFilter}
-                    onChange={e => setLocationFilter(e.target.value)}
+                    onChange={(e) => setLocationFilter(e.target.value)}
                     className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -218,7 +220,7 @@ export default function ServiceListing() {
                   <ChevronUp className="w-4 h-4" />
                 </h3>
                 <div className="space-y-1">
-                  {categories.map(category => (
+                  {categories.map((category) => (
                     <div key={category.name}>
                       <div className="flex items-center justify-between py-1.5">
                         <label className="flex items-center cursor-pointer flex-1">
@@ -254,7 +256,7 @@ export default function ServiceListing() {
                       {expandedCategory === category.name &&
                         category.subcategories.length > 0 && (
                           <div className="ml-6 space-y-1 mt-1">
-                            {category.subcategories.map(sub => (
+                            {category.subcategories.map((sub) => (
                               <label
                                 key={sub}
                                 className="flex items-center py-1 cursor-pointer"
@@ -283,7 +285,7 @@ export default function ServiceListing() {
                 </h3>
                 <select
                   value={searchRadius}
-                  onChange={e => setSearchRadius(e.target.value)}
+                  onChange={(e) => setSearchRadius(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option>Within 10 miles</option>
@@ -305,7 +307,9 @@ export default function ServiceListing() {
                     min="0"
                     max="600"
                     value={priceRange[1]}
-                    onChange={e => setPriceRange([0, parseInt(e.target.value)])}
+                    onChange={(e) =>
+                      setPriceRange([0, parseInt(e.target.value)])
+                    }
                     className="w-full accent-blue-600"
                   />
                   <div className="flex justify-between text-sm text-gray-600">
@@ -321,7 +325,7 @@ export default function ServiceListing() {
           <main className="flex-1">
             <div className="mb-6 flex items-center justify-between">
               <p className="text-gray-600">
-                Showing {paginatedServices.length} of {filteredServices.length}{' '}
+                Showing {paginatedServices.length} of {filteredServices.length}{" "}
                 services
               </p>
               <select className="px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -334,24 +338,29 @@ export default function ServiceListing() {
 
             {/* Service Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
-              {paginatedServices.map(service => (
+              {paginatedServices.map((service) => (
                 <div
                   key={service.id}
                   className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow"
                 >
                   <div className="relative h-48">
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="w-full h-full object-cover"
-                    />
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={service.image}
+                        alt={service.title}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                   </div>
                   <div className="p-4">
                     <div className="flex items-center mb-3">
-                      <img
-                        src={service.providerImage}
-                        alt={service.providerName}
-                        className="w-8 h-8 rounded-full mr-2"
+                      <Image
+                        src="/images/browser/img07.png"
+                        alt="provider1"
+                        width={24}
+                        height={24}
+                        className="w-6 h-6 rounded-full mr-2"
                       />
                       <span className="text-sm font-medium text-gray-900">
                         {service.providerName}
@@ -381,9 +390,11 @@ export default function ServiceListing() {
                         <span className="text-gray-500"> /Per Person</span>
                       </div>
                     </div>
-                    <button className="w-full mt-4 px-4 py-2 text-sm text-blue-600 border border-blue-600 rounded-md hover:bg-blue-50 transition-colors">
-                      View Details
-                    </button>
+                    <Link href={`/browse/details/${service.id}`}>
+                      <button className="w-full mt-4 px-4 py-2 text-sm text-blue-600 border border-blue-600 rounded-md hover:bg-blue-50 transition-colors cursor-pointer">
+                        View Details
+                      </button>
+                    </Link>
                   </div>
                 </div>
               ))}
@@ -393,7 +404,9 @@ export default function ServiceListing() {
             {totalPages > 1 && (
               <div className="flex items-center justify-center gap-2">
                 <button
-                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(1, prev - 1))
+                  }
                   disabled={currentPage === 1}
                   className="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded disabled:opacity-50 disabled:cursor-not-allowed"
                 >
@@ -412,8 +425,8 @@ export default function ServiceListing() {
                         onClick={() => setCurrentPage(page)}
                         className={`px-3 py-1 rounded ${
                           currentPage === page
-                            ? 'bg-blue-600 text-white'
-                            : 'text-gray-600 hover:bg-gray-100'
+                            ? "bg-blue-600 text-white"
+                            : "text-gray-600 hover:bg-gray-100"
                         }`}
                       >
                         {page}
@@ -433,7 +446,7 @@ export default function ServiceListing() {
                 })}
                 <button
                   onClick={() =>
-                    setCurrentPage(prev => Math.min(totalPages, prev + 1))
+                    setCurrentPage((prev) => Math.min(totalPages, prev + 1))
                   }
                   disabled={currentPage === totalPages}
                   className="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded disabled:opacity-50 disabled:cursor-not-allowed"
