@@ -2,11 +2,108 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import MyOrder from "../../../(dashboard)/components/myorder/myorder";
-import MessagePage from "../../../(dashboard)/components/messege/message";
-import ReviewPage from "../../../(dashboard)/components/review/review";
+import MyOrder from "../../dashboardcomponets/myorder/myorder";
+import MessagePage from "../../dashboardcomponets/messege/message";
+import ReviewPage from "../../dashboardcomponets/review/review";
 import Service from "../../_components/providerdashboard/service";
-import { serviceData } from "./serviceitem";
+// import { serviceData } from "./serviceitem";
+
+// serviceitem.tsx
+
+ const serviceData = [
+  {
+    id: 1,
+    title: "DJ Sarah’s Party Productions",
+    desc: "I will provide DJ services to make your events unforgettable.",
+    price: "$560",
+    img: "/images/img01.png",
+    rating: "4.9",
+    reviews: "234",
+    
+   
+  },
+  {
+    id: 2,
+    title: "Premium Catering Service",
+    desc: "I will provide professional catering services for your event.",
+    price: "$440",
+    img: "/images/Rectangle 20.png",
+    rating: "4.5",
+    reviews: "211",
+  },
+
+  {
+    id: 3,
+    title: "DJ Sarah’s Party Productions",
+    desc: "I will provide DJ services to make your events unforgettable.",
+    price: "$560",
+    img: "/images/img01.png",
+    rating: "4.9",
+    reviews: "234",
+    
+   
+  },
+
+  {
+    id: 4,
+    title: "DJ Sarah’s Party Productions",
+    desc: "I will provide DJ services to make your events unforgettable.",
+    price: "$560",
+    img: "/images/img01.png",
+    rating: "4.9",
+    reviews: "234",
+    
+   
+  },
+    
+  //add more....
+];
+
+// messageitem.tsx
+ const messageData = [
+  {
+    image: "/images/Rectangle 19.png",
+    name: "Jacob Jones",
+    text: "Princess Castle Bounce House by Part Pro Rentals, then i will be continue to",
+  },
+  {
+    image: "/images/Rectangle 20.png",
+    name: "Floyd Miles",
+    text: "Princess Castle Bounce House by Part Pro Rentals, then i will be continue to",
+  },
+  {
+    image: "/images/Rectangle 21.png",
+    name: "Annette Black",
+    text: "Princess Castle Bounce House by Part Pro Rentals, then i will be continue to",
+  },
+  {
+    image: "/images/Rectangle 22.png",
+    name: "Darrell Steward",
+    text: "Princess Castle Bounce House by Part Pro Rentals, then i will be continue to",
+  },
+];
+
+// activityitem.tsx
+export const activityData = [
+  {
+    text: "Received 5-star review",
+    time: "2 days ago",
+    dotColor: "green",
+  },
+  {
+    text: "Completed order #1247",
+    time: "2 days ago",
+    dotColor: "yellow",
+  },
+  {
+    text: "Earned Party Pro",
+    time: "2 days ago",
+    dotColor: "purple",
+  },
+];
+
+
+
 
 import {
   CalendarDays,
@@ -86,53 +183,20 @@ export default function Overview() {
               <SectionTitle title="Top Services" />
 
               <div className="space-y-3">
+  {serviceData.slice(0, 4).map((service) => (
+    <ServiceItem
+      key={service.id}
+      image={service.img}     //  img -> image prop
+      title={service.title}
+      desc={service.desc}
+      price={service.price}
+      rating={service.rating}
+      reviews={service.reviews}
+         //  pass date
+    />
+  ))}
+</div>
 
-                <ServiceItem
-                  image="/images/Rectangle 19.png"
-                  title="DJ Sarah’s Party Productions"
-                  desc="I will provide DJ services to make your events unforgettable."
-                  price="$560"
-                  rating="4.9"
-                  reviews="234"
-                />
-
-                <ServiceItem
-                  image="/images/Rectangle 20.png"
-                  title="Premium Catering Service"
-                  desc="I will provide professional catering services for your event."
-                  price="$440"
-                  rating="4.5"
-                  reviews="211"
-                />
-
-                <ServiceItem
-                  image="/images/Rectangle 21.png"
-                  title="Kathrine’s Entertainment Package"
-                  desc="I will provide entertainment services to engage your guests."
-                  price="$380"
-                  rating="4.4"
-                  reviews="220"
-                />
-
-                <ServiceItem
-                  image="/images/Rectangle 22.png"
-                  title="Customized Theme Party Organizer"
-                  desc="I will provide decorators to design and style your events beautifully."
-                  price="$660"
-                  rating="4.4"
-                  reviews="140"
-                />
-
-                {/* <ServiceItem
-                  image="/images/Rectangle 19.png"
-                  title="Elegant Wedding Event"
-                  desc="I will provide decorators to design and style your events beautifully."
-                  price="$760"
-                  rating="4.4"
-                  reviews="140"
-                /> */}
-
-              </div>
             </div>
 
             {/* RIGHT — Activity + Messages (UNCHANGED) */}
@@ -140,21 +204,32 @@ export default function Overview() {
 
               {/* Recent Message */}
               <div className="rounded-2xl border shadow-sm bg-[#ECEFF3] p-4">
-                <SectionTitle title="Recent Message" />
+  <SectionTitle title="Recent Message" />
 
-                <MessageItem image="/images/Rectangle 19.png" name="Jacob Jones" text="Princess Castle Bounce House by Part Pro Rentals, then i will be continue to" />
-                <MessageItem image="/images/Rectangle 20.png" name="Floyd Miles" text="Princess Castle Bounce House by Part Pro Rentals, then i will be continue to" />
-                <MessageItem image="/images/Rectangle 21.png" name="Annette Black" text="Princess Castle Bounce House by Part Pro Rentals, then i will be continue to" />
-                <MessageItem image="/images/Rectangle 22.png" name="Darrell Steward" text="Princess Castle Bounce House by Part Pro Rentals, then i will be continue to" />
-              </div>
+  {messageData.slice(0, 4).map((msg, index) => (
+    <MessageItem
+      key={index}
+      image={msg.image}
+      name={msg.name}
+      text={msg.text}
+    />
+  ))}
+</div>
+
 
               {/* Recent Activity */}
               <div className="rounded-2xl border shadow-sm bg-[#ECEFF3] p-4">
-                <SectionTitle title="Recent Activity" />
-                <ActivityItem text="Received 5-star review" time="2 days ago" dotColor="green" />
-                <ActivityItem text="Completed order #1247" time="2 days ago" dotColor="yellow" />
-                <ActivityItem text="Earned Party Pro" time="2 days ago" dotColor="purple" />
-              </div>
+  <SectionTitle title="Recent Activity" />
+
+  {activityData.map((activity, index) => (
+    <ActivityItem
+      key={index}
+      text={activity.text}
+      time={activity.time}
+      dotColor={activity.dotColor}
+    />
+  ))}
+</div>
 
             </div>
           </div>

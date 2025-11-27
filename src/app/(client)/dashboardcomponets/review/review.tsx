@@ -2,31 +2,49 @@
 
 import { Star, Pencil, ChevronRight } from "lucide-react";
 
+/* ======================================================
+   DYNAMIC REVIEWS DATA (same file)
+====================================================== */
+
+const reviewsData = [
+  {
+    id: 1,
+    title: "Austin Bounce",
+    subtitle: "Fall Festival Bounce House",
+    order: "ORD-003",
+    date: "Nov 23, 2024",
+    rating: 5,
+    review:
+      "DJ Sarah was absolutely amazing! She kept all the kids entertained for the entire party. The music selection was perfect and she even taught them some fun dances. Highly recommended!",
+    providerResponse:
+      "DJ Sarah was absolutely amazing! She kept all the kids entertained for the entire party. The music selection was perfect and she even taught them some fun dances. Highly recommended!",
+  },
+  {
+    id: 2,
+    title: "Austin Bounce",
+    subtitle: "Fall Festival Bounce House",
+    order: "ORD-003",
+    date: "Nov 23, 2024",
+    rating: 5,
+    review:
+      "DJ Sarah was absolutely amazing! She kept all the kids entertained for the entire party. The music selection was perfect and she even taught them some fun dances. Highly recommended!",
+    providerResponse:
+      "DJ Sarah was absolutely amazing! She kept all the kids entertained for the entire party. The music selection was perfect and she even taught them some fun dances. Highly recommended!",
+  },
+  // add more...
+];
+
+/* ======================================================
+   MAIN COMPONENT
+====================================================== */
+
 export default function ReviewPage() {
-  const reviews = [
-    {
-      title: "Austin Bounce",
-      subtitle: "Fall Festival Bounce House",
-      order: "ORD-003",
-      date: "Nov 23, 2024",
-      rating: 5,
-      review:
-        "DJ Sarah was absolutely amazing! She kept all the kids entertained for the entire party. The music selection was perfect and she even taught them some fun dances. Highly recommended!",
-      providerResponse:
-        "DJ Sarah was absolutely amazing! She kept all the kids entertained for the entire party. The music selection was perfect and she even taught them some fun dances. Highly recommended!",
-    },
-    {
-      title: "Austin Bounce",
-      subtitle: "Fall Festival Bounce House",
-      order: "ORD-003",
-      date: "Nov 23, 2024",
-      rating: 5,
-      review:
-        "DJ Sarah was absolutely amazing! She kept all the kids entertained for the entire party. The music selection was perfect and she even taught them some fun dances. Highly recommended!",
-      providerResponse:
-        "DJ Sarah was absolutely amazing! She kept all the kids entertained for the entire party. The music selection was perfect and she even taught them some fun dances. Highly recommended!",
-    },
-  ];
+  // Avg rating + total reviews (dynamic)
+  const totalReviews = reviewsData.length;
+  const avgRating =
+    totalReviews > 0
+      ? reviewsData.reduce((acc, r) => acc + Number(r.rating), 0) / totalReviews
+      : 0;
 
   return (
     <div className="w-full bg-white p-5 rounded-xl pb-10">
@@ -37,16 +55,18 @@ export default function ReviewPage() {
 
         <div className="flex items-center gap-2 text-yellow-500 font-semibold">
           <Star fill="#F6C700" className="text-yellow-400" size={18} />
-          <span className="text-black">4.9</span>
-          <span className="text-gray-500 text-sm">(156 reviews)</span>
+          <span className="text-black">{avgRating.toFixed(1)}</span>
+          <span className="text-gray-500 text-sm">
+            ({totalReviews} reviews)
+          </span>
         </div>
       </div>
 
       {/* ---------- Review Cards ---------- */}
       <div className="space-y-6">
-        {reviews.map((item, index) => (
+        {reviewsData.map((item) => (
           <div
-            key={index}
+            key={item.id}
             className="
               w-full 
               border 
@@ -103,7 +123,9 @@ export default function ReviewPage() {
 
             {/* PROVIDER RESPONSE */}
             <div className="mt-4">
-              <p className="font-semibold text-gray-800 mb-1">Provider Response:</p>
+              <p className="font-semibold text-gray-800 mb-1">
+                Provider Response:
+              </p>
 
               <div className="bg-[#F8FAFC] border p-3 rounded text-sm text-gray-700 leading-relaxed">
                 {item.providerResponse}

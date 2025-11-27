@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import MyOrder from "../myorder/myorder";
-import MessagePage from "../messege/message";
+import MyOrder from "../../../(client)/dashboardcomponets/myorder/myorder";
+import MessagePage from "../../../(client)/dashboardcomponets/messege/message";
 import ReviewPage from "../review/review"
 
 import {
