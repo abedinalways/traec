@@ -6,7 +6,6 @@ import Overview from "../_components/providerdashboard/pdoverview";
 export default function Page() {
   return (
     <main className="w-full min-h-screen bg-white">
-
       {/* ===== Top Cover Image / Header ===== */}
       <div className="w-full h-[250px] sm:h-[320px] md:h-[380px] lg:h-[420px] xl:h-[450px] relative">
         <img
@@ -28,7 +27,6 @@ export default function Page() {
       >
         {/* GRID LAYOUT */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-
           {/* LEFT — PROFILE CARD */}
           <div
             className="
@@ -59,10 +57,8 @@ export default function Page() {
           >
             <Overview />
           </div>
-
         </div>
       </div>
-
     </main>
   );
 }

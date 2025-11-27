@@ -1,4 +1,3 @@
-
 import Navbar from "@/components/reusable/Navbar";
 import Footer from "@/components/reusable/Footer";
 import React from "react";
