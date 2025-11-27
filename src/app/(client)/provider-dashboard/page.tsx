@@ -1,6 +1,6 @@
 "use client";
 
-import Editprofile from "../../(dashboard)/components/editprofile/Editprofile";
+import Editprofile from "../dashboardcomponets/editprofile/Editprofile";
 import Overview from "../_components/providerdashboard/pdoverview";
 
 export default function Page() {
