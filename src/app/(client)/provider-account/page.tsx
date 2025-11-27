@@ -27,37 +27,37 @@ export default function AccountDashboard() {
       icon: Pencil,
       title: "Edit Profile",
       desc: "Update your personal information",
-      path: "/profile/edit-profile",
+      path: "/provider-account/edit-profile",
     },
     {
       icon: Settings,
       title: "Account Settings",
       desc: "Privacy, security, and preferences",
-      path: "/profile/account-setting",
+      path: "/provider-account/account-setting",
     },
     {
       icon: CreditCard,
       title: "Payment Method",
       desc: "Manage your billing information",
-      path: "/profile/payment-method",
+      path: "/provider-account/payment-method",
     },
     {
       icon: Clock,
       title: "Order History",
       desc: "See your past events and bookings",
-      path: "/profile/order-history",
+      path: "/provider-account/order-history",
     },
     {
       icon: Bell,
       title: "Notification Preferences",
       desc: "Control how you receive updates",
-      path: "/profile/notification-preferences",
+      path: "/provider-account/notification-preferences",
     },
     {
       icon: HelpCircle,
       title: "Help & Support",
       desc: "Get help or customer service",
-      path: "/profile/help-support",
+      path: "/provider-account/help-support",
     },
   ];
 

@@ -28,11 +28,11 @@ export default function Subscribe() {
 
   return (
     <section className="z-50">
-      <div className="mx-auto max-w-3xl mt-10 px-4 py-6 md:py-14 z-20">
+      <div className="mx-auto max-w-3xl px-4 py-6 md:py-14 z-20">
         <div
           className={cn(
             "relative overflow-hidden border-none rounded-2xl",
-            "bg-gradient-email text-white w-full md:w-[920px] h-auto md:h-[244px]"
+            "bg-gradient-email text-white w-full md:max-w-3xl h-auto md:h-[244px]"
           )}
         >
           {/* Background Image */}

@@ -13,7 +13,7 @@ export default function Page() {
     <div className="w-full max-w-3xl mx-auto px-4 py-10">
       {/* Back Button */}
       <Link
-        href={"/profile"}
+        href={"/provider-account"}
         className="flex items-center max-w-38 rounded-sm p-2 text-sm border text-gray-600 hover:text-black mb-4"
       >
         <MdKeyboardArrowLeft size={24} className="pt-1" />
