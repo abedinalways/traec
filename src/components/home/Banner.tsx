@@ -1,8 +1,8 @@
-import React from 'react';
-import { Search, Star, CheckCircle2 } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
+import React from "react";
+import { Search, Star, CheckCircle2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const Banner = () => {
   return (
@@ -13,7 +13,7 @@ const Banner = () => {
           <div className="space-y-6 lg:space-y-8">
             <div className="space-y-4">
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                Elevate Your Event with Premium{' '}
+                Elevate Your Event with Premium{" "}
                 <span className="text-gradient italic font-serif">Evoke</span>
               </h1>
 
