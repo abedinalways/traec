@@ -43,12 +43,12 @@ const items = [
 
 const Accordion04 = () => {
   return (
-    <section className="w-full flex flex-col items-center pt-20 px-4 ">
+    <section className="w-full flex flex-col items-center ">
       <Accordion
         type="single"
         collapsible
         defaultValue="item-1"
-        className="w-full max-w-3xl space-y-4"
+        className="w-full space-y-4"
       >
         {items.map((item, index) => (
           <AccordionItem

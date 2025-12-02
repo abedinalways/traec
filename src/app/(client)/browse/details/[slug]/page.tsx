@@ -190,7 +190,7 @@ export default function ServiceDetailsPage() {
                 and avoid interruptions.
               </p>
             </div>
-            <h3 className="mt-5 text-2xl">FAQ</h3>
+            <h3 className="my-5 text-2xl">FAQ</h3>
             <Accordion04 />
             <CustomerReviewsSummary />
             <Reviews />
