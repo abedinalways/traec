@@ -113,12 +113,13 @@ export default function LogInModal({
               <span className="flex-grow h-px bg-gray-200"></span>
             </div>
 
-            <button className="w-full h-12 border border-gray-200 rounded-xl flex items-center justify-center bg-white cursor-pointer">
+            <button className="w-full h-12 border border-gray-200 rounded-xl flex items-center justify-center gap-3 bg-white cursor-pointer">
               <FcGoogle />
+              Continue with Google
             </button>
 
             <p className="text-center text-gray-500 mt-6 text-sm">
-              Already have not an account?{" "}
+              Don't have an account yet?{" "}
               <button
                 onClick={openSignup}
                 className="text-[#FF2A24] font-medium cursor-pointer"
