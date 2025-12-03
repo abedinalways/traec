@@ -19,6 +19,9 @@ const Banner = () => {
                 Elevate Your Event with Premium{" "}
                 <span className="text-gradient italic font-serif">Evoke</span>
               </h1>
+              <h1 style={{ fontFamily: "Britney-Bold" }}>
+                Welcome to the Event
+              </h1>
 
               <p className="text-gray-600 text-sm sm:text-base leading-relaxed max-w-xl">
                 Discover everything you need to plan the perfect event from DJs,
