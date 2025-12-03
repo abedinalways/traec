@@ -1,3 +1,4 @@
+"use client";
 import AccountSettingsForm from "../../_components/profile/AccountSettingForm";
 
 export default function Page() {
