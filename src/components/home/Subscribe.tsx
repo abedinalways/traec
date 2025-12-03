@@ -73,7 +73,7 @@ export default function Subscribe() {
 
               <Button
                 type="submit"
-                className="bg-white/80 hover:bg-white text-orange-700 font-semibold md:px-6 px-4"
+                className="bg-white hover:bg-white font-semibold text-orange-500 md:px-6 px-4"
               >
                 Subscribe
               </Button>

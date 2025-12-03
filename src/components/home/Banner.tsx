@@ -1,20 +1,26 @@
-import React from 'react';
-import { Search, Star, CheckCircle2 } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
+import React from "react";
+import { Search, Star, CheckCircle2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const Banner = () => {
   return (
-    <div className="bg-gradient-to-br from-orange-50 via-white to-white py-10">
+    <div className="bg-linear-to-br from-orange-50 via-white to-white py-10">
       <div className="custom-container mx-auto px-4 md:px-0 py-8 lg:py-16">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           {/* LEFT TEXT SECTION */}
           <div className="space-y-6 lg:space-y-8">
             <div className="space-y-4">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                Elevate Your Event with Premium{' '}
+              <h1
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight"
+                style={{ fontFamily: "Glory, sans-serif" }}
+              >
+                Elevate Your Event with Premium{" "}
                 <span className="text-gradient italic font-serif">Evoke</span>
+              </h1>
+              <h1 style={{ fontFamily: "Britney-Bold" }}>
+                Welcome to the Event
               </h1>
 
               <p className="text-gray-600 text-sm sm:text-base leading-relaxed max-w-xl">
@@ -26,7 +32,7 @@ const Banner = () => {
             </div>
 
             {/* SEARCH BAR */}
-            <div className="flex flex-col sm:flex-row gap-3 w-full bg-gradient py-4 rounded-xl px-4">
+            <div className="flex flex-col sm:flex-row gap-3 w-full py-4 rounded-xl px-4 bg-linear-to-r from-orange-200 via-red-100 to-white">
               <div className="relative flex-1 bg-white rounded-xl shadow-sm">
                 <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <Input
@@ -35,7 +41,7 @@ const Banner = () => {
                 />
               </div>
 
-              <Button className="btn-gradient text-white px-8 py-6 text-base font-semibold rounded-xl">
+              <Button className="btn-gradient text-white px-8 py-6 text-base font-semibold rounded-xl ">
                 Find Event Services
               </Button>
             </div>
