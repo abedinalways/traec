@@ -54,7 +54,7 @@ export default function SignUpModal({
 
           {/* RIGHT FORM */}
           <div className="flex items-center justify-center bg-white lg:-ml-16 rounded-2xl lg:rounded-l-4xl lg:rounded-r-2xl">
-            <div className="w-full max-w-md p-8 md:p-10 rounded-3xl">
+            <div className="w-full p-8 md:p-10 rounded-3xl">
               {/* Logo */}
               <div className="w-full flex justify-center mb-6">
                 <Image
@@ -71,54 +71,67 @@ export default function SignUpModal({
               </h2>
 
               {/* Form */}
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Email Address
+                </label>
                 <input
                   type="email"
                   {...register("email")}
-                  placeholder="Email"
+                  placeholder="Enter your email address"
                   className="w-full border border-gray-200 h-12 rounded-xl px-4 focus:outline-none"
                 />
 
                 {/* Password */}
-                <div className="relative">
-                  <input
-                    type={showPass ? "text" : "password"}
-                    {...register("password")}
-                    placeholder="Password"
-                    className="w-full border border-gray-200 h-12 rounded-xl px-4 pr-12 focus:outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPass(!showPass)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
-                  >
-                    {showPass ? (
-                      <AiOutlineEyeInvisible size={20} />
-                    ) : (
-                      <AiOutlineEye size={20} />
-                    )}
-                  </button>
+                <div className="pace-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Password
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showPass ? "text" : "password"}
+                      {...register("password")}
+                      placeholder="Password"
+                      className="w-full border border-gray-200 h-12 rounded-xl px-4 pr-12 focus:outline-none"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPass(!showPass)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
+                    >
+                      {showPass ? (
+                        <AiOutlineEyeInvisible size={20} />
+                      ) : (
+                        <AiOutlineEye size={20} />
+                      )}
+                    </button>
+                  </div>
                 </div>
 
                 {/* Confirm Password */}
-                <div className="relative">
-                  <input
-                    type={showConfirmPass ? "text" : "password"}
-                    {...register("confirmPassword")}
-                    placeholder="Confirm Password"
-                    className="w-full border border-gray-200 h-12 rounded-xl px-4 pr-12 focus:outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPass(!showConfirmPass)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
-                  >
-                    {showConfirmPass ? (
-                      <AiOutlineEyeInvisible size={20} />
-                    ) : (
-                      <AiOutlineEye size={20} />
-                    )}
-                  </button>
+                <div className=" space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Confirm Password
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showConfirmPass ? "text" : "password"}
+                      {...register("confirmPassword")}
+                      placeholder="Confirm Password"
+                      className="w-full border border-gray-200 h-12 rounded-xl px-4 pr-12 focus:outline-none"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPass(!showConfirmPass)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
+                    >
+                      {showConfirmPass ? (
+                        <AiOutlineEyeInvisible size={20} />
+                      ) : (
+                        <AiOutlineEye size={20} />
+                      )}
+                    </button>
+                  </div>
                 </div>
 
                 <button
@@ -135,8 +148,9 @@ export default function SignUpModal({
                 <span className="flex-grow h-px bg-gray-200"></span>
               </div>
 
-              <button className="w-full h-12 border border-gray-200 rounded-xl flex items-center justify-center bg-white cursor-pointer">
+              <button className="w-full h-12 border border-gray-200 rounded-xl flex items-center justify-center gap-3 bg-white cursor-pointer">
                 <FcGoogle />
+                Continue with Google
               </button>
 
               <p className="text-center text-gray-500 mt-6 text-sm">
