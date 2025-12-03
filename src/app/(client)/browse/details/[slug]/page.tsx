@@ -31,7 +31,7 @@ export default function ServiceDetailsPage() {
     <div className="my-10">
       <div className="custom-container mx-auto ">
         <Link href="/browse">
-          <button className="border border-gray-300 p-1 flex items-center gap-3 mt-5 rounded-md cursor-pointer mb-5">
+          <button className="border border-gray-300 p-2 flex items-center gap-3 mt-5 rounded-md cursor-pointer mb-5">
             <IoIosArrowBack /> Back to Browse
           </button>
         </Link>{" "}
@@ -59,10 +59,10 @@ export default function ServiceDetailsPage() {
                 >
                   <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 mr-1" />
                   <span className="text-sm font-semibold">
-                    {/* {service.rating} */} 5
+                    {/* {service.rating} */} 4.5
                   </span>
                   <span className="text-xs text-gray-500 ml-1">
-                    {/* ({service.reviewCount}) */} 500
+                    {/* ({service.reviewCount}) */} (234)
                   </span>
                 </div>
               </div>
@@ -80,10 +80,10 @@ export default function ServiceDetailsPage() {
 
               {/* Thumbnails */}
               <div className="flex gap-4 p-3">
-                {[1, 2, 7].map((i) => (
+                {[1, 2, 7, 5].map((i) => (
                   <div
                     key={i}
-                    className="overflow-hidden cursor-pointer"
+                    className="relative w-20 h-20 overflow-hidden cursor-pointer rounded-md"
                     onClick={() =>
                       handleThumbnailClick(`/images/browser/img0${i}.png`)
                     }
@@ -91,14 +91,14 @@ export default function ServiceDetailsPage() {
                     <Image
                       src={`/images/browser/img0${i}.png`}
                       alt={`Thumbnail ${i}`}
-                      width={100}
-                      height={100}
-                      className="object-cover rounded-md"
+                      fill
+                      className="object-cover"
                     />
                   </div>
                 ))}
               </div>
             </div>
+
             <div className="space-y-6 rounded-xl border border-gray-200 bg-white mt-5 p-4 shadow-sm">
               <h2 className="text-3xl font-semibold  mb-6">About</h2>
               <p className="text-lg text-gray-700 mb-4">
@@ -199,12 +199,12 @@ export default function ServiceDetailsPage() {
           <div className="w-full lg:w-[30%] ">
             <div className="w-full rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
               {/* Tabs */}
-              <div className="flex overflow-x-auto justify-between gap-5">
+              <div className="grid grid-cols-3 divide-x-4">
                 <button
                   onClick={() => setActiveTab("Basic")}
-                  className={`whitespace-nowrap px-4 py-2 rounded-md border ${
+                  className={`whitespace-nowrap px-4 py-2 border ${
                     activeTab === "Basic"
-                      ? "border-blue-600 text-blue-600 "
+                      ? "border-b-[#070707] border-b-2"
                       : "border-gray-300 text-gray-500 hover:text-black cursor-pointer"
                   }`}
                 >
@@ -213,9 +213,9 @@ export default function ServiceDetailsPage() {
 
                 <button
                   onClick={() => setActiveTab("Standard")}
-                  className={`whitespace-nowrap px-4 py-2 rounded-md border ${
+                  className={`whitespace-nowrap px-4 py-2  border ${
                     activeTab === "Standard"
-                      ? "border-blue-600 text-blue-600 "
+                      ? "border-b-[#070707] border-b-2"
                       : "border-gray-300 text-gray-500 hover:text-black cursor-pointer"
                   }`}
                 >
@@ -224,9 +224,9 @@ export default function ServiceDetailsPage() {
 
                 <button
                   onClick={() => setActiveTab("Premium")}
-                  className={`whitespace-nowrap px-4 py-2 rounded-md border ${
+                  className={`whitespace-nowrap px-4 py-2 border ${
                     activeTab === "Premium"
-                      ? "border-blue-600 text-blue-600 "
+                      ? "border-b-[#070707] border-b-2 "
                       : "border-gray-300 text-gray-500 hover:text-black cursor-pointer"
                   }`}
                 >

@@ -127,7 +127,7 @@ export default function LogInModal({
             </button>
 
             <p className="text-center text-gray-500 mt-6 text-sm">
-              Don't have an account yet?{" "}
+              Don&apos;t have an account yet?{" "}
               <button
                 onClick={openSignup}
                 className="text-[#FF2A24] font-medium cursor-pointer"
