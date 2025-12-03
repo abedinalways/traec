@@ -47,7 +47,7 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-6">
           <Button
             onClick={() => setOpenLogin(true)}
-            className="text-sm font-medium"
+            className="text-sm font-medium hover:bg-white cursor-pointer bg-white text-black"
           >
             Sign In
           </Button>
