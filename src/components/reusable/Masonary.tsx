@@ -325,9 +325,7 @@ const Masonry: React.FC<MasonryProps> = ({
             {item.tag && (
               <div className="absolute top-4 left-4 z-10">
                 <span
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold text-white ${getTagColor(
-                    item.tag
-                  )}`}
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold text-white btn-gradient`}
                 >
                   {item.tag}
                 </span>
