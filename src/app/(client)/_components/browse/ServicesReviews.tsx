@@ -13,7 +13,7 @@ import {
 export default function ServicesReviews() {
   return (
     <div>
-      <div className="w-full bg-white rounded-xl border shadow p-6 md:p-8 my-5">
+      <div className="w-full bg-white rounded-xl border p-6 md:p-8 my-5">
         <div className="flex items-center gap-2 mb-3 border-b border-[#DFE1E7] pb-3">
           <Image
             src="/images/browser/img07.png"
@@ -124,7 +124,7 @@ export default function ServicesReviews() {
           </Accordion>
         </div>
       </div>
-      <div className="w-full bg-white rounded-xl border shadow p-6 md:p-8 my-5">
+      <div className="w-full bg-white rounded-xl border p-6 md:p-8 my-5">
         <div className="flex items-center gap-2 mb-3 border-b border-[#DFE1E7] pb-3">
           <Image
             src="/images/browser/img07.png"
