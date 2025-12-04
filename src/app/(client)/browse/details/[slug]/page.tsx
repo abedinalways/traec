@@ -2,6 +2,7 @@
 import BasicServices from "@/app/(client)/_components/browse/BasicServices";
 import CustomerReviewsSummary from "@/app/(client)/_components/browse/CustomerReviewsSummary";
 import PremiumServices from "@/app/(client)/_components/browse/PremiumServices";
+import ServicesReviews from "@/app/(client)/_components/browse/ServicesReviews";
 import StandardServices from "@/app/(client)/_components/browse/StandardServices";
 import Reviews from "@/app/(client)/_components/providers/Reviews";
 import Accordion04 from "@/components/ui/accordion04";
@@ -193,7 +194,8 @@ export default function ServiceDetailsPage() {
             <h3 className="my-5 text-2xl">FAQ</h3>
             <Accordion04 />
             <CustomerReviewsSummary />
-            <Reviews />
+            {/* <Reviews /> */}
+            <ServicesReviews />
           </div>
           {/* Right Section (Stats) */}
           <div className="w-full lg:w-[30%] ">
@@ -264,7 +266,7 @@ export default function ServiceDetailsPage() {
                     >
                       <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 mr-1" />
                       <span className="text-sm font-semibold">
-                        {/* {service.rating} */} 5
+                        {/* {service.rating} */} 4.9
                       </span>
                       <span className="text-xs text-gray-500 ml-1">
                         {/* ({service.reviewCount}) */}(500)
