@@ -3,6 +3,7 @@ import React, { useState, useMemo } from "react";
 import { Star, MapPin, ChevronDown, ChevronUp, Search } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import FiltersSidebar from "./FilterSidebar";
 
 // Service data structure
 const servicesData = [
@@ -184,142 +185,8 @@ export default function ServiceListing() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar Filters */}
-          <aside className="w-full lg:w-64">
-            <div className="bg-white rounded-lg shadow-sm p-6 space-y-6 sticky top-8">
-              {/* Location Filter */}
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-3 flex items-center justify-between">
-                  Location
-                  <ChevronUp className="w-4 h-4" />
-                </h3>
-                <div className="relative mb-3">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Enter city, state, or zip code"
-                    value={locationFilter}
-                    onChange={(e) => setLocationFilter(e.target.value)}
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-                <div className="flex gap-2">
-                  <button className="flex-1 px-3 py-1.5 bg-gray-900 text-white text-sm rounded-full">
-                    <MapPin className="w-3 h-3 inline mr-1" />
-                    Service hub
-                  </button>
-                  <button className="flex-1 px-3 py-1.5 border border-gray-300 text-sm rounded-full">
-                    Read this
-                  </button>
-                </div>
-              </div>
 
-              {/* Categories */}
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-3 flex items-center justify-between">
-                  All Categories
-                  <ChevronUp className="w-4 h-4" />
-                </h3>
-                <div className="space-y-1">
-                  {categories.map((category) => (
-                    <div key={category.name}>
-                      <div className="flex items-center justify-between py-1.5">
-                        <label className="flex items-center cursor-pointer flex-1">
-                          <input
-                            type="checkbox"
-                            checked={selectedCategories.includes(category.name)}
-                            onChange={() => toggleCategory(category.name)}
-                            className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                          />
-                          <span className="ml-2 text-sm text-gray-700">
-                            {category.name}
-                          </span>
-                        </label>
-                        {category.subcategories.length > 0 && (
-                          <button
-                            onClick={() =>
-                              setExpandedCategory(
-                                expandedCategory === category.name
-                                  ? null
-                                  : category.name
-                              )
-                            }
-                            className="p-1"
-                          >
-                            {expandedCategory === category.name ? (
-                              <ChevronUp className="w-4 h-4 text-gray-400" />
-                            ) : (
-                              <ChevronDown className="w-4 h-4 text-gray-400" />
-                            )}
-                          </button>
-                        )}
-                      </div>
-                      {expandedCategory === category.name &&
-                        category.subcategories.length > 0 && (
-                          <div className="ml-6 space-y-1 mt-1">
-                            {category.subcategories.map((sub) => (
-                              <label
-                                key={sub}
-                                className="flex items-center py-1 cursor-pointer"
-                              >
-                                <input
-                                  type="checkbox"
-                                  className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                />
-                                <span className="ml-2 text-sm text-gray-600">
-                                  {sub}
-                                </span>
-                              </label>
-                            ))}
-                          </div>
-                        )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Search Radius */}
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-3 flex items-center justify-between">
-                  Search Radius
-                  <ChevronUp className="w-4 h-4" />
-                </h3>
-                <select
-                  value={searchRadius}
-                  onChange={(e) => setSearchRadius(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option>Within 10 miles</option>
-                  <option>Within 25 miles</option>
-                  <option>Within 50 miles</option>
-                  <option>Within 100 miles</option>
-                </select>
-              </div>
-
-              {/* Price Range */}
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-3 flex items-center justify-between">
-                  Price Range
-                  <ChevronUp className="w-4 h-4" />
-                </h3>
-                <div className="space-y-3">
-                  <input
-                    type="range"
-                    min="0"
-                    max="600"
-                    value={priceRange[1]}
-                    onChange={(e) =>
-                      setPriceRange([0, parseInt(e.target.value)])
-                    }
-                    className="w-full accent-blue-600"
-                  />
-                  <div className="flex justify-between text-sm text-gray-600">
-                    <span>${priceRange[0]}</span>
-                    <span>${priceRange[1]}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </aside>
+          <FiltersSidebar />
 
           {/* Main Content */}
           <main className="flex-1">
@@ -328,7 +195,7 @@ export default function ServiceListing() {
                 Showing {paginatedServices.length} of {filteredServices.length}{" "}
                 services
               </p>
-              <select className="px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <select className="p-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option>Featured</option>
                 <option>Price: Low to High</option>
                 <option>Price: High to Low</option>
