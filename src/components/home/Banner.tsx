@@ -13,7 +13,7 @@ const Banner = () => {
           <div className="space-y-6 lg:space-y-8">
             <div className="space-y-4">
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                Elevate Your Event with Premium{' '}
+                Elevate Your Event with Premium{" "}
                 <span className="text-gradient italic font-serif">Evoke</span>
               </h1>
               <h1 style={{ fontFamily: "Britney-Bold" }}>
@@ -163,7 +163,7 @@ const Banner = () => {
                     alt="Star"
                     width={1000}
                     height={500}
-                    className="absolute w-[41px] h-[39px] bottom-56  right-[-80px]"
+                    className="absolute w-[41px] h-[39px] bottom-56  -right-20"
                   />
                 </div>
 
