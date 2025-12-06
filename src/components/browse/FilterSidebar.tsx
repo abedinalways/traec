@@ -12,7 +12,7 @@ export default function FiltersSidebar() {
   const [openPrice, setOpenPrice] = useState(true);
 
   return (
-    <aside className="w-80 bg-white rounded-3xl shadow-md p-6 space-y-6 border border-gray-200">
+    <aside className="w-full lg:w-68 bg-[#FBFCFD] rounded-3xl shadow-sm p-6 space-y-6 border border-gray-200">
       {/* Filters title */}
       <h2 className="text-xl font-semibold">Filters</h2>
 
