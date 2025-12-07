@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Image from 'next/image';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Star } from 'lucide-react';
+import React from "react";
+import Image from "next/image";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Star } from "lucide-react";
 
 interface Testimonial {
   id: string;
@@ -17,21 +17,21 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    id: '1',
-    name: 'Albert Flores',
-    title: 'CEO, ConcreteX',
-    avatar: '/images/avatar01.png',
+    id: "1",
+    name: "Albert Flores",
+    title: "CEO, ConcreteX",
+    avatar: "/images/avatar01.png",
     review:
-      '“Tour annual company gala was a huge success thanks to the amazing team we found on EventHub. Professional, reliable and creative - everything we needed in one place.”',
+      "“Tour annual company gala was a huge success thanks to the amazing team we found on EventHub. Professional, reliable and creative - everything we needed in one place.”",
     rating: 5,
   },
   {
-    id: '2',
-    name: 'Jane Cooper',
-    title: 'CEO, Aura Media',
-    avatar: '/images/avatar02.png',
+    id: "2",
+    name: "Jane Cooper",
+    title: "CEO, Aura Media",
+    avatar: "/images/avatar02.png",
     review:
-      '“Tour annual company gala was a huge success thanks to the amazing team we found on EventHub. Professional, reliable and creative - everything we needed in one place.”',
+      "“Tour annual company gala was a huge success thanks to the amazing team we found on EventHub. Professional, reliable and creative - everything we needed in one place.”",
     rating: 5,
   },
 ];
@@ -51,7 +51,7 @@ const TestimonialCarousel = () => {
     if (!carouselRef.current) return;
     carouselRef.current.scrollBy({
       left: carouselRef.current.clientWidth,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   };
 
@@ -59,7 +59,7 @@ const TestimonialCarousel = () => {
     if (!carouselRef.current) return;
     carouselRef.current.scrollBy({
       left: -carouselRef.current.clientWidth,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   };
 
@@ -70,7 +70,7 @@ const TestimonialCarousel = () => {
         ref={carouselRef}
         className="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth px-6"
       >
-        {testimonials.map(item => (
+        {testimonials.map((item) => (
           <CarouselItem key={item.id}>
             <Card className="rounded-2xl border p-6 bg-white shadow-sm">
               <CardContent className="space-y-4 p-0 relative">
@@ -138,7 +138,7 @@ const TestimonialCarousel = () => {
         size="icon"
         className="
           hidden md:flex
-          absolute right-25 top-1/2 -translate-y-1/2
+          absolute right-26 top-1/2 -translate-y-1/2
           rounded-full btn-gradient text-white shadow-lg
           w-10 h-10
         "
