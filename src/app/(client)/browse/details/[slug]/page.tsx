@@ -4,7 +4,6 @@ import CustomerReviewsSummary from "@/app/(client)/_components/browse/CustomerRe
 import PremiumServices from "@/app/(client)/_components/browse/PremiumServices";
 import ServicesReviews from "@/app/(client)/_components/browse/ServicesReviews";
 import StandardServices from "@/app/(client)/_components/browse/StandardServices";
-import Reviews from "@/app/(client)/_components/providers/Reviews";
 import Accordion04 from "@/components/ui/accordion04";
 import { Star } from "lucide-react";
 import Image from "next/image";
@@ -68,7 +67,7 @@ export default function ServiceDetailsPage() {
                 </div>
               </div>
             </div>
-            <div className="bg-white shadow-md border rounded-xl">
+            <div className="bg-white border rounded-xl">
               {/* Main Image */}
               <div className="relative w-full h-[40vh]">
                 <Image
@@ -100,7 +99,7 @@ export default function ServiceDetailsPage() {
               </div>
             </div>
 
-            <div className="space-y-6 rounded-xl border border-gray-200 bg-white mt-5 p-4 shadow-sm">
+            <div className="space-y-6 rounded-xl border border-gray-200 bg-white mt-5 p-4">
               <h2 className="text-3xl font-semibold  mb-6">About</h2>
               <p className="text-lg text-gray-700 mb-4">
                 Looking for professional DJ entertainment, live music, or party
@@ -167,7 +166,7 @@ export default function ServiceDetailsPage() {
                 </p>
               </div>
             </div>
-            <div className="space-y-6 rounded-xl border border-gray-200 bg-white mt-5 p-4 shadow-sm">
+            <div className="space-y-6 rounded-xl border border-gray-200 bg-white mt-5 p-4">
               <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
                 <IoIosInformationCircleOutline />
                 Event Setup Preference
@@ -179,7 +178,7 @@ export default function ServiceDetailsPage() {
                 bubble machine for kids’ parties.
               </p>
             </div>
-            <div className="space-y-6 rounded-xl border border-gray-200 bg-white mt-5 p-4 shadow-sm">
+            <div className="space-y-6 rounded-xl border border-gray-200 bg-white mt-5 p-4">
               <h2 className="text-xl font-semibold  mb-6 flex items-center gap-2">
                 <IoIosInformationCircleOutline />
                 Respect Venue & Sound Rules
@@ -199,12 +198,12 @@ export default function ServiceDetailsPage() {
           </div>
           {/* Right Section (Stats) */}
           <div className="w-full lg:w-[30%] ">
-            <div className="w-full rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+            <div className="w-full rounded-xl border border-gray-200 bg-white">
               {/* Tabs */}
               <div className="grid grid-cols-3 divide-x-4">
                 <button
                   onClick={() => setActiveTab("Basic")}
-                  className={`whitespace-nowrap px-4 py-2 border ${
+                  className={`whitespace-nowrap px-4 py-2 border rounded-tl-md ${
                     activeTab === "Basic"
                       ? "border-b-[#070707] border-b-2"
                       : "border-gray-300 text-gray-500 hover:text-black cursor-pointer"
@@ -226,7 +225,7 @@ export default function ServiceDetailsPage() {
 
                 <button
                   onClick={() => setActiveTab("Premium")}
-                  className={`whitespace-nowrap px-4 py-2 border ${
+                  className={`whitespace-nowrap px-4 py-2 border rounded-tr-md ${
                     activeTab === "Premium"
                       ? "border-b-[#070707] border-b-2 "
                       : "border-gray-300 text-gray-500 hover:text-black cursor-pointer"
@@ -245,7 +244,7 @@ export default function ServiceDetailsPage() {
               {/* ================= Premium CONTENT ================= */}
               {activeTab === "Premium" && <PremiumServices />}
             </div>
-            <div className="w-full rounded-xl border border-gray-200 bg-white p-5 shadow-sm mt-5">
+            <div className="w-full rounded-xl border border-gray-200 bg-white p-5 mt-5">
               <div>
                 <h3 className="text-xl font-bold my-2">About the Provider</h3>
                 <div className="flex items-center gap-2 mb-3">
