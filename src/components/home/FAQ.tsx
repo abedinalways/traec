@@ -9,10 +9,10 @@ const FAQ = () => {
         Frequently Asked{" "}
         <span className="text-gradient italic font-serif">Questions</span>
       </h2>
-      <p className="text-gray-600 text-center text-sm md:text-md max-w-2xl mx-auto">
+      <p className="text-gray-600 text-center text-sm md:text-md max-w-2xl mx-auto  py-5">
         Hear from satisfied customers and successful service providers.
       </p>
-      <div className=" flex flex-col gap-4 px-4 md:px-0">
+      <div className=" flex flex-col gap-4 px-4 md:px-0 mx-auto max-w-3xl pt-10">
         <Accordion04 />
       </div>
       <div className="-mb-42 md:-mb-52 lg:-mb-56">
