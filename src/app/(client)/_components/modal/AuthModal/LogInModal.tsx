@@ -7,6 +7,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/navigation";
 import Modal from "../Modal";
+import { X } from "lucide-react";
 
 interface Props {
   isOpen: boolean;
@@ -38,7 +39,13 @@ export default function LogInModal({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="grid grid-cols-1 lg:grid-cols-2 z-50">
+      <div className="relative grid grid-cols-1 lg:grid-cols-2 z-50">
+        <button
+          onClick={onClose}
+          className="absolute right-4 cursor-pointer top-4 z-20 p-2 rounded-full bg-white shadow hover:bg-gray-100 transition"
+        >
+          <X className="w-5 h-5 text-gray-700" />
+        </button>
         {/* LEFT IMAGE */}
         <div className="flex items-center justify-center">
           <div className="w-full h-full flex items-center justify-center">
