@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
 import {
   Mail,
   Phone,
@@ -11,8 +11,8 @@ import {
   Instagram,
   Facebook,
   Linkedin,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface FooterProps {
   className?: string;
@@ -20,17 +20,17 @@ interface FooterProps {
 
 export default function Footer({ className }: FooterProps) {
   return (
-    <footer className={`relative text-white ${className || ''}`}>
+    <footer className={`relative text-white ${className || ""}`}>
       {/* Background image */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <Image
-          src={'/images/footer.png'}
+          src={"/images/footer.png"}
           alt="footer background"
           priority
           fill
           style={{
-            objectFit: 'cover',
-            filter: 'brightness(0.28) contrast(0.9)',
+            objectFit: "cover",
+            filter: "brightness(0.28) contrast(0.9)",
           }}
         />
       </div>
@@ -161,29 +161,6 @@ export default function Footer({ className }: FooterProps) {
                   <MapPin size={16} />
                 </div>
                 <div>123 Education Street, Suite 456</div>
-              </div>
-
-              <div className="pt-4">
-                <Link
-                  href="#"
-                  className="text-xs inline-flex items-center gap-2 hover:underline"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                    <polyline points="7 10 12 15 17 10" />
-                  </svg>
-                  Get directions
-                </Link>
               </div>
             </div>
           </div>

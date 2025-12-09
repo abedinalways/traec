@@ -242,3 +242,13 @@ input[type="time"] {
     background: linear-gradient(90deg, #ffac47 0%, #ff2a24 100%);
   }
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  overflow: -moz-scrollbars-none;
+}
