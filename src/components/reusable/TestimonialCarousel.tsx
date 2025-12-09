@@ -39,7 +39,8 @@ const testimonials: Testimonial[] = [
 const CarouselItem: React.FC<
   React.PropsWithChildren<{ className?: string }>
 > = ({ children, className }) => (
-  <div className={`flex-shrink-0 w-[90%] md:w-[550px] ${className}`}>
+  // use min-w instead of fixed width for better mobile behavior
+  <div className={`shrink-0 max-w-full md:max-w-[600px] ${className}`}>
     {children}
   </div>
 );
@@ -64,15 +65,28 @@ const TestimonialCarousel = () => {
   };
 
   return (
-    <div className="relative w-full max-w-7xl mx-auto py-10">
+    <div className="relative max-w-7xl mx-auto py-10">
       {/* SCROLLABLE WRAPPER */}
       <div
         ref={carouselRef}
-        className="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth px-6"
+        className="
+          flex gap-6
+          overflow-x-auto overflow-y-hidden
+          no-scrollbar scroll-smooth px-6 -mx-6
+          touch-pan-x
+          snap-x snap-mandatory
+        "
+        // inline style to ensure iOS uses native momentum scrolling
+        style={{
+          WebkitOverflowScrolling: "touch",
+          touchAction: "pan-x",
+          // prevents parent from catching the overscroll on mobile
+          overscrollBehaviorX: "contain",
+        }}
       >
         {testimonials.map((item) => (
           <CarouselItem key={item.id}>
-            <Card className="rounded-2xl border p-6 bg-white shadow-sm">
+            <Card className="rounded-2xl border p-6 bg-white shadow-sm snap-start">
               <CardContent className="space-y-4 p-0 relative">
                 <div className="flex justify-between items-start">
                   <Image
@@ -124,7 +138,7 @@ const TestimonialCarousel = () => {
         size="icon"
         className="
           hidden md:flex
-          absolute left-0 top-1/2 -translate-y-1/2
+          absolute -left-4 top-1/2 text-3xl pb-2 -translate-y-1/2
           rounded-full btn-gradient text-white shadow-lg
           w-10 h-10
         "
@@ -138,7 +152,8 @@ const TestimonialCarousel = () => {
         size="icon"
         className="
           hidden md:flex
-          absolute right-26 top-1/2 -translate-y-1/2
+          text-3xl
+          absolute -right-4 top-1/2 pb-2 -translate-y-1/2
           rounded-full btn-gradient text-white shadow-lg
           w-10 h-10
         "
@@ -165,6 +180,8 @@ const TestimonialCarousel = () => {
       <style>{`
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        /* Helper class for touch pan (Tailwind doesn't include touch-action by default) */
+        .touch-pan-x { touch-action: pan-x; }
       `}</style>
     </div>
   );

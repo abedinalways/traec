@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const JoinAsProvider = () => {
   return (
-    <div className="md:flex custom-container  justify-center gap-0! md:px-0 ">
+    <div className="md:flex custom-container md:px-4 p-2 justify-center gap-0!">
       <div className="flex-1 border-green-800">
         <BusinessCard />
       </div>
