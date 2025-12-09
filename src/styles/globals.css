@@ -187,8 +187,11 @@ body {
 }
 
 /* Apply gradient to the button but not the parent */
+/* .btn-gradient {
+  background: linear-gradient(90deg, #ff6a00 70%, #f3474f 10%);
+} */
 .btn-gradient {
-  background: linear-gradient(90deg, #ff6a00 0%, #ee0979 100%);
+  background: linear-gradient(to right, #fdba74, #f97316);
 }
 
 /* Optional: Add hover effect */
@@ -241,14 +244,4 @@ input[type="time"] {
   .bg-gradient-email {
     background: linear-gradient(90deg, #ffac47 0%, #ff2a24 100%);
   }
-}
-
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  overflow: -moz-scrollbars-none;
 }

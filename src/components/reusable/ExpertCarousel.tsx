@@ -157,7 +157,7 @@ const ExpertsCarousel: React.FC = () => {
         >
           {providersToRender.map((provider, index) => (
             <CarouselItem key={`${provider.id}-${index}`}>
-              <Card className="overflow-hidden shadow-none p-2! border-none transition-shadow duration-300 cursor-pointer bg-white">
+              <Card className="overflow-hidden shadow-none p-2! border-none transition-shadow duration-300 bg-white">
                 <CardContent className="p-0">
                   {/* Image Container */}
                   <div className="relative w-full h-[200px] rounded-2xl">
@@ -224,7 +224,7 @@ const ExpertsCarousel: React.FC = () => {
           onClick={scrollPrev}
           size="icon"
           variant="secondary"
-          className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 rounded-full bg-white shadow-lg border hover:bg-gray-50"
+          className="absolute cursor-pointer -left-4 top-1/2 -translate-y-1/2 z-10 rounded-full bg-white shadow-lg border hover:bg-gray-50"
         >
           <svg
             className="w-4 h-4 text-gray-600"
@@ -243,7 +243,7 @@ const ExpertsCarousel: React.FC = () => {
           onClick={scrollNext}
           size="icon"
           variant="secondary"
-          className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 rounded-full bg-white shadow-lg border hover:bg-gray-50"
+          className="absolute -right-4 cursor-pointer top-1/2 -translate-y-1/2 z-10 rounded-full bg-white shadow-lg border hover:bg-gray-50"
         >
           <svg
             className="w-4 h-4 text-gray-600"

@@ -74,7 +74,7 @@ const Card: React.FC<React.PropsWithChildren<{ className?: string }>> = ({
   className,
 }) => (
   <div
-    className={`rounded-xl transition-shadow duration-300 overflow-hidden cursor-pointer bg-white ${className}`}
+    className={`rounded-xl transition-shadow duration-300 overflow-hidden bg-white ${className}`}
   >
     {children}
   </div>
@@ -213,7 +213,7 @@ const CategoryCarousel = () => {
         {/* Left Button */}
         <Button onClick={scrollPrev} className="left-[-19]">
           <svg
-            className="w-4 h-4 text-gray-600"
+            className="w-4 h-4 cursor-pointer text-gray-600"
             fill="none"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -228,7 +228,7 @@ const CategoryCarousel = () => {
         {/* Right Button */}
         <Button onClick={scrollNext} className="right-[-22]">
           <svg
-            className="w-4 h-4 text-gray-600"
+            className="w-4 h-4 cursor-pointer text-gray-600"
             fill="none"
             strokeLinecap="round"
             strokeLinejoin="round"
