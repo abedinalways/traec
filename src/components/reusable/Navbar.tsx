@@ -18,7 +18,7 @@ import { useAuthModal } from "@/app/context/AuthModalContext";
 export default function Navbar() {
   const { setOpenLogin, setOpenSignup } = useAuthModal();
   return (
-    <header className="w-full fixed top-0 left-0 bg-white z-50 font-[inter]">
+    <header className="w-full fixed px-2 top-0 left-0 bg-white z-50 font-[inter]">
       <div className="custom-container mx-auto flex items-center justify-between py-4 gap-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">

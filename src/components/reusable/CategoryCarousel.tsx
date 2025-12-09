@@ -1,6 +1,6 @@
-'use client'
-import Image from 'next/image';
-import React from 'react';
+"use client";
+import Image from "next/image";
+import React from "react";
 
 // --- Interfaces and Data (Using the JSON structure) ---
 
@@ -15,50 +15,48 @@ interface Category {
 // Data updated to use placeholder images that visually match the original screenshot content.
 const categoriesData: Category[] = [
   {
-    id: 'dj_services',
-    name: 'DJ Services',
+    id: "dj_services",
+    name: "DJ Services",
     // Placeholder for DJ mixing board
-    imageUrl: '/images/featured01.png',
-    bgColorClass: 'bg-green-50', // Slightly more prominent light green
+    imageUrl: "/images/featured01.png",
+    bgColorClass: "bg-green-50", // Slightly more prominent light green
   },
   {
-    id: 'decorators',
-    name: 'Decorators',
+    id: "decorators",
+    name: "Decorators",
     // Placeholder for wedding arch/decor
-    imageUrl: '/images/featured02.png',
-    bgColorClass: 'bg-orange-50', // Light peach/pinkish background
+    imageUrl: "/images/featured02.png",
+    bgColorClass: "bg-orange-50", // Light peach/pinkish background
   },
   {
-    id: 'catering',
-    name: 'Catering',
+    id: "catering",
+    name: "Catering",
     // Placeholder for catered appetizers on a tray
-    imageUrl: '/images/featured03.png',
-    bgColorClass: 'bg-cyan-50', // Light blue/mint background
+    imageUrl: "/images/featured03.png",
+    bgColorClass: "bg-cyan-50", // Light blue/mint background
   },
   {
-    id: 'rentals',
-    name: 'Rentals',
+    id: "rentals",
+    name: "Rentals",
     // Placeholder for people holding hands/items
-    imageUrl: '/images/featured04.png',
-    bgColorClass: 'bg-purple-50/70', // Light purple background
+    imageUrl: "/images/featured04.png",
+    bgColorClass: "bg-purple-50/70", // Light purple background
   },
   {
-    id: 'photography',
-    name: 'Photography',
+    id: "photography",
+    name: "Photography",
     // Placeholder for a camera
-    imageUrl: '/images/featured05.png',
-    bgColorClass: 'bg-pink-50', // Light pink background
+    imageUrl: "/images/featured05.png",
+    bgColorClass: "bg-pink-50", // Light pink background
   },
   {
-    id: 'entertainment',
-    name: 'Entertainment',
+    id: "entertainment",
+    name: "Entertainment",
     // Placeholder for people partying/clubbing
-    imageUrl: '/images/featured06.png',
-    bgColorClass: 'bg-indigo-50', // Light lavender background
+    imageUrl: "/images/featured06.png",
+    bgColorClass: "bg-indigo-50", // Light lavender background
   },
 ];
-
-
 
 // Mock for CarouselItem - wraps content in a fixed card size for infinite stability
 const CarouselItem: React.FC<
@@ -95,9 +93,7 @@ const Button: React.FC<
   </button>
 );
 
-
-
- const CategoryCarousel = () => {
+const CategoryCarousel = () => {
   const carouselRef = React.useRef<HTMLDivElement>(null);
 
   // Define dimensions for infinite scroll stability
@@ -115,14 +111,14 @@ const Button: React.FC<
   // Scrolls forward by one item's width
   const scrollNext = React.useCallback(() => {
     if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: ITEM_WIDTH, behavior: 'smooth' });
+      carouselRef.current.scrollBy({ left: ITEM_WIDTH, behavior: "smooth" });
     }
   }, [ITEM_WIDTH]);
 
   // Scrolls backward by one item's width
   const scrollPrev = React.useCallback(() => {
     if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: -ITEM_WIDTH, behavior: 'smooth' });
+      carouselRef.current.scrollBy({ left: -ITEM_WIDTH, behavior: "smooth" });
     }
   }, [ITEM_WIDTH]);
 
@@ -172,7 +168,7 @@ const Button: React.FC<
   }, [TRANSITION_WIDTH]);
 
   return (
-    <div className="p-4 md:p-8 lg:p-12 w-full max-w-7xl mx-auto font-[inter]">
+    <div className="p-6 md:p-8 w-full max-w-7xl mx-auto font-[inter]">
       <div className="relative">
         <div
           ref={carouselRef}
@@ -183,7 +179,7 @@ const Button: React.FC<
         >
           {categoriesToRender.map((category, index) => (
             <CarouselItem key={`${category.id}-${index}`}>
-              {' '}
+              {" "}
               {/* Unique key for duplicated items */}
               <Card>
                 <div className="relative w-full h-[180px]">
@@ -192,10 +188,10 @@ const Button: React.FC<
                     alt={category.name}
                     fill
                     className="w-full h-full object-cover rounded-t-xl"
-                    onError={e => {
+                    onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.src =
-                        'https://placehold.co/600x400/CCCCCC/333333?text=Image+Error';
+                        "https://placehold.co/600x400/CCCCCC/333333?text=Image+Error";
                     }}
                   />
                   <div className="absolute inset-0 shadow-[inset_0_-5px_15px_rgba(0,0,0,0.05)] rounded-t-xl"></div>
@@ -211,8 +207,6 @@ const Button: React.FC<
               </Card>
             </CarouselItem>
           ))}
-
-         
         </div>
 
         {/* Manual Navigation Buttons - Remains functional for user interaction */}
