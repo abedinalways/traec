@@ -6,9 +6,9 @@ import Image from "next/image";
 
 const Banner = () => {
   return (
-    <div className="bg-linear-to-br from-orange-50 via-white to-white py-10">
+    <div className="bg-linear-to-br md:p-4 from-orange-50 via-white to-white py-10">
       <div className="custom-container mx-auto px-4 md:px-0 py-8 lg:py-16">
-        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="grid xl:grid-cols-2 gap-10 lg:gap-16 items-center">
           {/* LEFT TEXT SECTION */}
           <div className="space-y-6 lg:space-y-8">
             <div className="space-y-4">
@@ -71,7 +71,7 @@ const Banner = () => {
           {/* RIGHT IMAGE GRID */}
           <div className="relative">
             {/* MOBILE STACKED LAYOUT */}
-            <div className="flex flex-col gap-5 lg:hidden">
+            <div className="flex flex-col gap-5 xl:hidden">
               {/* Main Image */}
               <div className="relative">
                 <Image
@@ -125,7 +125,7 @@ const Banner = () => {
             </div>
 
             {/* DESKTOP GRID LAYOUT (UNCHANGED) */}
-            <div className="hidden lg:block">
+            <div className="hidden xl:block">
               {/* Your original grid completely untouched */}
               <div className="grid grid-cols-2 gap-6 relative">
                 {/* Top Left */}
