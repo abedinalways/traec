@@ -49,7 +49,7 @@ export default function Footer({ className }: FooterProps) {
                   height={34}
                 />
               </Link>
-              <p className="mt-2 text-sm text-gray-200/90 max-w-[22rem]">
+              <p className="mt-2 text-sm text-gray-200/90 max-w-88">
                 Your one-stop marketplace for event planning services. From DJs
                 and caterers to venues and decorators, find everything you need
                 to make your event unforgettable.

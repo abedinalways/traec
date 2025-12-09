@@ -81,7 +81,7 @@ export default function Navbar() {
 
           <Button
             onClick={() => setOpenSignup(true)}
-            className="rounded-full px-6 text-white font-medium btn-gradient cursor-pointer"
+            className="rounded-md px-6 text-white font-medium btn-gradient cursor-pointer"
           >
             Join Now
           </Button>
@@ -156,7 +156,7 @@ export default function Navbar() {
 
                   <Button
                     onClick={() => setOpenSignup(true)}
-                    className="rounded-full text-white font-medium btn-gradient"
+                    className="rounded-md text-white font-medium btn-gradient"
                   >
                     Join Now
                   </Button>
