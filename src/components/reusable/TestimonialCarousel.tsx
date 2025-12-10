@@ -40,7 +40,7 @@ const CarouselItem: React.FC<
   React.PropsWithChildren<{ className?: string }>
 > = ({ children, className }) => (
   // use min-w instead of fixed width for better mobile behavior
-  <div className={`shrink-0 max-w-full md:max-w-[600px] ${className}`}>
+  <div className={`shrink-0 max-w-full md:max-w-[500px] ${className}`}>
     {children}
   </div>
 );
