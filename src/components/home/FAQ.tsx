@@ -4,7 +4,7 @@ import Subscribe from "./Subscribe";
 
 const FAQ = () => {
   return (
-    <div className="bg-linear-to-b from-[#FDF4F4] to-[#FCEFEF] py-10 ">
+    <div className="bg-linear-to-r from-[#faf3f0] to-[#f6e2e2] py-10 ">
       <h2 className="text-2xl md:text-4xl text-center font-bold text-gray-900 leading-tight font-[glory]">
         Frequently Asked{" "}
         <span className="text-gradient italic font-serif">Questions</span>
