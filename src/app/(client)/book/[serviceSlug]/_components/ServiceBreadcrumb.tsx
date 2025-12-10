@@ -16,11 +16,11 @@ interface ServiceBreadcrumbProps {
 
 const ServiceBreadcrumb = ({ step }: ServiceBreadcrumbProps) => {
   console.log("service breadcrumb step from layout:", step);
-  const showBackbutton = step === 1;
+  const showBackButton = step === 1;
   const showBreadcrumb = step >= 2;
   return (
     <div className="mb-8">
-      {showBackbutton && (
+      {showBackButton && (
         <Link href={`/browse/details/1`}>
           {" "}
           <Button className="capitalize font-inter font-normal text-base leading-6 tracking-[0.01em] text-[#4a4c56] bg-transparent py-1.5 px-3.5 border border-[#dfe1e7] rounded-[12px] hover:bg-white cursor-pointer">

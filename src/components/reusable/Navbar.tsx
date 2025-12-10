@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Search, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { usePathname } from "next/navigation"; // 👈 added
 import {
   Sheet,
   SheetTrigger,
@@ -17,8 +18,21 @@ import { useAuthModal } from "@/app/context/AuthModalContext";
 
 export default function Navbar() {
   const { setOpenLogin, setOpenSignup } = useAuthModal();
+
+  const pathname = usePathname();
+
+  const isActive = (path: string) => {
+    if (path === "/") {
+      return pathname === "/" ? "text-[#F92E25] font-semibold" : "text-black";
+    }
+
+    return pathname.startsWith(path)
+      ? "text-[#FF2A24] font-semibold"
+      : "text-black";
+  };
+
   return (
-    <header className="w-full fixed top-0 left-0 bg-white z-50 font-[inter]">
+    <header className="w-full fixed px-2 top-0 left-0 bg-white z-50 font-[inter]">
       <div className="custom-container mx-auto flex items-center justify-between py-4 gap-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
@@ -27,11 +41,24 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center space-x-8 text-sm font-medium">
-          <Link href="/">Home</Link>
-          <Link href="/browse">Browse</Link>
-          <Link href="/how-it-works">How it Works</Link>
-          <Link href="/providers">Providers</Link>
-          <Link href="/become-provider">Become a Provider</Link>
+          <Link href="/" className={isActive("/")}>
+            Home
+          </Link>
+          <Link href="/browse" className={isActive("/browse")}>
+            Browse
+          </Link>
+          <Link href="/how-it-works" className={isActive("/how-it-works")}>
+            How it Works
+          </Link>
+          <Link href="/providers" className={isActive("/providers")}>
+            Providers
+          </Link>
+          <Link
+            href="/become-provider"
+            className={isActive("/become-provider")}
+          >
+            Become a Provider
+          </Link>
         </nav>
 
         {/* Desktop Search */}
@@ -51,16 +78,16 @@ export default function Navbar() {
           >
             Sign In
           </Button>
-          {/* Gradient Button */}{" "}
+
           <Button
             onClick={() => setOpenSignup(true)}
-            className="rounded-full px-6 text-white font-medium btn-gradient cursor-pointer"
+            className="rounded-md px-6 text-white font-medium btn-gradient cursor-pointer"
           >
             Join Now
           </Button>
         </div>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Menu */}
         <div className="md:hidden mx-4">
           <Sheet>
             <SheetTrigger>
@@ -74,23 +101,39 @@ export default function Navbar() {
 
               <div className="mt-6 flex flex-col space-y-5 text-base font-medium px-4">
                 <SheetClose asChild>
-                  <Link href="/">Home</Link>
+                  <Link href="/" className={isActive("/")}>
+                    Home
+                  </Link>
                 </SheetClose>
 
                 <SheetClose asChild>
-                  <Link href="/browse">Browse</Link>
+                  <Link href="/browse" className={isActive("/browse")}>
+                    Browse
+                  </Link>
                 </SheetClose>
 
                 <SheetClose asChild>
-                  <Link href="/how-it-works">How it Works</Link>
+                  <Link
+                    href="/how-it-works"
+                    className={isActive("/how-it-works")}
+                  >
+                    How it Works
+                  </Link>
                 </SheetClose>
 
                 <SheetClose asChild>
-                  <Link href="/providers">Providers</Link>
+                  <Link href="/providers" className={isActive("/providers")}>
+                    Providers
+                  </Link>
                 </SheetClose>
 
                 <SheetClose asChild>
-                  <Link href="/become-provider">Become a Provider</Link>
+                  <Link
+                    href="/become-provider"
+                    className={isActive("/become-provider")}
+                  >
+                    Become a Provider
+                  </Link>
                 </SheetClose>
 
                 {/* Mobile Search */}
@@ -109,10 +152,11 @@ export default function Navbar() {
                     className="rounded-full text-white font-medium btn-gradient"
                   >
                     Sign In
-                  </Button>{" "}
+                  </Button>
+
                   <Button
                     onClick={() => setOpenSignup(true)}
-                    className="rounded-full text-white font-medium btn-gradient"
+                    className="rounded-md text-white font-medium btn-gradient"
                   >
                     Join Now
                   </Button>

@@ -141,7 +141,7 @@ const Masonry: React.FC<MasonryProps> = ({
     return items.map((child) => {
       const col = colHeights.indexOf(Math.min(...colHeights));
       const x = col * (columnWidth + gap);
-      const height = (child.height * columnWidth) / 400;
+      const height = (child.height * columnWidth) / 500;
       const y = colHeights[col];
       colHeights[col] += height + gap;
 

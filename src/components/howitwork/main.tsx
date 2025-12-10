@@ -14,6 +14,7 @@ export default function HowItWorks() {
 
     const ctx = gsap.context(() => {
       // LEFT IMAGES – animate left → center
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       gsap.utils.toArray(".how-image-left").forEach((img: any) => {
         gsap.fromTo(
           img,
@@ -35,6 +36,7 @@ export default function HowItWorks() {
       });
 
       // RIGHT IMAGES – animate right → center
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       gsap.utils.toArray(".how-image-right").forEach((img: any) => {
         gsap.fromTo(
           img,
@@ -56,6 +58,7 @@ export default function HowItWorks() {
       });
 
       // TEXT – fade + float upward
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       gsap.utils.toArray(".how-text").forEach((text: any) => {
         gsap.fromTo(
           text,
@@ -68,8 +71,7 @@ export default function HowItWorks() {
             scrollTrigger: {
               trigger: text,
               start: "top 85%",
-              onEnter: () =>
-                gsap.to(text, { y: 0, opacity: 1, duration: 1 }),
+              onEnter: () => gsap.to(text, { y: 0, opacity: 1, duration: 1 }),
               onEnterBack: () =>
                 gsap.to(text, { y: 0, opacity: 1, duration: 1 }),
             },
@@ -106,7 +108,7 @@ export default function HowItWorks() {
 
         <div className="how-text">
           <h2 className="text-orange-500 font-bold text-xl sm:text-2xl mb-3">
-            01. Search & Browse
+            01. <span className="text-black">Search & Browse</span>
           </h2>
 
           <p className="text-gray-600 mb-4 text-sm sm:text-base">
@@ -139,7 +141,7 @@ export default function HowItWorks() {
       <div className="grid md:grid-cols-2 gap-10 items-center mb-16">
         <div className="order-2 md:order-1 how-text">
           <h2 className="text-orange-500 font-bold text-xl sm:text-2xl mb-3">
-            02. Compare & Choose
+            02. <span className="text-black">Compare & Choose</span>
           </h2>
 
           <p className="text-gray-600 mb-4 text-sm sm:text-base">
@@ -195,7 +197,7 @@ export default function HowItWorks() {
 
         <div className="how-text">
           <h2 className="text-orange-500 font-bold text-xl sm:text-2xl mb-3">
-            03. Book & Schedule
+            03. <span className="text-black"> Book & Schedule </span>
           </h2>
 
           <p className="text-gray-600 mb-4 text-sm sm:text-base">
@@ -228,12 +230,12 @@ export default function HowItWorks() {
       <div className="grid md:grid-cols-2 gap-10 items-center">
         <div className="order-2 md:order-1 how-text">
           <h2 className="text-orange-500 font-bold text-xl sm:text-2xl mb-3">
-            04. Party Time!
+            04. <span className="text-black">Party Time!</span>
           </h2>
 
           <p className="text-gray-600 mb-4 text-sm sm:text-base">
-            Enjoy your stress-free event while we handle the setup and
-            teardown. Your guests will have a blast!
+            Enjoy your stress-free event while we handle the setup and teardown.
+            Your guests will have a blast!
           </p>
 
           <ul className="text-gray-700 space-y-3 text-sm sm:text-base">
