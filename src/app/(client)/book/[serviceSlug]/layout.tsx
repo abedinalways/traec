@@ -40,7 +40,7 @@ function Wrapper({
       .join(" ") || "";
 
   return (
-    <div className="my-10">
+    <div className="my-10 px-2 md:px-4">
       <div className="custom-container mx-auto">
         <ServiceBreadcrumb step={step} />
         {/* Header */}
