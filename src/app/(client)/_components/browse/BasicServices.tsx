@@ -1,6 +1,5 @@
-import { FileClock, FileMusic } from "lucide-react";
+import { Clock, Repeat } from "lucide-react";
 import Link from "next/link";
-import React from "react";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 
 export default function BasicServices() {
@@ -27,12 +26,12 @@ export default function BasicServices() {
       {/* Icons Row */}
       <div className="flex items-center gap-6 mt-5 text-gray-700 text-sm">
         <div className="flex items-center gap-2">
-          <FileClock className="text-lg" />
+          <Clock size={19} className="text-lg" />
           Flexible Booking
         </div>
 
         <div className="flex items-center gap-2">
-          <FileMusic className="text-lg" />
+          <Repeat size={18} />
           Unlimited Song Requests
         </div>
       </div>

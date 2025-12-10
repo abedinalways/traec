@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 
-interface Testimonial {
+interface ITestimonial {
   id: string;
   name: string;
   title: string;
@@ -15,7 +15,7 @@ interface Testimonial {
   rating: number;
 }
 
-const testimonials: Testimonial[] = [
+const testimonials: ITestimonial[] = [
   {
     id: "1",
     name: "Albert Flores",
@@ -40,7 +40,7 @@ const CarouselItem: React.FC<
   React.PropsWithChildren<{ className?: string }>
 > = ({ children, className }) => (
   // use min-w instead of fixed width for better mobile behavior
-  <div className={`shrink-0 max-w-full md:max-w-[500px] ${className}`}>
+  <div className={`shrink-0 max-w-[90%] md:max-w-[500px] ${className}`}>
     {children}
   </div>
 );
@@ -65,7 +65,7 @@ const TestimonialCarousel = () => {
   };
 
   return (
-    <div className="relative max-w-7xl mx-auto py-10">
+    <div className="relative md:mx-auto py-10">
       {/* SCROLLABLE WRAPPER */}
       <div
         ref={carouselRef}
