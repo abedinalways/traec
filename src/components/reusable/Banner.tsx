@@ -16,9 +16,10 @@ interface EventBannerProps {
   placeholder?: string;
   buttons?: BannerButton[];
   className?: string;
-  decorationLeft?: string; // image url
-  decorationRight?: string; // image url
+  decorationLeft?: string;
+  decorationRight?: string;
   backgroundImage?: string;
+  haveSearchbar?: boolean;
 }
 
 export function Banner({
@@ -30,11 +31,12 @@ export function Banner({
   decorationLeft,
   decorationRight,
   backgroundImage,
+  haveSearchbar = true,
 }: EventBannerProps) {
   return (
     <div
       className={cn(
-        "relative w-full pb-20 px-4 flex flex-col items-center text-center  overflow-hidden",
+        "relative w-full pb-20 p-2 md:px-4 flex flex-col items-center text-center  overflow-hidden",
         className
       )}
       style={
@@ -103,17 +105,19 @@ export function Banner({
       )}
 
       {/* Search Bar */}
-      <div className="mt-8 w-full max-w-xl relative">
-        <div className="p-px rounded-full bg-linear-to-r from-[#fa8735] to-[#f73629]">
-          <input
-            placeholder="Search…"
-            className="h-12 w-full rounded-full px-5 bg-white outline-none"
-          />
+      {haveSearchbar && (
+        <div className="mt-8 w-full max-w-xl relative">
+          <div className="p-px rounded-full bg-linear-to-r from-[#fa8735] to-[#f73629]">
+            <input
+              placeholder="Search…"
+              className="h-12 w-full rounded-full px-5 bg-white outline-none"
+            />
+          </div>
+          <Button className="absolute top-1/2 right-2 -translate-y-1/2 h-9 w-9 rounded-full btn-gradient p-0">
+            <Search className="h-4 w-4 text-white" />
+          </Button>
         </div>
-        <Button className="absolute top-1/2 right-2 -translate-y-1/2 h-9 w-9 rounded-full btn-gradient p-0">
-          <Search className="h-4 w-4 text-white" />
-        </Button>
-      </div>
+      )}
 
       {/* Buttons */}
       <div className="mt-6 flex flex-wrap gap-3 justify-center">
