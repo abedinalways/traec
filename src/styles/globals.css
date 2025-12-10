@@ -169,9 +169,16 @@ body {
   background: linear-gradient(90deg, #f97316 0%, #fdba74 100%);
   transition: background 0.3s ease;
 }
-
+/* 
 .text-gradient {
-  color: #f79926;
+  color: linear-gradient(90deg #ffac47 0%, #ff2a24 100%);
+} */
+.text-gradient {
+  background: linear-gradient(90deg, #ffac47 0%, #e0221c 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 /* Remove default date icon */
