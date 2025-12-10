@@ -9,13 +9,7 @@ import { Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
-import {
-  FaHandshake,
-  FaMusic,
-  FaPhoneAlt,
-  FaRegLightbulb,
-  FaUserFriends,
-} from "react-icons/fa";
+import { AiOutlineCheckCircle } from "react-icons/ai";
 import { IoIosArrowBack, IoIosInformationCircleOutline } from "react-icons/io";
 
 export default function ServiceDetailsPage() {
@@ -28,7 +22,7 @@ export default function ServiceDetailsPage() {
     setMainImage(image);
   };
   return (
-    <div className="my-10">
+    <div className="my-10 md:px-4 p-2">
       <div className="custom-container mx-auto ">
         <Link href="/browse">
           <button className="border border-gray-300 p-2 flex items-center gap-3 mt-5 rounded-md cursor-pointer mb-5">
@@ -102,52 +96,55 @@ export default function ServiceDetailsPage() {
             <div className="space-y-6 rounded-xl border border-gray-200 bg-white mt-5 p-4">
               <h2 className="text-3xl font-semibold  mb-6">About</h2>
               <p className="text-lg text-gray-700 mb-4">
-                Looking for professional DJ entertainment, live music, or party
-                hosting for your birthday, wedding, school dance, or corporate
-                event? 🎶 Or do you want a high-energy DJ who can create an
-                unforgettable experience for your guests?
+                Looking for{" "}
+                <b>
+                  professional DJ entertainment, live music, or party hosting
+                </b>{" "}
+                for your birthday, wedding, school dance, or corporate event? 🎶
+                Or do you want a high-energy DJ who can create an unforgettable
+                experience for your guests?
               </p>
               <p className="text-lg text-gray-700 mb-4">
-                If yes, this is the BEST place for you! With years of experience
-                in live DJ performance and event entertainment, I will provide
-                custom party DJ services with professional sound, lighting, and
-                interactive hosting to keep your event lively, fun, and truly
-                memorable. From kids birthdays to elegant weddings, I bring the
-                perfect balance of music, energy, and crowd tailored to your
-                celebration.
+                If yes, this is the <b>BEST place for you!</b> With years of
+                experience in <b>live DJ performance and event entertainment</b>
+                , I will provide custom party DJ services with professional
+                sound, lighting, and interactive hosting to keep your event
+                lively, fun, and truly memorable. From kids birthdays to elegant
+                weddings, I bring the perfect balance of{" "}
+                <b>music, energy, and crowd</b> tailored to your celebration.
               </p>
 
               <h3 className="text-2xl font-semibold mb-4">Services I Offer:</h3>
               <ul className="space-y-4">
-                <li className="flex items-start space-x-4">
-                  <FaMusic className="text-2xl text-blue-500" />
+                <li className="flex items-center space-x-2">
+                  <AiOutlineCheckCircle className="text-green-600 text-xl" />
                   <p className="text-lg text-gray-700">
                     Professional, High-Energy, Dynamic Live DJ Performance
                   </p>
                 </li>
-                <li className="flex items-start space-x-4">
-                  <FaUserFriends className="text-2xl text-blue-500" />
+                <li className="flex items-center space-x-2">
+                  <AiOutlineCheckCircle className="text-green-600 text-xl" />
                   <p className="text-lg text-gray-700">
                     Engaging Crowd Interaction & Games - Musical chairs and
                     playful elements.
                   </p>
                 </li>
-                <li className="flex items-start space-x-4">
-                  <FaHandshake className="text-2xl text-blue-500" />
+                <li className="flex items-center space-x-2">
+                  <AiOutlineCheckCircle className="text-green-600 text-xl" />
                   <p className="text-lg text-gray-700">
                     Karaoke Nights & Sing-Along Sessions - Fun, interactive
                     entertainment for guests.
                   </p>
                 </li>
-                <li className="flex items-start space-x-4">
-                  <FaRegLightbulb className="text-2xl text-blue-500" />
+                <li className="flex items-center space-x-2">
+                  <AiOutlineCheckCircle className="text-green-600 text-xl" />
                   <p className="text-lg text-gray-700">
                     Custom Playlists Tailored to Your Event - From kid’s
                     birthdays to elegant weddings.
                   </p>
                 </li>
-                <li className="flex items-start space-x-4">
-                  <FaPhoneAlt className="text-2xl text-blue-500" />
+                <li className="flex items-center space-x-2">
+                  <AiOutlineCheckCircle className="text-green-600 text-xl" />
                   <p className="text-lg text-gray-700">
                     24/7 Fast Communication & Planning Support
                   </p>
@@ -155,14 +152,15 @@ export default function ServiceDetailsPage() {
               </ul>
 
               <p className="text-sm text-gray-500 mt-6">
-                Note: I do not provide venue, catering, or event photography
-                services. Please ensure your location is prepared for sound
-                setup and lighting.
+                <b>Note:</b> I do not provide venue, catering, or event
+                photography services. Please ensure your location is prepared
+                for sound setup and lighting.
               </p>
 
               <div className="mt-6">
-                <p className="text-xl font-semibold text-gray-800">
-                  Interested in making your event unforgettable? Let’s chat!
+                <p className="text-sm text-gray-800">
+                  🎉 Interested in making your event unforgettable?{" "}
+                  <b>Let’s chat!</b>
                 </p>
               </div>
             </div>
@@ -257,19 +255,15 @@ export default function ServiceDetailsPage() {
                   />
                   <div>
                     <span className="text-sm font-medium text-gray-900">
-                      {/* {service.providerName} */} John Doe
+                      John Doe
                     </span>
                     <div
                       className="
                 flex items-center"
                     >
                       <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 mr-1" />
-                      <span className="text-sm font-semibold">
-                        {/* {service.rating} */} 4.9
-                      </span>
-                      <span className="text-xs text-gray-500 ml-1">
-                        {/* ({service.reviewCount}) */}(500)
-                      </span>
+                      <span className="text-sm font-semibold">4.9</span>
+                      <span className="text-xs text-gray-500 ml-1">(500)</span>
                     </div>
                   </div>
                 </div>

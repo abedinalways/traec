@@ -1,8 +1,5 @@
 import Image from "next/image";
-import React from "react";
-import { MdOutlineLocationOff } from "react-icons/md";
-
-import { ChevronUp, ChevronDown } from "lucide-react";
+import { ChevronUp, ChevronDown, MapPinCheckInside } from "lucide-react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import {
   Accordion,
@@ -30,7 +27,7 @@ export default function ServicesReviews() {
               className="
                 flex items-center gap-2 text-[#777980]"
             >
-              <MdOutlineLocationOff />
+              <MapPinCheckInside size={17} />
               <span className="text-sm">Los Angeles, CA</span>
             </div>
           </div>
@@ -141,7 +138,7 @@ export default function ServicesReviews() {
               className="
                 flex items-center gap-2 text-[#777980]"
             >
-              <MdOutlineLocationOff />
+              <MapPinCheckInside size={17} />{" "}
               <span className="text-sm">Los Angeles, CA</span>
             </div>
           </div>
