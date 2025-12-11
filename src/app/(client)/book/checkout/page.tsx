@@ -13,6 +13,8 @@ import {
 } from "react-icons/md";
 import { IoIosArrowForward, IoMdTime } from "react-icons/io";
 import { CiUser } from "react-icons/ci";
+import Link from "next/link";
+import TicketIcon from "@/components/ui/TicketIcon";
 
 interface CardFormData {
   cardNumber: string;
@@ -192,7 +194,7 @@ export default function CheckoutPage({
               <div className="border rounded-xl p-5">
                 <h3 className="mb-3 text-lg font-bold">Order Summary</h3>
                 <div className="bg-[#FA991614] rounded-md p-5">
-                  <div className="flex gap-3 items-center">
+                  {/* <div className="flex gap-3 items-center">
                     <div className="flex items-center">
                       <Image
                         src="/images/browser/img07.png"
@@ -205,6 +207,19 @@ export default function CheckoutPage({
                     <div>
                       <h3>DJ Sarah&#39;s Party Productions</h3>
                       <p>by Party Pro Rentals</p>
+                    </div>
+                  </div> */}
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-md grid place-content-center bg-linear-to-r from-[#FFAC47] to-[#FF2A24] font-bold">
+                      <TicketIcon className="text-white" />
+                    </div>
+                    <div>
+                      <p className="font-inter font-medium text-sm text-black">
+                        DJ Santa’s Party Productions
+                      </p>
+                      <p className="font-inter text-xs text-[#777980]">
+                        Party Pro Rentals
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -274,9 +289,11 @@ export default function CheckoutPage({
                 <button className="bg-[#070707] w-full rounded-md py-3 text-white cursor-pointer flex items-center justify-center gap-3 ">
                   Download Receipt <MdOutlineFileDownload />
                 </button>
-                <button className="w-full border rounded-md py-3 cursor-pointer flex items-center justify-center gap-3 ">
-                  Go to order page <IoIosArrowForward />
-                </button>
+                <Link className="w-full" href={"/order-details"}>
+                  <button className="w-full border rounded-md py-3 cursor-pointer flex items-center justify-center gap-3 ">
+                    Go to order page <IoIosArrowForward />
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
