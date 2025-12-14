@@ -14,7 +14,7 @@ import Link from "next/link";
 import { ActionDialog } from "@/components/reusable/ActionDialog";
 import { useState } from "react";
 import { IoMdLogOut } from "react-icons/io";
-import ProfileCard from "@/components/reusable/ProfileView";
+import ProfileCard from "@/components/reusable/ProfileCard";
 
 const menu = [
   {

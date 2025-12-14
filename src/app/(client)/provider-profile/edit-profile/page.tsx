@@ -1,4 +1,4 @@
-import ProfileCard from "@/components/reusable/ProfileView";
+import ProfileCard from "@/components/reusable/ProfileCard";
 import Link from "next/link";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 
