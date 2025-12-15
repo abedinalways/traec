@@ -31,10 +31,12 @@ export default function LogInModal({
   const router = useRouter();
 
   const onSubmit = (data: LogInFormData) => {
+    // Save to localStorage
+    localStorage.setItem("loginData", JSON.stringify(data));
     console.log("Form Submitted:", data);
     onClose();
     reset();
-    // router.push("/");
+    router.push("/");
   };
 
   return (

@@ -15,9 +15,26 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { useAuthModal } from "@/app/context/AuthModalContext";
+import { useEffect, useState } from "react";
+
+type LoginData = {
+  name?: string;
+  email?: string;
+};
 
 export default function Navbar() {
   const { setOpenLogin, setOpenSignup } = useAuthModal();
+
+  const [user, setUser] = useState<LoginData | null>(null);
+
+  useEffect(() => {
+    const savedData = localStorage.getItem("loginData");
+
+    if (savedData) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setUser(JSON.parse(savedData));
+    }
+  }, []);
 
   const pathname = usePathname();
 
@@ -71,21 +88,40 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Auth Buttons */}
-        <div className="hidden md:flex items-center gap-6">
-          <Button
-            onClick={() => setOpenLogin(true)}
-            className="text-sm font-medium hover:bg-white cursor-pointer bg-white text-black"
-          >
-            Sign In
-          </Button>
+        {user ? (
+          <Link href={"/client-profile"}>
+            <div className="flex items-center gap-2">
+              <Image
+                src="/images/browser/img07.png"
+                alt="provider1"
+                width={24}
+                height={24}
+                className="w-6 h-6 rounded-full mr-2 cursor-pointer"
+              />
+              <div className="cursor-pointer">
+                <span className="text-sm font-medium text-gray-900">
+                  John Doe
+                </span>
+              </div>
+            </div>
+          </Link>
+        ) : (
+          <div className="hidden md:flex items-center gap-6">
+            <Button
+              onClick={() => setOpenLogin(true)}
+              className="text-sm font-medium hover:bg-white cursor-pointer bg-white text-black"
+            >
+              Sign In
+            </Button>
 
-          <Button
-            onClick={() => setOpenSignup(true)}
-            className="rounded-md px-6 text-white font-medium btn-gradient cursor-pointer"
-          >
-            Join Now
-          </Button>
-        </div>
+            <Button
+              onClick={() => setOpenSignup(true)}
+              className="rounded-md px-6 text-white font-medium btn-gradient cursor-pointer"
+            >
+              Join Now
+            </Button>
+          </div>
+        )}
 
         {/* Mobile Menu */}
         <div className="md:hidden mx-4">
@@ -146,21 +182,40 @@ export default function Navbar() {
                 </div>
 
                 {/* Mobile Auth */}
-                <div className="pt-6 flex flex-col gap-4 ">
-                  <Button
-                    onClick={() => setOpenLogin(true)}
-                    className="rounded-full text-white font-medium btn-gradient"
-                  >
-                    Sign In
-                  </Button>
+                {user ? (
+                  <Link href={"/client-profile"}>
+                    <div className="flex items-center gap-2">
+                      <Image
+                        src="/images/browser/img07.png"
+                        alt="provider1"
+                        width={24}
+                        height={24}
+                        className="w-6 h-6 rounded-full mr-2 cursor-pointer"
+                      />
+                      <div className="cursor-pointer">
+                        <span className="text-sm font-medium text-gray-900">
+                          John Doe
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                ) : (
+                  <div className="pt-6 flex flex-col gap-4 ">
+                    <Button
+                      onClick={() => setOpenLogin(true)}
+                      className="rounded-full text-white font-medium btn-gradient"
+                    >
+                      Sign In
+                    </Button>
 
-                  <Button
-                    onClick={() => setOpenSignup(true)}
-                    className="rounded-md text-white font-medium btn-gradient"
-                  >
-                    Join Now
-                  </Button>
-                </div>
+                    <Button
+                      onClick={() => setOpenSignup(true)}
+                      className="rounded-md text-white font-medium btn-gradient"
+                    >
+                      Join Now
+                    </Button>
+                  </div>
+                )}
               </div>
             </SheetContent>
           </Sheet>
