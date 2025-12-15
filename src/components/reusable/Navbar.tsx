@@ -90,7 +90,7 @@ export default function Navbar() {
         {/* Desktop Auth Buttons */}
         {user ? (
           <Link href={"/client-profile"}>
-            <div className="flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2">
               <Image
                 src="/images/browser/img07.png"
                 alt="provider1"
