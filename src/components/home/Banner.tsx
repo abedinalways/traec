@@ -3,6 +3,8 @@ import { Search, Star, CheckCircle2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import RightIcon from '../icons/RightIcon';
+
 
 const Banner = () => {
   return (
@@ -12,12 +14,12 @@ const Banner = () => {
           {/* LEFT TEXT SECTION */}
           <div className="space-y-6 lg:space-y-8">
             <div className="space-y-4">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                Elevate Your Event with Premium{' '}
-                <span className="text-gradient italic font-serif">Evoke</span>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight font-[glory]">
+                Elevate Your Event with Premium{" "}
+                <span className="italic font-serif text-[#FA9916]">Evoke</span>
               </h1>
 
-              <p className="text-gray-600 text-sm sm:text-base leading-relaxed max-w-xl">
+              <p className="text-gray-600 text-sm sm:text-base leading-relaxed max-w-xl font-[inter]">
                 Discover everything you need to plan the perfect event from DJs,
                 caterers, and decorators to venues, rentals, and entertainment.
                 Connect with trusted providers and bring your vision to life
@@ -80,13 +82,17 @@ const Banner = () => {
                 />
 
                 {/* Badge */}
-                <div className="absolute top-3 left-3 bg-white px-3 py-2 rounded-xl shadow-md flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 font-bold text-xs">
-                    ✓
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold">Sarah M.</p>
-                    <p className="text-[10px] text-gray-500">Wedding Planner</p>
+                <div className="p-px rounded-[14px] bg-yellow-300">
+                  <div className="absolute top-3 left-3 bg-white px-3 py-2 rounded-[14px] shadow-md flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 font-bold text-xs">
+                      <RightIcon />
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold">Sarah M.</p>
+                      <p className="text-[10px] text-gray-500">
+                        Wedding Planner
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -121,7 +127,6 @@ const Banner = () => {
               </div>
             </div>
 
-            {/* DESKTOP GRID LAYOUT (UNCHANGED) */}
             <div className="hidden lg:block">
               {/* Your original grid completely untouched */}
               <div className="grid grid-cols-2 gap-6 relative">
@@ -134,10 +139,10 @@ const Banner = () => {
                     height={400}
                     className="rounded-2xl object-cover w-[271px] h-[287px]"
                   />
-
-                  <div className="absolute top-3 left-[-65px] bg-white px-4 py-3 rounded-xl shadow-md flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 font-bold text-xs">
-                      ✓
+                  
+                  <div className="absolute top-3 left-[-65px] bg-white px-4 py-3 rounded-xl shadow-md flex items-center gap-3 border border-orange-300">
+                    <div className="w-8 h-8 rounded-full p-3  bg-orange-100 flex items-center justify-center font-bold text-xs">
+                      <RightIcon/>
                     </div>
                     <div>
                       <p className="text-sm font-semibold">Sarah M.</p>

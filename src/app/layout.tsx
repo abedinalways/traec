@@ -6,11 +6,11 @@ import {
   Geist_Mono,
   Glory,
   Inter,
-  Lexend,
-  Manrope,
-  Open_Sans,
+  
+  Satisfy,
 } from "next/font/google";
 import "../styles/globals.css";
+import localFont from "next/font/local";
 
 const glory = Glory({
   variable: "--font-glory",
@@ -24,25 +24,39 @@ const inter = Inter({
   weight: ["400", "500", "600", "700", "800"],
 });
 
-const manrope = Manrope({
-  variable: "--font-manrope",
-  subsets: ["latin"],
-});
+// const manrope = Manrope({
+//   variable: "--font-manrope",
+//   subsets: ["latin"],
+// });
 
-const openSans = Open_Sans({
-  variable: "--font-open-sans",
-  subsets: ["latin"],
-});
+// const openSans = Open_Sans({
+//   variable: "--font-open-sans",
+//   subsets: ["latin"],
+// });
 
-const lexend = Lexend({
-  variable: "--font-lexend",
-  subsets: ["latin"],
-});
+// const lexend = Lexend({
+//   variable: "--font-lexend",
+//   subsets: ["latin"],
+// });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
-});
+}); 
+
+// const brittney = localFont({
+//   src: [
+//     {
+//       path: "./fonts/BrittanySignature.ttf",
+//       weight: "400",
+//       style: "normal",
+//     },
+//   ],
+//   variable: "--font-brittney",
+//   display: "swap",
+// });
+
+
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
