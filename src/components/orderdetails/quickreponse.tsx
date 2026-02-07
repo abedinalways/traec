@@ -18,7 +18,16 @@ export default function QuickResponse({ onSend }: QuickResponseProps) {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto border rounded-xl p-5 bg-white shadow-sm">
+    <div className="w-full               /* mobile: full width */
+    sm:w-auto        /* small screens */
+    md:w-auto        /* medium screens */
+    lg:w-[650px]         /* large screens: original size */
+    h-auto            /* height stays same everywhere */
+    mx-0
+    ml-0                /* mobile: no left margin */
+    lg:ml-[55px]         /* large screens: original 55px margin */
+    border rounded-xl p-5 bg-white shadow-sm">
+    
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2">

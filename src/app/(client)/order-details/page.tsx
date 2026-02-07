@@ -6,9 +6,9 @@ import RightCard from "@/components/orderdetails/rightcard";
 
 export default function OrderdetailsPage() {
   return (
-    <main className=" custom-container min-h-screen bg-white px-4 sm:px-6 md:px-10 lg:px-16 py-8">
+    <main className="custom-container min-h-screen bg-white px-4 sm:px-6 md:px-10 lg:px-16 py-8">
 
-      {/* HEADER BREADCRUMB (Optional if already have) */}
+      {/* HEADER BREADCRUMB */}
       <p className="text-sm text-gray-500 mb-6">
         My orders <span className="text-gray-400">›</span> Order Details
       </p>
@@ -43,21 +43,9 @@ export default function OrderdetailsPage() {
 
       {/* QUICK RESPONSE BOX UNDER BOTH COLUMNS */}
       <div
-  className=" custom-container
-    
-    max-w-6xl
-    
-    mt-10
-    px-4
-    sm:px-6
-    md:px-1
-    lg:px-38
-  "
-    
->
-
-  
-
+        className="custom-container w-full max-w-3xl mx-auto mt-10"
+        style={{ marginLeft: 0, marginRight: 0 }}
+      >
         <QuickResponse
           onSend={(message) => {
             console.log("Sent message:", message);

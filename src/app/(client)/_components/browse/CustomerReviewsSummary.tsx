@@ -18,7 +18,7 @@ export default function CustomerReviewsSummary() {
   ];
 
   return (
-    <div className="w-full bg-white rounded-xl border shadow p-6 md:p-8">
+    <div className="w-full bg-white rounded-xl border p-6 md:p-8 my-5">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold mb-4">Customer Reviews</h2>
         <div className="flex items-center">

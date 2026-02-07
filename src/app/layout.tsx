@@ -74,10 +74,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <body
-        className={`${geistSans.variable} ${glory.variable} ${geistMono.variable} ${inter.variable} antialiased`}>
-        <main className='mt-16'>{children}</main>
+        className={`${geistSans.variable} ${glory.variable} ${geistMono.variable} ${inter.variable} antialiased`}
+      >
+        <main className="mt-16">
+          {" "}
+          <AuthModalProvider> {children}</AuthModalProvider>
+        </main>
       </body>
     </html>
   );

@@ -141,7 +141,7 @@ const Masonry: React.FC<MasonryProps> = ({
     return items.map((child) => {
       const col = colHeights.indexOf(Math.min(...colHeights));
       const x = col * (columnWidth + gap);
-      const height = (child.height * columnWidth) / 400;
+      const height = (child.height * columnWidth) / 500;
       const y = colHeights[col];
       colHeights[col] += height + gap;
 
@@ -325,9 +325,7 @@ const Masonry: React.FC<MasonryProps> = ({
             {item.tag && (
               <div className="absolute top-4 left-4 z-10">
                 <span
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold text-white ${getTagColor(
-                    item.tag
-                  )}`}
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold text-white btn-gradient`}
                 >
                   {item.tag}
                 </span>

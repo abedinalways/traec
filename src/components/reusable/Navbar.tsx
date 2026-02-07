@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Search, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { usePathname } from "next/navigation"; // 👈 added
 import {
   Sheet,
   SheetTrigger,
@@ -13,10 +14,42 @@ import {
   SheetTitle,
   SheetClose,
 } from "@/components/ui/sheet";
+import { useAuthModal } from "@/app/context/AuthModalContext";
+import { useEffect, useState } from "react";
+
+type LoginData = {
+  name?: string;
+  email?: string;
+};
 
 export default function Navbar() {
+  const { setOpenLogin, setOpenSignup } = useAuthModal();
+
+  const [user, setUser] = useState<LoginData | null>(null);
+
+  useEffect(() => {
+    const savedData = localStorage.getItem("loginData");
+
+    if (savedData) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setUser(JSON.parse(savedData));
+    }
+  }, []);
+
+  const pathname = usePathname();
+
+  const isActive = (path: string) => {
+    if (path === "/") {
+      return pathname === "/" ? "text-[#F92E25] font-semibold" : "text-black";
+    }
+
+    return pathname.startsWith(path)
+      ? "text-[#FF2A24] font-semibold"
+      : "text-black";
+  };
+
   return (
-    <header className="w-full fixed top-0 left-0 bg-white z-50 font-[inter]">
+    <header className="w-full fixed px-2 top-0 left-0 bg-white z-50 font-[inter]">
       <div className="custom-container mx-auto flex items-center justify-between py-4 gap-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
@@ -25,11 +58,24 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center space-x-8 text-sm font-medium">
-          <Link href="/">Home</Link>
-          <Link href="/browse">Browse</Link>
-          <Link href="/how-it-works">How it Works</Link>
-          <Link href="/providers">Providers</Link>
-          <Link href="/become-provider">Become a Provider</Link>
+          <Link href="/" className={isActive("/")}>
+            Home
+          </Link>
+          <Link href="/browse" className={isActive("/browse")}>
+            Browse
+          </Link>
+          <Link href="/how-it-works" className={isActive("/how-it-works")}>
+            How it Works
+          </Link>
+          <Link href="/providers" className={isActive("/providers")}>
+            Providers
+          </Link>
+          <Link
+            href="/become-provider"
+            className={isActive("/become-provider")}
+          >
+            Become a Provider
+          </Link>
         </nav>
 
         {/* Desktop Search */}
@@ -42,21 +88,42 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Auth Buttons */}
-        <div className="hidden md:flex items-center gap-6">
-          <Link href="/signin" className="text-sm font-medium">
-            Sign In
+        {user ? (
+          <Link href={"/client-profile"}>
+            <div className="hidden md:flex items-center gap-2">
+              <Image
+                src="/images/browser/img07.png"
+                alt="provider1"
+                width={24}
+                height={24}
+                className="w-6 h-6 rounded-full mr-2 cursor-pointer"
+              />
+              <div className="cursor-pointer">
+                <span className="text-sm font-medium text-gray-900">
+                  John Doe
+                </span>
+              </div>
+            </div>
           </Link>
+        ) : (
+          <div className="hidden md:flex items-center gap-6">
+            <Button
+              onClick={() => setOpenLogin(true)}
+              className="text-sm font-medium hover:bg-white cursor-pointer bg-white text-black"
+            >
+              Sign In
+            </Button>
 
-          {/* Gradient Button */}
-          <Link href="/signin">
-            {" "}
-            <Button className="rounded-full px-6 text-white font-medium btn-gradient cursor-pointer">
+            <Button
+              onClick={() => setOpenSignup(true)}
+              className="rounded-md px-6 text-white font-medium btn-gradient cursor-pointer"
+            >
               Join Now
             </Button>
-          </Link>
-        </div>
+          </div>
+        )}
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Menu */}
         <div className="md:hidden mx-4">
           <Sheet>
             <SheetTrigger>
@@ -70,23 +137,39 @@ export default function Navbar() {
 
               <div className="mt-6 flex flex-col space-y-5 text-base font-medium px-4">
                 <SheetClose asChild>
-                  <Link href="/">Home</Link>
+                  <Link href="/" className={isActive("/")}>
+                    Home
+                  </Link>
                 </SheetClose>
 
                 <SheetClose asChild>
-                  <Link href="/browse">Browse</Link>
+                  <Link href="/browse" className={isActive("/browse")}>
+                    Browse
+                  </Link>
                 </SheetClose>
 
                 <SheetClose asChild>
-                  <Link href="/how-it-works">How it Works</Link>
+                  <Link
+                    href="/how-it-works"
+                    className={isActive("/how-it-works")}
+                  >
+                    How it Works
+                  </Link>
                 </SheetClose>
 
                 <SheetClose asChild>
-                  <Link href="/providers">Providers</Link>
+                  <Link href="/providers" className={isActive("/providers")}>
+                    Providers
+                  </Link>
                 </SheetClose>
 
                 <SheetClose asChild>
-                  <Link href="/become-provider">Become a Provider</Link>
+                  <Link
+                    href="/become-provider"
+                    className={isActive("/become-provider")}
+                  >
+                    Become a Provider
+                  </Link>
                 </SheetClose>
 
                 {/* Mobile Search */}
@@ -99,15 +182,40 @@ export default function Navbar() {
                 </div>
 
                 {/* Mobile Auth */}
-                <div className="pt-6 flex flex-col gap-4 ">
-                  <Button className="rounded-full text-white font-medium btn-gradient">
-                    Sign In
-                  </Button>
+                {user ? (
+                  <Link href={"/client-profile"}>
+                    <div className="flex items-center gap-2">
+                      <Image
+                        src="/images/browser/img07.png"
+                        alt="provider1"
+                        width={24}
+                        height={24}
+                        className="w-6 h-6 rounded-full mr-2 cursor-pointer"
+                      />
+                      <div className="cursor-pointer">
+                        <span className="text-sm font-medium text-gray-900">
+                          John Doe
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                ) : (
+                  <div className="pt-6 flex flex-col gap-4 ">
+                    <Button
+                      onClick={() => setOpenLogin(true)}
+                      className="rounded-full text-white font-medium btn-gradient"
+                    >
+                      Sign In
+                    </Button>
 
-                  <Button className="rounded-full text-white font-medium btn-gradient">
-                    Join Now
-                  </Button>
-                </div>
+                    <Button
+                      onClick={() => setOpenSignup(true)}
+                      className="rounded-md text-white font-medium btn-gradient"
+                    >
+                      Join Now
+                    </Button>
+                  </div>
+                )}
               </div>
             </SheetContent>
           </Sheet>

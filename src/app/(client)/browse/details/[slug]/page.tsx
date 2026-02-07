@@ -2,20 +2,14 @@
 import BasicServices from "@/app/(client)/_components/browse/BasicServices";
 import CustomerReviewsSummary from "@/app/(client)/_components/browse/CustomerReviewsSummary";
 import PremiumServices from "@/app/(client)/_components/browse/PremiumServices";
+import ServicesReviews from "@/app/(client)/_components/browse/ServicesReviews";
 import StandardServices from "@/app/(client)/_components/browse/StandardServices";
-import Reviews from "@/app/(client)/_components/providers/Reviews";
 import Accordion04 from "@/components/ui/accordion04";
 import { Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
-import {
-  FaHandshake,
-  FaMusic,
-  FaPhoneAlt,
-  FaRegLightbulb,
-  FaUserFriends,
-} from "react-icons/fa";
+import { AiOutlineCheckCircle } from "react-icons/ai";
 import { IoIosArrowBack, IoIosInformationCircleOutline } from "react-icons/io";
 
 export default function ServiceDetailsPage() {
@@ -28,10 +22,10 @@ export default function ServiceDetailsPage() {
     setMainImage(image);
   };
   return (
-    <div className="my-10">
+    <div className="my-10 md:px-4 p-2">
       <div className="custom-container mx-auto ">
         <Link href="/browse">
-          <button className="border border-gray-300 p-1 flex items-center gap-3 mt-5 rounded-md cursor-pointer mb-5">
+          <button className="border border-gray-300 p-2 flex items-center gap-3 mt-5 rounded-md cursor-pointer mb-5">
             <IoIosArrowBack /> Back to Browse
           </button>
         </Link>{" "}
@@ -59,15 +53,15 @@ export default function ServiceDetailsPage() {
                 >
                   <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 mr-1" />
                   <span className="text-sm font-semibold">
-                    {/* {service.rating} */} 5
+                    {/* {service.rating} */} 4.5
                   </span>
                   <span className="text-xs text-gray-500 ml-1">
-                    {/* ({service.reviewCount}) */} 500
+                    {/* ({service.reviewCount}) */} (234)
                   </span>
                 </div>
               </div>
             </div>
-            <div className="bg-white shadow-md border rounded-xl">
+            <div className="bg-white border rounded-xl">
               {/* Main Image */}
               <div className="relative w-full h-[40vh]">
                 <Image
@@ -80,10 +74,10 @@ export default function ServiceDetailsPage() {
 
               {/* Thumbnails */}
               <div className="flex gap-4 p-3">
-                {[1, 2, 7].map((i) => (
+                {[1, 2, 7, 5].map((i) => (
                   <div
                     key={i}
-                    className="overflow-hidden cursor-pointer"
+                    className="relative w-20 h-20 overflow-hidden cursor-pointer rounded-md"
                     onClick={() =>
                       handleThumbnailClick(`/images/browser/img0${i}.png`)
                     }
@@ -91,63 +85,66 @@ export default function ServiceDetailsPage() {
                     <Image
                       src={`/images/browser/img0${i}.png`}
                       alt={`Thumbnail ${i}`}
-                      width={100}
-                      height={100}
-                      className="object-cover rounded-md"
+                      fill
+                      className="object-cover"
                     />
                   </div>
                 ))}
               </div>
             </div>
-            <div className="space-y-6 rounded-xl border border-gray-200 bg-white mt-5 p-4 shadow-sm">
+
+            <div className="space-y-6 rounded-xl border border-gray-200 bg-white mt-5 p-4">
               <h2 className="text-3xl font-semibold  mb-6">About</h2>
               <p className="text-lg text-gray-700 mb-4">
-                Looking for professional DJ entertainment, live music, or party
-                hosting for your birthday, wedding, school dance, or corporate
-                event? 🎶 Or do you want a high-energy DJ who can create an
-                unforgettable experience for your guests?
+                Looking for{" "}
+                <b>
+                  professional DJ entertainment, live music, or party hosting
+                </b>{" "}
+                for your birthday, wedding, school dance, or corporate event? 🎶
+                Or do you want a high-energy DJ who can create an unforgettable
+                experience for your guests?
               </p>
               <p className="text-lg text-gray-700 mb-4">
-                If yes, this is the BEST place for you! With years of experience
-                in live DJ performance and event entertainment, I will provide
-                custom party DJ services with professional sound, lighting, and
-                interactive hosting to keep your event lively, fun, and truly
-                memorable. From kids birthdays to elegant weddings, I bring the
-                perfect balance of music, energy, and crowd tailored to your
-                celebration.
+                If yes, this is the <b>BEST place for you!</b> With years of
+                experience in <b>live DJ performance and event entertainment</b>
+                , I will provide custom party DJ services with professional
+                sound, lighting, and interactive hosting to keep your event
+                lively, fun, and truly memorable. From kids birthdays to elegant
+                weddings, I bring the perfect balance of{" "}
+                <b>music, energy, and crowd</b> tailored to your celebration.
               </p>
 
               <h3 className="text-2xl font-semibold mb-4">Services I Offer:</h3>
               <ul className="space-y-4">
-                <li className="flex items-start space-x-4">
-                  <FaMusic className="text-2xl text-blue-500" />
+                <li className="flex items-center space-x-2">
+                  <AiOutlineCheckCircle className="text-green-600 text-xl" />
                   <p className="text-lg text-gray-700">
                     Professional, High-Energy, Dynamic Live DJ Performance
                   </p>
                 </li>
-                <li className="flex items-start space-x-4">
-                  <FaUserFriends className="text-2xl text-blue-500" />
+                <li className="flex items-center space-x-2">
+                  <AiOutlineCheckCircle className="text-green-600 text-xl" />
                   <p className="text-lg text-gray-700">
                     Engaging Crowd Interaction & Games - Musical chairs and
                     playful elements.
                   </p>
                 </li>
-                <li className="flex items-start space-x-4">
-                  <FaHandshake className="text-2xl text-blue-500" />
+                <li className="flex items-center space-x-2">
+                  <AiOutlineCheckCircle className="text-green-600 text-xl" />
                   <p className="text-lg text-gray-700">
                     Karaoke Nights & Sing-Along Sessions - Fun, interactive
                     entertainment for guests.
                   </p>
                 </li>
-                <li className="flex items-start space-x-4">
-                  <FaRegLightbulb className="text-2xl text-blue-500" />
+                <li className="flex items-center space-x-2">
+                  <AiOutlineCheckCircle className="text-green-600 text-xl" />
                   <p className="text-lg text-gray-700">
                     Custom Playlists Tailored to Your Event - From kid’s
                     birthdays to elegant weddings.
                   </p>
                 </li>
-                <li className="flex items-start space-x-4">
-                  <FaPhoneAlt className="text-2xl text-blue-500" />
+                <li className="flex items-center space-x-2">
+                  <AiOutlineCheckCircle className="text-green-600 text-xl" />
                   <p className="text-lg text-gray-700">
                     24/7 Fast Communication & Planning Support
                   </p>
@@ -155,18 +152,19 @@ export default function ServiceDetailsPage() {
               </ul>
 
               <p className="text-sm text-gray-500 mt-6">
-                Note: I do not provide venue, catering, or event photography
-                services. Please ensure your location is prepared for sound
-                setup and lighting.
+                <b>Note:</b> I do not provide venue, catering, or event
+                photography services. Please ensure your location is prepared
+                for sound setup and lighting.
               </p>
 
               <div className="mt-6">
-                <p className="text-xl font-semibold text-gray-800">
-                  Interested in making your event unforgettable? Let’s chat!
+                <p className="text-sm text-gray-800">
+                  🎉 Interested in making your event unforgettable?{" "}
+                  <b>Let’s chat!</b>
                 </p>
               </div>
             </div>
-            <div className="space-y-6 rounded-xl border border-gray-200 bg-white mt-5 p-4 shadow-sm">
+            <div className="space-y-6 rounded-xl border border-gray-200 bg-white mt-5 p-4">
               <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
                 <IoIosInformationCircleOutline />
                 Event Setup Preference
@@ -178,7 +176,7 @@ export default function ServiceDetailsPage() {
                 bubble machine for kids’ parties.
               </p>
             </div>
-            <div className="space-y-6 rounded-xl border border-gray-200 bg-white mt-5 p-4 shadow-sm">
+            <div className="space-y-6 rounded-xl border border-gray-200 bg-white mt-5 p-4">
               <h2 className="text-xl font-semibold  mb-6 flex items-center gap-2">
                 <IoIosInformationCircleOutline />
                 Respect Venue & Sound Rules
@@ -190,21 +188,22 @@ export default function ServiceDetailsPage() {
                 and avoid interruptions.
               </p>
             </div>
-            <h3 className="mt-5 text-2xl">FAQ</h3>
+            <h3 className="my-5 text-2xl">FAQ</h3>
             <Accordion04 />
             <CustomerReviewsSummary />
-            <Reviews />
+            {/* <Reviews /> */}
+            <ServicesReviews />
           </div>
           {/* Right Section (Stats) */}
           <div className="w-full lg:w-[30%] ">
-            <div className="w-full rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+            <div className="w-full rounded-xl border border-gray-200 bg-white">
               {/* Tabs */}
-              <div className="flex overflow-x-auto justify-between gap-5">
+              <div className="grid grid-cols-3 divide-x-4">
                 <button
                   onClick={() => setActiveTab("Basic")}
-                  className={`whitespace-nowrap px-4 py-2 rounded-md border ${
+                  className={`whitespace-nowrap px-4 py-2 border rounded-tl-md ${
                     activeTab === "Basic"
-                      ? "border-blue-600 text-blue-600 "
+                      ? "border-b-[#070707] border-b-2"
                       : "border-gray-300 text-gray-500 hover:text-black cursor-pointer"
                   }`}
                 >
@@ -213,9 +212,9 @@ export default function ServiceDetailsPage() {
 
                 <button
                   onClick={() => setActiveTab("Standard")}
-                  className={`whitespace-nowrap px-4 py-2 rounded-md border ${
+                  className={`whitespace-nowrap px-4 py-2  border ${
                     activeTab === "Standard"
-                      ? "border-blue-600 text-blue-600 "
+                      ? "border-b-[#070707] border-b-2"
                       : "border-gray-300 text-gray-500 hover:text-black cursor-pointer"
                   }`}
                 >
@@ -224,9 +223,9 @@ export default function ServiceDetailsPage() {
 
                 <button
                   onClick={() => setActiveTab("Premium")}
-                  className={`whitespace-nowrap px-4 py-2 rounded-md border ${
+                  className={`whitespace-nowrap px-4 py-2 border rounded-tr-md ${
                     activeTab === "Premium"
-                      ? "border-blue-600 text-blue-600 "
+                      ? "border-b-[#070707] border-b-2 "
                       : "border-gray-300 text-gray-500 hover:text-black cursor-pointer"
                   }`}
                 >
@@ -243,7 +242,7 @@ export default function ServiceDetailsPage() {
               {/* ================= Premium CONTENT ================= */}
               {activeTab === "Premium" && <PremiumServices />}
             </div>
-            <div className="w-full rounded-xl border border-gray-200 bg-white p-5 shadow-sm mt-5">
+            <div className="w-full rounded-xl border border-gray-200 bg-white p-5 mt-5">
               <div>
                 <h3 className="text-xl font-bold my-2">About the Provider</h3>
                 <div className="flex items-center gap-2 mb-3">
@@ -256,27 +255,26 @@ export default function ServiceDetailsPage() {
                   />
                   <div>
                     <span className="text-sm font-medium text-gray-900">
-                      {/* {service.providerName} */} John Doe
+                      John Doe
                     </span>
                     <div
                       className="
                 flex items-center"
                     >
                       <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 mr-1" />
-                      <span className="text-sm font-semibold">
-                        {/* {service.rating} */} 5
-                      </span>
-                      <span className="text-xs text-gray-500 ml-1">
-                        {/* ({service.reviewCount}) */}(500)
-                      </span>
+                      <span className="text-sm font-semibold">4.9</span>
+                      <span className="text-xs text-gray-500 ml-1">(500)</span>
                     </div>
                   </div>
                 </div>
                 <p>Usually responds within 1 hour</p>
                 <p>Member since 2022</p>
-                <button className="w-full mt-3 border py-3 rounded-lg text-gray-700 font-medium cursor-pointer">
-                  View Profile
-                </button>
+                <Link href={"/provider-profile/details/1"}>
+                  {" "}
+                  <button className="w-full mt-3 border py-3 rounded-lg text-gray-700 font-medium cursor-pointer">
+                    View Profile
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

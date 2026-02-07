@@ -1,9 +1,9 @@
-'use client';
-import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { MapPin, Star } from 'lucide-react';
-import Image from 'next/image';
+"use client";
+import React from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { MapPin, Star } from "lucide-react";
+import Image from "next/image";
 
 // --- Interfaces and Data ---
 
@@ -19,62 +19,56 @@ interface Provider {
 
 const providersData: Provider[] = [
   {
-    id: '1',
-    name: 'Sarah Johnson',
-    title: 'Wedding Photographer',
-    imageUrl:
-      '/images/experts/experts01.png',
-    location: 'New York NY',
+    id: "1",
+    name: "Sarah Johnson",
+    title: "Wedding Photographer",
+    imageUrl: "/images/experts/experts01.png",
+    location: "New York NY",
     rating: 4.9,
     reviewCount: 234,
   },
   {
-    id: '2',
-    name: 'Jenny Wilson',
-    title: 'Event Manager',
-    imageUrl:
-      '/images/experts/experts04.png',
-    location: 'New York NY',
+    id: "2",
+    name: "Jenny Wilson",
+    title: "Event Manager",
+    imageUrl: "/images/experts/experts04.png",
+    location: "New York NY",
     rating: 4.9,
     reviewCount: 234,
   },
   {
-    id: '3',
-    name: 'Cody Fisher',
-    title: 'DJ',
-    imageUrl:
-      '/images/experts/experts02.png',
-    location: 'New York NY',
+    id: "3",
+    name: "Cody Fisher",
+    title: "DJ",
+    imageUrl: "/images/experts/experts02.png",
+    location: "New York NY",
     rating: 4.9,
     reviewCount: 234,
   },
   {
-    id: '4',
-    name: 'Floyd Miles',
-    title: 'Catering',
-    imageUrl:
-      '/images/experts/experts03.png',
-    location: 'New York NY',
+    id: "4",
+    name: "Floyd Miles",
+    title: "Catering",
+    imageUrl: "/images/experts/experts03.png",
+    location: "New York NY",
     rating: 4.9,
     reviewCount: 234,
   },
   {
-    id: '5',
-    name: 'Robert Fox',
-    title: 'Decorator',
-    imageUrl:
-      '/images/experts/experts02.png',
-    location: 'New York NY',
+    id: "5",
+    name: "Robert Fox",
+    title: "Decorator",
+    imageUrl: "/images/experts/experts02.png",
+    location: "New York NY",
     rating: 4.9,
     reviewCount: 234,
   },
   {
-    id: '6',
-    name: 'Eleanor Pena',
-    title: 'Entertainment',
-    imageUrl:
-      '/images/experts/experts04.png',
-    location: 'New York NY',
+    id: "6",
+    name: "Eleanor Pena",
+    title: "Entertainment",
+    imageUrl: "/images/experts/experts04.png",
+    location: "New York NY",
     rating: 4.9,
     reviewCount: 234,
   },
@@ -107,14 +101,14 @@ const ExpertsCarousel: React.FC = () => {
   // Scrolls forward by one item's width
   const scrollNext = React.useCallback(() => {
     if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: ITEM_WIDTH, behavior: 'smooth' });
+      carouselRef.current.scrollBy({ left: ITEM_WIDTH, behavior: "smooth" });
     }
   }, [ITEM_WIDTH]);
 
   // Scrolls backward by one item's width
   const scrollPrev = React.useCallback(() => {
     if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: -ITEM_WIDTH, behavior: 'smooth' });
+      carouselRef.current.scrollBy({ left: -ITEM_WIDTH, behavior: "smooth" });
     }
   }, [ITEM_WIDTH]);
 
@@ -154,7 +148,7 @@ const ExpertsCarousel: React.FC = () => {
   }, [TRANSITION_WIDTH]);
 
   return (
-    <div className="p-2 md:p-8 lg:p-12 w-full max-w-7xl mx-auto font-sans">
+    <div className="w-full max-w-7xl mx-auto font-sans">
       <div className="relative">
         <div
           ref={carouselRef}
@@ -163,7 +157,7 @@ const ExpertsCarousel: React.FC = () => {
         >
           {providersToRender.map((provider, index) => (
             <CarouselItem key={`${provider.id}-${index}`}>
-              <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer bg-white">
+              <Card className="overflow-hidden shadow-none p-2! border-none transition-shadow duration-300 bg-white">
                 <CardContent className="p-0">
                   {/* Image Container */}
                   <div className="relative w-full h-[200px] rounded-2xl">
@@ -172,16 +166,16 @@ const ExpertsCarousel: React.FC = () => {
                       src={provider.imageUrl}
                       alt={provider.name}
                       className="w-full h-full object-cover p-2 rounded-2xl"
-                      onError={e => {
+                      onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.src =
-                          'https://placehold.co/400x400/CCCCCC/333333?text=No+Image';
+                          "https://placehold.co/400x400/CCCCCC/333333?text=No+Image";
                       }}
                     />
                   </div>
 
                   {/* Content Container */}
-                  <div className="p-4 space-y-2">
+                  <div className="p-4 pb-0 space-y-2">
                     {/* Name */}
                     <h3 className="text-base font-semibold text-gray-900">
                       {provider.name}
@@ -213,8 +207,8 @@ const ExpertsCarousel: React.FC = () => {
                     {/* View Profile Button */}
                     <Button
                       variant="outline"
-                      className="w-full mt-3"
-                      onClick={() => console.log('View profile:', provider.id)}
+                      className="w-full mt-3 mb-3 py-6 bg-[#F6F8FA]"
+                      onClick={() => console.log("View profile:", provider.id)}
                     >
                       View Profile
                     </Button>
@@ -230,7 +224,7 @@ const ExpertsCarousel: React.FC = () => {
           onClick={scrollPrev}
           size="icon"
           variant="secondary"
-          className="absolute left-[-16px] top-1/2 -translate-y-1/2 z-10 rounded-full bg-white shadow-lg border hover:bg-gray-50"
+          className="absolute cursor-pointer -left-4 top-1/2 -translate-y-1/2 z-10 rounded-full bg-white shadow-lg border hover:bg-gray-50"
         >
           <svg
             className="w-4 h-4 text-gray-600"
@@ -249,7 +243,7 @@ const ExpertsCarousel: React.FC = () => {
           onClick={scrollNext}
           size="icon"
           variant="secondary"
-          className="absolute right-[-16px] top-1/2 -translate-y-1/2 z-10 rounded-full bg-white shadow-lg border hover:bg-gray-50"
+          className="absolute -right-4 cursor-pointer top-1/2 -translate-y-1/2 z-10 rounded-full bg-white shadow-lg border hover:bg-gray-50"
         >
           <svg
             className="w-4 h-4 text-gray-600"
