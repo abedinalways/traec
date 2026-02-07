@@ -174,8 +174,7 @@ body {
   color: linear-gradient(90deg #ffac47 0%, #ff2a24 100%);
 } */
 .text-gradient {
-  background: linear-gradient(90deg, #ffac47 0%, #e0221c 100%);
-  background-clip: text;
+  background:  linear-gradient(90deg, #ffac47 0%, #ff2a24 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
@@ -205,4 +204,8 @@ input[type="time"] {
   .bg-gradient-email {
     background: linear-gradient(90deg, #ffac47 0%, #ff2a24 100%);
   }
+}
+
+.font-color{
+  text: linear-gradient(90deg, #ffac47 0%, #ff2a24 100%);
 }
