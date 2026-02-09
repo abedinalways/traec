@@ -154,7 +154,7 @@ const ExpertsCarousel: React.FC = () => {
   }, [TRANSITION_WIDTH]);
 
   return (
-    <div className="p-2 md:p-8 lg:p-12 w-full max-w-7xl mx-auto font-sans">
+    <div className="p-2  md:p-0 w-full max-w-7xl mx-auto font-sans">
       <div className="relative">
         <div
           ref={carouselRef}

@@ -66,13 +66,13 @@ const Stories = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl md:text-[48px] font-bold text-gray-900 mb-4 font-[glory]">
             Recent Event Success{' '}
-            <span className="text-transparent bg-clip-text text-gradient italic font-serif">
+            <span className=" bg-clip-text text-red-500 italic font-[glory] font-semibold">
               Stories
             </span>
           </h2>
-          <p className="text-gray-600 text-sm md:text-md max-w-2xl mx-auto font-[inter]">
+          <p className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto font-[inter]">
             Take a look at some of the amazing events our providers have created
             recently
           </p>

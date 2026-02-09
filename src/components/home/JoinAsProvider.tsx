@@ -5,10 +5,10 @@ import Image from 'next/image';
 const JoinAsProvider = () => {
   return (
     <div className="md:flex custom-container px-4 md:px-0 ">
-      <div className="md:w-[703px] md:h-[441px] mx-auto">
+      <div className="md:w-[617px] md:h-[407px] mx-auto ">
         <BusinessCard />
       </div>
-      <div className="md:w-[680px] md:h-[400px]">
+      <div className="md:w-[680px] md:h-[421px]">
         <Image
           src="/images/provider.png"
           width={1000}

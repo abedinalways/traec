@@ -44,17 +44,17 @@ const geistSans = Geist({
   subsets: ["latin"],
 }); 
 
-// const brittney = localFont({
-//   src: [
-//     {
-//       path: "./fonts/BrittanySignature.ttf",
-//       weight: "400",
-//       style: "normal",
-//     },
-//   ],
-//   variable: "--font-brittney",
-//   display: "swap",
-// });
+const brittney = localFont({
+  src: [
+    {
+      path: "../../public/fonts/Britney.ttf",
+      weight: "400",
+      style: "normal",
+    },
+  ],
+  variable: "--font-brittney",
+  display: "swap",
+});
 
 
 
@@ -74,10 +74,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <body
-        className={`${geistSans.variable} ${glory.variable} ${geistMono.variable} ${inter.variable} antialiased`}>
-        <main className='mt-16'>{children}</main>
+        className={`${geistSans.variable} ${glory.variable} ${geistMono.variable} ${inter.variable} ${brittney.variable} antialiased`}
+      >
+        <main className="mt-16">{children}</main>
       </body>
     </html>
   );

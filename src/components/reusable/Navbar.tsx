@@ -50,7 +50,7 @@ export default function Navbar() {
           {/* Gradient Button */}
           <Link href="/signin">
             {" "}
-            <Button className="rounded-full px-6 text-white font-medium btn-gradient cursor-pointer">
+            <Button className="rounded-[12px] px-6 text-white font-medium gradient-bg cursor-pointer">
               Join Now
             </Button>
           </Link>
@@ -104,7 +104,7 @@ export default function Navbar() {
                     Sign In
                   </Button>
 
-                  <Button className="rounded-full text-white font-medium btn-gradient">
+                  <Button className="rounded-[12px] text-white font-medium btn-gradient">
                     Join Now
                   </Button>
                 </div>
