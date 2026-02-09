@@ -11,6 +11,7 @@ import {
 } from "next/font/google";
 import "../styles/globals.css";
 import localFont from "next/font/local";
+import { AuthModalProvider } from "./context/AuthModalContext";
 
 const glory = Glory({
   variable: "--font-glory",
@@ -44,17 +45,17 @@ const geistSans = Geist({
   subsets: ["latin"],
 }); 
 
-// const brittney = localFont({
-//   src: [
-//     {
-//       path: "./fonts/BrittanySignature.ttf",
-//       weight: "400",
-//       style: "normal",
-//     },
-//   ],
-//   variable: "--font-brittney",
-//   display: "swap",
-// });
+const brittney = localFont({
+  src: [
+    {
+      path: "../../public/fonts/Britney.ttf",
+      weight: "400",
+      style: "normal",
+    },
+  ],
+  variable: "--font-brittney",
+  display: "swap",
+});
 
 
 

@@ -48,7 +48,7 @@ export default function Subscribe() {
           {/* Content */}
           <CardContent className="relative z-10 text-center  md:p-12 p-4 space-y-4">
             <div>
-              <h2 className="text-2xl md:text-4xl font-semibold">
+              <h2 className="text-4xl md:text-[48px] font-semibold font-[glory]">
                 Stay Updated with Evoke
               </h2>
               <p className="mt-2 text-xs md:text-md text-white/90">

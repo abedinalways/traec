@@ -1,10 +1,12 @@
-import React from 'react';
-import { Search, Star, CheckCircle2 } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
-import RightIcon from '../icons/RightIcon';
-
+import React from "react";
+import { Search, Star, CheckCircle2, MoveLeftIcon } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import RightIcon from "../icons/RightIcon";
+import BlueRightIcon from "../icons/BlueRightIcon";
+import StarIcon from "../icons/StarIcon";
+import GreenRightIcon from "../icons/GreenRightIcon";
 
 const Banner = () => {
   return (
@@ -14,9 +16,11 @@ const Banner = () => {
           {/* LEFT TEXT SECTION */}
           <div className="space-y-6 lg:space-y-8">
             <div className="space-y-4">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight font-[glory]">
+              <h1 className="text-3xl sm:text-4xl  lg:text-[64px] font-bold text-gray-900 leading-tight font-[glory]">
                 Elevate Your Event with Premium{" "}
-                <span className="italic font-serif text-[#FA9916]">Evoke</span>
+                <span className="px-2 text-gradient font-semibold italic ">
+                  Evoke
+                </span>
               </h1>
               <h1 style={{ fontFamily: "Britney-Bold" }}>
                 Welcome to the Event
@@ -31,38 +35,38 @@ const Banner = () => {
             </div>
 
             {/* SEARCH BAR */}
-            <div className="flex flex-col sm:flex-row gap-3 w-full py-4 rounded-xl px-4 bg-linear-to-r from-orange-200 via-red-100 to-white">
-              <div className="relative flex-1 bg-white rounded-xl shadow-sm">
-                <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <div className="flex flex-col sm:flex-row gap-3 w-full bg-gradient py-4 rounded-[32px] shape-squircle px-4 font-[inter]">
+              <div className="relative flex-1 bg-white border border-gray-200 rounded-[32px] shadow-sm shape-squircle">
+                <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 " />
                 <Input
                   placeholder="What type of Service do you need?"
-                  className="pl-12 pr-6 py-6 text-base border-0 focus:ring-0 bg-transparent rounded-xl placeholder:text-gray-400"
+                  className="pl-12 pr-6 py-7 text-base border-0 focus:ring-0 bg-transparent rounded-xl placeholder:text-gray-400 placeholder:font-[inter]"
                 />
               </div>
 
-              <Button className="btn-gradient text-white px-8 py-6 text-base font-semibold rounded-xl ">
+              <button className="gradient-bg text-white  cursor-pointer px-8 py-4 text-base font-semibold rounded-[12px]">
                 Find Event Services
-              </Button>
+              </button>
             </div>
 
             {/* STATS */}
-            <div className="flex flex-wrap gap-4 sm:gap-6 lg:gap-8 pt-4">
+            <div className="flex flex-wrap gap-4 sm:gap-6 lg:gap-8 pt-4 font-[inter]">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-blue-500" />
+                <BlueRightIcon />
                 <span className="text-xs sm:text-sm text-gray-700">
                   <span className="font-semibold">10,000+</span> Happy Customers
                 </span>
               </div>
 
               <div className="flex items-center gap-2">
-                <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+                <StarIcon />
                 <span className="text-xs sm:text-sm text-gray-700">
                   <span className="font-semibold">4.8/5</span> Average Rating
                 </span>
               </div>
 
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-green-500" />
+                <GreenRightIcon />
                 <span className="text-xs sm:text-sm text-gray-700">
                   <span className="font-semibold">500+</span> Verified Providers
                 </span>
@@ -120,7 +124,7 @@ const Banner = () => {
                 />
 
                 {/* Rating badge */}
-                <div className="absolute bottom-3 right-3 bg-[#fff1df] border border-orange-200 px-3 py-2 rounded-xl shadow-md flex items-center gap-2">
+                <div className="absolute bottom-3 right-3 bg-yellow-100 border border-orange-200 px-3 py-2 rounded-[10px] shadow-md flex items-center gap-2">
                   <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
                   <span className="font-semibold text-xs">4.9</span>
                   <span className="text-[10px] text-gray-500">
@@ -142,10 +146,17 @@ const Banner = () => {
                     height={400}
                     className="rounded-2xl object-cover w-[271px] h-[287px]"
                   />
-                  
+
                   <div className="absolute top-3 left-[-65px] bg-white px-4 py-3 rounded-xl shadow-md flex items-center gap-3 border border-orange-300">
-                    <div className="w-8 h-8 rounded-full p-3  bg-orange-100 flex items-center justify-center font-bold text-xs">
-                      <RightIcon/>
+                    <div className="bg-[#FCEDEB] rounded-full p-2">
+                      <div className="  p-1">
+                        <Image
+                          src="/images/right.png"
+                          width={15}
+                          height={15}
+                          alt=""
+                        />
+                      </div>
                     </div>
                     <div>
                       <p className="text-sm font-semibold">Sarah M.</p>
@@ -193,7 +204,7 @@ const Banner = () => {
                     className="rounded-2xl object-cover w-[326px] h-[200px]"
                   />
 
-                  <div className="absolute top-14 right-14 bg-[#fff1df] border border-orange-200 px-4 py-4 rounded-xl shadow-md flex items-center gap-2">
+                  <div className="absolute top-14 right-14 bg-[#fff1df]/20 border border-orange-200 px-4 py-4 rounded-xl shadow-md flex items-center gap-2">
                     <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
                     <span className="font-semibold">4.9</span>
                     <span className="text-xs text-gray-500">(234 reviews)</span>

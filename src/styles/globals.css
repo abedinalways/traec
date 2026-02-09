@@ -209,3 +209,20 @@ input[type="time"] {
 .font-color{
   text: linear-gradient(90deg, #ffac47 0%, #ff2a24 100%);
 }
+
+.shape-squircle {
+  corner-shape: squircle;
+}
+
+.card-gradient{
+  background: linear-gradient(90deg, #ffac47 0%, #ff2a24 100%);
+}
+
+.rating-bg{
+ background: rgba(250, 153, 22, 0.06);
+}
+
+.gradient-bg {
+  background: linear-gradient(90deg, #ffac47 0%, #ff0800 100%);
+ 
+}

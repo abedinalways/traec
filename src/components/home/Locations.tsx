@@ -128,12 +128,12 @@ const Locations = () => {
     },
   ];
   return (
-    <div className=" bg-[#FFFBF7] py-16 px-2 md:px-4 rounded-2xl">
-      <h2 className="text-2xl md:text-4xl text-center font-bold text-gray-900 leading-tight font-[glory]">
-        Locations We{" "}
-        <span className="text-gradient italic font-serif">Serve</span>
+    <div className=" bg-[#FFFBF7] py-16">
+      <h2 className="text-4xl md:text-[48px] text-center font-bold text-gray-900 leading-tight font-[glory]">
+        Locations We{' '}
+        <span className="text-gradient italic font-[glory] px-1">Serve</span>
       </h2>
-      <p className="text-gray-600 text-center text-sm md:text-md max-w-2xl mx-auto">
+      <p className="text-gray-600 text-center text-sm md:text-base max-w-2xl mx-auto font-[inter]">
         Find top event professionals in major cities across the United States.
       </p>
       <div className="custom-container flex flex-col gap-4">
