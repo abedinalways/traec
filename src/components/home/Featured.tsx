@@ -1,5 +1,5 @@
-import React from 'react';
-import CategoryCarousel from '../reusable/CategoryCarousel';
+import React from "react";
+import CategoryCarousel from "../reusable/CategoryCarousel";
 
 const Featured = () => {
   return (
@@ -9,7 +9,7 @@ const Featured = () => {
         <span className="text-gradient italic font-[glory] font-semibold">Services</span>
       </h2>
       <div>
-        <CategoryCarousel/>
+        <CategoryCarousel />
       </div>
     </div>
   );

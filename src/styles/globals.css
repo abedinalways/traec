@@ -1,3 +1,7 @@
+/* global.css */
+@import url("https://fonts.googleapis.com/css2?family=Satisfy&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Glory:wght@400;700&display=swap");
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -132,6 +136,13 @@
     @apply bg-[linear-gradient(90deg,#ffac47_0%,#ff2a24_100%)] text-transparent bg-clip-text;
   }
 }
+body {
+  font-family: "Britney";
+}
+
+.britney-font {
+  font-family: "Britney";
+}
 
 .custom-container {
   max-width: 1320px;
@@ -144,37 +155,29 @@
 /* Add this to your global CSS file (e.g., globals.css or index.css) */
 
 .btn-gradient {
-  background: linear-gradient(90deg, #ff6a00 0%, #ee0979 100%);
+  background: linear-gradient(90deg, #ffac47 0%, #ff2a24 100%);
 }
 
-/* Optional: Add hover effect */
-.btn-gradient:hover {
-  background: linear-gradient(90deg, #ee0979 0%, #ff6a00 100%);
-  transition: background 0.3s ease;
-}
-
-/* Optional: Add active/pressed state */
-.btn-gradient:active {
-  background: linear-gradient(90deg, #e6005f 0%, #e66000 100%);
-}
-
-/* Optional: Disabled state */
-.btn-gradient:disabled {
-  background: linear-gradient(90deg, #ccc 0%, #999 100%);
-  cursor: not-allowed;
-  opacity: 0.6;
-}
+/* Custom bg-gradient class for parent container */
 .bg-gradient {
   background: linear-gradient(115deg, #fde7d3 0%, #f8c3a4 15%, #ffffff 80%);
-  opacity: 0.6;
+  opacity: 0.6; /* To apply opacity as needed */
 }
 
+/* /Add hover effect */
+.btn-gradient:hover {
+  background: linear-gradient(90deg, #f97316 0%, #fdba74 100%);
+  transition: background 0.3s ease;
+}
+/* 
+.text-gradient {
+  color: linear-gradient(90deg #ffac47 0%, #ff2a24 100%);
+} */
 .text-gradient {
   background:  linear-gradient(90deg, #ffac47 0%, #ff2a24 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-fill-color: transparent;
+  color: transparent;
 }
 
 /* Remove default date icon */

@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import Image from "next/image";
@@ -17,9 +16,10 @@ interface EventBannerProps {
   placeholder?: string;
   buttons?: BannerButton[];
   className?: string;
-  decorationLeft?: string; // image url
-  decorationRight?: string; // image url
+  decorationLeft?: string;
+  decorationRight?: string;
   backgroundImage?: string;
+  haveSearchbar?: boolean;
 }
 
 export function Banner({
@@ -31,11 +31,12 @@ export function Banner({
   decorationLeft,
   decorationRight,
   backgroundImage,
+  haveSearchbar = true,
 }: EventBannerProps) {
   return (
     <div
       className={cn(
-        "relative w-full py-20 flex flex-col items-center text-center  overflow-hidden",
+        "relative w-full pb-20 p-2 md:px-4 flex flex-col items-center text-center  overflow-hidden",
         className
       )}
       style={
@@ -51,11 +52,11 @@ export function Banner({
       {/* Left Decoration */}
       {decorationLeft && (
         <Image
-          src="/images/banner/right.png"
+          src="/images/banner/group.png"
           alt="left"
-          width={238}
+          width={500}
           height={715}
-          className="absolute left-0 top-25 opacity-90"
+          className="absolute left-0 opacity-90"
         />
       )}
 
@@ -93,7 +94,7 @@ export function Banner({
         className="absolute  bottom-14 right-90 opacity-100"
       />
 
-      <h1 className="md:text-5xl text-2xl font-bold text-gray-900 font-[glory]">
+      <h1 className="md:text-5xl text-2xl pt-20 font-bold text-gray-900 font-[glory]">
         {title}
       </h1>
 
@@ -104,15 +105,19 @@ export function Banner({
       )}
 
       {/* Search Bar */}
-      <div className="mt-8 w-full max-w-xl relative">
-        <Input
-          placeholder={placeholder}
-          className="h-12 rounded-full pl-5 pr-12 bg-white border border-gray-200 shadow-sm"
-        />
-        <Button className="absolute top-1/2 right-2 -translate-y-1/2 h-9 w-9 rounded-full btn-gradient p-0">
-          <Search className="h-4 w-4 text-white" />
-        </Button>
-      </div>
+      {haveSearchbar && (
+        <div className="mt-8 w-full max-w-xl relative">
+          <div className="p-px rounded-full bg-linear-to-r from-[#fa8735] to-[#f73629]">
+            <input
+              placeholder="Search…"
+              className="h-12 w-full rounded-full px-5 bg-white outline-none"
+            />
+          </div>
+          <Button className="absolute top-1/2 right-2 -translate-y-1/2 h-9 w-9 rounded-full btn-gradient p-0">
+            <Search className="h-4 w-4 text-white" />
+          </Button>
+        </div>
+      )}
 
       {/* Buttons */}
       <div className="mt-6 flex flex-wrap gap-3 justify-center">

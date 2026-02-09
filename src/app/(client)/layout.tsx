@@ -3,6 +3,7 @@
 import Footer from "@/components/reusable/Footer";
 import Navbar from "@/components/reusable/Navbar";
 import React from "react";
+import AuthModalRenderer from "./_components/modal/AuthModal/AuthModalRenderer";
 
 export default function ClientLayout({
   children,
@@ -12,7 +13,8 @@ export default function ClientLayout({
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-grow">{children}</main>
+      <main className="grow">{children}</main>
+      <AuthModalRenderer />
       <Footer className="mt-auto" />
     </div>
   );

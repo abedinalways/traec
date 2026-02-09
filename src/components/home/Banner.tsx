@@ -10,9 +10,9 @@ import GreenRightIcon from "../icons/GreenRightIcon";
 
 const Banner = () => {
   return (
-    <div className="bg-gradient-to-br from-orange-50 via-white to-white py-10">
+    <div className="bg-linear-to-br md:p-4 from-orange-50 via-white to-white py-10">
       <div className="custom-container mx-auto px-4 md:px-0 py-8 lg:py-16">
-        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="grid xl:grid-cols-2 gap-10 lg:gap-16 items-center">
           {/* LEFT TEXT SECTION */}
           <div className="space-y-6 lg:space-y-8">
             <div className="space-y-4">
@@ -21,6 +21,9 @@ const Banner = () => {
                 <span className="px-2 text-gradient font-semibold italic ">
                   Evoke
                 </span>
+              </h1>
+              <h1 style={{ fontFamily: "Britney-Bold" }}>
+                Welcome to the Event
               </h1>
 
               <p className="text-gray-600 text-sm sm:text-base leading-relaxed max-w-xl font-[inter]">
@@ -74,7 +77,7 @@ const Banner = () => {
           {/* RIGHT IMAGE GRID */}
           <div className="relative">
             {/* MOBILE STACKED LAYOUT */}
-            <div className="flex flex-col gap-5 lg:hidden">
+            <div className="flex flex-col gap-5 xl:hidden">
               {/* Main Image */}
               <div className="relative">
                 <Image
@@ -176,7 +179,7 @@ const Banner = () => {
                     alt="Star"
                     width={1000}
                     height={500}
-                    className="absolute w-[41px] h-[39px] bottom-56 right-[-80px]"
+                    className="absolute w-[41px] h-[39px] bottom-56  -right-20"
                   />
                 </div>
 
@@ -187,7 +190,7 @@ const Banner = () => {
                     alt="Event 2"
                     width={500}
                     height={400}
-                    className="rounded-2xl object-cover w-[233px] h-[264px] absolute top-20 right-22"
+                    className="rounded-2xl border border-red-500  object-cover w-[233px] h-[264px] absolute top-18 right-24"
                   />
                 </div>
 
@@ -198,7 +201,7 @@ const Banner = () => {
                     alt="Event 3"
                     width={1000}
                     height={500}
-                    className="rounded-2xl object-cover w-[350px] h-[208px]"
+                    className="rounded-2xl object-cover w-[326px] h-[200px]"
                   />
 
                   <div className="absolute top-14 right-14 bg-[#fff1df]/20 border border-orange-200 px-4 py-4 rounded-xl shadow-md flex items-center gap-2">

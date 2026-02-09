@@ -1,68 +1,66 @@
-'use client';
-
-import React from 'react';
-import Masonry from '../reusable/Masonary';
+import React from "react";
+import Masonry from "../reusable/Masonary";
 
 const items = [
   {
-    id: '1',
-    img: '/images/stories/stories01.png',
-    url: 'https://example.com/one',
+    id: "1",
+    img: "/images/stories/stories01.png",
+    url: "https://example.com/one",
     height: 384,
-    title: 'Elegant Wedding Reception',
-    author: 'by Sarah Johnson',
-    tag: 'Wedding',
+    title: "Elegant Wedding Reception",
+    author: "by Sarah Johnson",
+    tag: "Wedding",
   },
   {
-    id: '2',
-    img: '/images/stories/stories02.png',
-    url: 'https://example.com/two',
+    id: "2",
+    img: "/images/stories/stories02.png",
+    url: "https://example.com/two",
     height: 279,
-    title: 'Corporate Gala Night',
-    author: 'by David Park',
-    tag: 'Corporate',
+    title: "Corporate Gala Night",
+    author: "by David Park",
+    tag: "Corporate",
   },
   {
-    id: '3',
-    img: '/images/stories/stories03.png',
-    url: 'https://example.com/three',
+    id: "3",
+    img: "/images/stories/stories03.png",
+    url: "https://example.com/three",
     height: 350,
-    title: 'Birthday Celebration',
-    author: 'by Elena Rodriguez',
-    tag: 'Birthday',
+    title: "Birthday Celebration",
+    author: "by Elena Rodriguez",
+    tag: "Birthday",
   },
   {
-    id: '4',
-    img: '/images/stories/stories05.png',
-    url: 'https://example.com/four',
+    id: "4",
+    img: "/images/stories/stories05.png",
+    url: "https://example.com/four",
     height: 424,
-    title: 'Corporate Event',
-    author: 'by Mila Miller',
-    tag: 'Corporate',
+    title: "Corporate Event",
+    author: "by Mila Miller",
+    tag: "Corporate",
   },
   {
-    id: '5',
-    img: '/images/stories/stories06.png',
-    url: 'https://example.com/five',
+    id: "5",
+    img: "/images/stories/stories06.png",
+    url: "https://example.com/five",
     height: 353,
-    title: 'Party Night',
-    author: 'by Mila Miller',
-    tag: 'Party',
+    title: "Party Night",
+    author: "by Mila Miller",
+    tag: "Party",
   },
   {
-    id: '6',
-    img: '/images/stories/stories04.png',
-    url: 'https://example.com/six',
+    id: "6",
+    img: "/images/stories/stories04.png",
+    url: "https://example.com/six",
     height: 319,
-    title: 'Music Festival Setup',
-    author: 'by Mike Chen',
-    tag: 'Concert',
+    title: "Music Festival Setup",
+    author: "by Mike Chen",
+    tag: "Concert",
   },
 ];
 
 const Stories = () => {
   return (
-    <div className="w-full min-h-screen py-16 px-4 md:px-0">
+    <div className="w-full min-h-screen py-16 px-2 md:px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">

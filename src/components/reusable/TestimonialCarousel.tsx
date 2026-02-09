@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Image from 'next/image';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Star } from 'lucide-react';
+import React from "react";
+import Image from "next/image";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Star } from "lucide-react";
 
-interface Testimonial {
+interface ITestimonial {
   id: string;
   name: string;
   title: string;
@@ -15,23 +15,23 @@ interface Testimonial {
   rating: number;
 }
 
-const testimonials: Testimonial[] = [
+const testimonials: ITestimonial[] = [
   {
-    id: '1',
-    name: 'Albert Flores',
-    title: 'CEO, ConcreteX',
-    avatar: '/images/avatar01.png',
+    id: "1",
+    name: "Albert Flores",
+    title: "CEO, ConcreteX",
+    avatar: "/images/avatar01.png",
     review:
-      '“Tour annual company gala was a huge success thanks to the amazing team we found on EventHub. Professional, reliable and creative - everything we needed in one place.”',
+      "“Tour annual company gala was a huge success thanks to the amazing team we found on EventHub. Professional, reliable and creative - everything we needed in one place.”",
     rating: 5,
   },
   {
-    id: '2',
-    name: 'Jane Cooper',
-    title: 'CEO, Aura Media',
-    avatar: '/images/avatar02.png',
+    id: "2",
+    name: "Jane Cooper",
+    title: "CEO, Aura Media",
+    avatar: "/images/avatar02.png",
     review:
-      '“Tour annual company gala was a huge success thanks to the amazing team we found on EventHub. Professional, reliable and creative - everything we needed in one place.”',
+      "“Tour annual company gala was a huge success thanks to the amazing team we found on EventHub. Professional, reliable and creative - everything we needed in one place.”",
     rating: 5,
   },
 ];
@@ -39,7 +39,8 @@ const testimonials: Testimonial[] = [
 const CarouselItem: React.FC<
   React.PropsWithChildren<{ className?: string }>
 > = ({ children, className }) => (
-  <div className={`flex-shrink-0 w-[90%] md:w-[550px] ${className}`}>
+  // use min-w instead of fixed width for better mobile behavior
+  <div className={`shrink-0 max-w-[90%] md:max-w-[500px] ${className}`}>
     {children}
   </div>
 );
@@ -51,7 +52,7 @@ const TestimonialCarousel = () => {
     if (!carouselRef.current) return;
     carouselRef.current.scrollBy({
       left: carouselRef.current.clientWidth,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   };
 
@@ -59,20 +60,33 @@ const TestimonialCarousel = () => {
     if (!carouselRef.current) return;
     carouselRef.current.scrollBy({
       left: -carouselRef.current.clientWidth,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   };
 
   return (
-    <div className="relative w-full max-w-7xl mx-auto py-10">
+    <div className="relative md:mx-auto py-10">
       {/* SCROLLABLE WRAPPER */}
       <div
         ref={carouselRef}
-        className="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth px-6"
+        className="
+          flex gap-6
+          overflow-x-auto overflow-y-hidden
+          no-scrollbar scroll-smooth px-6 -mx-6
+          touch-pan-x
+          snap-x snap-mandatory
+        "
+        // inline style to ensure iOS uses native momentum scrolling
+        style={{
+          WebkitOverflowScrolling: "touch",
+          touchAction: "pan-x",
+          // prevents parent from catching the overscroll on mobile
+          overscrollBehaviorX: "contain",
+        }}
       >
-        {testimonials.map(item => (
+        {testimonials.map((item) => (
           <CarouselItem key={item.id}>
-            <Card className="rounded-2xl border p-6 bg-white shadow-sm">
+            <Card className="rounded-2xl border p-6 bg-white shadow-sm snap-start">
               <CardContent className="space-y-4 p-0 relative">
                 <div className="flex justify-between items-start">
                   <Image
@@ -124,7 +138,7 @@ const TestimonialCarousel = () => {
         size="icon"
         className="
           hidden md:flex
-          absolute left-0 top-1/2 -translate-y-1/2
+          absolute -left-4 top-1/2 text-3xl pb-2 -translate-y-1/2
           rounded-full btn-gradient text-white shadow-lg
           w-10 h-10
         "
@@ -138,7 +152,8 @@ const TestimonialCarousel = () => {
         size="icon"
         className="
           hidden md:flex
-          absolute right-25 top-1/2 -translate-y-1/2
+          text-3xl
+          absolute -right-4 top-1/2 pb-2 -translate-y-1/2
           rounded-full btn-gradient text-white shadow-lg
           w-10 h-10
         "
@@ -165,6 +180,8 @@ const TestimonialCarousel = () => {
       <style>{`
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        /* Helper class for touch pan (Tailwind doesn't include touch-action by default) */
+        .touch-pan-x { touch-action: pan-x; }
       `}</style>
     </div>
   );

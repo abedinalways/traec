@@ -262,7 +262,7 @@ export default function Step6Review({
         </Button>
 
         <Link
-          href={`/book/${serviceSlug}/checkout?plan=${plan}`}
+          href={`/book/checkout`}
           className="capitalize font-inter text-base text-white py-3 px-6 bg-black rounded-md"
         >
           Proceed to Payment

@@ -1,9 +1,8 @@
 import ExpertsCarousel from "../reusable/ExpertCarousel";
 
-
 export default function Experts() {
   return (
-    <div className="w-full mx-auto py-12 px-4 md:px-8 relative bg-[#FFFBF7]">
+    <div className="w-full mx-auto py-12 px-6 md:px-8 relative bg-[#FFFBF7]">
       {/* Header */}
       <div className="text-center mb-12">
         <h2 className="text-4xl md:text-[48px] font-bold text-gray-900 mb-4 font-[glory]">
@@ -17,7 +16,7 @@ export default function Experts() {
           exceptional results
         </p>
       </div>
-      <ExpertsCarousel/>
+      <ExpertsCarousel />
     </div>
   );
 }

@@ -1,5 +1,5 @@
-import React from 'react';
-import FunctionCard from '../reusable/FunctionCard';
+import React from "react";
+import FunctionCard from "../reusable/FunctionCard";
 
 const Functions = () => {
   return (
@@ -11,8 +11,8 @@ const Functions = () => {
         Simple steps to book trusted event professionals from DJs and <br /> caterers
         to decorators and venues all in one place.
       </p>
-      <div className='custom-container'>
-        <FunctionCard/>
+      <div className="custom-container">
+        <FunctionCard />
       </div>
     </div>
   );

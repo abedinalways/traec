@@ -11,6 +11,7 @@ import {
 } from "next/font/google";
 import "../styles/globals.css";
 import localFont from "next/font/local";
+import { AuthModalProvider } from "./context/AuthModalContext";
 
 const glory = Glory({
   variable: "--font-glory",
@@ -76,9 +77,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${glory.variable} ${geistMono.variable} ${inter.variable} ${brittney.variable} antialiased`}
+        className={`${geistSans.variable} ${glory.variable} ${geistMono.variable} ${inter.variable} antialiased`}
       >
-        <main className="mt-16">{children}</main>
+        <main className="mt-16">
+          {" "}
+          <AuthModalProvider> {children}</AuthModalProvider>
+        </main>
       </body>
     </html>
   );

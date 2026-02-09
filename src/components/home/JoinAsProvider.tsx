@@ -1,20 +1,21 @@
-import React from 'react';
-import BusinessCard from '../reusable/BusinessCard';
-import Image from 'next/image';
+import React from "react";
+import BusinessCard from "../reusable/BusinessCard";
+import Image from "next/image";
 
 const JoinAsProvider = () => {
   return (
-    <div className="md:flex custom-container px-4 md:px-0 ">
-      <div className="md:w-[617px] md:h-[407px] mx-auto ">
+    <div className="grid grid-cols-1 md:grid-cols-[5fr_6fr] custom-container  w-full h-full">
+      <div className="w-full">
         <BusinessCard />
       </div>
-      <div className="md:w-[680px] md:h-[421px]">
+      <div className="w-full">
         <Image
           src="/images/provider.png"
-          width={1000}
-          height={1000}
+          width={703}
+          height={421}
+          className="h-full w-full object-cover"
+         
           alt="provider"
-          
         />
       </div>
     </div>
