@@ -24,13 +24,13 @@ export default function Footer({ className }: FooterProps) {
       {/* Background image */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <Image
-          src={"/images/footer.png"}
+          src={"/images/footer01.png"}
           alt="footer background"
           priority
           fill
           style={{
             objectFit: "cover",
-            filter: "brightness(0.28) contrast(0.9)",
+          
           }}
         />
       </div>

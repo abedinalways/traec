@@ -168,7 +168,7 @@ const CategoryCarousel = () => {
   }, [TRANSITION_WIDTH]);
 
   return (
-    <div className="p-6 md:p-8 w-full max-w-7xl mx-auto font-[inter]">
+    <div className="py-6 md:py-8 w-full max-w-7xl mx-auto font-[inter] ">
       <div className="relative">
         <div
           ref={carouselRef}

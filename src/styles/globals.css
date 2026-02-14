@@ -226,3 +226,6 @@ input[type="time"] {
   background: linear-gradient(90deg, #ffac47 0%, #ff0800 100%);
  
 }
+.subs-background{
+   background:linear-gradient(90deg, #ffac47 0%, #ff2a24 100%);
+}

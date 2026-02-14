@@ -11,7 +11,7 @@ const Functions = () => {
         Simple steps to book trusted event professionals from DJs and <br /> caterers
         to decorators and venues all in one place.
       </p>
-      <div className="custom-container">
+      <div className="custom-container ">
         <FunctionCard />
       </div>
     </div>

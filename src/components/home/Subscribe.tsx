@@ -28,22 +28,22 @@ export default function Subscribe() {
 
   return (
     <section className="z-50">
-      <div className="mx-auto max-w-3xl px-4 py-6 md:py-14 z-20">
+      <div className="mx-auto max-w-3xl px-4 py-6 md:py-14 z-20 subs-background">
         <div
           className={cn(
             "relative overflow-hidden border-none rounded-2xl",
-            "bg-gradient-email text-white w-full md:max-w-3xl h-auto md:h-[244px]"
+            "bg-gradient-email text-white w-full md:max-w-3xl h-auto md:h-[244px]",
           )}
         >
           {/* Background Image */}
-          <div className="absolute  py-2 inset-0 z-0">
+          {/* <div className="absolute  py-2 inset-0 z-0">
             <Image
               src="/images/subs.png"
               alt="Subscribe"
               fill
               className="object-cover"
             />
-          </div>
+          </div> */}
 
           {/* Content */}
           <CardContent className="relative z-10 text-center  md:p-12 p-4 space-y-4">
