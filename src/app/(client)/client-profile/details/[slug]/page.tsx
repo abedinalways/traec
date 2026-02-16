@@ -48,7 +48,7 @@ export default function ProvidersDetailsPage() {
       </div>
 
       {/* Content Over Image */}
-      <div className="custom-container mx-auto flex flex-col lg:flex-row gap-5 mt-negative-32 relative z-20">
+      <div className="custom-container mx-auto flex flex-col lg:flex-row gap-5 mt-negative-32 relative z-20 font-[inter]">
         {/* Left Section (Reviews) */}
         <div className="w-full lg:w-[70%] ">
           <div className="space-y-6 rounded-xl border border-gray-200 bg-white p-5 shadow-sm">

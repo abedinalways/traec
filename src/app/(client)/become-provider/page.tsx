@@ -9,7 +9,7 @@ export default function BecomeProviderPage() {
   return (
     <div>
       <BecomeProviderBanner />
-      <div className="bg-[#FFF5E8] py-20">
+      <div className="bg-[#FFF5E8] py-20 font-[inter]">
         <h2 className="text-4xl lg:text-5xl font-bold text-center">
           How Evoke{" "}
           <span className="text-gradient italic font-serif">Works</span>

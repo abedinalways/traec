@@ -1,7 +1,6 @@
 import React from "react";
-import { Search, Star, CheckCircle2, MoveLeftIcon } from "lucide-react";
+import { Search, Star} from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import RightIcon from "../icons/RightIcon";
 import BlueRightIcon from "../icons/BlueRightIcon";
@@ -10,11 +9,11 @@ import GreenRightIcon from "../icons/GreenRightIcon";
 
 const Banner = () => {
   return (
-    <div className="bg-linear-to-br md:p-4 from-orange-50 via-white to-white py-10">
+    <div className="bg-linear-to-br  from-orange-50 via-white to-white py-10">
       <div className="custom-container mx-auto px-4 md:px-0 py-8 lg:py-16">
-        <div className="grid xl:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="grid xl:grid-cols-2 gap-10 lg:gap-16 items-center justify-between">
           {/* LEFT TEXT SECTION */}
-          <div className="space-y-6 lg:space-y-8">
+          <div className="space-y-6 lg:space-y-8 ">
             <div className="space-y-4">
               <h1 className="text-3xl sm:text-4xl  lg:text-[64px] font-bold text-gray-900 leading-tight font-[glory]">
                 Elevate Your Event with Premium{" "}
@@ -75,7 +74,7 @@ const Banner = () => {
           </div>
 
           {/* RIGHT IMAGE GRID */}
-          <div className="relative">
+          <div className="relative md:pl-15 ">
             {/* MOBILE STACKED LAYOUT */}
             <div className="flex flex-col gap-5 xl:hidden">
               {/* Main Image */}
@@ -138,7 +137,7 @@ const Banner = () => {
               {/* Your original grid completely untouched */}
               <div className="grid grid-cols-2 gap-6 relative">
                 {/* Top Left */}
-                <div className="relative">
+                <div className="relative left-12">
                   <Image
                     src="/images/img01.png"
                     alt="Event"
@@ -159,8 +158,10 @@ const Banner = () => {
                       </div>
                     </div>
                     <div>
-                      <p className="text-sm font-semibold">Sarah M.</p>
-                      <p className="text-xs text-gray-500 -mt-1">
+                      <p className="text-sm font-semibold font-[open_sans]">
+                        Sarah M.
+                      </p>
+                      <p className="text-xs text-gray-500 -mt-1 font-[open_sans]">
                         Wedding Planner
                       </p>
                     </div>
@@ -171,7 +172,7 @@ const Banner = () => {
                     alt="Decor"
                     width={1000}
                     height={500}
-                    className="absolute w-[75px] h-[65px] top-40 right-74 md:block hidden"
+                    className="absolute w-[75px] h-[65px] top-40 -left-14 md:block hidden"
                   />
 
                   <Image
@@ -179,7 +180,7 @@ const Banner = () => {
                     alt="Star"
                     width={1000}
                     height={500}
-                    className="absolute w-[41px] h-[39px] bottom-56  -right-20"
+                    className="absolute w-[41px] h-[39px] bottom-56  -right-40"
                   />
                 </div>
 
@@ -190,21 +191,23 @@ const Banner = () => {
                     alt="Event 2"
                     width={500}
                     height={400}
-                    className="rounded-2xl border border-red-500  object-cover w-[233px] h-[264px] absolute top-18 right-24"
+                    className="rounded-2xl border border-red-500  object-cover w-[233px] h-[264px] absolute top-18 right-0"
                   />
                 </div>
 
                 {/* Bottom */}
                 <div className="col-span-2 relative">
-                  <Image
-                    src="/images/img03.png"
-                    alt="Event 3"
-                    width={1000}
-                    height={500}
-                    className="rounded-2xl object-cover w-[326px] h-[200px]"
-                  />
+                  <div className="relative md:left-12">
+                    <Image
+                      src="/images/img03.png"
+                      alt="Event 3"
+                      width={1000}
+                      height={500}
+                      className="rounded-2xl object-cover w-[326px] h-[200px]"
+                    />
+                  </div>
 
-                  <div className="absolute top-14 right-14 bg-[#fff1df]/20 border border-orange-200 px-4 py-4 rounded-xl shadow-md flex items-center gap-2">
+                  <div className="absolute top-14 right-6 bg-[#fff1df]/20 border border-orange-200 px-4 py-4 rounded-xl shadow-md flex items-center gap-2">
                     <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
                     <span className="font-semibold">4.9</span>
                     <span className="text-xs text-gray-500">(234 reviews)</span>
@@ -217,7 +220,7 @@ const Banner = () => {
                 alt="Decor"
                 width={1000}
                 height={500}
-                className="absolute w-[37px] h-[55px] top-110 right-55"
+                className="absolute w-[37px] h-[55px] top-110 right-10"
               />
             </div>
           </div>

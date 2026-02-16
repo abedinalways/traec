@@ -3,17 +3,15 @@ import React from "react";
 import { Search, Users, Calendar, Star, LucideIcon } from "lucide-react";
 import Image from "next/image";
 
-// --- Interfaces and Data (Updated for array type) ---
 
-// Define the structure for a single card item
 interface CardItem {
   step: string;
   title: string;
-  icon: keyof typeof iconMap; // Ensure icon names match keys in iconMap
+  icon: keyof typeof iconMap; 
   description: string;
 }
 
-// Map string keys to Lucide icons for dynamic rendering
+
 const iconMap = {
   Search,
   Users,
@@ -21,7 +19,7 @@ const iconMap = {
   Star,
 };
 
-// Use the data structure provided by the user (corrected to be an array of CardItem)
+
 const cards: CardItem[] = [
   {
     step: "01.",
@@ -53,24 +51,22 @@ const cards: CardItem[] = [
   },
 ];
 
-// --- Custom Card Component ---
 
-/**
- * Renders a single card with the specific gradient border and icon styling.
- */
+
+
 const ProcessCard: React.FC<{ data: CardItem }> = ({ data }) => {
   const IconComponent = iconMap[data.icon] as LucideIcon;
 
-  // Custom Tailwind class to generate the soft orange gradient border effect
+  
   const gradientBorderClass =
     "border-b-2 border-r-2 border-transparent  bg-linear-to-r from-[#FFAC47] to-[#FF2A24] bg-linear-to-b from-[#FFAC47] to-[#FF2A24] rounded-md ";
 
   return (
-    // Outer div creates the gradient border effect
+    
     <div className={gradientBorderClass}>
-      {/* Inner div contains the card content */}
+     
       <div className="bg-white p-6  h-full relative overflow-hidden rounded-md">
-        {/* Background ellipse image positioned at top-left corner */}
+       
         <div className="absolute top-0 left-0 w-32 h-32 -translate-x-8 -translate-y-8 pointer-events-none">
           <Image
             src="/images/ellipse.png"
@@ -80,22 +76,22 @@ const ProcessCard: React.FC<{ data: CardItem }> = ({ data }) => {
           />
         </div>
 
-        {/* Icon Area: Circle with inner gradient glow */}
+       
         <div className="relative w-16 h-16 mb-6 z-10">
           <div className="absolute inset-0 rounded-xl bg-white shadow-inner-xl" />
 
-          {/* Custom element for the glowing peach/orange background effect under the icon */}
+          
           <div
             className="absolute inset-0 rounded-xl opacity-60"
             style={{
-              // Gradient to match the soft glow around the icon circle
+            
               background:
                 "radial-gradient(circle at 50% 50%, rgba(255, 204, 189, 0.5), rgba(255, 255, 255, 0) 70%)",
               boxShadow: "0 0 10px rgba(255, 170, 150, 0.3)",
             }}
           />
 
-          {/* Icon container - centered within the glow */}
+          
           <div className="relative flex items-center justify-center w-full h-full p-2">
             <IconComponent
               className="w-6 h-6 text-orange-500"
@@ -125,11 +121,11 @@ const ProcessCard: React.FC<{ data: CardItem }> = ({ data }) => {
   );
 };
 
-// --- Main Component ---
+
 
 const FunctionCard = () => {
   return (
-    <div className="flex items-center justify-center py-16 font-sans antialiased">
+    <div className="flex justify-evenly py-16 font-sans antialiased ">
       <div className="w-full max-w-7xl">
         {/* The responsive grid layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 ">

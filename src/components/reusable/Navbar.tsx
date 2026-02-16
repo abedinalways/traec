@@ -58,13 +58,13 @@ export default function Navbar() {
           <Link href="/" className={isActive("/")}>
             Home
           </Link>
-          <Link href="/" className={isActive("/browse")}>
+          <Link href="/browse" className={isActive("/browse")}>
             Browse
           </Link>
-          <Link href="/" className={isActive("/how-it-works")}>
+          <Link href="/how-it-works" className={isActive("/how-it-works")}>
             How it Works
           </Link>
-          <Link href="/" className={isActive("/providers")}>
+          <Link href="/providers" className={isActive("/providers")}>
             Providers
           </Link>
           <Link

@@ -7,6 +7,8 @@ import {
   Glory,
   Inter,
   
+  Open_Sans,
+  
   Satisfy,
 } from "next/font/google";
 import "../styles/globals.css";
@@ -30,10 +32,10 @@ const inter = Inter({
 //   subsets: ["latin"],
 // });
 
-// const openSans = Open_Sans({
-//   variable: "--font-open-sans",
-//   subsets: ["latin"],
-// });
+const openSans = Open_Sans({
+  variable: "--font-open-sans",
+  subsets: ["latin"],
+});
 
 // const lexend = Lexend({
 //   variable: "--font-lexend",
@@ -77,7 +79,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${glory.variable} ${geistMono.variable} ${inter.variable} antialiased`}
+        className={`${geistSans.variable} ${glory.variable} ${openSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}
       >
         <main className="mt-16">
           {" "}
