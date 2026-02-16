@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function BecomeProviderBanner() {
   return (
-    <div className="relative w-full h-[50vh]">
+    <div className="relative w-full h-[50vh] font-[inter]">
       {/* Background Image */}
       <Image
         src="/images/BecomeProviderBanner.png"

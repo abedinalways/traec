@@ -151,14 +151,14 @@ export default function ServiceListing() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-2 md:px-4 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
+      <div className="max-w-7xl mx-auto px-2 md:px-0 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-[3fr_9fr] gap-6">
           {/* Sidebar Filters */}
 
           <FiltersSidebar />
 
           {/* Main Content */}
-          <main className="flex-1">
+          <main className="flex-1 font-[inter]">
             <div className="mb-6 flex items-center justify-between">
               <p className="text-gray-600">
                 Showing {paginatedServices.length} of {filteredServices.length}{" "}

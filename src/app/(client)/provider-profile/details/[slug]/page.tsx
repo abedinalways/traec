@@ -9,6 +9,8 @@ import AboutProvider from "@/app/(client)/_components/providers/AboutProvider";
 import Projects from "@/app/(client)/_components/providers/Projects";
 import Reviews from "@/app/(client)/_components/providers/Reviews";
 import Services from "@/app/(client)/_components/providers/Services";
+import MessageIcon from "@/components/icons/MessageIcon";
+import RightGreenIcon from "@/components/icons/RightGreenIcon";
 
 // JSON Data
 const overViewData = {
@@ -40,7 +42,7 @@ export default function ProvidersDetailsPage() {
       {/* Background Image Section */}
       <div className="w-full h-[50vh] relative z-0">
         <Image
-          src="https://i.ibb.co.com/5t97DJm/Rectangle-26.png"
+          src="/images/banner01.png"
           alt="banner"
           fill
           className="object-cover"
@@ -48,7 +50,7 @@ export default function ProvidersDetailsPage() {
       </div>
 
       {/* Content Over Image */}
-      <div className="custom-container mx-auto flex flex-col lg:flex-row gap-5 mt-negative-32 relative z-20">
+      <div className="custom-container mx-auto flex flex-col lg:flex-row gap-5 mt-negative-32 relative z-20 font-[inter]">
         {/* Left Section (Reviews) */}
         <div className="w-full lg:w-[70%] ">
           <div className="space-y-6 rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
@@ -60,10 +62,16 @@ export default function ProvidersDetailsPage() {
                     alt="Reviewer"
                     width={52}
                     height={52}
-                    className="object-contain"
+                    className="object-contain rounded-full border-2 border-[#DFE1E7]"
                   />
                   <div>
-                    <h3 className="font-semibold text-lg">{review.name}</h3>
+                    <h3 className="font-semibold text-lg flex  items-center gap-6">
+                      {review.name}{" "}
+                      <span className="flex items-center bg-[#EEFAF0] rounded-md px-4 py-1">
+                        <span className="flex gap-2 items-center text-green-400 font-light"><RightGreenIcon /> Verified</span>
+                      </span>
+                    </h3>
+
                     <div className="flex gap-3 py-4">
                       <div className="flex items-center text-yellow-500">
                         <FaStar className="text-yellow-500" />
@@ -85,10 +93,12 @@ export default function ProvidersDetailsPage() {
                     </div>
                     <p className="text-gray-700">{review.description}</p>
                     <div className="flex gap-3 mt-5">
-                      <button className="bg-[#070707] text-white py-2 px-8 rounded-md">
-                        Send Message
+                      <button className="bg-[#070707] text-white py-2 px-8 rounded-md cursor-pointer">
+                        <span className="flex items-center gap-2">
+                          <MessageIcon /> Send Message
+                        </span>
                       </button>
-                      <button className="py-2 px-8 rounded-md border border-amber-100">
+                      <button className="py-2 px-8 rounded-md border border-amber-100 cursor-pointer">
                         View Services
                       </button>
                     </div>

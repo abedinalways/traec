@@ -229,3 +229,10 @@ input[type="time"] {
 .subs-background{
    background:linear-gradient(90deg, #ffac47 0%, #ff2a24 100%);
 }
+
+.gradient-text {
+background: linear-gradient(108deg, #ffac47 0%, #ff2a24 100%);
+background-clip: text;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}

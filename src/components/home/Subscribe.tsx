@@ -28,7 +28,7 @@ export default function Subscribe() {
 
   return (
     <section className="z-50">
-      <div className="mx-auto max-w-3xl px-4 py-6 md:py-14 z-20 subs-background">
+      <div className="mx-auto max-w-3xl px-4  z-20 subs-background rounded-2xl my-6">
         <div
           className={cn(
             "relative overflow-hidden border-none rounded-2xl",
@@ -36,24 +36,34 @@ export default function Subscribe() {
           )}
         >
           {/* Background Image */}
-          {/* <div className="absolute  py-2 inset-0 z-0">
+          <div className="absolute  py-2 inset-0 z-0">
             <Image
-              src="/images/subs.png"
-              alt="Subscribe"
-              fill
-              className="object-cover"
+              src="/images/abcd.png"
+              alt="abec"
+              width={134}
+              height={722}
+              className="rotate-[-52.26] w-1/2"
             />
-          </div> */}
+          </div>
+          <div className="absolute left-80 py-2 inset-0 z-0">
+            <Image
+              src="/images/abc.png"
+              alt="abec"
+              width={134}
+              height={722}
+              className="rotate-[-52.26] w-1/2"
+            />
+          </div>
 
           {/* Content */}
-          <CardContent className="relative z-10 text-center  md:p-12 p-4 space-y-4">
+          <CardContent className="relative z-10 text-center  md:p-12 p-4 space-y-2">
             <div>
-              <h2 className="text-4xl md:text-[48px] font-semibold font-[glory]">
+              <h2 className="text-lg md:text-[32px] font-semibold font-[inter]">
                 Stay Updated with Evoke
               </h2>
               <p className="mt-2 text-xs md:text-md text-white/90">
-                Get the latest updates on new services, special offers, and
-                event planning tips.
+                Get the latest updates on new services, special offers, <br />
+                and event planning tips
               </p>
             </div>
 
@@ -68,12 +78,12 @@ export default function Subscribe() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="bg-white text-gray-900 placeholder:text-gray-500 sm:w-full"
+                className="bg-white text-gray-900 placeholder:text-gray-400 sm:w-full placeholder:font-[inter]"
               />
 
               <Button
                 type="submit"
-                className="bg-white hover:bg-white font-semibold text-orange-500 md:px-6 px-4"
+                className="bg-white hover:bg-white font-semibold text-orange-400 md:px-6 px-4 font-[inter]"
               >
                 Subscribe
               </Button>

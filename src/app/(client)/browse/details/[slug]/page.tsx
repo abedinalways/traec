@@ -1,9 +1,8 @@
 "use client";
-import BasicServices from "@/app/(client)/_components/browse/BasicServices";
+
 import CustomerReviewsSummary from "@/app/(client)/_components/browse/CustomerReviewsSummary";
-import PremiumServices from "@/app/(client)/_components/browse/PremiumServices";
 import ServicesReviews from "@/app/(client)/_components/browse/ServicesReviews";
-import StandardServices from "@/app/(client)/_components/browse/StandardServices";
+import RightGreenIcon from "@/components/icons/RightGreenIcon";
 import Accordion04 from "@/components/ui/accordion04";
 import { Star } from "lucide-react";
 import Image from "next/image";
@@ -15,27 +14,72 @@ import { IoIosArrowBack, IoIosInformationCircleOutline } from "react-icons/io";
 export default function ServiceDetailsPage() {
   const [mainImage, setMainImage] = useState("/images/browser/img07.png");
   const [activeTab, setActiveTab] = useState<"Basic" | "Standard" | "Premium">(
-    "Basic"
+    "Basic",
   );
+
+  const packageData = {
+    Basic: {
+      price: 250,
+      description:
+        "Professional DJ performance with lighting and interactive entertainment for small events.",
+      features: [
+        "Reliable Booking",
+        "Professional DJ Performance",
+        "Basic Floor Lighting",
+        "Limited Song Requests",
+      ],
+    },
+
+    Standard: {
+      price: 650,
+      description:
+        "Extended DJ performance with enhanced lighting, premium sound, and customized playlists.",
+      features: [
+        "Reliable Booking",
+        "Professional DJ Performance",
+        "Dance Floor Lighting + FX",
+        "Premium Sound System",
+        "Personalized Playlist",
+        "Emcee Support",
+      ],
+    },
+
+    Premium: {
+      price: 850,
+      description:
+        "Full-scale DJ entertainment package including premium lighting, hosting, and event management.",
+      features: [
+        "Reliable Booking",
+        "Exclusive DJ Performance",
+        "Full Stage + Lighting Setup",
+        "Surround Sound System",
+        "Professional MC Hosting",
+        "Themed Lighting & Effects",
+        "Party Host & Crowd Engagement",
+      ],
+    },
+  };
 
   const handleThumbnailClick = (image: string) => {
     setMainImage(image);
   };
+
   return (
-    <div className="my-10 md:px-4 p-2">
-      <div className="custom-container mx-auto ">
+    <div className="my-10 md:px-4 p-2 font-[inter]">
+      <div className="custom-container mx-auto">
         <Link href="/browse">
-          <button className="border border-gray-300 p-2 flex items-center gap-3 mt-5 rounded-md cursor-pointer mb-5">
+          <button className="border border-gray-300 p-2 flex items-center gap-3 mt-5 rounded-md mb-5">
             <IoIosArrowBack /> Back to Browse
           </button>
-        </Link>{" "}
+        </Link>
+
         <div className="flex flex-col lg:flex-row gap-5">
-          {/* Left Section (Reviews) */}
-          <div className="w-full lg:w-[70%] ">
+          <div className="w-full lg:w-[70%]">
             <div>
-              <h3 className="text-3xl font-bold my-2">
+              <h3 className="text-3xl md:text-[40px] leading-[120%] font-bold my-2 font-[glory]">
                 DJ Sarahs Party Productions
               </h3>
+              
               <div className="flex items-center gap-2 mb-3">
                 <Image
                   src="/images/browser/img07.png"
@@ -44,7 +88,7 @@ export default function ServiceDetailsPage() {
                   height={24}
                   className="w-6 h-6 rounded-full mr-2"
                 />
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm font-semibold text-gray-900">
                   {/* {service.providerName} */} John Doe
                 </span>
                 <div
@@ -74,7 +118,7 @@ export default function ServiceDetailsPage() {
 
               {/* Thumbnails */}
               <div className="flex gap-4 p-3">
-                {[1, 2, 7, 5].map((i) => (
+                {[3, 2, 7, 5].map((i) => (
                   <div
                     key={i}
                     className="relative w-20 h-20 overflow-hidden cursor-pointer rounded-md"
@@ -188,98 +232,119 @@ export default function ServiceDetailsPage() {
                 and avoid interruptions.
               </p>
             </div>
-            <h3 className="my-5 text-2xl">FAQ</h3>
+
             <Accordion04 />
             <CustomerReviewsSummary />
-            {/* <Reviews /> */}
             <ServicesReviews />
           </div>
-          {/* Right Section (Stats) */}
-          <div className="w-full lg:w-[30%] ">
+
+          {/* ================= RIGHT SIDE ================= */}
+          <div className="w-full lg:w-[30%]">
             <div className="w-full rounded-xl border border-gray-200 bg-white">
               {/* Tabs */}
-              <div className="grid grid-cols-3 divide-x-4">
-                <button
-                  onClick={() => setActiveTab("Basic")}
-                  className={`whitespace-nowrap px-4 py-2 border rounded-tl-md ${
-                    activeTab === "Basic"
-                      ? "border-b-[#070707] border-b-2"
-                      : "border-gray-300 text-gray-500 hover:text-black cursor-pointer"
-                  }`}
-                >
-                  Basic
-                </button>
-
-                <button
-                  onClick={() => setActiveTab("Standard")}
-                  className={`whitespace-nowrap px-4 py-2  border ${
-                    activeTab === "Standard"
-                      ? "border-b-[#070707] border-b-2"
-                      : "border-gray-300 text-gray-500 hover:text-black cursor-pointer"
-                  }`}
-                >
-                  Standard
-                </button>
-
-                <button
-                  onClick={() => setActiveTab("Premium")}
-                  className={`whitespace-nowrap px-4 py-2 border rounded-tr-md ${
-                    activeTab === "Premium"
-                      ? "border-b-[#070707] border-b-2 "
-                      : "border-gray-300 text-gray-500 hover:text-black cursor-pointer"
-                  }`}
-                >
-                  Premium
-                </button>
+              <div className="grid grid-cols-3">
+                {(["Basic", "Standard", "Premium"] as const).map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`px-4 py-3 text-sm font-medium ${
+                      activeTab === tab
+                        ? "border-b-2 border-black text-black "
+                        : "text-gray-500 hover:text-black cursor-pointer"
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                ))}
               </div>
 
-              {/* ================= Basic CONTENT ================= */}
-              {activeTab === "Basic" && <BasicServices />}
-
-              {/* ================= Standard CONTENT ================= */}
-              {activeTab === "Standard" && <StandardServices />}
-
-              {/* ================= Premium CONTENT ================= */}
-              {activeTab === "Premium" && <PremiumServices />}
+              {/* Dynamic Package Card */}
+              <PackageCard
+                title={activeTab}
+                price={packageData[activeTab].price}
+                description={packageData[activeTab].description}
+                features={packageData[activeTab].features}
+              />
             </div>
+
+            {/* Provider Info Card */}
             <div className="w-full rounded-xl border border-gray-200 bg-white p-5 mt-5">
-              <div>
-                <h3 className="text-xl font-bold my-2">About the Provider</h3>
-                <div className="flex items-center gap-2 mb-3">
-                  <Image
-                    src="/images/browser/img07.png"
-                    alt="provider1"
-                    width={24}
-                    height={24}
-                    className="w-6 h-6 rounded-full mr-2"
-                  />
-                  <div>
-                    <span className="text-sm font-medium text-gray-900">
-                      John Doe
-                    </span>
-                    <div
-                      className="
-                flex items-center"
-                    >
-                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 mr-1" />
-                      <span className="text-sm font-semibold">4.9</span>
-                      <span className="text-xs text-gray-500 ml-1">(500)</span>
-                    </div>
+              <h3 className="text-xl font-bold mb-4">About the Provider</h3>
+              <div className="flex items-center gap-2 mb-3">
+                <Image
+                  src="/images/browser/img07.png"
+                  alt="provider"
+                  width={40}
+                  height={40}
+                  className="rounded-full"
+                />
+                <div>
+                  <p className="font-medium">John Doe</p>
+                  <div className="flex items-center text-sm">
+                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 mr-1" />
+                    4.9 (500)
                   </div>
                 </div>
-                <p>Usually responds within 1 hour</p>
-                <p>Member since 2022</p>
-                <Link href={"/provider-profile/details/1"}>
-                  {" "}
-                  <button className="w-full mt-3 border py-3 rounded-lg text-gray-700 font-medium cursor-pointer">
-                    View Profile
-                  </button>
-                </Link>
               </div>
+
+              <p className="text-sm text-gray-600">
+                Usually responds within 1 hour
+              </p>
+
+              <Link href={"/provider-profile/details/1"}>
+                <button className="w-full mt-4 border py-3 rounded-lg text-gray-700 font-medium cursor-pointer">
+                  View Profile
+                </button>
+              </Link>
             </div>
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+
+
+function PackageCard({
+  title,
+  price,
+  description,
+  features,
+}: {
+  title: string;
+  price: number;
+  description: string;
+  features: string[];
+}) {
+  return (
+    <div className="p-6">
+      <div className="flex justify-between items-center mb-3">
+        <h3 className="text-lg font-semibold">{title} Plan</h3>
+        <div className="text-right">
+          <p className="text-xl font-bold">${price}</p>
+          <p className="text-xs text-gray-500">Per Hour</p>
+        </div>
+      </div>
+
+      <p className="text-sm text-gray-600 mb-4">{description}</p>
+
+      <ul className="space-y-2 mb-6">
+        {features.map((feature) => (
+          <li key={feature} className="flex items-center gap-2 text-sm">
+            <AiOutlineCheckCircle className="text-green-600" />
+            {feature}
+          </li>
+        ))}
+      </ul>
+
+      <button className="w-full btn-gradient cursor-pointer text-white py-3 rounded-lg font-medium mb-3 transition">
+        Book Now
+      </button>
+
+      <button className="w-full border py-3 rounded-lg text-gray-700 font-medium cursor-pointer">
+        Send Message
+      </button>
     </div>
   );
 }

@@ -29,7 +29,7 @@ const ProvidersPage: React.FC = () => {
   return (
     <>
       <BrowseBanner />
-      <div className='custom-container mx-auto'>
+      <div className='custom-container mx-auto font-[inter]'>
         <div className='flex justify-between items-center p-4 flex-wrap gap-5'>
           <p className='text-base'>
             Showing {filteredServices.length} of {services.length} services
@@ -67,7 +67,7 @@ const ProvidersPage: React.FC = () => {
             No Services Found
           </div>
         ) : (
-          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 my-4'>
             {filteredServices.map((service: Service, index: number) => (
               <ServiceCard key={index} service={service} />
             ))}

@@ -5,7 +5,7 @@ import Testimonial from "@/components/home/Testimonial";
 
 export default function HowItWorks() {
   return (
-    <main className="min-h-screen w-full overflow-x-hidden  py-6 space-y-14">
+    <main className="min-h-screen w-full overflow-x-hidden  py-6 space-y-14 font-[inter]">
       <Howbanner
         title="How Evoke Works"
         subtitle="From browsing to bouncing in just 4 simple steps. We make renting evokes easy, safe, and stress-free for your perfect party."

@@ -5,10 +5,10 @@ import React from 'react';
 
 const BrowsePage = () => {
   return (
-    <>
+    <div className='font-[inter]'>
       <BrowseBanner />
       <ServiceListing/>
-    </>
+    </div>
   );
 };
 
