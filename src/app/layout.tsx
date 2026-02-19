@@ -82,7 +82,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${glory.variable} ${openSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}
       >
         <main className="mt-16">
-          {" "}
+         
           <AuthModalProvider> {children}</AuthModalProvider>
         </main>
       </body>

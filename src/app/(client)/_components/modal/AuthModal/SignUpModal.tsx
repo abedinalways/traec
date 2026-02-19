@@ -179,7 +179,7 @@ import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import Modal from "../Modal";
-import { X } from "lucide-react"; // 👈 Close icon added
+import { X } from "lucide-react"; 
 
 interface SignUpModalProps {
   isOpen: boolean;
@@ -212,7 +212,7 @@ export default function SignUpModal({
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <div className="relative grid grid-cols-1 lg:grid-cols-2">
+        <div className="relative grid grid-cols-1 lg:grid-cols-2 font-[inter]">
           <button
             onClick={onClose}
             className="absolute right-4 cursor-pointer top-4 z-20 p-2 rounded-full bg-white shadow hover:bg-gray-100 transition"
