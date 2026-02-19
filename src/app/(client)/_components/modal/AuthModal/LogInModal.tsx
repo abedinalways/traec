@@ -41,7 +41,7 @@ export default function LogInModal({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="relative grid grid-cols-1 lg:grid-cols-2 z-50">
+      <div className="relative grid grid-cols-1 lg:grid-cols-2 z-50 font-[inter]">
         <button
           onClick={onClose}
           className="absolute right-4 cursor-pointer top-4 z-20 p-2 rounded-full bg-white shadow hover:bg-gray-100 transition"
@@ -49,14 +49,14 @@ export default function LogInModal({
           <X className="w-5 h-5 text-gray-700" />
         </button>
         {/* LEFT IMAGE */}
-        <div className="flex items-center justify-center">
-          <div className="w-full h-full flex items-center justify-center">
+        <div className="flex items-center justify-center mr-10">
+          <div className="w-full h-full flex items-center justify-center ">
             <Image
               src="/images/siginup.png"
               width={700}
               height={700}
               alt="provider"
-              className="w-full h-full object-cover rounded-3xl hidden lg:block"
+              className="w-full h-full object-cover hidden lg:block"
             />
           </div>
         </div>

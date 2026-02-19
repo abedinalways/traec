@@ -43,7 +43,7 @@ const items = [
 
 const Accordion04 = () => {
   return (
-    <section className="w-full flex flex-col items-center ">
+    <section className="w-full flex flex-col items-center font-[inter]">
       <Accordion
         type="single"
         collapsible
@@ -67,7 +67,7 @@ const Accordion04 = () => {
               <AccordionPrimitive.Trigger
                 className="group flex w-full items-center justify-between rounded-xl px-5 py-4 
     text-left text-base font-bold transition-all focus-visible:outline-none 
-    data-[state=open]:text-[#070707] cursor-pointer"
+    data-[state=open]:text-[#070707] cursor-pointer "
               >
                 {item.title}
 
