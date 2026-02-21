@@ -8,6 +8,7 @@ import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/navigation";
 import Modal from "../Modal";
 import { X } from "lucide-react";
+import FlyIcon from "@/components/icons/FlyIcon";
 
 interface Props {
   isOpen: boolean;
@@ -24,7 +25,7 @@ export default function LogInModal({
   isOpen,
   onClose,
   openSignup,
-  openForgotPassword,
+
 }: Props) {
   const { register, handleSubmit, reset } = useForm<LogInFormData>();
   const [showPass, setShowPass] = useState(false);
@@ -63,6 +64,10 @@ export default function LogInModal({
 
         {/* RIGHT FORM */}
         <div className="flex items-center justify-center bg-white lg:-ml-16 rounded-2xl lg:rounded-l-4xl lg:rounded-r-2xl">
+          {/* Logo */}
+          <div className="absolute right-70 top-10 z-20">
+            <FlyIcon />
+          </div>
           <div className="w-full p-8 md:p-10 rounded-3xl">
             {/* Logo */}
             <div className="w-full flex justify-center mb-6">
@@ -112,7 +117,14 @@ export default function LogInModal({
                 </div>
               </div>
               <div className="flex justify-end items-center cursor-pointer">
-                <p onClick={openForgotPassword} className="cursor-pointer">
+                <p
+                  onClick={() => {
+                    onClose();
+                    reset(); 
+                    router.push("/forgot-password"); 
+                  }}
+                  className="cursor-pointer text-[14px]"
+                >
                   Forgot password?
                 </p>
               </div>

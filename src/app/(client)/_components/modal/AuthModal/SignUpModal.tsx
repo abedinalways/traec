@@ -317,7 +317,7 @@ export default function SignUpModal({
 
                 <button
                   type="submit"
-                  className="w-full h-12 rounded-xl text-white font-medium bg-linear-to-r from-[#FFAC47] to-[#FF2A24] cursor-pointer"
+                  className="w-full h-12 mt-4 rounded-xl text-white font-medium bg-linear-to-r from-[#FFAC47] to-[#FF2A24] cursor-pointer"
                 >
                   Sign up
                 </button>
@@ -340,7 +340,7 @@ export default function SignUpModal({
                   onClick={openLogin}
                   className="text-[#FF2A24] font-medium cursor-pointer"
                 >
-                  Log In
+                  Sign In
                 </button>
               </p>
             </div>

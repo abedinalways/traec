@@ -24,6 +24,7 @@ type LoginData = {
 
 export default function Navbar() {
   const { setOpenLogin } = useAuthModal();
+  const { setOpenSignup } = useAuthModal();
   const pathname = usePathname();
 
   const [user, setUser] = useState<LoginData | null>(null);
@@ -68,7 +69,7 @@ export default function Navbar() {
             Providers
           </Link>
           <Link
-            href="/"
+            href="/become-provider"
             className={isActive("/become-provider")}
           >
             Become a Provider
@@ -79,7 +80,7 @@ export default function Navbar() {
         <div className="hidden lg:flex items-center relative w-[260px]">
           <Input
             placeholder="Search for party rentals"
-            className="rounded-full pl-4 pr-10"
+            className="rounded-[32px] pl-4 pr-10 shape-squircle"
           />
           <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
         </div>
@@ -110,11 +111,12 @@ export default function Navbar() {
               Sign In
             </Button>
 
-            <Link href="/signin">
-              <Button className="rounded-[12px] px-6 text-white font-medium gradient-bg cursor-pointer">
-                Join Now
-              </Button>
-            </Link>
+            <Button
+              onClick={() => setOpenSignup(true)}
+              className="rounded-[12px] px-6 text-white font-medium gradient-bg cursor-pointer"
+            >
+              Join Now
+            </Button>
           </div>
         )}
 
@@ -201,7 +203,10 @@ export default function Navbar() {
                       Sign In
                     </Button>
 
-                    <Button className="rounded-[12px] text-white font-medium btn-gradient">
+                    <Button
+                      onClick={() => setOpenSignup(true)}
+                      className="rounded-[12px] text-white font-medium btn-gradient"
+                    >
                       Join Now
                     </Button>
                   </div>
