@@ -2,32 +2,33 @@
 
 import Editprofile from "../dashboardcomponets/editprofile/Editprofile";
 import Overview from "../../(client)/dashboardcomponets/overview/Overview";
+import Image from "next/image";
 
-export default function Page() {
+export default function ClientDashboardPage() {
   return (
-    <main className="w-full min-h-screen bg-white">
+    <main className="w-full min-h-screen  font-[inter]">
 
-      {/* ===== Top Cover Image / Header ===== */}
-      <div className="w-full h-[250px] sm:h-[320px] md:h-[380px] lg:h-[420px] xl:h-[450px] relative">
-        <img
+      <div className="w-full h-full relative">
+        <Image
           src="/images/Rectangle 26.png"
           alt="Profile cover"
-          className="w-full h-full object-cover"
+          width={1600} height={283}
+          className="w-full md:h-full h-[283px] object-cover"
         />
 
         <div className="absolute inset-0 bg-black/20"></div>
       </div>
 
-      {/* ===== MAIN CONTENT WRAPPER ===== */}
+      
       <div
         className="
           w-full max-w-7xl mx-auto 
-          px-4 sm:px-6 md:px-10 lg:px-12
-          -mt-24 relative z-10
+          px-2 md:px-0
+          mt-10 lg:-mt-24 relative z-10
         "
       >
         {/* GRID LAYOUT */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-3  gap-6 justify-between items-start">
 
           {/* LEFT — PROFILE CARD */}
           <div
@@ -39,10 +40,8 @@ export default function Page() {
           >
             <div
               className="
-                w-full 
-                max-w-xs 
-                lg:w-[360px] 
-                lg:h-[904px]
+                w-full lg:w-[336px]
+                
               "
             >
               <Editprofile />
@@ -54,7 +53,7 @@ export default function Page() {
             className="
               lg:col-span-2
               w-full
-              min-h-screen
+              min-h-screen 
             "
           >
             <Overview />
