@@ -7,7 +7,7 @@ export default function Header() {
   if (!activeConversation) return null;
 
   return (
-    <div className="flex items-center gap-3 px-5 py-1 bg-gray-100 border-b">
+    <div className="flex items-center gap-3 px-5 py-1 bg-gray-100 border-b ">
       <Image
         src={activeConversation.avatar}
         alt={activeConversation.name}
