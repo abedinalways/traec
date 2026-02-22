@@ -1,0 +1,247 @@
+'use client';
+
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { io, Socket } from 'socket.io-client';
+
+export type Sender = 'me' | 'doctor';
+
+export type CustomAttachment = {
+  id: string;
+  name: string;
+  attachmentsType?: 'test-result' | 'file' | 'unknown';
+  testId?: string;
+};
+export function createCustomAttachment(
+  id: string,
+  name: string,
+  attachmentsType?: 'test-result' | 'file' | 'unknown',
+  testId?: string
+): CustomAttachment {
+  return {
+    id,
+    attachmentsType,
+    name,
+    testId,
+  };
+}
+
+export function isCustomAttachment(obj: unknown): obj is CustomAttachment {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    typeof (obj as Record<string, unknown>).id === 'string' &&
+    ((obj as Record<string, unknown>).attachmentsType === undefined ||
+      ['test-result', 'file', 'unknown'].includes(
+        (obj as Record<string, unknown>).attachmentsType as string
+      )) &&
+    ((obj as Record<string, unknown>).testId === undefined ||
+      typeof (obj as Record<string, unknown>).testId === 'string')
+  );
+}
+export type Message = {
+  id: string;
+  sender: 'me' | 'doctor';
+  text?: string;
+  attachments?: File[] | CustomAttachment[];
+  createdAt: number;
+};
+
+export type Conversation = {
+  id: string;
+  name: string;
+  avatar: string;
+  messages: Message[];
+};
+
+type ChatContextType = {
+  conversations: Conversation[];
+  activeConversation: Conversation | null;
+  selectConversation: (id: string) => void;
+  sendMessage: (text: string, attachments?: File[]) => void;
+  isTyping: boolean;
+  setTyping: (v: boolean) => void;
+  socket: Socket | null;
+};
+
+const ChatContext = createContext<ChatContextType | null>(null);
+
+export const useChat = () => {
+  const ctx = useContext(ChatContext);
+  if (!ctx) throw new Error('useChat must be used inside ChatProvider');
+  return ctx;
+};
+
+export function ChatProvider({ children }: { children: React.ReactNode }) {
+  const [socket, setSocket] = useState<Socket | null>(null);
+
+  // Initialize Socket Connection
+  useEffect(() => {
+    // TODO: Configure your actual Socket URL in environment variables
+    // e.g., process.env.NEXT_PUBLIC_SOCKET_URL
+    const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+    
+    console.log('Initializing socket connection to:', socketUrl);
+    
+    const socketInstance = io(socketUrl, {
+      withCredentials: true,
+      transports: ['websocket'], // Prefer WebSocket transport
+      autoConnect: true,
+    });
+
+    socketInstance.on('connect', () => {
+      console.log('Socket connected:', socketInstance.id);
+    });
+
+    socketInstance.on('connect_error', (err) => {
+      console.error('Socket connection error:', err);
+    });
+
+    socketInstance.on('disconnect', () => {
+      console.log('Socket disconnected');
+    });
+
+    // Setup global listeners here if needed
+    // socketInstance.on('receive_message', handleReceiveMessage);
+
+    setSocket(socketInstance);
+
+    return () => {
+      socketInstance.disconnect();
+    };
+  }, []);
+
+  const [conversations, setConversations] = useState<Conversation[]>([
+    {
+      id: '1',
+      name: 'Rikta B Ino',
+      avatar: '/images/browser/Avater.png',
+      messages: [
+        {
+          id: 'm1',
+          sender: 'doctor',
+          text: 'Hi! Did you see the latest research on TMJ disorders?',
+          // eslint-disable-next-line react-hooks/purity
+          createdAt: Date.now(),
+        },
+        {
+          id: 'm2',
+          sender: 'me',
+          text: 'Yes! The findings were fascinating. I can send you the full paper if you would like.',
+          // eslint-disable-next-line react-hooks/purity
+          createdAt: Date.now(),
+        },
+        // {
+        //   id: 'm1',
+        //   sender: 'doctor',
+        //   text: 'Hi! hav you any idea about it?',
+        //   // eslint-disable-next-line react-hooks/purity
+        //   createdAt: Date.now(),
+        // },
+        {
+          id: 'm3',
+          sender: 'doctor',
+          text: 'Just wrapped up this Trauma block —60% correct. Curious how you would do.',
+          attachments: [
+            createCustomAttachment(
+              'foo',
+              'habijabi',
+              'test-result',
+              'test-id-1324'
+            ),
+          ],
+          // eslint-disable-next-line react-hooks/purity
+          createdAt: Date.now(),
+        },
+      ],
+    },
+    {
+      id: '2',
+      name: 'Sheikh A Dinar',
+      avatar: '/images/Avatar02.png',
+      messages: [
+        {
+          id: 'm1',
+          sender: 'doctor',
+          text: 'Hi! Did you see the latest research on TMJ disorders?',
+          // eslint-disable-next-line react-hooks/purity
+          createdAt: Date.now(),
+        },
+        {
+          id: 'm2',
+          sender: 'me',
+          text: 'Yes! The findings were fascinating. I can send you the full paper if you would like.',
+          // eslint-disable-next-line react-hooks/purity
+          createdAt: Date.now(),
+        },
+        {
+          id: 'm1',
+          sender: 'doctor',
+          text: 'Hi! hav you any idea about it?',
+          // eslint-disable-next-line react-hooks/purity
+          createdAt: Date.now(),
+        },
+        
+      ],
+    },
+  ]);
+
+  const [activeId, setActiveId] = useState('1');
+  const [isTyping, setIsTyping] = useState(false);
+
+  const activeConversation = conversations.find(c => c.id === activeId) ?? null;
+
+  const selectConversation = (id: string) => setActiveId(id);
+
+  const sendMessage = (text: string, attachments: File[] = []) => {
+    if (!text.trim() && attachments.length === 0) return;
+
+    const newMessage: Message = {
+      id: crypto.randomUUID(),
+      sender: 'me',
+      text: text || undefined,
+      attachments: attachments.length ? attachments : undefined,
+      createdAt: Date.now(),
+    };
+
+    // Optimistic Update
+    setConversations(prev =>
+      prev.map(conv =>
+        conv.id === activeId
+          ? {
+              ...conv,
+              messages: [
+                ...conv.messages,
+                newMessage,
+              ],
+            }
+          : conv
+      )
+    );
+
+    // Emit to Socket
+    if (socket) {
+      socket.emit('send_message', {
+        conversationId: activeId,
+        message: newMessage
+      });
+    }
+
+    setIsTyping(false);
+  };
+
+  return (
+    <ChatContext.Provider
+      value={{
+        conversations,
+        activeConversation,
+        selectConversation,
+        sendMessage,
+        isTyping,
+        setTyping: setIsTyping,
+        socket,
+      }}
+    >
+      {children}
+    </ChatContext.Provider>
+  );
+}

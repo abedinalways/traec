@@ -62,7 +62,7 @@ export default function AccountDashboard() {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const router = useRouter();
   return (
-    <div className="w-full flex justify-center py-10 px-4">
+    <div className="w-full flex justify-center py-10 px-4 font-[inter]">
       <div className="w-full max-w-[780px] space-y-8">
         {/* Profile Header */}
         <ProfileCard
@@ -75,7 +75,7 @@ export default function AccountDashboard() {
         />
 
         {/* Menu Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 font-[inter]">
           {menu.map((item, idx) => (
             <Card
               key={idx}
@@ -98,7 +98,7 @@ export default function AccountDashboard() {
         </div>
 
         {/* Logout */}
-        <Card className="p-4 rounded-xl border border-gray-200 shadow-sm flex flex-row items-center justify-between">
+        <Card className="p-4 rounded-xl border border-gray-200 shadow-sm flex flex-row items-center justify-between font-[inter]">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-[linear-gradient(90deg,#FFF0E4_0%,#FFE3E1_100%)] text-orange-400 rounded-xl">
               <LogOut size={20} />

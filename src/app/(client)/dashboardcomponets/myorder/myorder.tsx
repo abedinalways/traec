@@ -11,7 +11,7 @@ import { ChevronDown } from "lucide-react";
 const ordersData = [
   {
     id: 1,
-    image: "/images/Rectangle 19.png",
+    image: "/images/browser/img12.png",
     title: "Sofia’s 7th Birthday Princess Party",
     provider: "by Part Pro Rentals",
     price: "$545",
@@ -21,7 +21,7 @@ const ordersData = [
   },
   {
     id: 2,
-    image: "/images/Rectangle 20.png",
+    image: "/images/browser/img12.png",
     title: "Jacob’s Anniversary Dinner Setup",
     provider: "by Premium Caterers",
     price: "$440",
@@ -31,7 +31,7 @@ const ordersData = [
   },
   {
     id: 3,
-    image: "/images/Rectangle 21.png",
+    image: "/images/browser/img12.png",
     title: "Annette’s Wedding Event Lighting",
     provider: "by Party Light Pro",
     price: "$760",
@@ -41,7 +41,7 @@ const ordersData = [
   },
   {
     id: 4,
-    image: "/images/Rectangle 22.png",
+    image: "/images/browser/img12.png",
     title: "Darrell’s Corporate Event Hosting",
     provider: "by Event Masters",
     price: "$660",
@@ -110,19 +110,19 @@ function OrderCard({ order }: any) {
         <div className="flex flex-wrap sm:flex-nowrap items-center gap-6 sm:gap-10">
 
           {/* PRICE */}
-          <div className="text-right">
-            <p className="text-xs text-gray-400">Price</p>
-            <p className="font-semibold">{order.price}</p>
+          <div className="">
+            <p className="text-xs text-gray-400 font-normal">Price</p>
+            <p className="font-medium ">{order.price}</p>
           </div>
 
           {/* DUE IN */}
-          <div className="text-right">
+          <div className="">
             <p className="text-xs text-gray-400">Due In</p>
             <p className="font-semibold">{order.dueIn}</p>
           </div>
 
           {/* STATUS */}
-          <div className="text-right">
+          <div className="">
             <p className="text-xs text-gray-400">Status</p>
             <span className="px-3 py-1 text-xs bg-blue-100 text-blue-600 rounded-full">
               {order.status}

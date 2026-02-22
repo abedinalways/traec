@@ -37,7 +37,7 @@ export default function Editprofile() {
 
       {/* Name + Verified */}
       <div className="mt-3">
-        <h2 className="text-[28px] font-semibold text-gray-900 flex items-center justify-between gap-4">
+        <h2 className="text-[24px] font-semibold text-gray-900 flex items-center justify-between gap-4">
           Sarah Miller
           <span className="flex items-center gap-1 bg-[#eefaf0] text-[#2DAB57] text-xs px-2 py-1 rounded-full">
             <RightGreenIcon />
@@ -47,12 +47,12 @@ export default function Editprofile() {
 
         {/* Location + Rating */}
         <div className="flex items-center gap-4 mt-2 text-gray-600 text-sm">
-          <span className="flex items-center gap-1 text-[16px]">
+          <span className="flex items-center gap-1 text-[14px]">
             <LocationIcon/>
             Austin, TX
           </span>
 
-          <span className="flex items-center gap-1 text-[16px]">
+          <span className="flex items-center gap-1 text-[14px]">
             <StarIcon/>
             <span className="font-medium">4.9</span>
             <span className="text-gray-500">(156 reviews)</span>
@@ -60,14 +60,12 @@ export default function Editprofile() {
         </div>
 
         {/* Member Since */}
-        <p className="flex items-center gap-1 text-sm text-gray-600 mt-1 text-[16px]">
+        <p className="flex items-center gap-1 text-sm text-gray-600 mt-1 text-[14px]">
           <CalendarIcon/>
           Member since 2023
         </p>
       </div>
-      {/* -------- END TOP SECTION -------- */}
-
-      {/* ---------- Existing Code Below (No Change) ---------- */}
+     
 
       <hr className="my-4" />
 

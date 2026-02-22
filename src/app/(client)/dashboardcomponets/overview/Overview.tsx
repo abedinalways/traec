@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import MyOrder from "../../../(client)/dashboardcomponets/myorder/myorder";
-import MessagePage from "../../../(client)/dashboardcomponets/messege/message";
+
 import ReviewPage from "../review/review"
 
 import {
@@ -14,6 +14,15 @@ import {
   ChevronRight,
   Dot,
 } from "lucide-react";
+import BoxIcon from "@/components/icons/BoxIcon";
+
+import MessagesIcon from "@/components/icons/MessagesIcon";
+import { ChatProvider } from "../../context/ChatContext";
+
+import MessageSection from "@/components/message/MessageSection";
+import MessageInput from "@/components/message/MessageInput";
+import MessageListSection from "@/components/message/MessageListSection";
+import Header from "@/components/message/Header";
 
 export default function Overview() {
   const [activeTab, setActiveTab] = useState("Overview");
@@ -21,11 +30,7 @@ export default function Overview() {
   const tabs = ["Overview", "My Orders", "Messages", "Reviews"];
 
   return (
-    <div className="w-full bg-white p-5 rounded">
-
-      {/* ============================  
-                NAVIGATION TABS 
-      ============================ */}
+    <div className="w-full bg-white p-5 rounded ">
       <div className="rounded-2xl bg-white border shadow-sm px-4 sm:px-6 md:px-8 py-3 flex flex-wrap gap-4 md:gap-8 items-center">
         {tabs.map((tab) => (
           <button
@@ -34,7 +39,7 @@ export default function Overview() {
             className={`pb-2 text-sm font-medium transition-all ${
               activeTab === tab
                 ? "text-black border-b-2 border-black"
-                : "text-gray-500 hover:text-gray-700"
+                : "text-gray-500 hover:text-gray-700 cursor-pointer"
             }`}
           >
             {tab}
@@ -42,56 +47,121 @@ export default function Overview() {
         ))}
       </div>
 
-      {/* ============================  
-                 OVERVIEW TAB CONTENT
-      ============================ */}
       {activeTab === "Overview" && (
         <div className="py-6 w-full">
-
           {/* ======= TOP 4 STATS ======= */}
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <StatBox icon={<CalendarDays className="text-red-500" size={20} />} value="02" label="Upcoming Events" bg="bg-red-100" />
-            <StatBox icon={<Clock className="text-blue-500" size={20} />} value="11" label="Past Orders" bg="bg-blue-100" />
-            <StatBox icon={<MessageCircle className="text-green-500" size={20} />} value="06" label="Unread Messages" bg="bg-green-100" />
-            <StatBox icon={<Star className="text-yellow-500" size={20} />} value="4.9" label="Avg Rating Score" bg="bg-yellow-100" />
+            <StatBox
+              icon={<CalendarDays className="text-red-500" size={20} />}
+              value="02"
+              label="Upcoming Events"
+              bg="bg-red-100"
+            />
+            <StatBox
+              icon={<BoxIcon />}
+              value="11"
+              label="Past Orders"
+              bg="bg-blue-100"
+            />
+            <StatBox
+              icon={<MessagesIcon />}
+              value="06"
+              label="Unread Messages"
+              bg="bg-green-100"
+            />
+            <StatBox
+              icon={<Star className="text-yellow-500" size={20} />}
+              value="4.9"
+              label="Avg Rating Score"
+              bg="bg-yellow-100"
+            />
           </div>
 
           {/* ======= MAIN GRID ======= */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
             {/* LEFT — Recent Orders */}
-            <div className="lg:col-span-6 rounded-3xl border shadow-sm bg-[#ECEFF3] p-4 w-full min-h-[380px] md:min-h-[450px] lg:h-[490px]">
+            <div className="lg:col-span-6 rounded-3xl border shadow-sm bg-[#ECEFF3] p-4 w-full min-h-[380px] md:min-h-[550px] lg:h-[490px] ">
               <SectionTitle title="Recent Orders" />
 
               <div className="space-y-3">
-                <OrderItem title="Emma’s 7th Birthday" vendor="Princess Castle Bounce House" date="Dec 20, 2024" status="Progress" statusColor="blue" />
-                <OrderItem title="Emma’s 7th Birthday" vendor="Princess Castle Bounce House" date="Dec 20, 2024" status="Pending" statusColor="yellow" />
-                <OrderItem title="Emma’s 7th Birthday" vendor="Princess Castle Bounce House" date="Dec 20, 2024" status="Cancel" statusColor="red" />
-                <OrderItem title="Emma’s 7th Birthday" vendor="Princess Castle Bounce House" date="Dec 20, 2024" status="Complete" statusColor="green" />
+                <OrderItem
+                  title="Emma’s 7th Birthday"
+                  vendor="Princess Castle Bounce House by Part Pro Rentals"
+                  date="Dec 20, 2024"
+                  status="Progress"
+                  statusColor="blue"
+                />
+                <OrderItem
+                  title="Emma’s 7th Birthday"
+                  vendor="Princess Castle Bounce House by Part Pro Rentals"
+                  date="Dec 20, 2024"
+                  status="Pending"
+                  statusColor="yellow"
+                />
+                <OrderItem
+                  title="Emma’s 7th Birthday"
+                  vendor="Princess Castle Bounce House by Part Pro Rentals"
+                  date="Dec 20, 2024"
+                  status="Cancel"
+                  statusColor="red"
+                />
+                <OrderItem
+                  title="Emma’s 7th Birthday"
+                  vendor="Princess Castle Bounce House by Part Pro Rentals"
+                  date="Dec 20, 2024"
+                  status="Complete"
+                  statusColor="green"
+                />
               </div>
             </div>
 
             {/* RIGHT — Activity + Messages */}
             <div className="lg:col-span-6 space-y-6 w-full">
-
               {/* Recent Activity */}
               <div className="rounded-2xl border shadow-sm bg-[#ECEFF3] p-4">
                 <SectionTitle title="Recent Activity" />
-                <ActivityItem text="Received 5-star review" time="2 days ago" dotColor="green" />
-                <ActivityItem text="Completed order #1247" time="2 days ago" dotColor="yellow" />
-                <ActivityItem text="Earned Party Pro" time="2 days ago" dotColor="purple" />
+                <ActivityItem
+                  text="Received 5-star review"
+                  time="2 days ago"
+                  dotColor="green"
+                />
+                <ActivityItem
+                  text="Completed order #1247"
+                  time="2 days ago"
+                  dotColor="yellow"
+                />
+                <ActivityItem
+                  text="Earned Party Pro"
+                  time="2 days ago"
+                  dotColor="purple"
+                />
               </div>
 
               {/* Recent Messages */}
               <div className="rounded-2xl border shadow-sm bg-[#ECEFF3] p-4">
                 <SectionTitle title="Recent Message" />
 
-                <MessageItem image="/images/Rectangle 19.png" name="Jacob Jones" text="Princess Castle Bounce House by Part Pro Rentals, then I will be continue to" />
-                <MessageItem image="/images/Rectangle 20.png" name="Floyd Miles" text="Princess Castle Bounce House by Part Pro Rentals, then I will be continue to" />
-                <MessageItem image="/images/Rectangle 21.png" name="Annette Black" text="Princess Castle Bounce House by Part Pro Rentals, then I will be continue to" />
-                <MessageItem image="/images/Rectangle 22.png" name="Darrell Steward" text="Princess Castle Bounce House by Part Pro Rentals, then I will be continue to" />
+                <MessageItem
+                  image="/images/Avater11.png"
+                  name="Jacob Jones"
+                  text="Princess Castle Bounce House by Part Pro Rentals, then I will be continue to"
+                />
+                <MessageItem
+                  image="/images/Rectangle 20.png"
+                  name="Floyd Miles"
+                  text="Princess Castle Bounce House by Part Pro Rentals, then I will be continue to"
+                />
+                <MessageItem
+                  image="/images/Rectangle 21.png"
+                  name="Annette Black"
+                  text="Princess Castle Bounce House by Part Pro Rentals, then I will be continue to"
+                />
+                <MessageItem
+                  image="/images/Rectangle 22.png"
+                  name="Darrell Steward"
+                  text="Princess Castle Bounce House by Part Pro Rentals, then I will be continue to"
+                />
               </div>
-
             </div>
           </div>
         </div>
@@ -110,19 +180,36 @@ export default function Overview() {
                MESSAGES TAB  
       ============================ */}
       {activeTab === "Messages" && (
-        <div className="pt-4 w-full h-[80vh] md:h-[calc(100vh-150px)] overflow-hidden rounded-xl">
-          <MessagePage />
-        </div>
-      )}
+        <ChatProvider>
+          <section className="grid md:h-[calc(100vh-150px)] grid-cols-12 gap-4 bg-[#f3f4f6] p-4 rounded-2xl">
+            {/* Sidebar */}
+            <aside className="md:col-span-4 col-span-12">
+              <div className="bg-white rounded-2xl p-5 h-full shadow-sm">
+                <MessageListSection />
+              </div>
+            </aside>
 
+            {/* Chat Area */}
+            <div className="md:col-span-8 col-span-12 bg-white rounded-2xl shadow-sm flex flex-col h-full overflow-hidden">
+              <Header/>
+
+              <div className="flex-1 overflow-hidden">
+                <MessageSection />
+              </div>
+
+              <MessageInput />
+            </div>
+          </section>
+        </ChatProvider>
+      )}
       {/* ============================  
                 REVIEWS TAB  
       ============================ */}
       {activeTab === "Reviews" && (
-  // <div className="pt-4 w-full min-h-[80vh]">
-    <ReviewPage />
-  // </div>
-)}
+        // <div className="pt-4 w-full min-h-[80vh]">
+        <ReviewPage />
+        // </div>
+      )}
     </div>
   );
 }
@@ -166,20 +253,20 @@ function OrderItem({ title, vendor, date, status, statusColor }: any) {
   return (
     <div className="border rounded-xl p-4 flex justify-between items-center bg-white shadow-sm w-full">
       <div>
-        <p className="font-medium text-gray-900">{title}</p>
-        <p className="text-xs text-gray-500">{vendor}</p>
+        <p className="font-medium text-[16px] text-gray-900">{title}</p>
+        <p className="text-[12px] max-w-sm text-gray-500">{vendor}</p>
 
-        <p className="mt-2 flex items-center gap-1 text-xs text-gray-500">
+        <p className="mt-2 flex items-center gap-1 text-[14px] text-gray-500">
           <CalendarDays size={14} /> {date}
         </p>
       </div>
 
-      <div className="text-right">
+      <div className="text-right flex flex-col justify-between gap-2 md:gap-6 ">
         <span className={`px-3 py-1 rounded-full text-xs ${badgeColor[String(statusColor) as keyof typeof badgeColor]}`}>
           {status}
         </span>
 
-        <p className="text-[11px] text-gray-500 mt-2 cursor-pointer hover:underline">
+        <p className="text-[12px] text-gray-500 mt-2 cursor-pointer hover:underline">
           View Details
         </p>
       </div>

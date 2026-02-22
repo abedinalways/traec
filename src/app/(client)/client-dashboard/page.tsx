@@ -28,7 +28,7 @@ export default function ClientDashboardPage() {
         "
       >
         {/* GRID LAYOUT */}
-        <div className="grid grid-cols-1 lg:grid-cols-3  gap-6 justify-between items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-4  gap-6 justify-between items-start">
 
           {/* LEFT — PROFILE CARD */}
           <div
@@ -51,7 +51,7 @@ export default function ClientDashboardPage() {
           {/* RIGHT — OVERVIEW */}
           <div
             className="
-              lg:col-span-2
+              lg:col-span-3
               w-full
               min-h-screen 
             "

@@ -130,6 +130,11 @@ export default function LogInModal({
               </div>
               <button
                 type="submit"
+                onClick={() => {
+                  onClose();
+                  reset();
+                  router.push("/client-dashboard");
+                }}
                 className="w-full h-12 rounded-xl text-white font-medium bg-gradient-to-r from-[#FFAC47] to-[#FF2A24] cursor-pointer"
               >
                 Log In
