@@ -15,7 +15,7 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { useAuthModal } from "@/app/context/AuthModalContext";
-import { useEffect, useState } from "react";
+import DropDown from "../icons/DropDownIcon";
 
 type LoginData = {
   name?: string;
@@ -27,14 +27,13 @@ export default function Navbar() {
   const { setOpenSignup } = useAuthModal();
   const pathname = usePathname();
 
-  const [user, setUser] = useState<LoginData | null>(null);
+  // ✅ Demo user only for client dashboard routes
+  const demoUser: LoginData = {
+    name: "Cameron Diana",
+    email: "cameron@example.com",
+  };
 
-  // useEffect(() => {
-  //   const savedData = localStorage.getItem("loginData");
-  //   if (savedData) {
-  //     setUser(JSON.parse(savedData));
-  //   }
-  // }, []);
+  const user = pathname.startsWith("/client-dashboard") ? demoUser : null;
 
   const isActive = (path: string) => {
     if (path === "/") {
@@ -92,14 +91,14 @@ export default function Navbar() {
             className="hidden md:flex items-center gap-2"
           >
             <Image
-              src="/images/browser/img07.png"
+              src="/images/browser/Avater.png"
               alt="profile"
               width={24}
               height={24}
               className="w-6 h-6 rounded-full"
             />
-            <span className="text-sm font-medium text-gray-900">
-              {user.name || "John Doe"}
+            <span className="text-sm font-medium text-gray-900 flex items-center gap-2">
+              {user.name} <DropDown/>
             </span>
           </Link>
         ) : (
@@ -190,7 +189,7 @@ export default function Navbar() {
                         className="w-6 h-6 rounded-full"
                       />
                       <span className="text-sm font-medium text-gray-900">
-                        {user.name || "John Doe"}
+                        {user.name}
                       </span>
                     </div>
                   </Link>

@@ -20,9 +20,9 @@ interface FooterProps {
 
 export default function Footer({ className }: FooterProps) {
   return (
-    <footer className={`relative text-white ${className || ""}`}>
+    <footer className={`font-[inter] relative text-white ${className || ""}`}>
       {/* Background image */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
+      <div className="absolute inset-0 -z-10 overflow-hidden ">
         <Image
           src={"/images/footer01.png"}
           alt="footer background"
@@ -30,7 +30,6 @@ export default function Footer({ className }: FooterProps) {
           fill
           style={{
             objectFit: "cover",
-          
           }}
         />
       </div>
