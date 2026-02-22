@@ -6,16 +6,32 @@ import { useChat } from "@/app/(client)/context/ChatContext";
 
 export default function MessageSection() {
   const { activeConversation } = useChat();
-  const endRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (!activeConversation || !scrollRef.current) return;
+
+    if (isFirstRender.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      isFirstRender.current = false;
+      return;
+    }
+
+    scrollRef.current.scrollTo({
+      top: scrollRef.current.scrollHeight,
+      behavior: "smooth",
+    });
   }, [activeConversation?.messages.length]);
 
+  // Safe render guard (after hooks)
   if (!activeConversation) return null;
 
   return (
-    <div className="flex-1 overflow-y-auto px-6 py-6 bg-gray-50">
+    <div
+      ref={scrollRef}
+      className="overflow-y-auto bg-gray-50 px-6 py-6 h-full"
+    >
       {activeConversation.messages.map((msg) => (
         <div key={msg.id} className="mb-4 flex">
           {msg.sender === "doctor" ? (
@@ -40,8 +56,6 @@ export default function MessageSection() {
           )}
         </div>
       ))}
-
-      <div ref={endRef} />
     </div>
   );
 }

@@ -76,8 +76,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
 
   // Initialize Socket Connection
   useEffect(() => {
-    // TODO: Configure your actual Socket URL in environment variables
-    // e.g., process.env.NEXT_PUBLIC_SOCKET_URL
+   
     const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
     
     console.log('Initializing socket connection to:', socketUrl);
@@ -130,13 +129,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
           // eslint-disable-next-line react-hooks/purity
           createdAt: Date.now(),
         },
-        // {
-        //   id: 'm1',
-        //   sender: 'doctor',
-        //   text: 'Hi! hav you any idea about it?',
-        //   // eslint-disable-next-line react-hooks/purity
-        //   createdAt: Date.now(),
-        // },
+        
         {
           id: 'm3',
           sender: 'doctor',
