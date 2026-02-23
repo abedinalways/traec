@@ -9,7 +9,6 @@ import {
   
   Open_Sans,
   
-  Satisfy,
 } from "next/font/google";
 import "../styles/globals.css";
 import localFont from "next/font/local";
