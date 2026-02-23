@@ -83,7 +83,55 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --w: #fff;
+	--b: #070707;
+	--red: #f92e25;
+	--blue: #00b5fb;
+	--orange: #fa9916;
+	--red-orange-50: #feeae9;
+	--red-orange-100: #fdbebb;
+	--red-orange-200: #fc9f9b;
+	--red-orange-300: #fb736d;
+	--red-orange-400: #fa5851;
+	--red-orange-500: #f92e25;
+	--red-orange-600: #e32a22;
+	--red-orange-700: #b1211a;
+	--red-orange-800: #891914;
+	--red-orange-900: #691310;
+	--blue-blue-50: #e6f8ff;
+	--blue-blue-100: #b0e8fe;
+	--blue-blue-200: #8addfd;
+	--blue-blue-300: #54cdfc;
+	--blue-blue-400: #33c4fc;
+	--blue-blue-500: #00b5fb;
+	--blue-blue-600: #00a5e4;
+	--blue-blue-700: #0081b2;
+	--blue-blue-800: #00648a;
+	--blue-blue-900: #004c69;
+	--orange-light: #fff5e8;
+	--orange-light-:hover: #fef0dc;
+	--orange-light-:active: #fddfb7;
+	--orange-normal: #fa9916;
+	--orange-normal-:hover: #e18a14;
+	--orange-normal-:active: #c87a12;
+	--orange-dark: #bc7311;
+	--orange-dark-:hover: #965c0d;
+	--orange-dark-:active: #70450a;
+	--orange-darker: #583608;
+	--gray-black-50: #e9e9ea;
+	--gray-black-100: #d2d2d5;
+	--gray-black-200: #a5a5ab;
+	--gray-black-300: #777980;
+	--gray-black-400: #4a4c56;
+	--gray-black-500: #1d1f2c;
+	--gray-black-600: #161721;
+	--gray-black-700: #0f1016;
+	--gray-black-800: #07080b;
+	--gray-black-900: #030304;
+	--background-white: #fff;
+	
 }
+
 
 .dark {
   --background: oklch(0.145 0 0);
@@ -247,4 +295,8 @@ background-clip: text;
 
 .background-gradient{
   background: linear-gradient(90deg, #ffac47 0%, #ff2a24 100%);
+}
+
+.icon-bg{
+  background: linear-gradient(90deg, rgba(255, 172, 71, 0.14) 0%, rgba(255, 42, 36, 0.14) 100%);
 }

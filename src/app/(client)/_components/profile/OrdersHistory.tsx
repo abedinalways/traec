@@ -7,6 +7,11 @@ import { FiBox } from "react-icons/fi";
 import { FaHandHoldingDollar } from "react-icons/fa6";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { BiTask } from "react-icons/bi";
+import LeftIcon from "@/components/icons/LeftIcon";
+import CubeIcon from "@/components/icons/CubeIcon";
+import CompleteIcon from "@/components/icons/CompleteIcon";
+import PendingIcon from "@/components/icons/PendingIcon";
+import SendIcon from "@/components/icons/SendIcon";
 
 export interface OrderItem {
   id: number;
@@ -42,13 +47,13 @@ export default function OrderHistory({
   orders,
 }: OrderHistoryProps) {
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 py-10">
+    <div className="w-full max-w-5xl mx-auto px-4 py-10 font-[inter]">
       {/* Back Button */}
       <Link
-        href={backUrl}
-        className="flex items-center w-fit gap-1 px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-50 transition mb-6"
+        href={"/client-profile"}
+        className="flex items-center max-w-[168px] shape-squircle rounded-[22px] p-2 text-sm border  text-gray-black-400 mb-4 text-[16px]"
       >
-        <MdKeyboardArrowLeft size={20} />
+        <LeftIcon />
         Back To Account
       </Link>
 
@@ -61,40 +66,54 @@ export default function OrderHistory({
       {/* Stats Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <div className="border rounded-xl p-5 flex items-center gap-4 text-center">
-          <FiBox size={50} className="p-2 border rounded-full text-gray-500" />
+          <p className="rounded-full border border-gray-200 p-3">
+            <CubeIcon />
+          </p>
           <div>
-            <p className="text-3xl font-semibold">{stats.pastOrders}</p>
-            <p className="text-[#4A4C56] font-medium mt-1">Past Orders</p>
+            <p className="text-[20px] font-semibold leading-[160%]">
+              {stats.pastOrders}
+            </p>
+            <p className="text-[#4A4C56] text-sm font-normal mt-1">
+              Past Orders
+            </p>
           </div>
         </div>
 
         <div className="border rounded-xl p-5 flex items-center gap-4 text-center">
-          <BiTask size={50} className="p-2 border rounded-full text-gray-500" />
+          <p className="rounded-full border border-gray-200 p-3">
+            <CompleteIcon />
+          </p>
           <div>
-            <p className="text-3xl font-semibold">{stats.completed}</p>
-            <p className="text-[#4A4C56] font-medium mt-1">Completed</p>
+            <p className="text-[20px] font-semibold leading-[160%]">
+              {stats.completed}
+            </p>
+            <p className="text-[#4A4C56] text-sm font-normal mt-1">Completed</p>
           </div>
         </div>
 
         <div className="border rounded-xl p-5 flex items-center gap-4 text-center">
-          <AiOutlineLoading3Quarters
-            size={50}
-            className="p-2 border rounded-full text-gray-500"
-          />
+          <p className="rounded-full border border-gray-200 p-3">
+            <PendingIcon />
+          </p>
           <div>
-            <p className="text-3xl font-semibold">{stats.pending}</p>
-            <p className="text-[#4A4C56] font-medium mt-1">Pending</p>
+            <p className="text-[20px] font-semibold leading-[160%]">
+              {stats.pending}
+            </p>
+            <p className="text-[#4A4C56] text-sm font-normal mt-1">Pending</p>
           </div>
         </div>
 
         <div className="border rounded-xl p-5 flex items-center gap-4 text-center">
-          <FaHandHoldingDollar
-            size={50}
-            className="p-2 border rounded-full text-gray-500"
-          />
+          <p className="rounded-full border border-gray-200 p-3">
+            <SendIcon />
+          </p>
           <div>
-            <p className="text-3xl font-semibold">${stats.totalSpend}</p>
-            <p className="text-gray-500 text-sm mt-1">Total Spend</p>
+            <p className="text-[20px] font-semibold leading-[160%]">
+              ${stats.totalSpend}
+            </p>
+            <p className="text-[#4A4C56] text-sm font-normal mt-1">
+              Total Spend
+            </p>
           </div>
         </div>
       </div>
@@ -117,8 +136,8 @@ export default function OrderHistory({
               />
 
               <div className="flex-1">
-                <h3 className="font-medium text-gray-900">{order.title}</h3>
-                <p className="text-[#4A4C56] font-medium">
+                <h3 className="font-medium text-gray-900 text-[16px] leading-[160%]">{order.title}</h3>
+                <p className="text-[#4A4C56] font-medium text-[14px]">
                   by{" "}
                   <span className="text-black underline">{order.vendor}</span>
                 </p>
@@ -129,12 +148,12 @@ export default function OrderHistory({
             <div className="flex flex-wrap gap-4 w-full lg:w-auto lg:flex-nowrap lg:gap-8">
               <div className="flex-1 min-w-[130px] sm:min-w-[140px]">
                 <p className="text-[#777980] text-sm">Date</p>
-                <p className="text-gray-700 font-medium">{order.date}</p>
+                <p className="text-gray-700 font-medium text-[16px]">{order.date}</p>
               </div>
 
               <div className="flex-1 min-w-[130px] sm:min-w-[140px]">
                 <p className="text-[#777980] text-sm">Price</p>
-                <p className="text-gray-700 font-medium">${order.price}</p>
+                <p className="text-gray-700 font-medium text-[16px]">${order.price}</p>
               </div>
 
               <div className="flex-1 min-w-[130px] sm:min-w-[140px]">
@@ -145,8 +164,8 @@ export default function OrderHistory({
                     order.status === "Complete"
                       ? "bg-green-100 text-green-700"
                       : order.status === "Pending"
-                      ? "bg-yellow-100 text-yellow-600"
-                      : "bg-blue-100 text-blue-600"
+                        ? "bg-yellow-100 text-yellow-600"
+                        : "bg-blue-100 text-blue-600"
                   }`}
                 >
                   {order.status}

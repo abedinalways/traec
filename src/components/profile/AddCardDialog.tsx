@@ -12,7 +12,7 @@ interface AddCardDialogProps {
 export function AddCardDialog({ open, setOpen, onSubmit }: AddCardDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-w-2xl w-full rounded-2xl px-8 py-10">
+      <DialogContent className="max-w-2xl w-full rounded-2xl px-8 py-10 font-[inter]">
         <DialogHeader>
           <h2 className="text-2xl font-semibold">Add New Card</h2>
           <p className="text-gray-500 text-sm -mt-1">
@@ -64,17 +64,17 @@ export function AddCardDialog({ open, setOpen, onSubmit }: AddCardDialogProps) {
                 className="border rounded-xl px-4 py-3 text-gray-700 focus:ring-2 focus:ring-black/10 outline-none"
               />
             </div>
-            <div className="flex md:flex-row flex-col-reverse mt-2 gap-4">
+            <div className="flex md:flex-row flex-col-reverse mt-2  gap-4">
               <Button
                 variant="outline"
-                className="rounded-xl w-full py-6"
+                className="rounded-xl w-full py-6 cursor-pointer"
                 onClick={() => setOpen(false)}
               >
                 Cancel
               </Button>
 
               <Button
-                className="bg-black text-white w-full rounded-xl py-6 hover:bg-black/90"
+                className="bg-black text-white w-full rounded-xl py-6 cursor-pointer hover:bg-black/90"
                 onClick={() => {
                   onSubmit?.();
                   setOpen(false);

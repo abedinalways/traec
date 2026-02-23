@@ -1,10 +1,12 @@
 import React from "react";
 import { Card } from "../ui/card";
 import Image from "next/image";
-import { CheckCircle } from "lucide-react";
-import { GrLocation } from "react-icons/gr";
-import { HiOutlineCalendarDateRange } from "react-icons/hi2";
-import { MdOutlineMailOutline } from "react-icons/md";
+
+import RightGreenIcon from "../icons/RightGreenIcon";
+import LocationIcon from "../icons/LocationIcon";
+import CalendarIcon from "../icons/CalendarIcon";
+
+import EmailIcon from "../icons/EmailIcon";
 
 interface ProfileCardProps {
   name: string;
@@ -24,34 +26,34 @@ export default function ProfileCard({
   verified = false,
 }: ProfileCardProps) {
   return (
-    <Card className="p-4 md:p-6 shadow-none flex flex-row items-center gap-6">
+    <Card className="p-4 md:p-6 shadow-none flex md:flex-row items-center gap-6 font-[inter]">
       <Image
         src={avatar}
         alt="Profile"
-        height={30}
-        width={30}
-        className="md:w-30 w-22 md:h-30 h-22 rounded-full object-cover"
+        height={112}
+        width={112}
+        className="rounded-full object-cover"
       />
 
       <div className="flex-1 space-y-2">
-        <div className="flex items-center gap-2">
-          <h2 className="md:text-2xl text-xl font-semibold">{name}</h2>
+        <div className="inline-block md:flex items-center gap-2">
+          <h2 className="md:text-[28px] text-2xl font-semibold">{name}</h2>
           {verified && (
-            <span className="flex items-center gap-1 text-sm bg-green-100 text-green-700 px-2 py-1 rounded-md">
-              <CheckCircle className="text-green-700" size={14} /> Verified
+            <span className="flex items-center justify-center w-fit gap-1 text-[16px] bg-[#eefaf0] text-[#2dab57] px-2 py-1 rounded-md">
+              <RightGreenIcon /> Verified
             </span>
           )}
         </div>
 
-        <div className="flex items-center gap-2 text-gray-600 text-sm">
-          <GrLocation />
+        <div className="flex items-center gap-2 text-[#4a4c56] text-xs md:text-[16px]">
+          <LocationIcon />
           <p>{location}</p>
-          <HiOutlineCalendarDateRange />
+          <CalendarIcon />
           <p>{joined}</p>
         </div>
 
-        <div className="flex items-center gap-2 text-gray-600 text-sm">
-          <MdOutlineMailOutline />
+        <div className="flex items-center gap-2 text-[#4a4c56] text-xs md:text-[16px]">
+          <EmailIcon />
           <p>{email}</p>
         </div>
       </div>
@@ -59,15 +61,4 @@ export default function ProfileCard({
   );
 }
 
-/**
- * Example Usage (TypeScript):
- *
- * <ProfileCard
- *    name="Cameron Diana"
- *    avatar="/images/featured06.png"
- *    location="Los Angeles, CA"
- *    joined="Joined Jan 2021"
- *    email="maria@email.com"
- *    verified={true}
- * />
- */
+

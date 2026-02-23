@@ -27,13 +27,14 @@ export default function Navbar() {
   const { setOpenSignup } = useAuthModal();
   const pathname = usePathname();
 
-  // ✅ Demo user only for client dashboard routes
+ 
   const demoUser: LoginData = {
     name: "Cameron Diana",
     email: "cameron@example.com",
   };
 
-  const user = pathname.startsWith("/client-dashboard") ? demoUser : null;
+  const user = pathname.startsWith("/client-dashboard") || (pathname.startsWith("/client-profile")) ? demoUser : null;
+ 
 
   const isActive = (path: string) => {
     if (path === "/") {
@@ -120,7 +121,7 @@ export default function Navbar() {
         )}
 
         {/* Mobile Menu */}
-        <div className="md:hidden">
+        <div className="md:hidden font-[inter]">
           <Sheet>
             <SheetTrigger>
               <Menu className="h-6 w-6" />
