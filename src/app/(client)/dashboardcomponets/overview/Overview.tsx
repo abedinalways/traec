@@ -30,8 +30,8 @@ export default function Overview() {
   const tabs = ["Overview", "My Orders", "Messages", "Reviews"];
 
   return (
-    <div className="w-full bg-white p-5 rounded ">
-      <div className="rounded-2xl bg-white border shadow-sm px-4 sm:px-6 md:px-8 py-3 flex flex-wrap gap-4 md:gap-8 items-center">
+    <div className="w-full  bg-white p-5 rounded ">
+      <div className=" bg-white border-b   px-4 sm:px-6 md:px-8 py-3 flex flex-wrap gap-4 md:gap-8 items-center">
         {tabs.map((tab) => (
           <button
             key={tab}
@@ -45,8 +45,9 @@ export default function Overview() {
             {tab}
           </button>
         ))}
+        
       </div>
-
+ 
       {activeTab === "Overview" && (
         <div className="py-6 w-full">
           {/* ======= TOP 4 STATS ======= */}

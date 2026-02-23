@@ -26,7 +26,7 @@ export function ActionDialog({
 }: IActionDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="py-8 max-w-[384px]! rounded-2xl">
+      <DialogContent className="py-8 max-w-[384px]! rounded-2xl font-[inter]">
         <div className="flex flex-col items-center text-center">
           {/* Icon Holder */}
           <div className="w-16 h-16 rounded-full border-3 border-red-200 flex items-center justify-center mb-4">
@@ -37,20 +37,20 @@ export function ActionDialog({
 
           <p className="text-gray-500 text-[16px] mb-6">{description}</p>
 
-          <DialogFooter className="flex w-full justify-center! gap-4">
-            <Button
-              className="bg-red-600 hover:bg-red-700 cursor-pointer text-white px-8 py-6 rounded-lg"
+          <DialogFooter className="flex  w-full items-center justify-center gap-4">
+            <button
+              className="bg-[#e9201d]  cursor-pointer text-white rounded-[16px]! shape-squircle! w-[154px] h-[56px]"
               onClick={() => {
                 onConfirm?.();
                 setOpen(false);
               }}
             >
               {confirmLabel}
-            </Button>
+            </button>
 
             <Button
               variant="outline"
-              className="px-8 py-6 cursor-pointer rounded-lg"
+              className="shape-squircle! rounded-[16px]! w-[154px] h-[56px] cursor-pointer  border border-[#3d4566]"
               onClick={() => setOpen(false)}
             >
               {cancelLabel}

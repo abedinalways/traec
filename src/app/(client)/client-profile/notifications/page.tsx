@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { Switch } from "@/components/ui/switch";
+import LeftIcon from "@/components/icons/LeftIcon";
 
 export default function NotificationPreferences() {
   const [prefs, setPrefs] = useState({
@@ -18,13 +19,13 @@ export default function NotificationPreferences() {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-10">
+    <div className="w-full max-w-4xl mx-auto px-4 py-10 font-[inter]">
       {/* Back Button */}
       <Link
-        href="/client-profile"
-        className="flex items-center max-w-38 rounded-sm p-2 text-sm border text-gray-600 hover:text-black mb-6"
+        href={"/client-profile"}
+        className="flex items-center max-w-[168px] shape-squircle rounded-[22px] p-2 text-sm border  text-gray-black-400 mb-4 text-[16px]"
       >
-        <MdKeyboardArrowLeft size={22} />
+        <LeftIcon />
         Back To Account
       </Link>
 
@@ -33,7 +34,7 @@ export default function NotificationPreferences() {
         <h1 className="text-2xl font-semibold text-gray-900">
           Notification Preferences
         </h1>
-        <p className="text-gray-500 mt-1">
+        <p className="text-gray-500 mt-1 text-[16px]">
           Customize how and when you receive notifications
         </p>
       </div>
