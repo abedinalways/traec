@@ -16,28 +16,42 @@ interface Props {
   openSignup: () => void;
   openForgotPassword: () => void;
 }
+
 interface LogInFormData {
   email: string;
   password: string;
 }
 
-export default function LogInModal({
-  isOpen,
-  onClose,
-  openSignup,
-
-}: Props) {
+export default function LogInModal({ isOpen, onClose, openSignup }: Props) {
   const { register, handleSubmit, reset } = useForm<LogInFormData>();
   const [showPass, setShowPass] = useState(false);
   const router = useRouter();
 
-  const onSubmit = (data: LogInFormData) => {
-    // Save to localStorage
-    localStorage.setItem("loginData", JSON.stringify(data));
-    console.log("Form Submitted:", data);
-    onClose();
-    reset();
-    router.push("/");
+  const onSubmit = async (data: LogInFormData) => {
+    try {
+      
+      let role = "user";
+
+      if (data.email === "admin@gmail.com") {
+        role = "admin";
+      }
+
+      
+      localStorage.setItem("role", role);
+
+      
+      onClose();
+      reset();
+
+      
+      if (role === "admin") {
+        router.push("/admin/dashboard");
+      } else {
+        router.push("/client-dashboard");
+      }
+    } catch (error) {
+      console.log("Login failed", error);
+    }
   };
 
   return (
@@ -49,9 +63,10 @@ export default function LogInModal({
         >
           <X className="w-5 h-5 text-gray-700" />
         </button>
+
         {/* LEFT IMAGE */}
         <div className="flex items-center justify-center mr-10">
-          <div className="w-full h-full flex items-center justify-center ">
+          <div className="w-full h-full flex items-center justify-center">
             <Image
               src="/images/siginup.png"
               width={700}
@@ -63,23 +78,20 @@ export default function LogInModal({
         </div>
 
         {/* RIGHT FORM */}
-        <div className="flex items-center justify-center bg-white lg:-ml-16 rounded-2xl lg:rounded-l-4xl lg:rounded-r-2xl">
-          {/* Logo */}
-          <div className="absolute right-70 top-10 z-20">
+        <div className="flex items-center justify-center z-50 bg-white lg:-ml-16 rounded-2xl lg:rounded-l-4xl lg:rounded-r-2xl">
+          {/* <div className="absolute right-70 top-10 z-20">
             <FlyIcon />
-          </div>
+          </div> */}
+
           <div className="w-full p-8 md:p-10 rounded-3xl">
-            {/* Logo */}
             <div className="w-full flex justify-center mb-6">
               <Image src="/images/logo.png" width={50} height={50} alt="logo" />
             </div>
 
-            {/* Title */}
             <h2 className="text-center text-[22px] font-semibold mb-7">
               Login to your Account
             </h2>
 
-            {/* Form */}
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
                 Email Address
@@ -116,25 +128,23 @@ export default function LogInModal({
                   </button>
                 </div>
               </div>
+
               <div className="flex justify-end items-center cursor-pointer">
                 <p
                   onClick={() => {
                     onClose();
-                    reset(); 
-                    router.push("/forgot-password"); 
+                    reset();
+                    router.push("/forgot-password");
                   }}
-                  className="cursor-pointer text-[14px]"
+                  className="text-[14px]"
                 >
                   Forgot password?
                 </p>
               </div>
+
+            
               <button
                 type="submit"
-                onClick={() => {
-                  onClose();
-                  reset();
-                  router.push("/client-dashboard");
-                }}
                 className="w-full h-12 rounded-xl text-white font-medium bg-gradient-to-r from-[#FFAC47] to-[#FF2A24] cursor-pointer"
               >
                 Log In
@@ -158,7 +168,7 @@ export default function LogInModal({
                 onClick={openSignup}
                 className="text-[#FF2A24] font-medium cursor-pointer"
               >
-                Sign in
+                Sign up
               </button>
             </p>
           </div>
