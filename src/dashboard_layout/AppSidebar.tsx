@@ -69,19 +69,27 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const isActive = useCallback((path: string) => path === pathname, [pathname]);
+  const isActive = useCallback(
+    (path?: string) => {
+      if (!path) return false;
+      return pathname.startsWith(path);
+    },
+    [pathname],
+  );
 
-  useEffect(() => {
-    config.navItems.forEach((nav, index) => {
-      if (nav.subItems) {
-        nav.subItems.forEach((subItem) => {
-          if (isActive(subItem.path)) {
-            setOpenSubmenu(index);
-          }
-        });
-      }
-    });
-  }, [pathname, isActive, config.navItems]);
+ useEffect(() => {
+   config.navItems.forEach((nav, index) => {
+     // If parent has path and is active
+     if (nav.path && pathname.startsWith(nav.path)) {
+       setOpenSubmenu(null);
+     }
+
+     // If any subItem is active
+     if (nav.subItems?.some((sub) => pathname.startsWith(sub.path))) {
+       setOpenSubmenu(index);
+     }
+   });
+ }, [pathname, config.navItems]);
 
   useEffect(() => {
     if (openSubmenu !== null) {
@@ -113,7 +121,17 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
   return (
     <>
       <aside
-        className={`fixed top-0  left-0 flex flex-col h-screen transition-all duration-300 ease-in-out z-2000 bg-gray-50  ${sidebarWidth} ${sidebarClasses} shadow-xl`}
+        className={`
+    fixed top-0 left-0
+    flex flex-col
+    h-screen
+    bg-[#F4F6F8]
+    border-r border-gray-200
+    transition-all duration-300 ease-in-out
+    ${sidebarWidth}
+    ${sidebarClasses}
+    z-1000
+  `}
       >
         {/* Header Section */}
         <SidebarHeader
@@ -124,7 +142,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
         />
 
         {/* Navigation Menu */}
-        <div className="flex-1  no-scrollbar px-3 py-4">
+        <div className="flex-1 overflow-y-auto px-4 py-6">
           <nav className="space-y-1 relative">
             {config.navItems.map((nav, index) => (
               <div key={nav.name} className="relative">

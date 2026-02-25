@@ -300,3 +300,7 @@ background-clip: text;
 .icon-bg{
   background: linear-gradient(90deg, rgba(255, 172, 71, 0.14) 0%, rgba(255, 42, 36, 0.14) 100%);
 }
+
+.dashboard-bg{
+  background: rgba(255, 255, 255, 0.5);
+}

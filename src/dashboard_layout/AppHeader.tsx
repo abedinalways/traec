@@ -38,9 +38,9 @@ const AppHeader = ({ role }: AppHeaderProps) => {
   }, []);
 
   return (
-    <header className="fixed top-0 left-0 right-0 flex w-full bg-white dark:bg-[#0B151D] z-99 border-b border-gray-200 dark:border-[#26344B]">
+    <header className="font-[inter] fixed top-0 left-0 right-0 flex w-full bg-white dark:bg-[#0B151D] z-99 border-b border-gray-200 ">
       <div className="flex flex-col items-center justify-between grow lg:flex-row lg:px-3">
-        <div className="flex items-center justify-between w-full gap-2 px-3 py-3 border-b border-gray-200 dark:border-[#26344B] sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-4">
+        <div className="flex items-center justify-between w-full gap-2 px-3  border-b border-gray-200 dark:border-[#26344B] sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-4">
           {/* Mobile Toggle Button */}
           <button
             className="lg:hidden items-center justify-center w-10 h-10 text-gray-400 border-[#26344B] rounded-lg z-99999 "
@@ -80,7 +80,7 @@ const AppHeader = ({ role }: AppHeaderProps) => {
             )}
           </button>
           <Link href="/" className="lg:hidden">
-            <Image src="/logo.svg" alt="Logo" width={152} height={32} />
+            <Image src="/images/profile/img01.png" alt="Logo" width={152} height={32} />
           </Link>
 
           <button
@@ -117,7 +117,7 @@ const AppHeader = ({ role }: AppHeaderProps) => {
         <div
           className={`${
             isApplicationMenuOpen ? "flex" : "hidden"
-          } items-center justify-between w-full gap-4 px-5 py-4 lg:flex shadow-theme-md lg:justify-end lg:px-0 lg:shadow-none`}
+          } items-center justify-between w-full gap-4 px-5 py-2 lg:flex shadow-theme-md lg:justify-end lg:px-0 lg:shadow-none`}
         >
           <div className="flex items-center gap-2 2xsm:gap-3">
             {role === "user" && (
@@ -127,7 +127,7 @@ const AppHeader = ({ role }: AppHeaderProps) => {
                 }}
               />
             )}
-            <NotificationDropdown />
+            {/* <NotificationDropdown /> */}
           </div>
 
           <UserDropdown />
