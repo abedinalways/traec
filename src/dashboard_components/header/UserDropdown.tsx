@@ -20,17 +20,29 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
   return (
     <div className="relative">
       <button
-        onClick={toggleDropdown} 
-        className="flex items-center text-gray-700 dark:text-gray-400 dropdown-toggle"
+        onClick={toggleDropdown}
+        className="flex items-center text-gray-700 dark:text-gray-400 dropdown-toggle border border-[#e2ebfad5] rounded-[40px] px-4 py-2"
       >
-        <span className="mr-3 overflow-hidden rounded-full h-11 w-11">
-          
-          <Image src="/sidebar/profile_img.jpg" alt="User" width={44} height={44} className="rounded-full" />
+        <span className="mr-3 overflow-hidden rounded-full border-2 border-[#c1c1c1]">
+          <Image
+            src="/images/profile/img01.png"
+            alt="User"
+            width={36}
+            height={36}
+            className="rounded-full"
+          />
         </span>
 
-        <span className="block mr-1 font-medium text-theme-sm">Jannatul.Su</span>
+        <div className="flex flex-col gap-2 ">
+          <span className="block mr-1 font-medium text-theme-sm">
+            Gustavo Xaviar
+          </span>
+          <h3 className="bg-[#ffcd71] rounded-[24px]  text-black text-[8px] w-[37px] h-[14px] flex justify-center items-center">
+            Admin
+          </h3>
+        </div>
 
-        <svg
+        {/* <svg
           className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
           }`}
@@ -47,9 +59,9 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
             strokeLinecap="round"
             strokeLinejoin="round"
           />
-        </svg>
+        </svg> */}
       </button>
-
+{/* 
       <Dropdown
         isOpen={isOpen}
         onClose={closeDropdown}
@@ -162,7 +174,7 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
           </svg>
           Sign out
         </Link>
-      </Dropdown>
+      </Dropdown> */}
     </div>
   );
 }

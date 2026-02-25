@@ -18,8 +18,8 @@ export default function AdminDashboardShell({
   const mainContentMargin = isMobileOpen
     ? "ml-0"
     : isExpanded
-      ? "lg:ml-[312px]"
-      : "lg:ml-[122px]";
+      ? "lg:ml-[272px]"
+      : "lg:ml-[82px]";
 
   return (
     <div className="min-h-screen xl:flex overflow-x-hidden  dark:bg-[#0B151D]">
@@ -31,11 +31,10 @@ export default function AdminDashboardShell({
       >
         {/* Header */}
         <div className="">
-
-        <AppHeader />
+          <AppHeader />
         </div>
         {/* Page Content */}
-        <div className="">{children}</div>
+        <div className="dashboard-bg ">{children}</div>
       </div>
     </div>
   );

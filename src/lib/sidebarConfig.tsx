@@ -3,7 +3,7 @@
 import React from "react";
 import {
   UserIcon,
-  DashboardIcon,
+  
   MyMatchIcon,
   Live,
   SettingsIcon,
@@ -15,6 +15,7 @@ import {
   AnalyticsIcon,
 } from "../icons/index";
 import { Download, Wallet } from "lucide-react";
+import DashboardIcon from "@/icons/DashboardIcon";
 
 export type UserRole = "admin" | "user";
 
@@ -48,7 +49,7 @@ export const adminSidebarConfig: SidebarConfig = {
   subtitle: "Admin Console",
   navItems: [
     {
-      icon: <DashboardIcon />,
+      icon: <DashboardIcon/>,
       name: "Dashboard",
       path: "/admin/dashboard",
     },
