@@ -36,8 +36,8 @@ export function Banner({
   return (
     <div
       className={cn(
-        "relative w-full pb-20 p-2 md:px-4 flex flex-col items-center text-center  overflow-hidden",
-        className
+        "relative w-full pb-20 p-2 md:px-4 flex flex-col items-center text-center font-[inter] overflow-hidden",
+        className,
       )}
       style={
         backgroundImage
@@ -56,7 +56,7 @@ export function Banner({
           alt="left"
           width={500}
           height={715}
-          className="absolute left-0 opacity-90"
+          className="absolute left-0 opacity-90 hidden md:block"
         />
       )}
 
@@ -67,7 +67,7 @@ export function Banner({
           alt=""
           width={150}
           height={150}
-          className="absolute right-0 bottom-10 opacity-70"
+          className="absolute right-0 bottom-10 opacity-70 hidden md:block"
         />
       )}
 
@@ -76,14 +76,14 @@ export function Banner({
         alt=""
         width={50}
         height={50}
-        className="absolute  top-4 opacity-100"
+        className="absolute hidden md:block top-4 opacity-100"
       />
       <Image
         src="/images/banner/mola.png"
         alt=""
         width={50}
         height={50}
-        className="absolute  bottom-18 left-50 opacity-100"
+        className="absolute hidden md:block bottom-18 left-50 opacity-100"
       />
 
       <Image
@@ -91,7 +91,7 @@ export function Banner({
         alt=""
         width={50}
         height={50}
-        className="absolute  bottom-14 right-90 opacity-100"
+        className="absolute hidden md:block bottom-14 right-90 opacity-100"
       />
 
       <h1 className="md:text-5xl text-2xl pt-20 font-bold text-gray-900 font-[glory]">

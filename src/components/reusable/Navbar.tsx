@@ -110,14 +110,14 @@ export default function Navbar() {
         ) : (
           <div className="hidden md:flex items-center gap-6">
             <Button
-              onClick={() => setOpenLogin(true)}
+              // onClick={() => setOpenLogin(true)}
               className="bg-white text-black hover:bg-white text-sm font-medium cursor-pointer"
             >
               Sign In
             </Button>
 
             <Button
-              onClick={() => setOpenSignup(true)}
+              // onClick={() => setOpenSignup(true)}
               className="rounded-[12px] px-6 text-white font-medium gradient-bg cursor-pointer"
             >
               Join Now
@@ -126,7 +126,7 @@ export default function Navbar() {
         )}
 
         {/* Mobile Menu */}
-        <div className="md:hidden font-[inter]">
+        <div className="md:hidden font-[inter]!">
           <Sheet>
             <SheetTrigger>
               <Menu className="h-6 w-6" />
@@ -134,10 +134,10 @@ export default function Navbar() {
 
             <SheetContent side="right" className="w-[260px]">
               <SheetHeader>
-                <SheetTitle>Evoke</SheetTitle>
+                <SheetTitle className="font-[inter]">Evoke</SheetTitle>
               </SheetHeader>
 
-              <div className="mt-6 flex flex-col space-y-5 text-base font-medium px-4">
+              <div className="mt-6 flex flex-col space-y-5 text-base font-medium px-4 font-[inter]">
                 <SheetClose asChild>
                   <Link href="/" className={isActive("/")}>
                     Home

@@ -14,7 +14,7 @@ export default function BecomeProviderPage() {
       <div className="bg-[#FFF5E8] py-20 font-[inter]">
         <h2 className="text-4xl lg:text-5xl font-bold text-center font-[glory]">
           How Evoke{" "}
-          <span className="text-gradient italic font-[glory] px-1">Works</span>
+          <span className="text-gradient font-[brittney]">Works</span>
         </h2>
         <p className=" mt-4 max-w-lg mx-auto text-center font-[inter] ">
           Join InFlatables and connect with thousands of customers looking for

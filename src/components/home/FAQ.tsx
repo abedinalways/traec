@@ -4,12 +4,12 @@ import Subscribe from "./Subscribe";
 
 const FAQ = () => {
   return (
-    <div className="bg-gradient-to-b from-[#FDF4F4] to-[#FCEFEF] py-10">
+    <div className="bg-gradient-to-b from-[#FDF4F4] to-[#FCEFEF] py-10 ">
       <h2 className="text-4xl md:text-[48px] text-center font-bold text-gray-900 leading-tight font-[glory]">
         Frequently Asked{" "}
         <span className="text-gradient font-[brittney]">Questions</span>
       </h2>
-      <p className="text-gray-600 text-center text-sm md:text-md max-w-2xl mx-auto  py-5">
+      <p className="text-gray-600 text-center text-sm md:text-md max-w-2xl mx-auto font-[inter] py-5">
         Hear from satisfied customers and successful service providers.
       </p>
       <div className=" flex flex-col gap-4 px-2 md:px-4 mx-auto max-w-3xl pt-10">
