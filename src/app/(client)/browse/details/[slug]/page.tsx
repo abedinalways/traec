@@ -338,9 +338,11 @@ function PackageCard({
         ))}
       </ul>
 
-      <button className="w-full btn-gradient cursor-pointer text-white py-3 rounded-lg font-medium mb-3 transition">
-        Book Now
-      </button>
+      <Link href="/book/1">
+        <button className="w-full btn-gradient cursor-pointer text-white py-3 rounded-lg font-medium mb-3 transition">
+          Book Now
+        </button>
+      </Link>
 
       <button className="w-full border py-3 rounded-lg text-gray-700 font-medium cursor-pointer">
         Send Message

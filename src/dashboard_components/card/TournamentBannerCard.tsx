@@ -1,6 +1,6 @@
 "use client";
 
-import { VictoryIcon } from "@/src/icons";
+
 
 export default function TournamentBannerCard() {
     return (
@@ -30,7 +30,7 @@ export default function TournamentBannerCard() {
 
             {/* Background Icon */}
             <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2  ">
-                <VictoryIcon />
+               
             </div>
         </section>
     );

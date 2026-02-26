@@ -10,9 +10,10 @@ import GamePreferenceChart from "./components/GamePreferenceChart";
 import { RevenueDataService } from "./services/revenueDataService";
 import { TransactionsDataService } from "./services/transactionsDataService";
 import { TimePeriod } from "./types/revenue.types";
-import { ShooterIcon, RacingIcon } from "@/src/icons";
+// import { ShooterIcon, RacingIcon } from "@/src/icons";
 import { Wallet } from "lucide-react";
 import StatsCard from "../card/StatsCard";
+import { RacingIcon, ShooterIcon } from "@/icons";
 
 const AnalyticsContainer = () => {
     const [revenuePeriod, setRevenuePeriod] = useState<TimePeriod>("Monthly");
@@ -62,13 +63,13 @@ const AnalyticsContainer = () => {
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 rounded-xl  p-4 sm:p-6">
                     <RevenueStatsCard
-                        icon={<ShooterIcon className="w-6 h-6 text-blue-400" />}
+                        icon={<ShooterIcon/>}
                         label="SHOOTER"
                         value={RevenueDataService.formatCurrency(revenueStats.shooter.value)}
                         change={`${revenueStats.shooter.change} ↑`}
                     />
                     <RevenueStatsCard
-                        icon={<RacingIcon className="w-6 h-6 text-orange-400" />}
+                        icon={<RacingIcon/>}
                         label="RACING"
                         value={RevenueDataService.formatCurrency(revenueStats.racing.value)}
                         change={`${revenueStats.racing.change} ↑`}

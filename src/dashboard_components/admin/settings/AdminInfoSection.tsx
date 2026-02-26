@@ -1,5 +1,5 @@
 import React from "react";
-import EditSquareIcon from "@/src/icons/EditSquareIcon";
+
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 
@@ -28,7 +28,7 @@ const AdminInfoSection: React.FC<AdminInfoSectionProps> = ({ settings, setSettin
                     Admin Information
                 </h3>
                 <Button type="button" className="flex space-x-2 bg-[#3641534D] text-[#5952FF]">
-                    <span className="text-[#5952FF]"><EditSquareIcon /></span>
+                    <span className="text-[#5952FF]"></span>
                     Edit
                 </Button>
             </div>

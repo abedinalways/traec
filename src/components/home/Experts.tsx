@@ -6,8 +6,8 @@ export default function Experts() {
       {/* Header */}
       <div className="text-center mb-12">
         <h2 className="text-4xl md:text-[48px] font-bold text-gray-900 mb-4 font-[glory]">
-          Expert Service{' '}
-          <span className="text-transparent bg-clip-text bg-red-500 italic font-[glory] font-semibold">
+          Expert Service{" "}
+          <span className="text-transparent text-gradient font-[brittney]">
             Providers
           </span>
         </h2>

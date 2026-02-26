@@ -3,7 +3,7 @@
 
 import Label from "../../switch/Label";
 import Select from "../../switch/Select";
-import { ChevronDownIcon } from "@/src/icons";
+import { ChevronDownIcon } from "../../../../icons";
 
 export type SelectOption = {
   value: string;

@@ -8,6 +8,7 @@ import {
   Inter,
   
   Open_Sans,
+  Playfair_Display,
   
 } from "next/font/google";
 import "../styles/globals.css";
@@ -49,12 +50,23 @@ const geistSans = Geist({
 const brittney = localFont({
   src: [
     {
-      path: "../../public/fonts/Britney.ttf",
-      weight: "400",
+      path: "../../public/fonts/Britney-Bold.otf",
+      weight: "600",
       style: "normal",
     },
   ],
   variable: "--font-brittney",
+  display: "swap",
+});
+const brittney_regular = localFont({
+  src: [
+    {
+      path: "../../public/fonts/Britney-Regular.otf",
+      weight: "400",
+      style: "normal",
+    },
+  ],
+  variable: "--font-brittney_regular",
   display: "swap",
 });
 
@@ -78,10 +90,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${glory.variable} ${openSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}
+        className={`${geistSans.variable} ${glory.variable} ${openSans.variable} ${geistMono.variable} ${inter.variable} ${brittney.variable} ${brittney_regular.variable} antialiased`}
       >
         <main className="mt-16">
-         
           <AuthModalProvider> {children}</AuthModalProvider>
         </main>
       </body>

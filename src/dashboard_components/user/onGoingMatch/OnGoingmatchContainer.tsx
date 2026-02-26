@@ -1,5 +1,5 @@
 "use client"
-import { RefreshIcon1 } from "@/src/icons";
+import { RefreshIcon1 } from "../../../icons";
 import PageBreadcrumb from "../../common/PageBreadCrumb";
 import { Button } from "../../ui/button";
 import RankedDuelArenaCard from "./RankedDuelArenaCard";

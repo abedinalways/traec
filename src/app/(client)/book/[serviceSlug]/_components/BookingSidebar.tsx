@@ -87,7 +87,7 @@ const BookingSidebar = ({ step: currentStep }: { step: number }) => {
                   {item.title}
                 </h2>
                 <p
-                  className={`font-inter font-normal text-sm leading-6 tracking-[0.01em] ${descColor}`}
+                  className={`font-inter font-normal text-base leading-6 tracking-[0.01em] ${descColor}`}
                 >
                   {item.desc}
                 </p>

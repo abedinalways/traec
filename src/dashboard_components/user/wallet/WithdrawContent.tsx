@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CoinIcon } from "@/src/icons";
+import { CoinIcon } from "../../../icons";
 import { AlertCircle } from "lucide-react";
 
 export default function WithdrawContent() {

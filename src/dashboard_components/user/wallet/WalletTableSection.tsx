@@ -1,10 +1,10 @@
 
 "use client"
-import { RefreshIcon } from "@/src/icons";
+import { RefreshIcon } from "../../../icons";
 import { Button } from "../../ui/button";
 import SelectField, { SelectOption } from "../../ui/input/searchInput/SelectField";
 import { useState } from "react";
-import CompitiveRoomTable from "../../tables/CompitiveRoomTable";
+
 import WalletHistoryTable from "../../tables/WalletHistoryTable";
 
 export default function WalletTableSection() {
@@ -63,7 +63,7 @@ export default function WalletTableSection() {
 
             {/* Table */}
             <div className="w-full overflow-x-auto rounded-xl border border-[#26344B] bg-[#0B111B]">
-                <WalletHistoryTable/>
+                {/* <WalletHistoryTable/> */}
             </div>
 
         </section>

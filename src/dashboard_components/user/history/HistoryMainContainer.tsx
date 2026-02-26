@@ -1,7 +1,7 @@
 "use client"
 import HistoryCard from "../../card/HistoryCard";
 import PageBreadcrumb from "../../common/PageBreadCrumb";
-import { CupIocn, IPodIcon, NetIcon } from "@/src/icons";
+import { CupIocn, IPodIcon, NetIcon } from "../../../icons";
 import HistoryContainerTableSection from "./HistoryContainerTableSection";
 import { Button } from "../../ui/button";
 import { Download } from "lucide-react";

@@ -33,7 +33,12 @@ export default function Navbar() {
     email: "cameron@example.com",
   };
 
-  const user = pathname.startsWith("/client-dashboard") || (pathname.startsWith("/client-profile")) ? demoUser : null;
+  const user =
+    pathname.startsWith("/client-dashboard") ||
+    pathname.startsWith("/client-profile") ||
+    pathname.startsWith("/book")
+      ? demoUser
+      : null;
  
 
   const isActive = (path: string) => {

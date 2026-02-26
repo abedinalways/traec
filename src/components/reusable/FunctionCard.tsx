@@ -26,28 +26,28 @@ const cards: CardItem[] = [
     title: "Browse Evoke",
     icon: "Search",
     description:
-      "Review provider profiles, check availability, and compare prices. View photos and read customer reviews.",
+      "Explore thousands of event service providers in your area. From catering and DJs to decorators and venues, discover everything you need in one place.",
   },
   {
     step: "02.",
     title: "Compare & Choose",
     icon: "Users",
     description:
-      "Review provider profiles, check availability, and compare prices. View photos and read customer reviews.",
+      "Review provider profiles, check availability, compare prices, view photos, and read real customer reviews to find the perfect match for your event.",
   },
   {
     step: "03.",
     title: "Book & Schedule",
     icon: "Calendar",
     description:
-      "Secure your rental with easy online booking. Schedule delivery, setup, and pickup times that work for you.",
+      "Secure your service with easy online booking. Choose your preferred date, time, delivery, setup, and pickup details.",
   },
   {
     step: "04.",
     title: "Party & Review",
     icon: "Star",
     description:
-      "Enjoy your stress-free event while we handle the setup and takedown. Your guests will have a blast!",
+      "Enjoy your event while your vendors handle the details. After the event, leave a review to help others plan their perfect celebration.",
   },
 ];
 

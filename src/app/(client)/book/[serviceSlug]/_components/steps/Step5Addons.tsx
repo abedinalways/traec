@@ -3,9 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormItem, FormMessage } from "@/components/ui/form";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import LeftArrow from "@/components/icons/LeftArrow";
+import RightArrow from "@/components/icons/RightArrow";
 
 type AddonItem = {
   id: number;
@@ -53,17 +54,15 @@ const AVAILABLE_ADDONS: AddonItem[] = [
 ];
 
 export default function Step5Addons({ data, onNext, onPrevious }: Step5Props) {
-  // Form instance just for structure (like other steps)
   const form = useForm();
 
-  // Local state for addons (no RHF involvement here)
   const [selectedAddons, setSelectedAddons] = useState<number[]>(
-    data.addons || []
+    data.addons || [],
   );
 
   const toggleAddon = (id: number) => {
     setSelectedAddons((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
     );
   };
 
@@ -116,10 +115,11 @@ export default function Step5Addons({ data, onNext, onPrevious }: Step5Props) {
                     onClick={() => toggleAddon(addon.id)}
                   >
                     <div className="flex items-start gap-3">
-                      {/* CHECKBOX is purely visual — no own onChange, no state updates from inside */}
                       <Checkbox
                         checked={isSelected}
-                        className="mt-1 pointer-events-none"
+                        onCheckedChange={() => toggleAddon(addon.id)}
+                        className="mt-1"
+                        onClick={(e) => e.stopPropagation()} // prevents double toggle
                       />
 
                       <div>
@@ -143,33 +143,23 @@ export default function Step5Addons({ data, onNext, onPrevious }: Step5Props) {
             })}
           </div>
 
-          {/* Total Price */}
-          {/* <div className="mt-5 flex justify-between items-center border border-[#dfe1e7] rounded-lg p-5">
-            <span className="font-inter font-medium text-base text-black">
-              Total Price
-            </span>
-            <span className="font-inter font-semibold text-xl text-black">
-              ${totalPrice}
-            </span>
-          </div> */}
-
           {/* Buttons */}
           <div className="flex items-center justify-between">
             <Button
               type="button"
               onClick={onPrevious}
-              className="capitalize font-inter text-base text-black bg-[#f6f8fa] hover:bg-[#f6f8fa] p-6"
+              className="capitalize font-inter text-base text-black bg-[#f6f8fa] hover:bg-[#f6f8fa] p-6 cursor-pointer"
             >
-              <ChevronLeft />
+              <LeftArrow />
               previous
             </Button>
 
             <Button
               type="submit"
-              className="capitalize font-inter text-base text-white p-6"
+              className="capitalize font-inter text-base text-white p-6 w-[100px] h-[48px] cursor-pointer"
             >
               next
-              <ChevronRight />
+              <RightArrow />
             </Button>
           </div>
         </form>

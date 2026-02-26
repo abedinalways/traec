@@ -47,7 +47,9 @@ function Wrapper({
         <div className="flex flex-col gap-1 mb-4">
           <h3 className="font-inter text-2xl font-medium">Book Your Service</h3>
 
-          <p className="font-inter text-base text-[#dfe1e7]">{serviceName}</p>
+          <p className="font-inter text-base text-[#4a4c56] leading-[160%]">
+            Princess Castle Bounce House by Party Pro Rentals
+          </p>
         </div>
         <div className="flex flex-col lg:flex-row gap-5 ">
           <div className="w-full lg:w-[30%]">

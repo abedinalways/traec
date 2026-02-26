@@ -14,6 +14,10 @@ import { CalendarDays, ChevronLeft, ChevronRight, Clock4 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import clsx from "clsx";
 import { useRef } from "react";
+import LeftArrow from "@/components/icons/LeftArrow";
+import RightArrow from "@/components/icons/RightArrow";
+import ClockIcon from "@/components/icons/ClockIcon";
+import DateIcon from "@/components/icons/DateIcon";
 
 type Step3Data = {
   eventStartDate: string;
@@ -75,14 +79,14 @@ export default function Step3DateTime({
                       field.ref(el);
                       startDateRef.current = el;
                     }}
-                    className={clsx(inputStyle, "pl-4 py-6")}
+                    className={clsx(inputStyle, "pl-4 py-6 rounded-[12px]")}
                   />
 
                   <span
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9ca3af] cursor-pointer"
                     onClick={() => startDateRef.current?.showPicker()}
                   >
-                    <CalendarDays size={20} />
+                    <DateIcon/>
                   </span>
                 </div>
 
@@ -110,14 +114,14 @@ export default function Step3DateTime({
                       field.ref(el);
                       endDateRef.current = el;
                     }}
-                    className={clsx(inputStyle, "pl-4 py-6")}
+                    className={clsx(inputStyle, "pl-4 py-6 rounded-[12px]")}
                   />
 
                   <span
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9ca3af] cursor-pointer"
                     onClick={() => endDateRef.current?.showPicker()}
                   >
-                    <CalendarDays size={20} />
+                    <DateIcon/>
                   </span>
                 </div>
 
@@ -145,14 +149,14 @@ export default function Step3DateTime({
                       field.ref(el);
                       startTimeRef.current = el;
                     }}
-                    className="pl-4 py-6 text-black w-full placeholder:text-[#9ca3af]"
+                    className="pl-4 py-6 text-black w-full placeholder:text-[#9ca3af] rounded-[12px]"
                   />
 
                   <span
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9ca3af] cursor-pointer"
                     onClick={() => startTimeRef.current?.showPicker()}
                   >
-                    <Clock4 />
+                    <ClockIcon/>
                   </span>
                 </div>
 
@@ -181,14 +185,14 @@ export default function Step3DateTime({
                         field.ref(el);
                         endTimeRef.current = el;
                       }}
-                      className="pl-4 py-6 text-black w-full placeholder:text-[#9ca3af]"
+                      className="pl-4 py-6 text-black w-full placeholder:text-[#9ca3af] rounded-[12px]"
                     />
 
                     <span
                       className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9ca3af] cursor-pointer"
                       onClick={() => endTimeRef.current?.showPicker()}
                     >
-                      <Clock4 />
+                      <ClockIcon/>
                     </span>
                   </div>
                 </FormControl>
@@ -204,18 +208,18 @@ export default function Step3DateTime({
           <Button
             type="button"
             onClick={onPrevious}
-            className="capitalize font-inter text-base text-black bg-[#f6f8fa] hover:bg-[#f6f8fa] p-6"
+            className="capitalize font-inter text-base text-black bg-[#f6f8fa] hover:bg-[#f6f8fa] p-6 cursor-pointer"
           >
-            <ChevronLeft />
+            <LeftArrow/>
             previous
           </Button>
 
           <Button
             type="submit"
-            className="capitalize font-inter text-base text-white p-6"
+            className="capitalize font-inter text-base text-white p-6 cursor-pointer w-[100px] h-[48px] rounded-[12px]"
           >
             next
-            <ChevronRight />
+            <RightArrow/>
           </Button>
         </div>
       </form>

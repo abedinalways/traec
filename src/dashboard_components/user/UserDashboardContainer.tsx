@@ -12,7 +12,7 @@ import LiveRoomPreviewCard from "./LiveRoomPreviewCard";
 import RecentPlayedGames from "./RecentPlayedGames";
 import RecentWalletActivityEmpty from "./RecentWalletActivityEmpty";
 import LiveRoomDataCard from "../card/LiveRoomDataCard";
-import CurrentStreakCard from "../card/CurrentStreakCard";
+
 import { useRouter } from "next/navigation";
 
 const UserDashboardContainer = () => {
@@ -74,9 +74,9 @@ const UserDashboardContainer = () => {
 
                         <TopWinnersCard />
                         <GameDistributionCard />
-                        <CurrentStreakCard
+                        {/* <CurrentStreakCard
                             history={["loss", "loss", "win", "win", "win", "win", "win", "loss", "win", "loss", "win", "win", "win", "loss", "loss", "loss", "loss"]}
-                        />
+                        /> */}
 
                     </div>
 

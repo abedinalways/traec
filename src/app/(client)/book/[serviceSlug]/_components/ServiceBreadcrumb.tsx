@@ -1,3 +1,4 @@
+import LeftArrow from "@/components/icons/LeftArrow";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -23,8 +24,8 @@ const ServiceBreadcrumb = ({ step }: ServiceBreadcrumbProps) => {
       {showBackButton && (
         <Link href={`/browse/details/1`}>
           {" "}
-          <Button className="capitalize font-inter font-normal text-base leading-6 tracking-[0.01em] text-[#4a4c56] bg-transparent py-1.5 px-3.5 border border-[#dfe1e7] rounded-[12px] hover:bg-white cursor-pointer">
-            <ChevronLeft />
+          <Button className="capitalize font-inter font-normal text-base leading-6 tracking-[0.01em] text-[#4a4c56] bg-transparent py-1.5 px-3.5 border border-[#dfe1e7] rounded-[12px] hover:bg-white cursor-pointer text-[16px]">
+            <LeftArrow/>
             back to service
           </Button>
         </Link>

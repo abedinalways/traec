@@ -5,7 +5,7 @@ import StatsCard from "../card/StatsCard";
 import PageBreadcrumb from "../common/PageBreadCrumb";
 import SearchInput from "../ui/input/searchInput/SearchInput";
 import SelectField, { SelectOption } from "../ui/input/searchInput/SelectField";
-import { RefreshIcon } from "@/src/icons";
+
 import { Button } from "../ui/button";
 import FinancialTable from "../tables/FinancialTable";
 
@@ -79,7 +79,7 @@ const FinancialContainer = () => {
                             size="icon"
                             className="rounded-xl h-11 px-3 py-2 bg-[#1A1D2D] border border-gray-600/30 hover:bg-[#1A1D2D]/80 hover:border-gray-500/40 transition-colors"
                         >
-                            <RefreshIcon className="text-gray-400" />
+                           
                         </Button>
                     </div>
                 </div>

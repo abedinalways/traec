@@ -58,32 +58,52 @@ export default function FiltersSidebar() {
   ];
 
   const categoryData = {
-    Catering: [
-      "Full-service catering",
-      "Private chefs",
+    "Catering & Food Services": [
+      "Private Chefs",
       "Food Trucks",
-      "Dessert Tables",
+      "Bartending Services",
+      "Dessert Tables / Specialty Treats",
     ],
-    "DJ Services": ["Wedding DJs", "Corporate DJs", "Private Party DJs"],
-    Decorators: [
-      "Wedding Decor",
-      "Corporate Decor",
-      "Floral Arrangements",
-      "Lighting Design",
+
+    "Decor & Event Design": [
+      "Event Decorators",
+      "Floral Designers",
+      "Balloon Designers",
+      "Luxury Event Styling",
+      "Solo Musicians",
+      "Backdrop & Prop Rentals",
     ],
+
+    Entertainment: [
+      "DJs",
+      "Live Bands",
+      "MCs / Hosts",
+      "Cultural Performers",
+      "Children’s Entertainment",
+    ],
+
+    "Photography & Videography": [
+      "Wedding Photographers",
+      "Videographers",
+      "Drone Videography",
+      "Photo Booth Rentals",
+    ],
+
     Rentals: [
-      "Furniture Rentals",
       "Tent Rentals",
-      "Tableware",
-      "Audio Equipment",
+      "Chair & Table Rentals",
+      "Luxury Furniture Rentals",
+      "Stage & Sound Equipment",
+      "Inflatables / Bounce Houses",
     ],
-    Photography: [
-      "Wedding Photography",
-      "Event Photography",
-      "Videography",
-      "Drone Coverage",
+
+    Venues: [
+      "Banquet Halls",
+      "Outdoor / Beach Venues",
+      "Hotels with Event Space",
+      "Conference Centers",
+      "Private Estates",
     ],
-    Entertainment: ["Live Bands", "Magicians", "Comedians", "Dancers"],
   };
 
   return (

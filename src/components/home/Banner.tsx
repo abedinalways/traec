@@ -17,13 +17,11 @@ const Banner = () => {
             <div className="space-y-4">
               <h1 className="text-3xl sm:text-4xl  lg:text-[64px] font-bold text-gray-900 leading-tight font-[glory]">
                 Elevate Your Event with Premium{" "}
-                <span className="px-2 text-gradient font-semibold italic ">
+                <span className="text-3xl sm:text-4xl  lg:text-[64px] font-[brittney] font-semibold text-[#F2652F]  ">
                   Evoke
                 </span>
               </h1>
-              <h1 style={{ fontFamily: "Britney-Bold" }}>
-                Welcome to the Event
-              </h1>
+             
 
               <p className="text-gray-600 text-sm sm:text-base leading-relaxed max-w-xl font-[inter]">
                 Discover everything you need to plan the perfect event from DJs,

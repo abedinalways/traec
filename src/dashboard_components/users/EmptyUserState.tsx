@@ -1,4 +1,4 @@
-import { EmptyUserStateIcon } from "@/src/icons";
+import { EmptyUserStateIcon } from "../../icons";
 
 export default function EmptyUserState() {
     return (

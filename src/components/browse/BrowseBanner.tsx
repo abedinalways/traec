@@ -10,12 +10,14 @@ const BrowseBanner = () => {
       decorationRight="/right-decoration.png"
       backgroundImage="/images/banner.png"
       buttons={[
-        { label: "Catering" },
-        { label: "DJ Services" },
-        { label: "Decorators" },
-        { label: "Rentals" },
-        { label: "Photography" },
-        { label: "Entertainment" },
+        
+          { label: "Catering & Food Services" },
+          { label: "Decor & Event Design" },
+          { label: "Entertainment" },
+          { label: "Photography & Videography" },
+          { label: "Rentals" },
+          { label: "Venues" },
+        
       ]}
     />
   );

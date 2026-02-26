@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { settingsNav } from "@/src/lib/settingsNav";
+import { settingsNav } from "@/lib/settingsNav";
+
 
 export default function SettingsSidebar() {
     const pathname = usePathname();

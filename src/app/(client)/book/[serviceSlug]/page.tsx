@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useParams } from "next/navigation";
 
 import Step6Review from "./_components/steps/Step6Review";
 import Step5Addons from "./_components/steps/Step5Addons";
@@ -13,14 +13,11 @@ import Step1Location from "./_components/steps/Step1Location";
 import { BookingData } from "@/types/global";
 import { useBooking } from "../context/BookingContext";
 
-interface BookingPageProps {
-  step: number;
-  setStep: (n: number) => void;
-  serviceSlug: string;
-}
-
-export default function BookingPage({ serviceSlug }: BookingPageProps) {
+export default function BookingPage() {
   const { step, setStep } = useBooking();
+
+  const params = useParams();
+  const serviceSlug = params?.serviceSlug as string;
 
   const searchParams = useSearchParams();
   const plan = searchParams.get("plan") || "basic";
@@ -70,7 +67,7 @@ export default function BookingPage({ serviceSlug }: BookingPageProps) {
 
   const handleNext = <K extends keyof BookingData>(
     stepKey: K,
-    data: Partial<BookingData[K]>
+    data: Partial<BookingData[K]>,
   ) => {
     setBookingData((prev) => ({
       ...prev,
@@ -137,17 +134,15 @@ export default function BookingPage({ serviceSlug }: BookingPageProps) {
             onPrevious={handlePrevious}
           />
         );
-
       default:
         return null;
     }
   };
 
   return (
-    <div className="border border-[#dfe1e7] rounded-xl p-5 space-y-6">
-      {/* Dynamic Step Title */}
+    <div className="border border-[#dfe1e7] rounded-xl p-5 space-y-6 font-[inter]">
       <div className="flex flex-col gap-2 border-b border-b-[#dfe1e7] pb-4">
-        <h1 className="capitalize font-inter font-medium text-2xl leading-5 tracking-[0.01em] text-black">
+        <h1 className="capitalize font-inter font-medium text-2xl tracking-[0.01em] text-black">
           Step {step} :{step === 1 && " Location & Contact"}
           {step === 2 && " Event Details"}
           {step === 3 && " Date & Time"}
@@ -166,7 +161,6 @@ export default function BookingPage({ serviceSlug }: BookingPageProps) {
         </p>
       </div>
 
-      {/* Step Component */}
       {renderStep()}
     </div>
   );
