@@ -126,7 +126,7 @@ export default function Navbar() {
         )}
 
         {/* Mobile Menu */}
-        <div className="md:hidden font-[inter]">
+        <div className="md:hidden font-[inter]!">
           <Sheet>
             <SheetTrigger>
               <Menu className="h-6 w-6" />
@@ -134,10 +134,10 @@ export default function Navbar() {
 
             <SheetContent side="right" className="w-[260px]">
               <SheetHeader>
-                <SheetTitle>Evoke</SheetTitle>
+                <SheetTitle className="font-[inter]">Evoke</SheetTitle>
               </SheetHeader>
 
-              <div className="mt-6 flex flex-col space-y-5 text-base font-medium px-4">
+              <div className="mt-6 flex flex-col space-y-5 text-base font-medium px-4 font-[inter]">
                 <SheetClose asChild>
                   <Link href="/" className={isActive("/")}>
                     Home
