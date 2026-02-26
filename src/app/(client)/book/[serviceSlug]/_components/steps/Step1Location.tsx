@@ -63,7 +63,7 @@ const Step1Location = ({ data, onNext }: Step1Props) => {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      className="placeholder:capitalize text-black font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 pl-4 py-6"
+                      className="placeholder:capitalize text-black font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 pl-4 py-6 rounded-[12px]"
                       placeholder="enter your street address"
                       {...field}
                     />
@@ -86,7 +86,7 @@ const Step1Location = ({ data, onNext }: Step1Props) => {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        className="placeholder:capitalize text-black font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 pl-4 py-6"
+                        className="placeholder:capitalize text-black font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 pl-4 py-6 rounded-[12px]"
                         placeholder="enter your city"
                         {...field}
                       />
@@ -107,7 +107,7 @@ const Step1Location = ({ data, onNext }: Step1Props) => {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        className="placeholder:capitalize text-black font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 pl-4 py-6"
+                        className="placeholder:capitalize text-black font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 pl-4 py-6 rounded-[12px]"
                         placeholder="enter your state"
                         {...field}
                       />
@@ -128,7 +128,7 @@ const Step1Location = ({ data, onNext }: Step1Props) => {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        className="placeholder:capitalize text-black font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 pl-4 py-6"
+                        className="placeholder:capitalize text-black font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 pl-4 py-6 rounded-[12px]"
                         placeholder="enter your zip code"
                         {...field}
                       />
@@ -150,7 +150,7 @@ const Step1Location = ({ data, onNext }: Step1Props) => {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      className="placeholder:capitalize text-black font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 pl-4 py-6"
+                      className="placeholder:capitalize text-black font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 pl-4 py-6 rounded-[12px]"
                       placeholder="enter your first name"
                       {...field}
                     />
@@ -171,7 +171,7 @@ const Step1Location = ({ data, onNext }: Step1Props) => {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      className="placeholder:capitalize text-black font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 pl-4 py-6"
+                      className="placeholder:capitalize text-black font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 pl-4 py-6 rounded-[12px]"
                       placeholder="enter your last name"
                       {...field}
                     />
@@ -192,7 +192,7 @@ const Step1Location = ({ data, onNext }: Step1Props) => {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      className="placeholder:capitalize text-black font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 pl-4 py-6"
+                      className="placeholder:capitalize text-black font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 pl-4 py-6 rounded-[12px]"
                       placeholder="enter your email"
                       {...field}
                     />
@@ -213,7 +213,7 @@ const Step1Location = ({ data, onNext }: Step1Props) => {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      className="placeholder:capitalize text-black font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 pl-4 py-6"
+                      className="placeholder:capitalize text-black font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 pl-4 py-6 rounded-[12px]"
                       placeholder="enter your phone number"
                       {...field}
                     />
@@ -228,7 +228,7 @@ const Step1Location = ({ data, onNext }: Step1Props) => {
           <div className="flex items-center justify-end">
             <Button
               type="submit"
-              className="capitalize font-inter font-normal text-base leading-6 tracking-[0.01em] text-white p-6 cursor-pointer"
+              className="capitalize font-inter font-normal w-[100px] h-[48px] rounded-[12px] text-base leading-6 tracking-[0.01em] text-white p-6 cursor-pointer"
             >
               next
               <ChevronRight />

@@ -11,7 +11,7 @@ interface LocationCards{
 
 export default function LocationCards({ locations, locationChange }:LocationCards) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 py-10">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 py-10 font-[inter]">
       {locations.map((location, index) => (
         <Card
           key={index}

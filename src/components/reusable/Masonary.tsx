@@ -300,7 +300,7 @@ const Masonry: React.FC<MasonryProps> = ({
   return (
     <div
       ref={containerRef}
-      className="relative w-full"
+      className="relative w-full font-[inter]"
       style={{ height: totalHeight }} //  FIX APPLIED HERE
     >
       {grid.map((item) => (

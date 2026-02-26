@@ -2,8 +2,7 @@
 import { useState } from "react";
 import SelectField, { SelectOption } from "../../ui/input/searchInput/SelectField";
 import { Button } from "../../ui/button";
-import { RefreshIcon } from "@/src/icons";
-import CompitiveRoomTable from "../../tables/CompitiveRoomTable";
+
 import SearchInput from "../../ui/input/searchInput/SearchInput";
 import MatchHistoryTable from "../../tables/MatchHistoryTable";
 
@@ -67,7 +66,7 @@ export default function HistoryContainerTableSection() {
                         size="icon"
                         className="h-11 w-11 rounded-xl bg-[#1A1D2D] border border-gray-600/30 hover:bg-[#1A1D2D]/80 hover:border-gray-500/40 transition"
                     >
-                        <RefreshIcon className="h-4 w-4 text-gray-400" />
+                        
                     </Button>
                 </div>
             </div>

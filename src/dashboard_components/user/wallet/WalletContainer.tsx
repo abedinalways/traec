@@ -1,6 +1,6 @@
 
 "use client"
-import { NetIcon } from "@/src/icons";
+import { NetIcon } from "../../../icons";
 import HistoryCard from "../../card/HistoryCard";
 import PageBreadcrumb from "../../common/PageBreadCrumb";
 import { Button } from "../../ui/button";

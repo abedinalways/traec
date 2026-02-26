@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { EnterIcon, JoinGameIcon } from "@/src/icons";
+import { EnterIcon, JoinGameIcon } from "../../../icons";
 import PlayersEntryInfo from "../../card/PlayersEntryInfo";
 
 type RankedDuelArenaCardProps = {

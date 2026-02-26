@@ -1,5 +1,7 @@
 "use client";
 
+import LeftArrow from "@/components/icons/LeftArrow";
+import RightArrow from "@/components/icons/RightArrow";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -54,7 +56,10 @@ const Step2EventDetails = ({ data, onNext, onPrevious }: Step2Props) => {
   return (
     <div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-9">
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="space-y-9 font-[inter]"
+        >
           <div className="grid grid-cols-2 gap-5">
             {/* Event Type */}
             <FormField
@@ -75,24 +80,42 @@ const Step2EventDetails = ({ data, onNext, onPrevious }: Step2Props) => {
                         <SelectValue placeholder="Select event type" />
                       </SelectTrigger>
 
-                      <SelectContent className="text-black capitalize">
+                      <SelectContent className="text-black capitalize font-[inter] ">
                         <SelectGroup>
-                          <SelectItem value="dj-party" className="p-4">
+                          <SelectItem
+                            value="dj-party"
+                            className="p-4 cursor-pointer"
+                          >
                             DJ Party
                           </SelectItem>
-                          <SelectItem value="birthday" className="p-4">
+                          <SelectItem
+                            value="birthday"
+                            className="p-4 cursor-pointer"
+                          >
                             Birthday Event
                           </SelectItem>
-                          <SelectItem value="wedding" className="p-4">
+                          <SelectItem
+                            value="wedding"
+                            className="p-4 cursor-pointer"
+                          >
                             Wedding DJ
                           </SelectItem>
-                          <SelectItem value="corporate" className="p-4">
+                          <SelectItem
+                            value="corporate"
+                            className="p-4 cursor-pointer"
+                          >
                             Corporate Event
                           </SelectItem>
-                          <SelectItem value="school-event" className="p-4">
+                          <SelectItem
+                            value="school-event"
+                            className="p-4 cursor-pointer"
+                          >
                             School Event / Prom
                           </SelectItem>
-                          <SelectItem value="festival" className="p-4">
+                          <SelectItem
+                            value="festival"
+                            className="p-4 cursor-pointer"
+                          >
                             Festival / Outdoor Event
                           </SelectItem>
                         </SelectGroup>
@@ -117,7 +140,7 @@ const Step2EventDetails = ({ data, onNext, onPrevious }: Step2Props) => {
                   <FormControl>
                     <Input
                       placeholder="enter your event name"
-                      className="pl-4 py-6 text-black placeholder:capitalize font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0"
+                      className="pl-4 py-6 text-black placeholder:capitalize font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 rounded-[12px]"
                       {...field}
                     />
                   </FormControl>
@@ -137,12 +160,11 @@ const Step2EventDetails = ({ data, onNext, onPrevious }: Step2Props) => {
                   </FormLabel>
 
                   <div className="relative">
-                    {/* INPUT (user can type manually any number) */}
                     <Input
                       type="text"
                       min={1}
                       placeholder="Enter guest count"
-                      className="pl-4 py-6 text-black w-full placeholder:capitalize font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0"
+                      className="pl-4 py-6 text-black w-full placeholder:capitalize font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 rounded-[12px]"
                       value={field.value || ""}
                       onChange={(e) => field.onChange(Number(e.target.value))}
                     />
@@ -165,7 +187,7 @@ const Step2EventDetails = ({ data, onNext, onPrevious }: Step2Props) => {
                             >
                               {num}
                             </SelectItem>
-                          )
+                          ),
                         )}
                       </SelectContent>
                     </Select>
@@ -192,7 +214,7 @@ const Step2EventDetails = ({ data, onNext, onPrevious }: Step2Props) => {
                       type="text"
                       min={1}
                       placeholder="eg. 8 (in hr)"
-                      className="pl-4 py-6 text-black w-full placeholder:capitalize font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0"
+                      className="pl-4 py-6 text-black w-full placeholder:capitalize font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 rounded-[12px]"
                       value={field.value || ""}
                       onChange={(e) => field.onChange(Number(e.target.value))}
                     />
@@ -215,7 +237,7 @@ const Step2EventDetails = ({ data, onNext, onPrevious }: Step2Props) => {
                             >
                               {num}
                             </SelectItem>
-                          )
+                          ),
                         )}
                       </SelectContent>
                     </Select>
@@ -238,7 +260,7 @@ const Step2EventDetails = ({ data, onNext, onPrevious }: Step2Props) => {
                   <FormControl>
                     <Textarea
                       placeholder="Write Something About Your Event"
-                      className=" text-black min-h-[150px] pl-4 placeholder:capitalize font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0"
+                      className=" text-black min-h-[150px] pl-4 placeholder:capitalize font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 rounded-[12px]"
                       {...field}
                     />
                   </FormControl>
@@ -253,18 +275,18 @@ const Step2EventDetails = ({ data, onNext, onPrevious }: Step2Props) => {
             <Button
               type="button"
               onClick={onPrevious}
-              className="capitalize font-inter font-normal text-base leading-6 tracking-[0.01em] text-black bg-[#f6f8fa] hover:bg-[#f6f8fa] p-6"
+              className="capitalize font-inter font-normal text-base leading-6 tracking-[0.01em] text-black bg-[#f6f8fa] hover:bg-[#f6f8fa] p-6 cursor-pointer"
             >
-              <ChevronLeft />
+              <LeftArrow/>
               previous
             </Button>
 
             <Button
               type="submit"
-              className="capitalize font-inter font-normal text-base leading-6 tracking-[0.01em] text-white p-6"
+              className="capitalize w-[82px] h-[40px] rounded-[12px] font-inter font-normal text-base leading-6 tracking-[0.01em] text-white p-6 cursor-pointer"
             >
               next
-              <ChevronRight />
+              <RightArrow/>
             </Button>
           </div>
         </form>

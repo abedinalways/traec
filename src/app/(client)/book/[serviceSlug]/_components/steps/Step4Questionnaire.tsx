@@ -1,5 +1,7 @@
 "use client";
 
+import LeftArrow from "@/components/icons/LeftArrow";
+import RightArrow from "@/components/icons/RightArrow";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -71,7 +73,7 @@ const Step4Questionnaire = ({ data, onNext, onPrevious }: Step4Props) => {
                   <FormControl>
                     <Input
                       placeholder="e.g., Princess, Disco, Superhero"
-                      className="pl-4 py-6 text-black placeholder:capitalize font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0"
+                      className="pl-4 py-6 text-black placeholder:text-[#a5a5ab] font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 rounded-[12px]"
                       {...field}
                     />
                   </FormControl>
@@ -92,7 +94,7 @@ const Step4Questionnaire = ({ data, onNext, onPrevious }: Step4Props) => {
                   <FormControl>
                     <Input
                       placeholder="e g. , Kids' Pop, Disney, Family Hits, 80S/90s, Bollywood, Latin"
-                      className="pl-4 py-6 text-black placeholder:capitalize font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0"
+                      className="pl-4 py-6 text-black placeholder:text-[#a5a5ab] font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 rounded-[12px]"
                       {...field}
                     />
                   </FormControl>
@@ -113,7 +115,7 @@ const Step4Questionnaire = ({ data, onNext, onPrevious }: Step4Props) => {
                   <FormControl>
                     <Textarea
                       placeholder="List any songs that must be played"
-                      className="pl-4 text-black placeholder:capitalize font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 min-h-[140px]"
+                      className="pl-4 text-black placeholder:text-[#a5a5ab] font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 min-h-[140px] rounded-[12px]"
                       {...field}
                     />
                   </FormControl>
@@ -134,7 +136,7 @@ const Step4Questionnaire = ({ data, onNext, onPrevious }: Step4Props) => {
                   <FormControl>
                     <Textarea
                       placeholder="List any games that must be included"
-                      className="pl-4 text-black placeholder:capitalize font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 min-h-[140px]"
+                      className="pl-4 text-black placeholder:text-[#a5a5ab] font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 min-h-[140px] rounded-[12px]"
                       {...field}
                     />
                   </FormControl>
@@ -155,7 +157,7 @@ const Step4Questionnaire = ({ data, onNext, onPrevious }: Step4Props) => {
                   <FormControl>
                     <Textarea
                       placeholder="Write the description"
-                      className="pl-4 text-black placeholder:capitalize font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 min-h-[140px]"
+                      className="pl-4 text-black placeholder:text-[#a5a5ab] font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 min-h-[140px] rounded-[12px]"
                       {...field}
                     />
                   </FormControl>
@@ -176,7 +178,7 @@ const Step4Questionnaire = ({ data, onNext, onPrevious }: Step4Props) => {
                   <FormControl>
                     <Textarea
                       placeholder="Any extra preferences, timing notes, parking/ loading info, or special instructions?"
-                      className="pl-4 t-black placeholder:capitalize font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 min-h-[140px]"
+                      className="pl-4 t-black placeholder:text-[#a5a5ab] font-normal text-base leading-6 tracking-[0.01em] focus-visible:ring-0 min-h-[140px] rounded-[12px]"
                       {...field}
                     />
                   </FormControl>
@@ -192,19 +194,19 @@ const Step4Questionnaire = ({ data, onNext, onPrevious }: Step4Props) => {
             <Button
               type="button"
               onClick={onPrevious}
-              className="capitalize font-inter text-base text-black bg-[#f6f8fa] hover:bg-[#f6f8fa] p-6"
+              className="capitalize cursor-pointer font-inter text-base text-black bg-[#f6f8fa] hover:bg-[#f6f8fa] p-6 "
             >
-              <ChevronLeft />
+              <LeftArrow/>
               previous
             </Button>
 
             {/* Next */}
             <Button
               type="submit"
-              className="capitalize font-inter text-base text-white p-6"
+              className="capitalize font-inter text-base text-white p-6 w-[100px] h-[48px] cursor-pointer"
             >
               next
-              <ChevronRight />
+              <RightArrow/>
             </Button>
           </div>
         </form>

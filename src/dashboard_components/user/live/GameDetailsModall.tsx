@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Modal } from "../../ui/modal";
 import { Users, X } from "lucide-react";
-import { BallIcon } from "@/src/icons";
+import { BallIcon } from "../../../icons";
 
 interface GameDetailsModalProps {
     isOpen: boolean;

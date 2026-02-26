@@ -1,10 +1,10 @@
 
 "use client"
-import { RefreshIcon } from "@/src/icons";
+import { RefreshIcon } from "../../../icons";
 import { Button } from "../../ui/button";
 import SelectField, { SelectOption } from "../../ui/input/searchInput/SelectField";
 import { useState } from "react";
-import CompitiveRoomTable from "../../tables/CompitiveRoomTable";
+// import CompitiveRoomTable from "../../tables/CompitiveRoomTable";
 
 export default function ActiveCompititiveRoomTableSection() {
     const [selected, selectedValue] = useState("");
@@ -63,8 +63,8 @@ export default function ActiveCompititiveRoomTableSection() {
 
             {/* Table */}
             <div className="w-full overflow-x-auto rounded-xl border border-[#26344B] bg-[#0B111B]">
-                <CompitiveRoomTable    
-                />
+              
+                
             </div>
 
         </section>

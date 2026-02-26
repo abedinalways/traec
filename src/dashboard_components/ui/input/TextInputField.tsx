@@ -1,9 +1,10 @@
 "use client";
 
 import React from "react";
-import { Input } from "@/src/components/ui/input";
+
 import { cn } from "@/lib/utils";
 import FormFieldInput from "./FormFieldInput";
+import { Input } from "../input";
 
 type TextInputFieldProps = {
     label?: string;

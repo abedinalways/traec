@@ -10,7 +10,7 @@ const Location = ({ location }: LocationProps) => {
   const [loading, setLoading] = useState(true);
 
   return (
-    <div className="relative w-full h-[418px] rounded-xl overflow-hidden">
+    <div className="relative w-full h-[418px] rounded-xl overflow-hidden font-[inter]">
       {/* Skeleton */}
       {loading && (
         <div className="absolute inset-0 z-10 animate-pulse bg-gray-200">

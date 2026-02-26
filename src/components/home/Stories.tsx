@@ -65,8 +65,8 @@ const Stories = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-[48px] font-bold text-gray-900 mb-4 font-[glory]">
-            Recent Event Success{' '}
-            <span className=" bg-clip-text text-red-500 italic font-[glory] font-semibold">
+            Recent Event Success{" "}
+            <span className=" bg-clip-text text-gradient font-[brittney]">
               Stories
             </span>
           </h2>

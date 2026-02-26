@@ -1,5 +1,7 @@
 "use client";
 
+import LeftArrow from "@/components/icons/LeftArrow";
+import TrackIcon from "@/components/icons/TrackIcon";
 import { Button } from "@/components/ui/button";
 import TicketIcon from "@/components/ui/TicketIcon";
 import { ChevronLeft } from "lucide-react";
@@ -70,15 +72,17 @@ export default function Step6Review({
         Review Your Booking
       </h1>
       {/* === TOP HEADER LIKE SCREENSHOT === */}
-      <div className="border border-[#dfe1e7] rounded-lg p-5 flex items-center gap-3 bg-[#FA99160E]">
+      <div className="border border-orange-200 rounded-lg p-5 flex items-center gap-3 bg-[#FA99160E]">
         <div className="w-10 h-10 rounded-md grid place-content-center bg-linear-to-r from-[#FFAC47] to-[#FF2A24] font-bold">
-          <TicketIcon className="text-white" />
+          <TrackIcon />
         </div>
         <div>
-          <p className="font-inter font-medium text-sm text-black">
+          <p className="font-inter font-medium text-[16px] text-black">
             DJ Santa’s Party Productions
           </p>
-          <p className="font-inter text-xs text-[#777980]">Party Pro Rentals</p>
+          <p className="font-inter text-[16px] text-[#777980]">
+            Party Pro Rentals
+          </p>
         </div>
       </div>
 
@@ -159,7 +163,9 @@ export default function Step6Review({
           <div className="text-[#4a4c56] text-base leading-6 tracking-[0.01em] flex gap-1">
             <p className="font-medium">1.</p>
             <div className="flex flex-col gap-2">
-              <span className="font-medium">What is your Party Theme?</span>
+              <span className="font-medium text-gray-800">
+                What is your Party Theme?
+              </span>
               <span>Theme: {step4.partyTheme}</span>
             </div>
           </div>
@@ -167,7 +173,7 @@ export default function Step6Review({
           <div className="text-[#4a4c56] text-base leading-6 tracking-[0.01em] flex gap-1">
             <p className="font-medium">2.</p>
             <div className="flex flex-col">
-              <span className="font-medium">
+              <span className="font-medium text-gray-800">
                 What kind of music you Preference?
               </span>
               <span>
@@ -180,7 +186,7 @@ export default function Step6Review({
           <div className="text-[#4a4c56] text-base leading-6 tracking-[0.01em] flex gap-1">
             <p className="font-medium">3.</p>
             <div className="flex flex-col">
-              <span className="font-medium">
+              <span className="font-medium text-gray-800">
                 What are your Must-Play Songs?
               </span>
               <span>Must-Play Songs: {step4.mustPlaySongs}</span>
@@ -190,7 +196,7 @@ export default function Step6Review({
           <div className="text-[#4a4c56] text-base leading-6 tracking-[0.01em] flex gap-1">
             <p className="font-medium">4.</p>
             <div className="flex flex-col">
-              <span className="font-medium">
+              <span className="font-medium text-gray-800">
                 Do you want Dance Party Games included?
               </span>
               <span>{step4.partyGames}</span>
@@ -200,7 +206,7 @@ export default function Step6Review({
           <div className="text-[#4a4c56] text-base leading-6 tracking-[0.01em] flex gap-1">
             <p className="font-medium">5.</p>
             <div className="flex flex-col">
-              <span className="font-medium">
+              <span className="font-medium text-gray-800">
                 How would you like the birthday child&apos;s entrance to be?
               </span>
               <span>{step4.entranceStyle}</span>
@@ -210,7 +216,9 @@ export default function Step6Review({
           <div className="text-[#4a4c56] text-base leading-6 tracking-[0.01em] flex gap-1">
             <p className="font-medium">6.</p>
             <div className="flex flex-col">
-              <span className="font-medium">Additional Notes</span>
+              <span className="font-medium text-gray-800">
+                Additional Notes
+              </span>
               <span>{step4.additionalNotes}</span>
             </div>
           </div>
@@ -257,13 +265,13 @@ export default function Step6Review({
           onClick={onPrevious}
           className="capitalize font-inter text-base text-black bg-[#f6f8fa] hover:bg-[#f6f8fa] p-6"
         >
-          <ChevronLeft />
+          <LeftArrow/>
           previous
         </Button>
 
         <Link
           href={`/book/checkout`}
-          className="capitalize font-inter text-base text-white py-3 px-6 bg-black rounded-md"
+          className="capitalize font-inter text-base text-white py-3 px-6 rounded-[12px] bg-black"
         >
           Proceed to Payment
         </Link>

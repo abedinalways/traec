@@ -3,8 +3,9 @@
 import { useMemo, useState } from "react";
 import { AlertTriangle } from "lucide-react";
 import DeleteOtpVerifyCard from "./DeleteOtpVerifyCard";
-import { useModal } from "@/src/hooks/useModal";
+
 import DeleteAccountInformationModal from "./DeletedInformationModal";
+import { useModal } from "@/hooks/useModal";
 
 type OtpStatus = "idle" | "error" | "success";
 
