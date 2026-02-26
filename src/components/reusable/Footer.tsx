@@ -57,17 +57,60 @@ export default function Footer({ className }: FooterProps) {
             </div>
 
             <div className="mt-6 flex items-center gap-3">
-              <Button variant="ghost" className="p-2 rounded-full">
-                <Twitter size={16} />
+              <Button
+                asChild
+                variant="ghost"
+                className="p-2 rounded-full cursor-pointer"
+              >
+                <a
+                  href="https://twitter.com/yourprofile"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Twitter size={16} />
+                </a>
               </Button>
-              <Button variant="ghost" className="p-2 rounded-full">
-                <Instagram size={16} />
+
+              <Button
+                asChild
+                variant="ghost"
+                className="p-2 rounded-full cursor-pointer"
+              >
+                <a
+                  href="https://instagram.com/yourprofile"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Instagram size={16} />
+                </a>
               </Button>
-              <Button variant="ghost" className="p-2 rounded-full">
-                <Facebook size={16} />
+
+              <Button
+                asChild
+                variant="ghost"
+                className="p-2 rounded-full cursor-pointer"
+              >
+                <a
+                  href="https://facebook.com/yourprofile"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Facebook size={16} />
+                </a>
               </Button>
-              <Button variant="ghost" className="p-2 rounded-full">
-                <Linkedin size={16} />
+
+              <Button
+                asChild
+                variant="ghost"
+                className="p-2 rounded-full cursor-pointer"
+              >
+                <a
+                  href="https://linkedin.com/in/yourprofile"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Linkedin size={16} />
+                </a>
               </Button>
             </div>
           </div>
@@ -78,27 +121,27 @@ export default function Footer({ className }: FooterProps) {
               <h4 className="text-sm font-semibold mb-4">Pages</h4>
               <ul className="space-y-3 text-sm text-gray-200">
                 <li>
-                  <Link href="#" className="hover:underline">
+                  <Link href="/" className="hover:underline">
                     Home
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:underline">
+                  <Link href="how-it-works" className="hover:underline">
                     How It Works
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:underline">
-                    Categories
+                  <Link href="browse" className="hover:underline">
+                    Browse
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:underline">
+                  <Link href="providers" className="hover:underline">
                     Providers
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="hover:underline">
+                  <Link href="become-provider" className="hover:underline">
                     Become a Provider
                   </Link>
                 </li>
@@ -152,7 +195,7 @@ export default function Footer({ className }: FooterProps) {
                 <div className="mt-1">
                   <Phone size={16} />
                 </div>
-                <div>+7xxxxxxxxx</div>
+                <div>+73233242423</div>
               </div>
 
               <div className="flex items-start gap-3">

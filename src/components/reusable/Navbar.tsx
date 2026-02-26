@@ -110,14 +110,14 @@ export default function Navbar() {
         ) : (
           <div className="hidden md:flex items-center gap-6">
             <Button
-              onClick={() => setOpenLogin(true)}
+              // onClick={() => setOpenLogin(true)}
               className="bg-white text-black hover:bg-white text-sm font-medium cursor-pointer"
             >
               Sign In
             </Button>
 
             <Button
-              onClick={() => setOpenSignup(true)}
+              // onClick={() => setOpenSignup(true)}
               className="rounded-[12px] px-6 text-white font-medium gradient-bg cursor-pointer"
             >
               Join Now

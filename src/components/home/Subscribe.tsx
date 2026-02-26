@@ -56,12 +56,12 @@ export default function Subscribe() {
           </div>
 
           {/* Content */}
-          <CardContent className="relative z-10 text-center  md:p-12 p-4 space-y-2">
+          <CardContent className="relative z-10 text-center  md:p-12 p-4 space-y-2 font-[inter]">
             <div>
               <h2 className="text-lg md:text-[32px] font-semibold font-[inter]">
                 Stay Updated with Evoke
               </h2>
-              <p className="mt-2 text-xs md:text-md text-white/90">
+              <p className="mt-2 text-xs md:text-md text-white/90 ">
                 Get the latest updates on new services, special offers, <br />
                 and event planning tips
               </p>

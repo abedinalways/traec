@@ -65,7 +65,7 @@ const TestimonialCarousel = () => {
   };
 
   return (
-    <div className="relative md:mx-auto py-10">
+    <div className="relative md:mx-auto py-10 font[inter]">
       {/* SCROLLABLE WRAPPER */}
       <div
         ref={carouselRef}
@@ -107,7 +107,7 @@ const TestimonialCarousel = () => {
                   </div>
                 </div>
 
-                <p className="text-gray-700 text-base leading-relaxed">
+                <p className="text-gray-500 text-base font-semibold leading-relaxed font-[inter]">
                   {item.review}
                 </p>
 
@@ -122,8 +122,10 @@ const TestimonialCarousel = () => {
 
                 <div className="flex items-center gap-3 pt-4">
                   <div>
-                    <h3 className="font-semibold text-gray-900">{item.name}</h3>
-                    <p className="text-sm text-gray-500">{item.title}</p>
+                    <h3 className="font-semibold text-gray-900 font-[inter]">
+                      {item.name}
+                    </h3>
+                    <p className="text-sm text-gray-500 font-[inter]">{item.title}</p>
                   </div>
                 </div>
               </CardContent>

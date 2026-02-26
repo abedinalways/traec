@@ -86,7 +86,7 @@ const Banner = () => {
                 />
 
                 {/* Badge */}
-                <div className="p-px rounded-[14px] bg-yellow-300">
+                <div className="p-px rounded-[14px] bg-yellow-300 font-[inter]">
                   <div className="absolute top-3 left-3 bg-white px-3 py-2 rounded-[14px] shadow-md flex items-center gap-2">
                     <div className="w-7 h-7 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 font-bold text-xs">
                       <RightIcon />
@@ -121,7 +121,7 @@ const Banner = () => {
                 />
 
                 {/* Rating badge */}
-                <div className="absolute bottom-3 right-3 bg-yellow-100 border border-orange-200 px-3 py-2 rounded-[10px] shadow-md flex items-center gap-2">
+                <div className="absolute bottom-3 right-3 bg-yellow-100 border border-orange-200 px-3 py-2 rounded-[10px] shadow-md flex items-center gap-2 font-[inter]">
                   <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
                   <span className="font-semibold text-xs">4.9</span>
                   <span className="text-[10px] text-gray-500">
@@ -156,10 +156,10 @@ const Banner = () => {
                       </div>
                     </div>
                     <div>
-                      <p className="text-sm font-semibold font-[open_sans]">
+                      <p className="text-sm font-semibold font-[inter]">
                         Sarah M.
                       </p>
-                      <p className="text-xs text-gray-500 -mt-1 font-[open_sans]">
+                      <p className="text-xs text-gray-500 -mt-1 font-[inter]">
                         Wedding Planner
                       </p>
                     </div>
@@ -205,7 +205,7 @@ const Banner = () => {
                     />
                   </div>
 
-                  <div className="absolute top-14 right-6 bg-[#fff1df]/20 border border-orange-200 px-4 py-4 rounded-xl shadow-md flex items-center gap-2">
+                  <div className="absolute top-14 right-4 bg-[#fff1df]/20 border border-orange-200 px-4 py-4 font-[inter] rounded-xl shadow-md flex items-center gap-2">
                     <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
                     <span className="font-semibold">4.9</span>
                     <span className="text-xs text-gray-500">(234 reviews)</span>
