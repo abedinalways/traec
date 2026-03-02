@@ -17,6 +17,7 @@ import { IoMdLogOut } from "react-icons/io";
 import ProfileCard from "@/components/reusable/ProfileCard";
 import Image from "next/image";
 import RedDeleteIcon from "@/components/icons/RedDeleteIcon";
+import ProviderProfileCard from "@/components/reusable/ProviderProfileCard";
 
 const menu = [
   {
@@ -64,7 +65,7 @@ export default function AccountDashboard() {
     <div className="w-full flex justify-center py-10 px-4 font-[inter]">
       <div className="w-full max-w-[780px] space-y-8">
         {/* Profile Header */}
-        <ProfileCard
+        <ProviderProfileCard
           name="Darlene Robertson"
           avatar="/images/provider-profile-img.svg"
           location="Los Angeles, CA"
