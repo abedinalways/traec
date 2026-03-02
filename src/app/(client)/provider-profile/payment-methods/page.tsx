@@ -8,6 +8,7 @@ import { PiShieldWarningBold } from "react-icons/pi";
 import { ActionDialog } from "@/components/reusable/ActionDialog";
 import { useState } from "react";
 import { AddCardDialog } from "@/components/profile/AddCardDialog";
+import LeftIcon from "@/components/icons/LeftIcon";
 
 export default function Page() {
   const [isAddCardModal, setIsAddCardModal] = useState(false);
@@ -31,13 +32,13 @@ export default function Page() {
   ];
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-10">
+    <div className="w-full max-w-4xl mx-auto px-4 py-10 font-[inter]">
       {/* Back Button */}
       <Link
         href={"/provider-profile"}
-        className="flex items-center max-w-38 rounded-sm p-2 text-sm border text-gray-600 hover:text-black mb-4"
+        className="flex items-center max-w-[168px] shape-squircle rounded-[22px] p-2 text-sm border  text-gray-black-400 mb-4 text-[16px]"
       >
-        <MdKeyboardArrowLeft size={24} />
+        <LeftIcon/>
         Back To Account
       </Link>
 

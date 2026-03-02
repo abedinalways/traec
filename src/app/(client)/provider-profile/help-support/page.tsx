@@ -1,4 +1,5 @@
 import OrderHistory from "../../_components/profile/OrdersHistory";
+import ProviderOrderHistory from "../../_components/profile/ProviderOrderHistory";
 
 export default function Page() {
   const orders = [
@@ -42,7 +43,7 @@ export default function Page() {
 
   return (
     <div className="w-full max-w-5xl mx-auto px-4 py-10">
-      <OrderHistory
+      <ProviderOrderHistory
         backUrl="/provider-profile"
         title="Order History"
         subtitle="View your past events and bookings"

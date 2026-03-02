@@ -7,6 +7,7 @@ import RightGreenIcon from "@/components/icons/RightGreenIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
 import StarIcon from "@/components/icons/StarIcon";
 import CalendarIcon from "@/components/icons/CalendarIcon";
+import Link from "next/link";
 
 export default function Editprofile() {
   return (
@@ -24,15 +25,17 @@ export default function Editprofile() {
         </div>
 
         {/* Edit Button */}
-        <button
-          className="
-          flex items-center gap-1 text-sm px-4 py-1 
+        <Link href="/provider-profile">
+          <button
+            className="
+          flex items-center cursor-pointer gap-1 text-sm px-4 py-1 
           border border-gray-200 rounded-[99px] hover:bg-gray-100 transition
         "
-        >
-          <ProfileIcon />
-          Edit Profile
-        </button>
+          >
+            <ProfileIcon />
+            Edit Profile
+          </button>
+        </Link>
       </div>
 
       {/* Name + Verified */}
@@ -48,12 +51,12 @@ export default function Editprofile() {
         {/* Location + Rating */}
         <div className="flex items-center gap-4 mt-2 text-gray-600 text-sm">
           <span className="flex items-center gap-1 text-[14px]">
-            <LocationIcon/>
+            <LocationIcon />
             Austin, TX
           </span>
 
           <span className="flex items-center gap-1 text-[14px]">
-            <StarIcon/>
+            <StarIcon />
             <span className="font-medium">4.9</span>
             <span className="text-gray-500">(156 reviews)</span>
           </span>
@@ -61,11 +64,10 @@ export default function Editprofile() {
 
         {/* Member Since */}
         <p className="flex items-center gap-1 text-sm text-gray-600 mt-1 text-[14px]">
-          <CalendarIcon/>
+          <CalendarIcon />
           Member since 2023
         </p>
       </div>
-     
 
       <hr className="my-4" />
 
@@ -81,7 +83,9 @@ export default function Editprofile() {
       <hr className="my-4" />
 
       <div>
-        <h3 className="font-semibold text-gray-800 mb-2 text-[16px]">My stats</h3>
+        <h3 className="font-semibold text-gray-800 mb-2 text-[16px]">
+          My stats
+        </h3>
 
         <div className="flex justify-between text-[16px] py-1">
           <span>Completed Orders</span>
@@ -102,7 +106,9 @@ export default function Editprofile() {
       <hr className="my-4" />
 
       <div>
-        <h3 className="font-semibold text-gray-800 mb-2 text-[16px]">Languages</h3>
+        <h3 className="font-semibold text-gray-800 mb-2 text-[16px]">
+          Languages
+        </h3>
 
         <div className="flex gap-2">
           <span className="px-3 py-1 rounded-full bg-gray-100 text-[16px]">
