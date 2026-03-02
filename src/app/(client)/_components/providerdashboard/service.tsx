@@ -13,7 +13,7 @@ export default function ServiceSection({ services = [] }: any) {
           Services ({services.length})
         </h2>
         <Link href="/addservice">
-        <button className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-xl text-sm font-medium">
+        <button className="bg-orange-500 cursor-pointer hover:bg-orange-600 text-white px-5 py-2 rounded-xl text-sm font-medium">
           + Add Service
         </button>
         </Link>

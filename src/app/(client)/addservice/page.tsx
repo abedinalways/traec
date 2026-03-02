@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { ChevronLeft, Plus, X } from "lucide-react";
+import Link from "next/link";
+import LeftIcon from "@/components/icons/LeftIcon";
 
 export default function Page() {
   const [basicFeatures, setBasicFeatures] = useState([""]);
@@ -52,27 +54,30 @@ export default function Page() {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-6">
-
-      {/* BACK BUTTON */}
-      <button className="flex items-center text-sm text-gray-500 mb-6 hover:underline">
-        <ChevronLeft size={16} className="mr-1" /> Back to Service
-      </button>
+    <div className="w-full max-w-6xl mx-auto p-6 font-[inter]">
+      {/* Back Button */}
+      <Link
+        href={"/provider-dashboard"}
+        className="flex items-center max-w-[168px] shape-squircle rounded-[22px] p-2 text-sm border  text-gray-black-400 mb-4 text-[16px]"
+      >
+        <LeftIcon />
+        Back To Account
+      </Link>
 
       {/* PAGE TITLE */}
       <h1 className="text-2xl font-semibold mb-3">Add Service</h1>
-      <p className="text-gray-500 mb-6">Update your service details and pricing</p>
+      <p className="text-gray-500 mb-6">
+        Update your service details and pricing
+      </p>
 
       {/* MAIN FORM BOX */}
       <div className="border rounded-2xl p-6 bg-white shadow-sm">
-
         {/* SECTION TITLE */}
         <h2 className="text-lg font-semibold mb-5">Service Details</h2>
         <p className="text-xs text-gray-500 mb-6">Tell us about your Service</p>
 
         {/* SERVICE INFO GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
-
           {/* Service Title */}
           <div>
             <label className="text-sm text-gray-600">Service Title</label>
@@ -195,7 +200,10 @@ export default function Page() {
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => {
             e.preventDefault();
-            handleSingleImageUpload({ target: { files: e.dataTransfer.files } }, 0);
+            handleSingleImageUpload(
+              { target: { files: e.dataTransfer.files } },
+              0,
+            );
           }}
           onClick={() => document.getElementById("dragDropInput")?.click()}
         >
@@ -231,7 +239,6 @@ export default function Page() {
             Create Service
           </button>
         </div>
-
       </div>
     </div>
   );
