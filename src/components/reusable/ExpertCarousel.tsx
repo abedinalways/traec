@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MapPin, Star } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 // --- Interfaces and Data ---
 
@@ -205,13 +206,15 @@ const ExpertsCarousel: React.FC = () => {
                     </div>
 
                     {/* View Profile Button */}
-                    <Button
-                      variant="outline"
-                      className="w-full mt-3 mb-3 py-6 bg-[#F6F8FA]"
-                      onClick={() => console.log("View profile:", provider.id)}
-                    >
-                      View Profile
-                    </Button>
+                    <Link href="/provider-profile/details/1">
+                      <Button
+                        variant="outline"
+                        className="w-full mt-3 mb-3 py-6 bg-[#F6F8FA] cursor-pointer"
+                        // onClick={() => console.log("View profile:", provider.id)}
+                      >
+                        View Profile
+                      </Button>
+                    </Link>
                   </div>
                 </CardContent>
               </Card>
