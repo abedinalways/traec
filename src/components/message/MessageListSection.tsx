@@ -10,7 +10,7 @@ export default function MessageListSection() {
   const [activeFilter, setActiveFilter] = useState("All");
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col font-[inter]">
       {/* Title */}
       <h3 className="text-lg font-semibold mb-4">Conversations</h3>
 

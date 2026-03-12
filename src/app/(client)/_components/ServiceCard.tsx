@@ -50,7 +50,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
           </div>
         </div>
       </div>
-      <Link href={`/provider-profile`}>
+      <Link href={`/provider-profile/details/1`}>
         <button className="bg-[#DFE1E7] w-full p-3 rounded-md cursor-pointer">
           View Profile
         </button>

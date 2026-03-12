@@ -35,7 +35,7 @@ export default function BecomeProviderBanner() {
         </p>
 
         <Link href={"/account-setup"}>
-          <button className="mt-6 bg-linear-to-r from-[#FFAC47] to-[#FF2A24] px-2 py-2 rounded-md font-semibold text-white md:w-[184px] md:h-[54px]">
+          <button className="mt-6 bg-linear-to-r from-[#FFAC47] to-[#FF2A24] px-2 py-2 rounded-md font-semibold cursor-pointer text-white md:w-[184px] md:h-[54px]">
             Become a Provider
           </button>
         </Link>

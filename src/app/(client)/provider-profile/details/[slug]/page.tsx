@@ -11,6 +11,7 @@ import Reviews from "@/app/(client)/_components/providers/Reviews";
 import Services from "@/app/(client)/_components/providers/Services";
 import MessageIcon from "@/components/icons/MessageIcon";
 import RightGreenIcon from "@/components/icons/RightGreenIcon";
+import Link from "next/link";
 
 // JSON Data
 const overViewData = {
@@ -68,7 +69,9 @@ export default function ProvidersDetailsPage() {
                     <h3 className="font-semibold text-lg flex  items-center gap-6">
                       {review.name}{" "}
                       <span className="flex items-center bg-[#EEFAF0] rounded-md px-4 py-1">
-                        <span className="flex gap-2 items-center text-green-400 font-light"><RightGreenIcon /> Verified</span>
+                        <span className="flex gap-2 items-center text-green-400 font-light">
+                          <RightGreenIcon /> Verified
+                        </span>
                       </span>
                     </h3>
 
@@ -93,14 +96,16 @@ export default function ProvidersDetailsPage() {
                     </div>
                     <p className="text-gray-700">{review.description}</p>
                     <div className="flex gap-3 mt-5">
-                      <button className="bg-[#070707] text-white py-2 px-8 rounded-md cursor-pointer">
-                        <span className="flex items-center gap-2">
-                          <MessageIcon /> Send Message
-                        </span>
-                      </button>
-                      <button className="py-2 px-8 rounded-md border border-amber-100 cursor-pointer">
+                      <Link href="/messages/1">
+                        <button className="bg-[#070707] text-white py-2 px-8 rounded-md cursor-pointer">
+                          <span className="flex items-center gap-2">
+                            <MessageIcon /> Send Message
+                          </span>
+                        </button>
+                      </Link>
+                      {/* <button className="py-2 px-8 rounded-md border border-amber-100 cursor-pointer">
                         View Services
-                      </button>
+                      </button> */}
                     </div>
                   </div>
                 </div>
@@ -116,7 +121,7 @@ export default function ProvidersDetailsPage() {
                   className={`whitespace-nowrap pb-2 ${
                     activeTab === "Services"
                       ? "text-blue-600 border-b-2 border-blue-600"
-                      : "text-gray-500 hover:text-black"
+                      : "text-gray-500 hover:text-black cursor-pointer"
                   }`}
                 >
                   Services
@@ -127,7 +132,7 @@ export default function ProvidersDetailsPage() {
                   className={`whitespace-nowrap pb-2 ${
                     activeTab === "Reviews"
                       ? "text-blue-600 border-b-2 border-blue-600"
-                      : "text-gray-500 hover:text-black"
+                      : "text-gray-500 hover:text-black cursor-pointer"
                   }`}
                 >
                   Reviews
@@ -137,7 +142,7 @@ export default function ProvidersDetailsPage() {
                   className={`whitespace-nowrap pb-2 ${
                     activeTab === "Projects"
                       ? "text-blue-600 border-b-2 border-blue-600"
-                      : "text-gray-500 hover:text-black"
+                      : "text-gray-500 hover:text-black cursor-pointer"
                   }`}
                 >
                   Projects
@@ -147,7 +152,7 @@ export default function ProvidersDetailsPage() {
                   className={`whitespace-nowrap pb-2 ${
                     activeTab === "About"
                       ? "text-blue-600 border-b-2 border-blue-600"
-                      : "text-gray-500 hover:text-black"
+                      : "text-gray-500 hover:text-black cursor-pointer"
                   }`}
                 >
                   About
