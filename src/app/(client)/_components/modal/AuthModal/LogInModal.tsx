@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import Modal from "../Modal";
 import { X } from "lucide-react";
 import FlyIcon from "@/components/icons/FlyIcon";
+import { demoLogin } from "@/lib/auth/auth";
 
 interface Props {
   isOpen: boolean;
@@ -27,28 +28,25 @@ export default function LogInModal({ isOpen, onClose, openSignup }: Props) {
   const [showPass, setShowPass] = useState(false);
   const router = useRouter();
 
-  const onSubmit = async (data: LogInFormData) => {
+  const onSubmit = (data: LogInFormData) => {
     try {
-      
-      let role = "user";
+      const res = demoLogin(data.email, data.password);
 
-      if (data.email === "admin@gmail.com") {
-        role = "admin";
+      if (!res.success) {
+        alert("Invalid email or password");
+        return;
       }
 
-      
-      localStorage.setItem("role", role);
+      // save role
+      localStorage.setItem("role", res.role);
 
-      
+      // update navbar immediately
+      window.dispatchEvent(new Event("storage"));
+
       onClose();
       reset();
 
-      
-      if (role === "admin") {
-        router.push("/admin/dashboard");
-      } else {
-        router.push("/client-dashboard");
-      }
+      router.push(res.redirect);
     } catch (error) {
       console.log("Login failed", error);
     }
@@ -79,10 +77,6 @@ export default function LogInModal({ isOpen, onClose, openSignup }: Props) {
 
         {/* RIGHT FORM */}
         <div className="flex items-center justify-center z-50 bg-white lg:-ml-16 rounded-2xl lg:rounded-l-4xl lg:rounded-r-2xl">
-          {/* <div className="absolute right-70 top-10 z-20">
-            <FlyIcon />
-          </div> */}
-
           <div className="w-full p-8 md:p-10 rounded-3xl">
             <div className="w-full flex justify-center mb-6">
               <Image src="/images/logo.png" width={50} height={50} alt="logo" />
@@ -142,7 +136,6 @@ export default function LogInModal({ isOpen, onClose, openSignup }: Props) {
                 </p>
               </div>
 
-            
               <button
                 type="submit"
                 className="w-full h-12 rounded-xl text-white font-medium bg-gradient-to-r from-[#FFAC47] to-[#FF2A24] cursor-pointer"

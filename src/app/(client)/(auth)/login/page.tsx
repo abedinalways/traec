@@ -7,6 +7,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import FlyIcon from "@/components/icons/FlyIcon";
 import { ShieldCheck } from "lucide-react";
+import { demoLogin } from "@/lib/auth/auth";
 
 interface AdminLoginFormData {
   email: string;
@@ -19,17 +20,29 @@ export default function AdminLoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const onSubmit = async (data: AdminLoginFormData) => {
-    setIsLoading(true);
-    // Simulate API Call
-    console.log("Admin Login Attempt:", data);
+  
+   
+  //demo login
+ const onSubmit = (data: AdminLoginFormData) => {
+   setIsLoading(true);
 
-    // Logic for admin redirect
-    setTimeout(() => {
-      setIsLoading(false);
-      router.push("/admin/dashboard");
-    }, 1500);
-  };
+   const res = demoLogin(data.email, data.password);
+
+   setTimeout(() => {
+     setIsLoading(false);
+
+     if (!res.success) {
+       alert("Invalid email or password");
+       return;
+     }
+
+     localStorage.setItem("role", res.role);
+
+     router.push(res.redirect);
+   }, 600);
+ };
+  
+
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center font-[inter] p-4">

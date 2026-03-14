@@ -133,9 +133,7 @@ export default function AccountDashboard() {
         confirmLabel="Yes. Log Out"
         onConfirm={() => {
           // Remove stored data
-          localStorage.removeItem("loginData");
-          console.log("yes, log out");
-
+          localStorage.removeItem("role");
           router.push("/");
         }}
       />
