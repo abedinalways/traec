@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Search, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Sheet,
   SheetTrigger,
@@ -16,32 +16,37 @@ import {
 } from "@/components/ui/sheet";
 import { useAuthModal } from "@/app/context/AuthModalContext";
 import DropDown from "../icons/DropDownIcon";
-
-type LoginData = {
-  name?: string;
-  email?: string;
-};
+import { useState, useEffect } from "react";
 
 export default function Navbar() {
-  const { setOpenLogin } = useAuthModal();
-  const { setOpenSignup } = useAuthModal();
+  const { setOpenLogin, setOpenSignup } = useAuthModal();
   const pathname = usePathname();
+  const router = useRouter();
 
- 
-  const demoUser: LoginData = {
-    name: "Cameron Diaz",
-    email: "cameron@example.com",
+  const [role, setRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    const updateRole = () => {
+      const storedRole = localStorage.getItem("role");
+      setRole(storedRole);
+    };
+
+    updateRole();
+
+    window.addEventListener("storage", updateRole);
+
+    return () => {
+      window.removeEventListener("storage", updateRole);
+    };
+  }, []);
+
+  const demoUsers = {
+    admin: { name: "Admin", email: "admin@company.com" },
+    client: { name: "Cameron Diaz", email: "cameron@example.com" },
+    provider: { name: "Provider", email: "provider@example.com" },
   };
 
-  const user =
-    pathname.startsWith("/client-dashboard") ||
-      pathname.startsWith("/client-profile") ||
-      pathname.startsWith("/provider-dashboard") ||
-      pathname.startsWith("/provider-profile") ||
-    pathname.startsWith("/book")
-      ? demoUser
-      : null;
- 
+  const user = role ? demoUsers[role as keyof typeof demoUsers] : null;
 
   const isActive = (path: string) => {
     if (path === "/") {
@@ -51,6 +56,12 @@ export default function Navbar() {
     return pathname.startsWith(path)
       ? "text-[#FF2A24] font-semibold"
       : "text-black";
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("role");
+    setRole(null);
+    router.push("/");
   };
 
   return (
@@ -87,40 +98,55 @@ export default function Navbar() {
         <div className="hidden lg:flex items-center relative w-[260px]">
           <Input
             placeholder="Search for party rentals"
-            className="rounded-[32px] pl-4 pr-10 shape-squircle"
+            className="rounded-[32px] pl-4 pr-10"
           />
           <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
         </div>
 
         {/* Desktop Auth */}
         {user ? (
-          <Link
-            href="/client-profile"
-            className="hidden md:flex items-center gap-2"
-          >
-            <Image
-              src="/images/browser/Avater.png"
-              alt="profile"
-              width={24}
-              height={24}
-              className="w-6 h-6 rounded-full"
-            />
-            <span className="text-sm font-medium text-gray-900 flex items-center gap-2">
-              {user.name} <DropDown/>
-            </span>
-          </Link>
+          <div className="hidden md:flex items-center gap-3">
+            <Link
+              href={
+                role === "client"
+                  ? "/client-profile"
+                  : role === "provider"
+                    ? "/provider-profile"
+                    : "/admin-profile"
+              }
+              className="flex items-center gap-2"
+            >
+              <Image
+                src="/images/browser/Avater.png"
+                alt="profile"
+                width={24}
+                height={24}
+                className="w-6 h-6 rounded-full"
+              />
+              <span className="text-sm font-medium text-gray-900 flex items-center gap-2">
+                {user.name} <DropDown />
+              </span>
+            </Link>
+
+            <Button
+              onClick={handleLogout}
+              className="text-sm gradient-bg  text-white cursor-pointer px-4 py-2 rounded-lg"
+            >
+              Logout
+            </Button>
+          </div>
         ) : (
           <div className="hidden md:flex items-center gap-6">
-            <Button
+            <button
               onClick={() => setOpenLogin(true)}
-              className="bg-white text-black hover:bg-white text-sm font-medium cursor-pointer"
+              className="bg-white text-black text-sm cursor-pointer font-medium"
             >
               Sign In
-            </Button>
+            </button>
 
             <Button
               onClick={() => setOpenSignup(true)}
-              className="rounded-[12px] px-6 text-white font-medium gradient-bg cursor-pointer"
+              className="rounded-[12px] px-6 text-white font-medium gradient-bg"
             >
               Join Now
             </Button>
@@ -128,15 +154,15 @@ export default function Navbar() {
         )}
 
         {/* Mobile Menu */}
-        <div className="md:hidden font-[inter]!">
+        <div className="md:hidden font-[inter]">
           <Sheet>
             <SheetTrigger>
               <Menu className="h-6 w-6" />
             </SheetTrigger>
 
-            <SheetContent side="right" className="w-[260px]">
+            <SheetContent side="right" className="w-[260px] font-[inter]">
               <SheetHeader>
-                <SheetTitle className="font-[inter]">Evoke</SheetTitle>
+                <SheetTitle>Evoke</SheetTitle>
               </SheetHeader>
 
               <div className="mt-6 flex flex-col space-y-5 text-base font-medium px-4 font-[inter]">
@@ -167,53 +193,44 @@ export default function Navbar() {
                   </Link>
                 </SheetClose>
 
-                <SheetClose asChild>
-                  <Link
-                    href="/become-provider"
-                    className={isActive("/become-provider")}
-                  >
-                    Become a Provider
-                  </Link>
-                </SheetClose>
-
-                {/* Mobile Search */}
-                <div className="relative mt-4">
-                  <Input
-                    placeholder="Search…"
-                    className="rounded-full pl-4 pr-10"
-                  />
-                  <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-                </div>
-
                 {/* Mobile Auth */}
                 {user ? (
-                  <Link href="/client-profile">
-                    <div className="flex items-center gap-2">
-                      <Image
-                        src="/images/browser/img07.png"
-                        alt="profile"
-                        width={24}
-                        height={24}
-                        className="w-6 h-6 rounded-full"
-                      />
-                      <span className="text-sm font-medium text-gray-900">
-                        {user.name}
-                      </span>
-                    </div>
-                  </Link>
-                ) : (
-                  <div className="pt-6 flex flex-col gap-4">
-                    <Button
-                      onClick={() => setOpenLogin(true)}
-                      className="rounded-full text-white font-medium btn-gradient"
-                    >
-                      Sign In
-                    </Button>
+                  <div className="flex flex-col gap-4 pt-4">
+                    <SheetClose asChild>
+                      <Link
+                        href={
+                          role === "client"
+                            ? "/client-profile"
+                            : role === "provider"
+                              ? "/provider-profile"
+                              : "/admin-profile"
+                        }
+                        className="flex items-center gap-3"
+                      >
+                        <Image
+                          src="/images/browser/Avater.png"
+                          alt="profile"
+                          width={24}
+                          height={24}
+                          className="w-6 h-6 rounded-full"
+                        />
+                        <span className="text-sm font-medium text-gray-900 flex items-center gap-2">
+                          {user.name} <DropDown />
+                        </span>
+                      </Link>
+                    </SheetClose>
 
                     <Button
-                      onClick={() => setOpenSignup(true)}
-                      className="rounded-[12px] text-white font-medium btn-gradient"
+                      onClick={handleLogout}
+                      className="bg-red-500 hover:bg-red-600 text-white"
                     >
+                      Logout
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-4 pt-4">
+                    <Button onClick={() => setOpenLogin(true)}>Sign In</Button>
+                    <Button onClick={() => setOpenSignup(true)}>
                       Join Now
                     </Button>
                   </div>
