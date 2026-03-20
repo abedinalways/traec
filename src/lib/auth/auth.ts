@@ -12,7 +12,7 @@ export const demoUsers: DemoUser[] = [
     email: "admin@traec.com",
     password: "admin123",
     role: "admin",
-    redirect: "/admin-dashboard",
+    redirect: "/admin/dashboard",
   },
   {
     email: "client@traec.com",
