@@ -1,7 +1,7 @@
 "use client";
 
-import  { ReactNode } from "react";
-import ReusableTable from "./ReusableTable";
+import { ReactNode } from "react";
+import ReusableTable from "./ReusableTableForAll";
 import Badge from "../ui/badge/Badge";
 import { useRouter } from "next/navigation";
 
@@ -16,16 +16,96 @@ interface UserRow {
 }
 
 const tableData: UserRow[] = [
-  { id: 1, username: "Cryptoknight", uid: "88932", winRate: "67.8%", status: "Active", spent: "450.00", withdraw: "850.00" },
-  { id: 2, username: "PlayerOne", uid: "88932", winRate: "72.12%", status: "Active", spent: "50.00", withdraw: "650.00" },
-  { id: 3, username: "Player001", uid: "88932", winRate: "32.98%", status: "Active", spent: "0.00", withdraw: "0.00" },
-  { id: 4, username: "MetaGamer", uid: "88932", winRate: "32.98%", status: "Active", spent: "120.00", withdraw: "1120.00" },
-  { id: 5, username: "ProGamer", uid: "88932", winRate: "45.34%", status: "Suspended", spent: "450.00", withdraw: "750.00" },
-  { id: 6, username: "NinjaGamer", uid: "88932", winRate: "12.4%", status: "Disabled", spent: "50.00", withdraw: "20.00" },
-  { id: 7, username: "Player001", uid: "88932", winRate: "32.98%", status: "Active", spent: "0.00", withdraw: "0.00" },
-  { id: 8, username: "MetaGamer", uid: "88932", winRate: "32.98%", status: "Active", spent: "120.00", withdraw: "1120.00" },
-  { id: 9, username: "ProGamer", uid: "88932", winRate: "45.34%", status: "Suspended", spent: "450.00", withdraw: "750.00" },
-  { id: 10, username: "NinjaGamer", uid: "88932", winRate: "12.4%", status: "Disabled", spent: "50.00", withdraw: "20.00" },
+  {
+    id: 1,
+    username: "Cryptoknight",
+    uid: "88932",
+    winRate: "67.8%",
+    status: "Active",
+    spent: "450.00",
+    withdraw: "850.00",
+  },
+  {
+    id: 2,
+    username: "PlayerOne",
+    uid: "88932",
+    winRate: "72.12%",
+    status: "Active",
+    spent: "50.00",
+    withdraw: "650.00",
+  },
+  {
+    id: 3,
+    username: "Player001",
+    uid: "88932",
+    winRate: "32.98%",
+    status: "Active",
+    spent: "0.00",
+    withdraw: "0.00",
+  },
+  {
+    id: 4,
+    username: "MetaGamer",
+    uid: "88932",
+    winRate: "32.98%",
+    status: "Active",
+    spent: "120.00",
+    withdraw: "1120.00",
+  },
+  {
+    id: 5,
+    username: "ProGamer",
+    uid: "88932",
+    winRate: "45.34%",
+    status: "Suspended",
+    spent: "450.00",
+    withdraw: "750.00",
+  },
+  {
+    id: 6,
+    username: "NinjaGamer",
+    uid: "88932",
+    winRate: "12.4%",
+    status: "Disabled",
+    spent: "50.00",
+    withdraw: "20.00",
+  },
+  {
+    id: 7,
+    username: "Player001",
+    uid: "88932",
+    winRate: "32.98%",
+    status: "Active",
+    spent: "0.00",
+    withdraw: "0.00",
+  },
+  {
+    id: 8,
+    username: "MetaGamer",
+    uid: "88932",
+    winRate: "32.98%",
+    status: "Active",
+    spent: "120.00",
+    withdraw: "1120.00",
+  },
+  {
+    id: 9,
+    username: "ProGamer",
+    uid: "88932",
+    winRate: "45.34%",
+    status: "Suspended",
+    spent: "450.00",
+    withdraw: "750.00",
+  },
+  {
+    id: 10,
+    username: "NinjaGamer",
+    uid: "88932",
+    winRate: "12.4%",
+    status: "Disabled",
+    spent: "50.00",
+    withdraw: "20.00",
+  },
 ];
 
 export default function BasicTableOne() {
@@ -50,7 +130,6 @@ export default function BasicTableOne() {
 
     // Win Rate
     (item) => <span>{item.winRate}</span>,
-
 
     (item) => (
       <Badge

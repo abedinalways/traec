@@ -24,6 +24,7 @@ export type NavItem = {
   icon: React.ReactNode;
   path?: string;
   subItems?: { name: string; path: string; icon: React.ReactNode }[];
+  submenuStyle?: "default" | "tree";
 };
 
 export type QuickLink = {
@@ -42,6 +43,7 @@ export type SidebarConfig = {
   subtitle: string;
   navItems: NavItem[];
   quickLinks: QuickLink[];
+
 };
 
 // Admin sidebar configuration
@@ -49,14 +51,31 @@ export const adminSidebarConfig: SidebarConfig = {
   subtitle: "Admin Console",
   navItems: [
     {
-      icon: <DashboardIcon/>,
+      icon: <DashboardIcon />,
       name: "Dashboard",
       path: "/admin/dashboard",
     },
     {
       icon: <UsersIcon />,
-      name: "Users",
-      path: "/admin/dashboard/users",
+      name: "User Management",
+      submenuStyle: "tree",
+      subItems: [
+        {
+          name: "Client Management",
+          path: "/admin/dashboard/user-management/client-management",
+          icon: <UserIcon className="w-4 h-4" />,
+        },
+        {
+          name: "Seller/Providers",
+          path: "/admin/dashboard/user-management/seller-providers",
+          icon: <UserIcon className="w-4 h-4" />,
+        },
+        {
+          name: "New Account Approval",
+          path: "/admin/dashboard/user-management/new-account-approval",
+          icon: <UserIcon className="w-4 h-4" />,
+        },
+      ],
     },
 
     {

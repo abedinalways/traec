@@ -19,16 +19,17 @@ interface Column<T> {
 interface ReusableTableProps<T> {
   columns: Column<T>[];
   data: T[];
+  rowKey?: (row: T, index: number) => string | number;
 }
 
-export default function ReusableTable<T>({
+export default function ReusableTableForAll<T>({
   columns,
   data,
+  rowKey,
 }: ReusableTableProps<T>) {
   return (
     <Table>
-      {/* Header */}
-      <TableHeader>
+      <TableHeader className="">
         <TableRow>
           {columns.map((col, i) => (
             <TableHead key={i} className={col.className}>
@@ -38,10 +39,12 @@ export default function ReusableTable<T>({
         </TableRow>
       </TableHeader>
 
-      {/* Body */}
       <TableBody>
         {data.map((row, rowIndex) => (
-          <TableRow key={rowIndex} className="hover:bg-gray-50">
+          <TableRow
+            key={rowKey ? rowKey(row, rowIndex) : rowIndex}
+            className="hover:bg-gray-50"
+          >
             {columns.map((col, colIndex) => (
               <TableCell key={colIndex} className={col.className}>
                 {col.render

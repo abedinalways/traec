@@ -8,7 +8,7 @@ export default function AdminDashboardLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div>
+    <div className="font-[inter]">
       <SidebarProvider>
         <AdminDashboardShell>
           {children}
