@@ -8,9 +8,7 @@ import {
   type UserRole,
 } from "@/lib/sidebarConfig";
 
-
 import { useModal } from "@/hooks/useModal";
-
 import { useSidebar } from "@/app/context/SidebarContext";
 import { SidebarHeader } from "@/dashboard_components/sidebar/SidebarHeader";
 import { SidebarMenuItem } from "@/dashboard_components/sidebar/SidebarMenuItem";
@@ -31,7 +29,10 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
 }) => {
   const { isExpanded, isMobileOpen, toggleSidebar } = useSidebar();
   const pathname = usePathname();
-  const [openSubmenu, setOpenSubmenu] = useState<number | null>(null);
+
+  const [manualOpenSubmenu, setManualOpenSubmenu] = useState<number | null>(
+    null,
+  );
   const subMenuRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const [subMenuHeight, setSubMenuHeight] = useState<Record<string, number>>(
     {},
@@ -39,13 +40,14 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Get sidebar config based on role
   const config = getSidebarConfig(role);
+
   const {
     isOpen: isWalletModalOpen,
     openModal: openWalletModal,
     closeModal: closeWalletModal,
   } = useModal();
+
   const walletAddress = "0x71C7656EC7ab8efB7401B5fd6...";
 
   const handleQuickLinkClick = (link: QuickLink) => {
@@ -64,6 +66,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1024);
     };
+
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -72,24 +75,23 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
   const isActive = useCallback(
     (path?: string) => {
       if (!path) return false;
-      return pathname.startsWith(path);
+
+      if (path === "/admin/dashboard") {
+        return pathname === path;
+      }
+
+      return pathname === path || pathname.startsWith(`${path}/`);
     },
     [pathname],
   );
 
- useEffect(() => {
-   config.navItems.forEach((nav, index) => {
-     // If parent has path and is active
-     if (nav.path && pathname.startsWith(nav.path)) {
-       setOpenSubmenu(null);
-     }
+  const activeSubmenu = config.navItems.findIndex((nav) =>
+    nav.subItems?.some(
+      (sub) => pathname === sub.path || pathname.startsWith(`${sub.path}/`),
+    ),
+  );
 
-     // If any subItem is active
-     if (nav.subItems?.some((sub) => pathname.startsWith(sub.path))) {
-       setOpenSubmenu(index);
-     }
-   });
- }, [pathname, config.navItems]);
+  const openSubmenu = activeSubmenu !== -1 ? activeSubmenu : manualOpenSubmenu;
 
   useEffect(() => {
     if (openSubmenu !== null) {
@@ -104,7 +106,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
   }, [openSubmenu]);
 
   const handleSubmenuToggle = (index: number) => {
-    setOpenSubmenu((prev) => (prev === index ? null : index));
+    setManualOpenSubmenu((prev) => (prev === index ? null : index));
   };
 
   const sidebarWidth = isMobileOpen
@@ -113,7 +115,6 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
       ? "w-[280px]"
       : "w-[90px]";
 
-  // Desktop: rounded border with padding, Mobile: no padding
   const sidebarClasses = isMobileOpen
     ? "translate-x-0"
     : "-translate-x-full overflow-x-hidden md:overflow-x-visible lg:translate-x-0";
@@ -122,18 +123,17 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
     <>
       <aside
         className={`
-    fixed top-0 left-0
-    flex flex-col
-    h-screen
-    bg-[#F4F6F8]
-    border-r border-gray-200
-    transition-all duration-300 ease-in-out
-    ${sidebarWidth}
-    ${sidebarClasses}
-    z-1000
-  `}
+          fixed top-0 left-0
+          flex flex-col
+          h-screen
+          bg-[#F4F6F8]
+          border-r border-gray-200
+          transition-all duration-300 ease-in-out
+          ${sidebarWidth}
+          ${sidebarClasses}
+          z-1000
+        `}
       >
-        {/* Header Section */}
         <SidebarHeader
           isExpanded={isExpanded}
           isMobile={isMobile}
@@ -141,7 +141,6 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
           onToggle={toggleSidebar}
         />
 
-        {/* Navigation Menu */}
         <div className="flex-1 overflow-y-auto px-4 py-6">
           <nav className="space-y-1 relative">
             {config.navItems.map((nav, index) => (
@@ -167,7 +166,6 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
           </nav>
         </div>
 
-        {/* Quick Links Section - Above User Profile */}
         {(isExpanded || isMobile) && config.quickLinks.length > 0 && (
           <QuickLinks
             links={config.quickLinks}
@@ -175,11 +173,11 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
           />
         )}
 
-        {/* User Profile Section */}
         {(isExpanded || isMobile) && (
           <UserProfile name={userName} id={userId} />
         )}
       </aside>
+
       <WalletAddressModal
         isOpen={isWalletModalOpen}
         onClose={closeWalletModal}
