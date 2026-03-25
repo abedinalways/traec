@@ -301,7 +301,7 @@ export const SidebarMenuItem: React.FC<SidebarMenuItemProps> = ({
       href={item.path || "#"}
       className={`font-[inter] w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
         isActive(item.path || "")
-          ? "bg-[#6B38FF] text-white dark:bg-[#6B38FF]"
+          ? "bg-[#0f1016] text-white dark:bg-[#0f1016]"
           : "text-gray-700 dark:text-[#98A2B3] hover:bg-gray-100 dark:hover:bg-[#2C2F3F] hover:text-gray-900 dark:hover:text-white"
       } ${!isExpanded && !isMobile ? "justify-center" : "justify-start"}`}
       onMouseEnter={() => onMouseEnter(item.name)}

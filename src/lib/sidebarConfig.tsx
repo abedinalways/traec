@@ -16,6 +16,7 @@ import {
 } from "../icons/index";
 import { Download, Wallet } from "lucide-react";
 import DashboardIcon from "@/icons/DashboardIcon";
+import OrderManagementIcon from "@/icons/OrderManagementIcon";
 
 export type UserRole = "admin" | "user";
 
@@ -79,8 +80,8 @@ export const adminSidebarConfig: SidebarConfig = {
     },
 
     {
-      icon: <GameRoomsIcon />,
-      name: "Game Rooms",
+      icon: <OrderManagementIcon/>,
+      name: "Order Management",
       path: "/admin/dashboard/game-rooms",
     },
     {
