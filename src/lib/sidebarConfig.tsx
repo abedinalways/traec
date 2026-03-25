@@ -17,6 +17,11 @@ import {
 import { Download, Wallet } from "lucide-react";
 import DashboardIcon from "@/icons/DashboardIcon";
 import OrderManagementIcon from "@/icons/OrderManagementIcon";
+import PromotionIcon from "@/icons/PromotionIcon";
+import SubscriptionIcon from "@/icons/SubscriptionIcon";
+import PaymentIcon from "@/icons/PaymentIcon";
+import UsersIcondashboard from "@/icons/UsersIconDashboard";
+import CMSIcon from "@/icons/CMSIcon";
 
 export type UserRole = "admin" | "user";
 
@@ -57,7 +62,7 @@ export const adminSidebarConfig: SidebarConfig = {
       path: "/admin/dashboard",
     },
     {
-      icon: <UsersIcon />,
+      icon: <UsersIcondashboard />,
       name: "User Management",
       submenuStyle: "tree",
       subItems: [
@@ -80,25 +85,54 @@ export const adminSidebarConfig: SidebarConfig = {
     },
 
     {
-      icon: <OrderManagementIcon/>,
+      icon: <OrderManagementIcon />,
       name: "Order Management",
-      path: "/admin/dashboard/game-rooms",
+      path: "/admin/dashboard/order-management",
     },
     {
-      icon: <FinancialIcon />,
-      name: "Financials",
-      path: "/admin/dashboard/financial",
+      icon: <PromotionIcon />,
+      name: "Preomotion Management",
+      path: "/admin/dashboard/promotion-management",
     },
 
     {
-      icon: <AnalyticsIcon />,
-      name: "Analytics",
-      path: "/admin/dashboard/analytics",
+      icon: <SubscriptionIcon />,
+      name: "Subscription & Payment",
+      submenuStyle: "tree",
+      subItems: [
+        {
+          name: "Subscription",
+          path: "/admin/dashboard/subscription-payment/subscription",
+          icon: <PaymentIcon />,
+        },
+        {
+          name: "Payment",
+          path: "/admin/dashboard/subscription-payment/payment",
+          icon: <PaymentIcon />,
+        },
+      ],
     },
     {
-      icon: <SettingsIcon />,
-      name: "Settings",
-      path: "/admin/dashboard/settings",
+      icon: <UsersIcondashboard />,
+      name: "Report & Support",
+      submenuStyle: "tree",
+      subItems: [
+        {
+          name: "Report Management",
+          path: "/admin/dashboard/report-support/report-management",
+          icon: <PaymentIcon />,
+        },
+        {
+          name: "Help & Support",
+          path: "/admin/dashboard/report-support/support",
+          icon: <PaymentIcon />,
+        },
+      ],
+    },
+    {
+      icon: <CMSIcon />,
+      name: "CMS",
+      path: "/admin/dashboard/cms",
     },
   ],
   quickLinks: [],
