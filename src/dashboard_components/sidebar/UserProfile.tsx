@@ -1,48 +1,50 @@
 "use client";
-import React from "react";
-import { Logout, VerifyIcon } from "../../icons/index";
 
-import ProfileAvatar from "../users/ProfileAvatar";
+import React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Settings } from "lucide-react"; // Or your custom icon
+import { Logout } from "../../icons/index";
 
 interface UserProfileProps {
-  name: string;
-  id: string;
   onLogout?: () => void;
 }
 
-export const UserProfile: React.FC<UserProfileProps> = ({
-  
-  onLogout,
-}) => {
-  return (
-    <div className="px-3 pb-4  border-gray-200 border-dashed dark:border-[#2C2F3F]">
-      <div className="mt-4 p-3 rounded-lg bg-white dark:bg-[#2C2F3F] border border-gray-200 dark:border-transparent shadow-sm dark:shadow-none">
-        <div className="flex items-center gap-3 ">
-          {/* <ProfileAvatar imageSrc="/sidebar/profile_img.jpg" isOnline={true} /> */}
+export const UserProfile: React.FC<UserProfileProps> = ({ onLogout }) => {
+  const pathname = usePathname();
 
-          <div className="flex justify-between">
-            {/* <div>
-              <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                {name} kkk
-              </p>
-              <p className="text-xs text-gray-600 dark:text-[#98A2B3]">
-                ID #{id}
-              </p>
-            </div> */}
-            {/* <VerifyIcon className="absolute top-0 right-10 w-5 h-5" /> */}
-          </div>
-          <button
-            onClick={onLogout}
-            className="text-gray-600 flex justify-between items-center dark:text-[#98A2B3] hover:text-gray-900 dark:hover:text-white transition-colors"
-            aria-label="Logout "
-          >
-            <span className="flex justify-between gap-10">
-              {" "}
-              Logout <Logout className="w-5 h-5" />
-            </span>
-          </button>
+  // Check if the current URL matches the settings route
+  const isActive = pathname === "/admin/dashboard/settings-security";
+
+  return (
+    <div className="px-4 pb-6 space-y-3 mt-auto">
+      {/* Settings & Security Link */}
+      <Link href="/admin/dashboard/settings-security" className="block w-full">
+        <button
+          className={`flex items-center gap-3 w-full p-4 rounded-xl transition-all shadow-sm ${
+            isActive
+              ? "bg-[#030914] text-white shadow-md"
+              : "bg-white border border-gray-100 text-[#1D2433] hover:bg-gray-50"
+          }`}
+        >
+          <Settings
+            size={20}
+            className={isActive ? "text-white" : "text-gray-500"}
+          />
+          <span className="text-[15px] font-medium">Settings & Security</span>
+        </button>
+      </Link>
+
+      {/* Logout Button */}
+      <button
+        onClick={onLogout}
+        className="flex items-center gap-3 w-full p-4 rounded-full bg-white border border-gray-100 text-[#1D2433] hover:bg-gray-50 transition-all shadow-sm"
+      >
+        <div className="flex items-center justify-center w-6 h-6 rounded-full bg-gray-100">
+          <Logout className="w-4 h-4 text-[#1D2433]" />
         </div>
-      </div>
+        <span className="text-[15px] font-medium">Logout</span>
+      </button>
     </div>
   );
 };
