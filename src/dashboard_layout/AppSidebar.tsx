@@ -91,7 +91,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
     ),
   );
 
-  const openSubmenu = activeSubmenu !== -1 ? activeSubmenu : manualOpenSubmenu;
+  const openSubmenu = manualOpenSubmenu !== null ? manualOpenSubmenu : activeSubmenu;
 
   useEffect(() => {
     if (openSubmenu !== null) {

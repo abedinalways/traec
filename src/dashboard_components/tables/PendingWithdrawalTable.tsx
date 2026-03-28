@@ -188,7 +188,7 @@ const PendingWithdrawalTable = () => {
 
       {/* Table (responsive: horizontal scroll) */}
       <div className="w-full overflow-x-auto">
-        <ReusableTable<PendingWithdrawalRow>
+        {/* <ReusableTable<PendingWithdrawalRow>
           tableHeader={tableHeader}
           items={tableData}
           rowRenderers={rowRenderers}
@@ -211,7 +211,7 @@ const PendingWithdrawalTable = () => {
                 text-start
                 border-b border-[#26344b]
             "
-        />
+        /> */}
       </div>
       <PendingWithdrawalDeleteModal
         isOpen={isDeleteModalOpen}

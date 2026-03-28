@@ -18,7 +18,7 @@ function NotificationSettings() {
       <h3 className="text-[16px] font-bold text-[#030914] mb-4">
         Notification Settings
       </h3>
-      <div className="space-y-4">
+      <div className="space-y-4 cursor-pointer">
         {notifications.map((n: NotificationItem, i: number) => (
           <NotificationCheckbox
             key={i}

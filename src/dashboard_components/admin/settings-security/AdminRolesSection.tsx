@@ -10,8 +10,8 @@ const rolesData = [
 
 function AdminRolesSection() {
   return (
-    <section>
-      <h2 className="text-[15px] font-bold text-[#030914] mb-4">Admin Roles &amp; Permissions</h2>
+    <section className="mt-6">
+      <h2 className="text-[18px] font-bold text-[#030914] mb-4">Admin Roles &amp; Permissions</h2>
       <div className="grid grid-cols-2 gap-3">
         {rolesData.map((r) => (
           <AdminRolesCard key={r.id} name={r.name} sub={r.sub} />

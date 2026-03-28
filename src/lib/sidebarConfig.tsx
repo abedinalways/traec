@@ -9,10 +9,7 @@ import {
   SettingsIcon,
   ActiveOnGoinMatch,
   TimeIcon,
-  UsersIcon,
-  GameRoomsIcon,
-  FinancialIcon,
-  AnalyticsIcon,
+  
 } from "../icons/index";
 import { Download, Wallet } from "lucide-react";
 import DashboardIcon from "@/icons/DashboardIcon";
@@ -69,17 +66,17 @@ export const adminSidebarConfig: SidebarConfig = {
         {
           name: "Client Management",
           path: "/admin/dashboard/user-management/client-management",
-          icon: <UserIcon className="w-4 h-4" />,
+          icon: <PaymentIcon />,
         },
         {
           name: "Seller/Providers",
           path: "/admin/dashboard/user-management/seller-providers",
-          icon: <UserIcon className="w-4 h-4" />,
+          icon: <PaymentIcon />,
         },
         {
           name: "New Account Approval",
           path: "/admin/dashboard/user-management/new-account-approval",
-          icon: <UserIcon className="w-4 h-4" />,
+          icon: <PaymentIcon />,
         },
       ],
     },
