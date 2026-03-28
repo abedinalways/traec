@@ -8,15 +8,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import React from "react";
 
-interface Column<T> {
+export interface Column<T> {
   header: string;
   accessor?: keyof T;
-  render?: (row: T) => React.ReactNode;
+  render?: (row: T, index?: number) => React.ReactNode; // index optional
   className?: string;
 }
 
-interface ReusableTableProps<T> {
+export interface ReusableTableProps<T> {
   columns: Column<T>[];
   data: T[];
   rowKey?: (row: T, index: number) => string | number;
@@ -28,8 +29,8 @@ export default function ReusableTableForAll<T>({
   rowKey,
 }: ReusableTableProps<T>) {
   return (
-    <Table>
-      <TableHeader className="">
+    <Table className="w-full">
+      <TableHeader>
         <TableRow>
           {columns.map((col, i) => (
             <TableHead key={i} className={col.className}>
@@ -48,7 +49,7 @@ export default function ReusableTableForAll<T>({
             {columns.map((col, colIndex) => (
               <TableCell key={colIndex} className={col.className}>
                 {col.render
-                  ? col.render(row)
+                  ? col.render(row, rowIndex)
                   : col.accessor
                     ? (row[col.accessor] as React.ReactNode)
                     : null}

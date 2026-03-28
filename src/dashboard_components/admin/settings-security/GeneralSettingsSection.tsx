@@ -7,7 +7,7 @@ import TwoFactorCard from "./TwoFactorCard";
 
 export default function SecuritySettingsPage() {
   return (
-    <div className="min-h-screen  space-y-6" style={{ fontFamily: "Inter, sans-serif" }}>
+    <div className="min-h-screen font-[inter]  space-y-10">
       <AdminRolesSection />
 
       <div className="grid grid-cols-2 gap-4">

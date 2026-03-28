@@ -179,7 +179,7 @@ export default function WalletHistoryTable() {
   return (
     <>
       <div className="w-full overflow-x-auto">
-        <ReusableTable<IWalletHistory>
+        {/* <ReusableTable<IWalletHistory>
           tableHeader={tableHeader}
           items={tableData}
           rowRenderers={rowRenderers}
@@ -187,7 +187,7 @@ export default function WalletHistoryTable() {
           minTableWidthPx={1000}
           headerCellClassName="bg-[#0b151d] px-6 py-4 text-xs font-medium uppercase tracking-wide text-[#94a3b8] border-b border-[#26344b] text-start"
           bodyCellClassName="px-6 py-4 border-b border-[#1f2a37] text-start hover:bg-[#0f1c26] transition"
-        />
+        /> */}
       </div>
     </>
   );

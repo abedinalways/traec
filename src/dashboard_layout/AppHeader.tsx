@@ -79,8 +79,8 @@ const AppHeader = ({ role }: AppHeaderProps) => {
               </svg>
             )}
           </button>
-          <Link href="/" className="lg:hidden">
-            <Image src="/images/profile/img01.png" alt="Logo" width={152} height={32} />
+          <Link href="/" className="hidden">
+            <Image src="/images/profile/img01.png" alt="Logo" width={152} height={32} className="w-fit "/>
           </Link>
 
           <button

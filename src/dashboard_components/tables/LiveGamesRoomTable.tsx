@@ -123,9 +123,9 @@ const LiveGamesRoomTable = () => {
 
       {/* Table (responsive: horizontal scroll) */}
       <div className="w-full overflow-x-auto">
-        <ReusableTable<ILiveGameRoom>
-          tableHeader={tableHeader}
-          items={tableData}
+        {/* <ReusableTable<ILiveGameRoom>
+          
+         
           rowRenderers={rowRenderers}
           getRowKey={(row) => row.id}
           // responsive: only forces scroll when needed (no fixed width)
@@ -146,7 +146,7 @@ const LiveGamesRoomTable = () => {
                 text-start
                 border-b border-[#26344b]
             "
-        />
+        /> */}
       </div>
     </div>
   );

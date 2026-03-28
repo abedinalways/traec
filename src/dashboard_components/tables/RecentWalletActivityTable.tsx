@@ -142,7 +142,7 @@ const RecentWalletActivityTable = () => {
 
       {/* Table */}
       <div className="w-full overflow-x-auto">
-        <ReusableTable<IWalletActivity>
+        {/* <ReusableTable<IWalletActivity>
           tableHeader={tableHeader}
           items={tableData}
           rowRenderers={rowRenderers}
@@ -163,7 +163,7 @@ const RecentWalletActivityTable = () => {
                         border-b border-[#26344b]
                         text-start
                     "
-        />
+        /> */}
       </div>
     </div>
   );

@@ -10,9 +10,9 @@ const passwordPolicies = [
 
 function PasswordPolicyCard() {
   return (
-    <div className="bg-white rounded-xl p-5 shadow-sm">
-      <h3 className="text-[14px] font-bold text-[#030914] mb-4">Password Policy</h3>
-      <div className="space-y-3">
+    <div className="bg-white rounded-xl p-5 shadow-sm font-[inter]">
+      <h3 className="text-[18px] font-bold text-[#030914] mb-4">Password Policy</h3>
+      <div className="space-y-3 text-[14px]">
         {passwordPolicies.map((p, i) => (
           <PolicyCheckbox key={i} label={p.label} checked={p.checked} />
         ))}

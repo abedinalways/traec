@@ -162,7 +162,7 @@ const RecentPlayedGamesTable = () => {
 
       {/* Table */}
       <div className="w-full overflow-x-auto">
-        <ReusableTable<IRecentGame>
+        {/* <ReusableTable<IRecentGame>
           tableHeader={tableHeader}
           items={tableData}
           rowRenderers={rowRenderers}
@@ -183,7 +183,7 @@ const RecentPlayedGamesTable = () => {
                         border-b border-[#26344b]
                         text-start
                     "
-        />
+        /> */}
       </div>
     </div>
   );
