@@ -1,7 +1,30 @@
-import { baseApi } from "@/src/redux/api/baseApi";
+import { baseApi } from "@/redux/api/baseApi";
+
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    registerUser: builder.mutation<
+      {
+        success?: boolean;
+        message?: string;
+        data?: { email: string; requires_verification: boolean };
+      },
+      {
+        name: string;
+        last_name: string;
+        email: string;
+        password: string;
+        password_confirmation: string;
+        otp?: string;
+      }
+    >({
+      query: (data) => ({
+        url: "/user-register",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["User"],
+    }),
     logoutUser: builder.mutation<{ success?: boolean; message?: string }, void>(
       {
         query: () => ({
@@ -60,6 +83,7 @@ const authApi = baseApi.injectEndpoints({
 });
 
 export const {
+  useRegisterUserMutation,
   useLogoutUserMutation,
   useForgotPasswordMutation,
   useResendVerificationEmailMutation,

@@ -1,8 +1,23 @@
-export type AuthRole = "dispatcher" | "admin" | "super-admin" | null;
+export type AuthRole = "user" | "provider" | "admin" | null;
 
 export interface LoginParams {
   email: string;
   password: string;
+}
+
+export interface LoginUser {
+  id: number;
+  name: string;
+  last_name?: string;
+  email: string;
+  type: AuthRole | string;
+}
+
+export interface LoginResponse {
+  user: LoginUser;
+  message: string;
+  token: string;
+  success?: boolean;
 }
 
 export interface AuthTokenPayload {
@@ -11,18 +26,12 @@ export interface AuthTokenPayload {
   refresh_token?: string;
 }
 
-export interface LoginResponse {
-  success: boolean;
-  message: string;
-  authorization?: AuthTokenPayload;
-  data?: AuthTokenPayload;
-  type?: AuthRole | string;
-}
-
 export interface RefreshTokenResponse {
   success: boolean;
   message?: string;
   authorization?: AuthTokenPayload;
   data?: AuthTokenPayload;
+  token?: string;
+  refresh_token?: string;
   type?: AuthRole | string;
 }

@@ -8,9 +8,9 @@ import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/navigation";
 import Modal from "../Modal";
 import { X } from "lucide-react";
-import FlyIcon from "@/components/icons/FlyIcon";
-import { demoLogin } from "@/lib/auth/auth";
-
+import { toast } from "sonner";
+import { useLoginMutation } from "@/redux/api/baseApi";
+import { getDefaultRouteForRole, normalizeAuthRole } from "@/lib/auth/config";
 interface Props {
   isOpen: boolean;
   onClose: () => void;
@@ -28,27 +28,34 @@ export default function LogInModal({ isOpen, onClose, openSignup }: Props) {
   const [showPass, setShowPass] = useState(false);
   const router = useRouter();
 
-  const onSubmit = (data: LogInFormData) => {
+  const [login, { isLoading }] = useLoginMutation();
+
+  const onSubmit = async (data: LogInFormData) => {
+    console.log("LOGIN FORM SUBMITTED:", data);
+
     try {
-      const res = demoLogin(data.email, data.password);
+      const res = await login({
+        email: data.email,
+        password: data.password,
+      }).unwrap();
 
-      if (!res.success) {
-        alert("Invalid email or password");
-        return;
-      }
+      console.log("LOGIN RESPONSE:", res);
 
-      // save role
-      localStorage.setItem("role", res.role);
+      const role = normalizeAuthRole(res.user?.type);
 
-      // update navbar immediately
-      window.dispatchEvent(new Event("storage"));
+      toast.success(res?.message || "Login successful");
 
       onClose();
       reset();
 
-      router.push(res.redirect);
-    } catch (error) {
-      console.log("Login failed", error);
+      window.dispatchEvent(new Event("storage"));
+
+      router.replace(getDefaultRouteForRole(role));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      console.log("LOGIN ERROR:", err);
+
+      toast.error(err?.data?.message || "Invalid email or password");
     }
   };
 
@@ -62,7 +69,6 @@ export default function LogInModal({ isOpen, onClose, openSignup }: Props) {
           <X className="w-5 h-5 text-gray-700" />
         </button>
 
-        {/* LEFT IMAGE */}
         <div className="flex items-center justify-center mr-10">
           <div className="w-full h-full flex items-center justify-center">
             <Image
@@ -75,7 +81,6 @@ export default function LogInModal({ isOpen, onClose, openSignup }: Props) {
           </div>
         </div>
 
-        {/* RIGHT FORM */}
         <div className="flex items-center justify-center z-50 bg-white lg:-ml-16 rounded-2xl lg:rounded-l-4xl lg:rounded-r-2xl">
           <div className="w-full p-8 md:p-10 rounded-3xl">
             <div className="w-full flex justify-center mb-6">
@@ -92,12 +97,11 @@ export default function LogInModal({ isOpen, onClose, openSignup }: Props) {
               </label>
               <input
                 type="email"
-                {...register("email")}
+                {...register("email", { required: true })}
                 placeholder="Email"
                 className="w-full border border-gray-200 h-12 rounded-xl px-4 focus:outline-none"
               />
 
-              {/* Password */}
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700">
                   Password
@@ -105,7 +109,7 @@ export default function LogInModal({ isOpen, onClose, openSignup }: Props) {
                 <div className="relative">
                   <input
                     type={showPass ? "text" : "password"}
-                    {...register("password")}
+                    {...register("password", { required: true })}
                     placeholder="Password"
                     className="w-full border border-gray-200 h-12 rounded-xl px-4 pr-12 focus:outline-none"
                   />
@@ -138,9 +142,10 @@ export default function LogInModal({ isOpen, onClose, openSignup }: Props) {
 
               <button
                 type="submit"
-                className="w-full h-12 rounded-xl text-white font-medium bg-gradient-to-r from-[#FFAC47] to-[#FF2A24] cursor-pointer"
+                disabled={isLoading}
+                className="w-full h-12 rounded-xl text-white font-medium bg-gradient-to-r from-[#FFAC47] to-[#FF2A24] cursor-pointer disabled:opacity-60"
               >
-                Log In
+                {isLoading ? "Logging in..." : "Log In"}
               </button>
             </form>
 

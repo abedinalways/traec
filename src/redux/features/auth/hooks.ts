@@ -1,15 +1,12 @@
 "use client";
 
-import { baseApi, useLoginMutation } from "@/src/redux/api/baseApi";
-import { useLogoutUserMutation } from "@/src/redux/features/auth/authapi";
-import {
-  logOut,
-  selectCurrentRole,
-  selectCurrentToken,
-  selectIsAuthenticated,
-} from "@/src/redux/features/auth/authSlice";
-import { getErrorMessage } from "@/src/lib/getErrorMessage";
-import { useAppDispatch, useAppSelector } from "@/src/redux/store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { logOut, selectCurrentRole, selectCurrentToken, selectIsAuthenticated } from "./authSlice";
+import { baseApi, useLoginMutation } from "@/redux/api/baseApi";
+import { useLogoutUserMutation } from "./authapi";
+import { getErrorMessage } from "@/lib/getErrorMessage";
+
+
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
