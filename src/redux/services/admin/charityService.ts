@@ -1,7 +1,5 @@
-import {
-  ICreateCharityPayload,
-  IUpdateCharityPayload,
-} from "@/src/types/adminCharityTypes";
+import { ICreateCharityPayload, IUpdateCharityPayload } from "@/types/adminCharityTypes";
+
 
 export const charityPayloadToFormData = (
   payload: ICreateCharityPayload | IUpdateCharityPayload,

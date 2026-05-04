@@ -14,6 +14,7 @@ import {
 import "../styles/globals.css";
 import localFont from "next/font/local";
 import { AuthModalProvider } from "./context/AuthModalContext";
+import ReduxProvider from "@/redux/ReduxProvider";
 
 const glory = Glory({
   variable: "--font-glory",
@@ -92,9 +93,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${glory.variable} ${openSans.variable} ${geistMono.variable} ${inter.variable} ${brittney.variable} ${brittney_regular.variable} antialiased`}
       >
+        <ReduxProvider>
+
         <main className="mt-16">
           <AuthModalProvider> {children}</AuthModalProvider>
         </main>
+        </ReduxProvider>
       </body>
     </html>
   );
