@@ -14,7 +14,9 @@ import {
 import "../styles/globals.css";
 import localFont from "next/font/local";
 import { AuthModalProvider } from "./context/AuthModalContext";
-import ReduxProvider from "@/redux/ReduxProvider";
+import ReduxProvider from "./ReduxProvider";
+
+
 
 const glory = Glory({
   variable: "--font-glory",

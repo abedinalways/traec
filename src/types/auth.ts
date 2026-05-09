@@ -5,19 +5,35 @@ export interface LoginParams {
   password: string;
 }
 
-export interface LoginUser {
+export interface AuthUser {
   id: number;
   name: string;
-  last_name?: string;
+  last_name?: string | null;
   email: string;
   type: AuthRole | string;
+  image?: string | null;
+  phone?: string | null;
+  status?: string | null;
+  provider_status?: boolean | null;
 }
 
-export interface LoginResponse {
-  user: LoginUser;
+export interface BackendLoginResponse {
+  user: AuthUser;
   message: string;
   token: string;
   success?: boolean;
+}
+
+export interface LoginResponse {
+  success: boolean;
+  message: string;
+  user: AuthUser;
+}
+
+export interface MeResponse {
+  authenticated: boolean;
+  user: AuthUser | null;
+  message?: string;
 }
 
 export interface AuthTokenPayload {
