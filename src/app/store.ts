@@ -1,14 +1,16 @@
-import adminSupportChatReducer from "@/redux/features/admin/support/supportChatSlice";
-import  authReducer  from "@/redux/features/auth/authSlice";
+
+
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-
 import { baseApi } from "./api/baseApi";
+
+import authReducer from "./api/auth/authSlice";
+
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    adminSupportChat: adminSupportChatReducer,
+    // adminSupportChat: adminSupportChatReducer,
     [baseApi.reducerPath]: baseApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>

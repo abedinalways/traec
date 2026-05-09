@@ -7,7 +7,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import FlyIcon from "@/components/icons/FlyIcon";
 import { ShieldCheck } from "lucide-react";
-import { demoLogin } from "@/lib/auth/auth";
+
 
 interface AdminLoginFormData {
   email: string;

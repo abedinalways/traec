@@ -16,37 +16,39 @@ import {
 } from "@/components/ui/sheet";
 import { useAuthModal } from "@/app/context/AuthModalContext";
 import DropDown from "../icons/DropDownIcon";
-import { useState, useEffect } from "react";
+
+import { getDefaultRouteForRole, normalizeAuthRole } from "@/lib/auth/config";
+
+import { useDispatch } from "react-redux";
+import { useGetMeQuery, useLogoutUserMutation } from "@/app/api/auth/authapi";
+import { baseApi } from "@/app/api/baseApi";
 
 export default function Navbar() {
   const { setOpenLogin, setOpenSignup } = useAuthModal();
+
   const pathname = usePathname();
   const router = useRouter();
+  const dispatch = useDispatch();
 
-  const [role, setRole] = useState<string | null>(null);
+  const {
+    data,
+    isLoading: isMeLoading,
+    isFetching: isMeFetching,
+  } = useGetMeQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
 
-  useEffect(() => {
-    const updateRole = () => {
-      const storedRole = localStorage.getItem("role");
-      setRole(storedRole);
-    };
+  const [logoutUser, { isLoading: isLoggingOut }] = useLogoutUserMutation();
 
-    updateRole();
+  const user = data?.authenticated ? data.user : null;
+  const role = normalizeAuthRole(user?.type);
+  const dashboardHref = role ? getDefaultRouteForRole(role) : "/";
 
-    window.addEventListener("storage", updateRole);
+  const userFullName = user
+    ? `${user.name || ""} ${user.last_name || ""}`.trim()
+    : "";
 
-    return () => {
-      window.removeEventListener("storage", updateRole);
-    };
-  }, []);
-
-  const demoUsers = {
-    admin: { name: "Admin", email: "admin@company.com" },
-    client: { name: "Cameron Diaz", email: "cameron@example.com" },
-    provider: { name: "Provider", email: "provider@example.com" },
-  };
-
-  const user = role ? demoUsers[role as keyof typeof demoUsers] : null;
+  const userImage = user?.image || "/images/browser/Avater.png";
 
   const isActive = (path: string) => {
     if (path === "/") {
@@ -58,10 +60,16 @@ export default function Navbar() {
       : "text-black";
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("role");
-    setRole(null);
-    router.push("/");
+  const handleLogout = async () => {
+    try {
+      await logoutUser().unwrap();
+    } catch (error) {
+      console.log("Logout error:", error);
+    } finally {
+      dispatch(baseApi.util.resetApiState());
+      router.push("/");
+      router.refresh();
+    }
   };
 
   return (
@@ -77,15 +85,19 @@ export default function Navbar() {
           <Link href="/" className={isActive("/")}>
             Home
           </Link>
+
           <Link href="/browse" className={isActive("/browse")}>
             Browse
           </Link>
+
           <Link href="/how-it-works" className={isActive("/how-it-works")}>
             How it Works
           </Link>
+
           <Link href="/providers" className={isActive("/providers")}>
             Providers
           </Link>
+
           <Link
             href="/become-provider"
             className={isActive("/become-provider")}
@@ -104,47 +116,47 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Auth */}
-        {user ? (
+        {isMeLoading || isMeFetching ? (
           <div className="hidden md:flex items-center gap-3">
-            <Link
-              href={
-                role === "client"
-                  ? "/client-profile"
-                  : role === "provider"
-                    ? "/provider-profile"
-                    : "/admin-profile"
-              }
-              className="flex items-center gap-2"
-            >
+            <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />
+            <div className="w-24 h-4 rounded bg-gray-200 animate-pulse" />
+          </div>
+        ) : user ? (
+          <div className="hidden md:flex items-center gap-3">
+            <Link href={dashboardHref} className="flex items-center gap-2">
               <Image
-                src="/images/browser/Avater.png"
+                src={userImage}
                 alt="profile"
-                width={24}
-                height={24}
-                className="w-6 h-6 rounded-full"
+                width={28}
+                height={28}
+                className="w-7 h-7 rounded-full object-cover"
               />
+
               <span className="text-sm font-medium text-gray-900 flex items-center gap-2">
-                {user.name} <DropDown />
+                {userFullName || user.email || "User"} <DropDown />
               </span>
             </Link>
 
             <Button
               onClick={handleLogout}
-              className="text-sm gradient-bg  text-white cursor-pointer px-4 py-2 rounded-lg"
+              disabled={isLoggingOut}
+              className="text-sm gradient-bg text-white cursor-pointer px-4 py-2 rounded-lg disabled:opacity-60"
             >
-              Logout
+              {isLoggingOut ? "Logging out..." : "Logout"}
             </Button>
           </div>
         ) : (
           <div className="hidden md:flex items-center gap-6">
             <button
+              type="button"
               onClick={() => setOpenLogin(true)}
-              className="bg-white text-black text-sm cursor-pointer font-medium "
+              className="bg-white text-black text-sm cursor-pointer font-medium"
             >
               Sign In
             </button>
 
             <Button
+              type="button"
               onClick={() => setOpenSignup(true)}
               className="rounded-[12px] px-6 text-white font-medium gradient-bg cursor-pointer"
             >
@@ -156,8 +168,10 @@ export default function Navbar() {
         {/* Mobile Menu */}
         <div className="md:hidden font-[inter]">
           <Sheet>
-            <SheetTrigger>
-              <Menu className="h-6 w-6" />
+            <SheetTrigger asChild>
+              <button type="button">
+                <Menu className="h-6 w-6" />
+              </button>
             </SheetTrigger>
 
             <SheetContent side="right" className="w-[260px] font-[inter]">
@@ -193,44 +207,58 @@ export default function Navbar() {
                   </Link>
                 </SheetClose>
 
+                <SheetClose asChild>
+                  <Link
+                    href="/become-provider"
+                    className={isActive("/become-provider")}
+                  >
+                    Become a Provider
+                  </Link>
+                </SheetClose>
+
                 {/* Mobile Auth */}
-                {user ? (
+                {isMeLoading || isMeFetching ? (
+                  <div className="flex items-center gap-3 pt-4">
+                    <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />
+                    <div className="w-24 h-4 rounded bg-gray-200 animate-pulse" />
+                  </div>
+                ) : user ? (
                   <div className="flex flex-col gap-4 pt-4">
                     <SheetClose asChild>
                       <Link
-                        href={
-                          role === "client"
-                            ? "/client-profile"
-                            : role === "provider"
-                              ? "/provider-profile"
-                              : "/admin-profile"
-                        }
+                        href={dashboardHref}
                         className="flex items-center gap-3"
                       >
                         <Image
-                          src="/images/browser/Avater.png"
+                          src={userImage}
                           alt="profile"
-                          width={24}
-                          height={24}
-                          className="w-6 h-6 rounded-full"
+                          width={28}
+                          height={28}
+                          className="w-7 h-7 rounded-full object-cover"
                         />
+
                         <span className="text-sm font-medium text-gray-900 flex items-center gap-2">
-                          {user.name} <DropDown />
+                          {userFullName || user.email || "User"} <DropDown />
                         </span>
                       </Link>
                     </SheetClose>
 
                     <Button
+                      type="button"
                       onClick={handleLogout}
-                      className="bg-red-500 hover:bg-red-600 text-white"
+                      disabled={isLoggingOut}
+                      className="bg-red-500 hover:bg-red-600 text-white disabled:opacity-60"
                     >
-                      Logout
+                      {isLoggingOut ? "Logging out..." : "Logout"}
                     </Button>
                   </div>
                 ) : (
                   <div className="flex flex-col gap-4 pt-4">
-                    <Button onClick={() => setOpenLogin(true)}>Sign In</Button>
-                    <Button onClick={() => setOpenSignup(true)}>
+                    <Button type="button" onClick={() => setOpenLogin(true)}>
+                      Sign In
+                    </Button>
+
+                    <Button type="button" onClick={() => setOpenSignup(true)}>
                       Join Now
                     </Button>
                   </div>

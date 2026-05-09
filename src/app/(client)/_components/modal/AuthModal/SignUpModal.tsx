@@ -8,7 +8,9 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { X } from "lucide-react";
 import { toast } from "sonner"; // or your toast lib
 import Modal from "../Modal";
-import { useRegisterUserMutation } from "@/redux/features/auth/authapi";
+import { useRegisterUserMutation } from "@/app/api/auth/authapi";
+
+
 
 
 interface SignUpModalProps {
