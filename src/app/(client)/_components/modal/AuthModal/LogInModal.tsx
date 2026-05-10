@@ -283,7 +283,7 @@ export default function LogInModal({
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-4 cursor-pointer top-4 z-20 p-2 rounded-full bg-white shadow hover:bg-gray-100 transition"
+          className="absolute right-4  cursor-pointer top-4 z-2000 p-2 rounded-full bg-white shadow hover:bg-gray-100 transition"
         >
           <X className="w-5 h-5 text-gray-700" />
         </button>
