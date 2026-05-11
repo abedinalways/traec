@@ -42,41 +42,33 @@ export default function SignUpModal({
 
   const [registerUser, { isLoading }] = useRegisterUserMutation();
 
-  // const onSubmit = async (data: SignUpFormData) => {
-  //   console.log("FORM SUBMITTED:", data);
-  //   try {
-  //     const res = await registerUser({
-  //       name: data.firstName,
-  //       last_name: data.lastName,
-  //       email: data.email,
-  //       password: data.password,
-  //       password_confirmation: data.confirmPassword,
-  //       ...(otpStep && { otp: data.otp }),
-  //     }).unwrap();
 
-  //     if (res?.data?.requires_verification && !otpStep) {
-  //       // Step 1 done — move to OTP step
-  //       setPendingEmail(res.data.email);
-  //       setOtpStep(true);
-  //       toast.success("OTP sent to your email!");
-  //     } else {
-  //       // Step 2 done — registration complete
-  //       toast.success("Registration successful! Please log in.");
-  //       reset();
-  //       setOtpStep(false);
-  //       onClose();
-  //       openLogin();
-  //     }
-  //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //   } catch (err: any) {
-  //     toast.error(
-  //       err?.data?.message ?? "Registration failed. Please try again.",
-  //     );
-  //   }
-  // };
-  
+  const getErrorMessage = (err: unknown) => {
+    if (typeof err === "object" && err !== null && "data" in err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const data = (err as { data?: any }).data;
+
+      if (typeof data?.message === "string") {
+        return data.message;
+      }
+
+      if (data?.errors && typeof data.errors === "object") {
+        const firstError = Object.values(data.errors)?.[0];
+
+        if (Array.isArray(firstError) && typeof firstError[0] === "string") {
+          return firstError[0];
+        }
+      }
+    }
+
+    return "Something went wrong. Please try again.";
+  };
+
   const onSubmit = async (data: SignUpFormData) => {
-    console.log("FORM SUBMITTED:", data);
+    if (!otpStep && data.password !== data.confirmPassword) {
+      toast.error("Password and confirm password do not match.");
+      return;
+    }
 
     const payload = {
       name: data.firstName,
@@ -87,34 +79,34 @@ export default function SignUpModal({
       ...(otpStep && { otp: data.otp }),
     };
 
-    // console.log("REGISTER PAYLOAD:", payload);
+    const loadingToast = toast.loading(
+      otpStep ? "Verifying OTP..." : "Creating your account...",
+    );
 
     try {
-      // console.log("BEFORE API CALL");
-
       const res = await registerUser(payload).unwrap();
 
-      // console.log("AFTER API CALL");
-      // console.log("REGISTER RESPONSE:", res);
+      toast.dismiss(loadingToast);
 
       if (res?.data?.requires_verification && !otpStep) {
         setPendingEmail(res.data.email);
         setOtpStep(true);
-        toast.success("OTP sent to your email!");
-      } else {
-        toast.success("Registration successful! Please log in.");
-        reset();
-        setOtpStep(false);
-        onClose();
-        openLogin();
+        toast.success(res?.message || "OTP sent to your email!");
+        return;
       }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
+
+      toast.success(res?.message || "Registration successful! Please log in.");
+
+      reset();
+      setOtpStep(false);
+      setPendingEmail("");
+      onClose();
+      openLogin();
+    } catch (err: unknown) {
+      toast.dismiss(loadingToast);
       console.log("REGISTER ERROR:", err);
 
-      toast.error(
-        err?.data?.message ?? "Registration failed. Please try again.",
-      );
+      toast.error(getErrorMessage(err));
     }
   };
   return (
@@ -149,7 +141,12 @@ export default function SignUpModal({
               {otpStep ? "Verify Your Email" : "Create an Account"}
             </h2>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
+            <form
+              onSubmit={handleSubmit(onSubmit, () => {
+                toast.error("Please fill in all required fields.");
+              })}
+              className="space-y-2"
+            >
               {!otpStep ? (
                 <>
                   <div className="flex gap-2">
