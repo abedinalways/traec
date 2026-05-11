@@ -11,10 +11,27 @@ export interface AuthUser {
   last_name?: string | null;
   email: string;
   type: AuthRole | string;
+
   image?: string | null;
   phone?: string | null;
   status?: string | null;
   provider_status?: boolean | null;
+
+  address?: string | null;
+  city?: string | null;
+  state?: string | null;
+  zip_code?: string | null;
+
+  bio?: string | null;
+  languages?: string[] | null;
+
+  category_id?: number | null;
+  plan_id?: number | null;
+  plan?: unknown;
+  provider_subscription?: string | null;
+
+  created_at?: string | null;
+  updated_at?: string | null;
 }
 
 export interface BackendLoginResponse {

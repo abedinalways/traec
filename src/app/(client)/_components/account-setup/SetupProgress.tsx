@@ -1,3 +1,4 @@
+import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Step } from "@/types/account-seetings";
 
@@ -12,13 +13,13 @@ function StepDot({
     <div
       className={cn(
         "grid h-10 w-10 place-items-center rounded-full text-[16px] font-semibold p-2",
-        status === "done" && "text-white background-gradient border-orange-500",
+        status === "done" && "bg-black text-white border-black",
         status === "active" &&
-          "border border-orange-500 bg-white text-gradient",
+          "border border-orange-500 bg-white text-orange-500",
         status === "todo" && "border border-zinc-200 bg-white text-zinc-500",
       )}
     >
-      {number}
+      {status === "done" ? <Check className="h-5 w-5" /> : number}
     </div>
   );
 }
@@ -37,18 +38,23 @@ function ProgressItem({
   return (
     <div className="flex gap-3">
       <StepDot number={number} status={status} />
+
       <div className="min-w-0">
         <div className="text-[16px] font-semibold text-zinc-900">{title}</div>
-        <div className="text-[12px] font-normal leading-4 text-zinc-500">{subtitle}</div>
+        <div className="text-[12px] font-normal leading-4 text-zinc-500">
+          {subtitle}
+        </div>
       </div>
     </div>
   );
 }
 
 export default function SetupProgress({ step }: { step: Step }) {
-  const s1 = step === 1 ? "active" : step > 1 ? "done" : "todo";
-  const s2 = step === 2 ? "active" : step > 2 ? "done" : "todo";
-  const s3 = step === 3 ? "active" : step > 3 ? "done" : "todo";
+  const getStatus = (itemStep: number) => {
+    if (step === itemStep) return "active";
+    if (step > itemStep) return "done";
+    return "todo";
+  };
 
   return (
     <div>
@@ -56,24 +62,33 @@ export default function SetupProgress({ step }: { step: Step }) {
         Account Setup Progress
       </div>
 
-      <div className="mt-4 space-y-4 ">
+      <div className="mt-4 space-y-4">
         <ProgressItem
           number={1}
-          title="Personal Information"
-          subtitle="Tell us a bit about yourself"
-          status={s1}
+          title="Select Plan"
+          subtitle="Choose your provider plan"
+          status={getStatus(1)}
         />
+
         <ProgressItem
           number={2}
-          title="Your Preferences"
-          subtitle="Personalize your experience"
-          status={s2}
+          title="Personal Information"
+          subtitle="Tell us a bit about yourself"
+          status={getStatus(2)}
         />
+
         <ProgressItem
           number={3}
-          title="Account Summary"
-          subtitle="Review Account Details"
-          status={s3}
+          title="Your Preferences"
+          subtitle="Personalize your experience"
+          status={getStatus(3)}
+        />
+
+        <ProgressItem
+          number={4}
+          title="Payment"
+          subtitle="Complete secure payment"
+          status={getStatus(4)}
         />
       </div>
     </div>

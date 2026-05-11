@@ -48,6 +48,7 @@ export default function LogInModal({
 
   const getErrorMessage = (err: unknown) => {
     if (typeof err === "object" && err !== null && "data" in err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const data = (err as { data?: any }).data;
 
       if (typeof data?.message === "string") {
