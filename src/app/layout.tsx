@@ -11,10 +11,11 @@ import {
   Playfair_Display,
   
 } from "next/font/google";
-import "../styles/globals.css";
+import "./styles/globals.css";
 import localFont from "next/font/local";
 import { AuthModalProvider } from "./context/AuthModalContext";
 import ReduxProvider from "./ReduxProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 
 
@@ -96,10 +97,16 @@ export default function RootLayout({
         className={`${geistSans.variable} ${glory.variable} ${openSans.variable} ${geistMono.variable} ${inter.variable} ${brittney.variable} ${brittney_regular.variable} antialiased`}
       >
         <ReduxProvider>
+          <main className="mt-16">
+            <AuthModalProvider> {children}</AuthModalProvider>
+          </main>
 
-        <main className="mt-16">
-          <AuthModalProvider> {children}</AuthModalProvider>
-        </main>
+          <Toaster
+            position="top-right"
+            richColors
+            closeButton
+            duration={3000}
+          />
         </ReduxProvider>
       </body>
     </html>
