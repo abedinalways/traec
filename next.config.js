@@ -4,22 +4,10 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**.ibb.co.com", // Handles any subdomain on ibb.co.com
-      },
-      {
-        protocol: "https",
-        hostname: "**.ibb.co", // Handles any subdomain on ibb.co
+        hostname: "traec.apphero.agency",
+        pathname: "/uploads/**",
       },
     ],
-  },
-
-  webpack(config) {
-    config.module.rules.push({
-      test: /\.svg$/,
-      use: ["@svgr/webpack"],
-    });
-
-    return config;
   },
 };
 
