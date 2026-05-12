@@ -18,7 +18,7 @@ import { useAuthModal } from "@/app/context/AuthModalContext";
 import DropDown from "../icons/DropDownIcon";
 
 import { getDefaultRouteForRole, normalizeAuthRole } from "@/lib/auth/config";
-
+import { getImageUrl } from "@/lib/getImageUrl";
 import { useDispatch } from "react-redux";
 import { useGetMeQuery, useLogoutUserMutation } from "@/app/api/auth/authapi";
 import { baseApi } from "@/app/api/baseApi";
@@ -48,7 +48,7 @@ export default function Navbar() {
     ? `${user.name || ""} ${user.last_name || ""}`.trim()
     : "";
 
-  const userImage = user?.image || "/images/browser/Avater.png";
+ const userImage = getImageUrl(user?.image, "/images/browser/Avater.png");
 
   const isActive = (path: string) => {
     if (path === "/") {

@@ -1,23 +1,22 @@
+
+
 "use client";
+
 import { Card } from "@/components/ui/card";
-import {
-  ChevronRight,
-  Pencil,
-  Settings,
-  CreditCard,
-  Clock,
-  Bell,
-  HelpCircle,
-  LogOut,
-} from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { ActionDialog } from "@/components/reusable/ActionDialog";
 import { useState } from "react";
-import { IoMdLogOut } from "react-icons/io";
-import ProfileCard from "@/components/reusable/ProfileCard";
 import Image from "next/image";
 import RedDeleteIcon from "@/components/icons/RedDeleteIcon";
 import ProviderProfileCard from "@/components/reusable/ProviderProfileCard";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { useGetProfileQuery } from "@/app/api/profile/profileUpdateApi";
+import { useLogoutUserMutation } from "@/app/api/auth/authapi";
+import { baseApi } from "@/app/api/baseApi";
+import { useDispatch } from "react-redux";
+import { getImageUrl } from "@/lib/getImageUrl";
 
 const menu = [
   {
@@ -30,7 +29,6 @@ const menu = [
     icon: "/images/profile/settings.png",
     title: "Account Settings",
     href: "/provider-profile/account-setting",
-
     desc: "Privacy, security, and preferences",
   },
   {
@@ -55,22 +53,70 @@ const menu = [
     icon: "/images/profile/help.png",
     title: "Help & Support",
     href: "/provider-profile/help-support",
-
     desc: "Get help or customer service",
   },
 ];
+
+const formatJoinedDate = (date?: string | null) => {
+  if (!date) return "Joined recently";
+
+  const parsedDate = new Date(date);
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return "Joined recently";
+  }
+
+  return `Joined ${parsedDate.toLocaleString("en-US", {
+    month: "short",
+    year: "numeric",
+  })}`;
+};
+
 export default function AccountDashboard() {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const { data, isLoading } = useGetProfileQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  const [logoutUser, { isLoading: isLoggingOut }] = useLogoutUserMutation();
+
+  const user = data?.authenticated ? data.user : null;
+
+  const fullName = user
+    ? `${user.name || ""} ${user.last_name || ""}`.trim()
+    : "";
+
+  const location = [user?.city, user?.state].filter(Boolean).join(", ");
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser().unwrap();
+      toast.success("Logged out successfully.");
+    } catch (error) {
+      console.log("LOGOUT ERROR:", error);
+      toast.error("Logout failed. Please try again.");
+    } finally {
+      setIsLogoutModalOpen(false);
+      dispatch(baseApi.util.resetApiState());
+      router.push("/");
+      router.refresh();
+    }
+  };
+
   return (
     <div className="w-full flex justify-center py-10 px-4 font-[inter]">
       <div className="w-full max-w-[780px] space-y-8">
         {/* Profile Header */}
         <ProviderProfileCard
-          name="Darlene Robertson"
-          avatar="/images/provider-profile-img.svg"
-          location="Los Angeles, CA"
-          joined="Joined Jan 2021"
-          email="maria@email.com"
+          name={isLoading ? "Loading..." : fullName || "User"}
+          avatar={getImageUrl(user?.image || "/images/provider-profile-img.svg")}
+          location={location || "Location not added"}
+          joined={formatJoinedDate(user?.created_at)}
+          email={user?.email || "Email not found"}
           verified={true}
         />
 
@@ -82,22 +128,22 @@ export default function AccountDashboard() {
               className="flex items-center justify-between p-4.5 rounded-xl border border-gray-200 shadow-sm transition-all hover:shadow-md hover:-translate-y-1 cursor-pointer"
             >
               <Link href={item.href!} className="flex items-center gap-4">
-                
-                 <div className="p-3 icon-bg text-orange-400 rounded-[8px] ">
-                                     <Image
-                                       src={item.icon}
-                                       alt={item.title}
-                                       width={24}
-                                       height={24}
-                                     />
-                                   </div>
-                
+                <div className="p-3 icon-bg text-orange-400 rounded-[8px] ">
+                  <Image
+                    src={item.icon}
+                    alt={item.title}
+                    width={24}
+                    height={24}
+                  />
+                </div>
+
                 <div>
                   <h3 className="font-semibold text-[18px]">{item.title}</h3>
                   <p className="text-[16px] text-[#4A4C56]  pt-0.5">
                     {item.desc}
                   </p>
                 </div>
+
                 <ChevronRight size={20} className="text-gray-400" />
               </Link>
             </Card>
@@ -115,24 +161,25 @@ export default function AccountDashboard() {
               <p className="text-sm text-gray-500">Sign out of your account</p>
             </div>
           </div>
+
           <button
             onClick={() => setIsLogoutModalOpen(true)}
-            className="px-4 py-2 cursor-pointer bg-black text-[16px] font-medium text-white rounded-lg hover:bg-gray-800 transition"
+            disabled={isLoggingOut}
+            className="px-4 py-2 cursor-pointer bg-black text-[16px] font-medium text-white rounded-lg hover:bg-gray-800 transition disabled:opacity-60"
           >
-            Logout
+            {isLoggingOut ? "Logging out..." : "Logout"}
           </button>
         </Card>
       </div>
+
       <ActionDialog
         open={isLogoutModalOpen}
         setOpen={setIsLogoutModalOpen}
         icon={<RedDeleteIcon />}
         title="Log Out"
         description="Are you sure you want to log out?"
-        confirmLabel="Yes. Log Out"
-        onConfirm={() => {
-          console.log("yes, log out");
-        }}
+        confirmLabel={isLoggingOut ? "Logging Out..." : "Yes. Log Out"}
+        onConfirm={handleLogout}
       />
     </div>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-
+import { getImageUrl } from "@/lib/getImageUrl";
 import ProfileIcon from "@/components/icons/ProfileIcon";
 import RightGreenIcon from "@/components/icons/RightGreenIcon";
 import LocationIcon from "@/components/icons/LocationIcon";
@@ -71,7 +71,7 @@ export default function Editprofile() {
         {/* Profile Image */}
         <div className="relative w-16 h-16">
           <Image
-            src={user.image || "/images/Ellipse 71.png"}
+            src={getImageUrl(user?.image, "/images/provider-profile-img.svg")}
             alt={fullName || "Profile"}
             fill
             className="rounded-full object-cover"
