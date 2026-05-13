@@ -22,10 +22,11 @@ export default function PasswordSetSuccessfullyModal({
             {/* Logo */}
             <div className="w-full flex justify-center my-6">
               <Image
-                src="/images/Successfully.png"
+                src="/images/success01.png"
                 width={100}
                 height={100}
                 alt="logo"
+                unoptimized
               />
             </div>
 
