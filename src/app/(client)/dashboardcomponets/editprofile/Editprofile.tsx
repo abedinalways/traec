@@ -184,7 +184,7 @@ export default function Editprofile() {
       <hr className="my-4" />
 
       {/* Response Time */}
-      <div>
+      {/* <div>
         <h3 className="font-semibold text-gray-800 mb-2 text-[16px]">
           Response Time
         </h3>
@@ -196,7 +196,7 @@ export default function Editprofile() {
           <span className="w-2 h-2 rounded-full bg-teal-500 inline-block"></span>
           Within 1 hour
         </span>
-      </div>
+      </div> */}
     </div>
   );
 }

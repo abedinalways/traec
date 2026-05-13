@@ -1,88 +1,173 @@
 "use client";
-import React, { useEffect, useRef } from "react";
 
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
-import Link from "next/link";
 import Modal from "../Modal";
+import { toast } from "sonner";
+import {
+  useForgotPasswordMutation,
+  useVerifyForgotPasswordOtpMutation,
+} from "@/app/api/auth/authapi";
+
 interface Props {
   isOpen: boolean;
   onClose: () => void;
+  email: string;
   openSetNewPassword: () => void;
 }
+
 interface OTPData {
   otp: string[];
 }
 
+const getErrorMessage = (err: unknown) => {
+  if (typeof err === "object" && err !== null && "data" in err) {
+    const data = (err as { data?: { message?: string } }).data;
+
+    if (typeof data?.message === "string") {
+      return data.message;
+    }
+  }
+
+  return "OTP verification failed. Please try again.";
+};
+
 export default function OTPModal({
   isOpen,
   onClose,
+  email,
   openSetNewPassword,
 }: Props) {
   const {
-    register,
     handleSubmit,
     watch,
     setValue,
+    reset,
     formState: { errors },
-  } = useForm<OTPData>();
+  } = useForm<OTPData>({
+    defaultValues: {
+      otp: ["", "", "", ""],
+    },
+  });
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const otp = watch("otp") || [];
 
-  // Focus first input on mount
+  const [verifyOtp, { isLoading }] = useVerifyForgotPasswordOtpMutation();
+  const [resendOtp, { isLoading: isResending }] = useForgotPasswordMutation();
+
   useEffect(() => {
-    if (inputRefs.current[0]) {
-      inputRefs.current[0].focus();
+    if (isOpen) {
+      setTimeout(() => {
+        inputRefs.current[0]?.focus();
+      }, 100);
     }
-  }, []);
+  }, [isOpen]);
 
   const handleChange = (index: number, value: string) => {
-    // Only allow numbers
     if (value && !/^\d+$/.test(value)) return;
 
+    const digit = value.slice(0, 1);
     const newOtp = [...otp];
-    newOtp[index] = value;
-    setValue("otp", newOtp);
 
-    // Auto-focus next input
-    if (value && index < 5) {
+    newOtp[index] = digit;
+    setValue("otp", newOtp, { shouldValidate: true });
+
+    if (digit && index < 3) {
       inputRefs.current[index + 1]?.focus();
     }
   };
 
   const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
-      // Move to previous input on backspace if current is empty
       inputRefs.current[index - 1]?.focus();
     }
   };
 
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
-    const pastedData = e.clipboardData.getData("text").slice(0, 4);
+
+    const pastedData = e.clipboardData
+      .getData("text")
+      .replace(/\D/g, "")
+      .slice(0, 4);
+
+    if (!pastedData) return;
+
     const pastedArray = pastedData.split("");
+    const newOtp = ["", "", "", ""];
 
-    if (pastedArray.every((char) => /^\d+$/.test(char))) {
-      const newOtp = [...otp];
-      pastedArray.forEach((char, index) => {
-        if (index < 4) {
-          newOtp[index] = char;
-        }
-      });
-      setValue("otp", newOtp);
+    pastedArray.forEach((char, index) => {
+      if (index < 4) {
+        newOtp[index] = char;
+      }
+    });
 
-      // Focus the next empty input or the last one
-      const nextEmptyIndex = pastedArray.length < 4 ? pastedArray.length : 3;
-      inputRefs.current[nextEmptyIndex]?.focus();
+    setValue("otp", newOtp, { shouldValidate: true });
+
+    const nextIndex = pastedArray.length >= 4 ? 3 : pastedArray.length;
+    inputRefs.current[nextIndex]?.focus();
+  };
+
+  const onSubmit = async (data: OTPData) => {
+    if (!email) {
+      toast.error("Email is missing. Please try forgot password again.");
+      return;
+    }
+
+    const otpCode = (data.otp || []).join("");
+
+    if (otpCode.length !== 4) {
+      toast.error("Please enter the 4-digit OTP.");
+      return;
+    }
+
+    const loadingToast = toast.loading("Verifying OTP...");
+
+    try {
+      const res = await verifyOtp({
+        email,
+        otp: otpCode,
+      }).unwrap();
+
+      toast.dismiss(loadingToast);
+      toast.success(res?.message || "OTP verified successfully.");
+
+      reset();
+      onClose();
+      openSetNewPassword();
+    } catch (err) {
+      toast.dismiss(loadingToast);
+      console.log("VERIFY OTP ERROR:", err);
+      toast.error(getErrorMessage(err));
     }
   };
 
-  const onSubmit = (data: OTPData) => {
-    console.log("Form Submitted:", data);
-    onClose();
-    openSetNewPassword();
+  const handleResendOtp = async () => {
+    if (!email) {
+      toast.error("Email is missing. Please try forgot password again.");
+      return;
+    }
+
+    const loadingToast = toast.loading("Resending OTP...");
+
+    try {
+      const res = await resendOtp({ email }).unwrap();
+
+      toast.dismiss(loadingToast);
+      toast.success(res?.message || "OTP resent successfully.");
+      reset({
+        otp: ["", "", "", ""],
+      });
+      inputRefs.current[0]?.focus();
+    } catch (err) {
+      toast.dismiss(loadingToast);
+      console.log("RESEND OTP ERROR:", err);
+      toast.error(getErrorMessage(err));
+    }
   };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="grid grid-cols-1 md:min-w-lg mx-auto">
@@ -105,13 +190,6 @@ export default function OTPModal({
                 {[0, 1, 2, 3].map((index) => (
                   <input
                     key={index}
-                    {...register(`otp.${index}`, {
-                      required: "OTP is required",
-                      pattern: {
-                        value: /^[0-9]$/,
-                        message: "Must be a single digit",
-                      },
-                    })}
                     ref={(el) => {
                       inputRefs.current[index] = el;
                     }}
@@ -136,20 +214,28 @@ export default function OTPModal({
 
               {/* Resend */}
               <div className="flex flex-col gap-5 justify-center items-center mt-8">
-                {" "}
                 <div className="flex gap-3 justify-center items-center">
-                  <Link href="#">Didn’t receive the code?</Link>
+                  <span>Didn’t receive the code?</span>
                   <div className=" text-[#27AE60]">
-                    <Link href="#">Resend</Link>
+                    <button
+                      type="button"
+                      onClick={handleResendOtp}
+                      disabled={isResending}
+                      className="cursor-pointer disabled:opacity-60"
+                    >
+                      {isResending ? "Resending..." : "Resend"}
+                    </button>
                   </div>
                 </div>
-                <p>You can resend code in 30s</p>{" "}
+                <p>You can resend code in 30s</p>
               </div>
+
               <button
                 type="submit"
-                className="w-full h-12 my-5 rounded-xl text-white font-medium bg-linear-to-r from-[#FFAC47] to-[#FF2A24] cursor-pointer"
+                disabled={isLoading}
+                className="w-full h-12 my-5 rounded-xl text-white font-medium bg-linear-to-r from-[#FFAC47] to-[#FF2A24] cursor-pointer disabled:opacity-60"
               >
-                Send
+                {isLoading ? "Verifying..." : "Send"}
               </button>
             </form>
           </div>
