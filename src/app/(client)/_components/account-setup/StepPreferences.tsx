@@ -125,7 +125,7 @@ export default function StepPreferences({
 
       <div className="space-y-6">
         <div>
-          <div className="text-[14px] font-semibold uppercase tracking-wide text-zinc-500">
+          <div className="text-[14px] font-semibold  tracking-wide text-zinc-500">
             What services are you interested in? Select at least one.
           </div>
 
@@ -146,7 +146,7 @@ export default function StepPreferences({
 
           <Button
             type="button"
-            className="h-[48px] w-[100px] cursor-pointer rounded-md bg-black px-5 text-[16px] text-white hover:bg-black/90"
+            className="h-[48px] w-[100px] cursor-pointer rounded-md gradient-bg px-5 text-[16px] text-white "
             onClick={handleNext}
           >
             Next <ChevronRight className="ml-2 h-4 w-4" />

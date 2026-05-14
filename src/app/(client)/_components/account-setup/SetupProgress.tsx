@@ -13,7 +13,7 @@ function StepDot({
     <div
       className={cn(
         "grid h-10 w-10 place-items-center rounded-full text-[16px] font-semibold p-2",
-        status === "done" && "bg-black text-white border-black",
+        status === "done" && "gradient-bg  text-white border border-orange-500",
         status === "active" &&
           "border border-orange-500 bg-white text-orange-500",
         status === "todo" && "border border-zinc-200 bg-white text-zinc-500",

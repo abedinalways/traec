@@ -6,9 +6,8 @@ import MyOrder from "../../dashboardcomponets/myorder/myorder";
 import MessagePage from "../../dashboardcomponets/messege/message";
 import ReviewPage from "../../dashboardcomponets/review/review";
 import Service from "./service";
-// import { serviceData } from "./serviceitem";
-
-// serviceitem.tsx
+import { useGetProfileQuery } from "@/app/api/profile/profileUpdateApi";
+import { CheckCircle2, XCircle, Calendar, CreditCard, Package, RefreshCcw } from "lucide-react";
 
 const serviceData = [
   {
@@ -113,7 +112,7 @@ import MessageInput from "@/components/message/MessageInput";
 export default function Overview() {
   const [activeTab, setActiveTab] = useState("Overview");
 
-  const tabs = ["Overview", "My Orders", "Services", "Messages", "Reviews"];
+  const tabs = ["Overview", "My Orders", "Services", "Messages", "Reviews", "My Plan"];
 
   return (
     <div className="w-full bg-white p-5 rounded">
@@ -247,37 +246,39 @@ export default function Overview() {
 
       {activeTab === "Services" && <Service services={serviceData} />}
 
-       {/* ============================  
+      {/* ============================  
                      MESSAGES TAB  
             ============================ */}
-            {activeTab === "Messages" && (
-              <ChatProvider>
-                <section className="grid md:h-[calc(100dvh-190px)] grid-cols-12 md:gap-4">
-                  {/* Sidebar */}
-                  <aside className="md:col-span-4 col-span-12 mt-4 md:mt-0 shadow-lg p-2 rounded-2xl">
-                    <div className="rounded-2xl bg-white md:p-6 p-4 md:max-h-[calc(100dvh-140px)] overflow-hidden">
-                      <MessageListSection/>
-                    </div>
-                  </aside>
-      
-                  {/* Chat Area */}
-                  <div className="md:h-[calc(100dvh-100px)]  md:col-span-8 col-span-12 bg-white md:p-6 p-2 md:grid md:grid-rows-[130px_1fr_86px] rounded-2xl shadow-lg overflow-y-auto">
-                    <Header />
-      
-                    <div className="flex-1 overflow-hidden">
-                      <MessageSection/>
-                    </div>
-      
-                    <MessageInput />
-                  </div>
-                </section>
-              </ChatProvider>
-            )}
+      {activeTab === "Messages" && (
+        <ChatProvider>
+          <section className="grid md:h-[calc(100dvh-190px)] grid-cols-12 md:gap-4">
+            {/* Sidebar */}
+            <aside className="md:col-span-4 col-span-12 mt-4 md:mt-0 shadow-lg p-2 rounded-2xl">
+              <div className="rounded-2xl bg-white md:p-6 p-4 md:max-h-[calc(100dvh-140px)] overflow-hidden">
+                <MessageListSection />
+              </div>
+            </aside>
+
+            {/* Chat Area */}
+            <div className="md:h-[calc(100dvh-100px)]  md:col-span-8 col-span-12 bg-white md:p-6 p-2 md:grid md:grid-rows-[130px_1fr_86px] rounded-2xl shadow-lg overflow-y-auto">
+              <Header />
+
+              <div className="flex-1 overflow-hidden">
+                <MessageSection />
+              </div>
+
+              <MessageInput />
+            </div>
+          </section>
+        </ChatProvider>
+      )}
 
       {/* ============================  
                 REVIEWS TAB  
       ============================ */}
       {activeTab === "Reviews" && <ReviewPage />}
+
+      {activeTab === "My Plan" && <MyPlanTab />}
     </div>
   );
 }
@@ -363,6 +364,8 @@ function ActivityItem({ text, time, dotColor }: any) {
   );
 }
 
+
+
 function MessageItem({ image, name, text }: any) {
   return (
     <div className="flex justify-between items-center py-3 cursor-pointer hover:bg-gray-50 rounded-xl px-2 w-full">
@@ -380,6 +383,194 @@ function MessageItem({ image, name, text }: any) {
         </div>
       </div>
       <ChevronRight size={18} className="text-gray-400" />
+    </div>
+  );
+}
+
+
+function MyPlanTab() {
+  const { data, isLoading, isError } = useGetProfileQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  const user = data?.authenticated ? data.user : null;
+
+  // Cast plan & subscription from unknown → typed inline
+  const plan = user?.plan as {
+    id: number;
+    name: string;
+    title: string;
+    price: string;
+    currency: string;
+    package: string;
+  } | null | undefined;
+
+  const sub = user?.provider_subscription as {
+    status: string;
+    stripe_status: string;
+    current_period_start: string;
+    current_period_end: string;
+    cancel_at_period_end: string | null;
+  } | null | undefined;
+
+  const formatDate = (iso?: string | null) => {
+    if (!iso) return "—";
+    return new Date(iso).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  // ── Loading skeleton ──────────────────────────────────────────────────────
+  if (isLoading) {
+    return (
+      <div className="pt-6 animate-pulse space-y-4 max-w-2xl">
+        <div className="h-40 rounded-2xl bg-gray-200" />
+        <div className="h-48 rounded-2xl bg-gray-200" />
+      </div>
+    );
+  }
+
+  // ── Error / no plan ───────────────────────────────────────────────────────
+  if (isError || !user) {
+    return (
+      <div className="pt-6 text-sm text-red-500">
+        Unable to load plan data.
+      </div>
+    );
+  }
+
+  if (!plan) {
+    return (
+      <div className="pt-8 flex flex-col items-center gap-3 text-center text-gray-500">
+        <Package size={40} className="text-gray-300" />
+        <p className="font-medium">No active plan found.</p>
+        <p className="text-xs text-gray-400">Subscribe to a plan to unlock provider features.</p>
+      </div>
+    );
+  }
+
+  const isActive = sub?.stripe_status === "active";
+  const cancelAtEnd = sub?.cancel_at_period_end;
+
+  return (
+    <div className="pt-6 space-y-5 max-w-2xl">
+
+      {/* ── Plan overview card ─────────────────────────────────────────────── */}
+      <div className="rounded-2xl border shadow-sm bg-white p-6">
+        <div className="flex items-start justify-between flex-wrap gap-3">
+          <div>
+            <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">Current Plan</p>
+            <h2 className="text-xl font-bold text-gray-900">{plan.title}</h2>
+            <p className="text-sm text-gray-500 mt-0.5">{plan.name}</p>
+          </div>
+
+          {/* Status badge */}
+          <span
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold ${
+              isActive
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-600"
+            }`}
+          >
+            {isActive
+              ? <CheckCircle2 size={13} />
+              : <XCircle size={13} />}
+            {sub?.status ?? "Unknown"}
+          </span>
+        </div>
+
+        <hr className="my-4" />
+
+        {/* Price + billing cycle */}
+        <div className="flex items-end gap-1">
+          <span className="text-3xl font-bold text-gray-900">
+            {plan.currency === "USD" ? "$" : plan.currency}
+            {parseFloat(plan.price).toFixed(2)}
+          </span>
+          <span className="text-sm text-gray-400 mb-1">
+            / {plan.package}
+          </span>
+        </div>
+      </div>
+
+      {/* ── Subscription details card ──────────────────────────────────────── */}
+      <div className="rounded-2xl border shadow-sm bg-white p-6 space-y-4">
+        <h3 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+          <CreditCard size={15} className="text-gray-400" />
+          Subscription Details
+        </h3>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Billing cycle */}
+          <DetailCard
+            icon={<RefreshCcw size={15} className="text-blue-500" />}
+            bg="bg-blue-50"
+            label="Billing Cycle"
+            value={plan.package.charAt(0).toUpperCase() + plan.package.slice(1)}
+          />
+
+          {/* Stripe status */}
+          <DetailCard
+            icon={<CheckCircle2 size={15} className="text-green-500" />}
+            bg="bg-green-50"
+            label="Stripe Status"
+            value={sub?.stripe_status
+              ? sub.stripe_status.charAt(0).toUpperCase() + sub.stripe_status.slice(1)
+              : "—"}
+          />
+
+          {/* Period start */}
+          <DetailCard
+            icon={<CalendarDays size={15} className="text-purple-500" />}
+            bg="bg-purple-50"
+            label="Period Start"
+            value={formatDate(sub?.current_period_start)}
+          />
+
+          {/* Period end */}
+          <DetailCard
+            icon={<CalendarDays size={15} className="text-orange-500" />}
+            bg="bg-orange-50"
+            label="Period End"
+            value={formatDate(sub?.current_period_end)}
+          />
+        </div>
+
+        {/* Cancel-at-period-end warning */}
+        {cancelAtEnd && (
+          <div className="flex items-start gap-2 mt-2 rounded-xl bg-red-50 border border-red-100 px-4 py-3">
+            <XCircle size={16} className="text-red-500 flex-shrink-0 mt-0.5" />
+            <p className="text-xs text-red-600">
+              Your subscription is set to cancel at the end of the current billing period on{" "}
+              <span className="font-semibold">{formatDate(sub?.current_period_end)}</span>.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Small reusable detail card ────────────────────────────────────────────────
+function DetailCard({
+  icon, bg, label, value,
+}: {
+  icon: React.ReactNode;
+  bg: string;
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="flex items-center gap-3 rounded-xl border bg-gray-50 px-4 py-3">
+      <div className={`w-8 h-8 rounded-lg ${bg} flex items-center justify-center flex-shrink-0`}>
+        {icon}
+      </div>
+      <div>
+        <p className="text-[11px] text-gray-400 uppercase tracking-wide">{label}</p>
+        <p className="text-sm font-semibold text-gray-800">{value}</p>
+      </div>
     </div>
   );
 }

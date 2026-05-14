@@ -13,6 +13,7 @@
 //   zip_code?: string;
 //   bio?: string;
 //   languages?: string[];
+//   category_id?: number[];
 //   password?: string;
 //   password_confirmation?: string;
 //   image?: File | null;
@@ -22,8 +23,21 @@
 //   message?: string;
 //   user?: AuthUser;
 //   success?: boolean;
+//   data?: {
+//     user?: AuthUser;
+//   };
 // };
 
+// export type ChangePasswordPayload = {
+//   current_password: string;
+//   new_password: string;
+//   new_password_confirmation: string;
+// };
+
+// export type ChangePasswordResponse = {
+//   success?: boolean;
+//   message?: string;
+// };
 // const parseJson = async (response: Response) => {
 //   const text = await response.text();
 
@@ -56,28 +70,69 @@
 //   };
 // };
 
+// const getUpdatedUserFromResponse = (
+//   response?: ProfileUpdateResponse,
+// ): AuthUser | undefined => {
+//   if (response?.user) {
+//     return response.user;
+//   }
+
+//   if (response?.data?.user) {
+//     return response.data.user;
+//   }
+
+//   return undefined;
+// };
+
 // const buildProfileFormData = (payload: ProfileUpdatePayload) => {
 //   const formData = new FormData();
 
-//   if (payload.name !== undefined) formData.append("name", payload.name);
+//   if (payload.name !== undefined) {
+//     formData.append("name", payload.name);
+//   }
+
 //   if (payload.last_name !== undefined) {
 //     formData.append("last_name", payload.last_name);
 //   }
-//   if (payload.phone !== undefined) formData.append("phone", payload.phone);
+
+//   if (payload.phone !== undefined) {
+//     formData.append("phone", payload.phone);
+//   }
+
 //   if (payload.address !== undefined) {
 //     formData.append("address", payload.address);
 //   }
-//   if (payload.city !== undefined) formData.append("city", payload.city);
-//   if (payload.state !== undefined) formData.append("state", payload.state);
+
+//   if (payload.city !== undefined) {
+//     formData.append("city", payload.city);
+//   }
+
+//   if (payload.state !== undefined) {
+//     formData.append("state", payload.state);
+//   }
+
 //   if (payload.zip_code !== undefined) {
 //     formData.append("zip_code", payload.zip_code);
 //   }
-//   if (payload.bio !== undefined) formData.append("bio", payload.bio);
+
+//   if (payload.bio !== undefined) {
+//     formData.append("bio", payload.bio);
+//   }
 
 //   if (payload.languages?.length) {
 //     payload.languages.forEach((language) => {
 //       formData.append("languages[]", language);
 //     });
+//   } else {
+//     formData.append("languages", JSON.stringify([]));
+//   }
+
+//   if (payload.category_id?.length) {
+//     payload.category_id.forEach((id) => {
+//       formData.append("category_id[]", String(id));
+//     });
+//   } else {
+//     formData.append("category_id", JSON.stringify([]));
 //   }
 
 //   if (payload.password) {
@@ -93,6 +148,27 @@
 //   }
 
 //   return formData;
+// };
+
+// const buildProfileJsonBody = (payload: ProfileUpdatePayload) => {
+//   return JSON.stringify({
+//     name: payload.name,
+//     last_name: payload.last_name,
+//     phone: payload.phone,
+//     address: payload.address,
+//     city: payload.city,
+//     state: payload.state,
+//     zip_code: payload.zip_code,
+//     bio: payload.bio,
+//     languages: payload.languages || [],
+//     category_id: payload.category_id || [],
+//     ...(payload.password
+//       ? {
+//           password: payload.password,
+//           password_confirmation: payload.password_confirmation,
+//         }
+//       : {}),
+//   });
 // };
 
 // const profileUpdateApi = baseApi.injectEndpoints({
@@ -154,23 +230,7 @@
 
 //           const body = hasImage
 //             ? buildProfileFormData(payload)
-//             : JSON.stringify({
-//                 name: payload.name,
-//                 last_name: payload.last_name,
-//                 phone: payload.phone,
-//                 address: payload.address,
-//                 city: payload.city,
-//                 state: payload.state,
-//                 zip_code: payload.zip_code,
-//                 bio: payload.bio,
-//                 languages: payload.languages || [],
-//                 ...(payload.password
-//                   ? {
-//                       password: payload.password,
-//                       password_confirmation: payload.password_confirmation,
-//                     }
-//                   : {}),
-//               });
+//             : buildProfileJsonBody(payload);
 
 //           const response = await fetch("/api/profile/update", {
 //             method: "PUT",
@@ -208,8 +268,21 @@
 //         try {
 //           const { data } = await queryFulfilled;
 
-//           if (data?.user) {
-//             dispatch(setAuthUser(data.user));
+//           const updatedUser = getUpdatedUserFromResponse(data);
+
+//           if (updatedUser) {
+//             dispatch(setAuthUser(updatedUser));
+
+//             dispatch(
+//               profileUpdateApi.util.updateQueryData(
+//                 "getProfile",
+//                 undefined,
+//                 (draft) => {
+//                   draft.authenticated = true;
+//                   draft.user = updatedUser;
+//                 },
+//               ),
+//             );
 //           }
 //         } catch {
 //           // UI component handles error toast
@@ -243,6 +316,7 @@ export type ProfileUpdatePayload = {
   zip_code?: string;
   bio?: string;
   languages?: string[];
+  category_id?: number[];
   password?: string;
   password_confirmation?: string;
   image?: File | null;
@@ -257,11 +331,22 @@ export type ProfileUpdateResponse = {
   };
 };
 
+export type ChangePasswordPayload = {
+  current_password: string;
+  new_password: string;
+  new_password_confirmation: string;
+};
+
+export type ChangePasswordResponse = {
+  success?: boolean;
+  message?: string;
+};
+
+/* ─── Helpers ─────────────────────────────────────────────────────────────── */
+
 const parseJson = async (response: Response) => {
   const text = await response.text();
-
   if (!text) return null;
-
   try {
     return JSON.parse(text);
   } catch {
@@ -282,81 +367,50 @@ const createFetchError = (
           : String(dataOrMessage || "Request failed"),
     };
   }
-
-  return {
-    status,
-    data: dataOrMessage,
-  };
+  return { status, data: dataOrMessage };
 };
 
 const getUpdatedUserFromResponse = (
   response?: ProfileUpdateResponse,
 ): AuthUser | undefined => {
-  if (response?.user) {
-    return response.user;
-  }
-
-  if (response?.data?.user) {
-    return response.data.user;
-  }
-
+  if (response?.user) return response.user;
+  if (response?.data?.user) return response.data.user;
   return undefined;
 };
 
 const buildProfileFormData = (payload: ProfileUpdatePayload) => {
   const formData = new FormData();
 
-  if (payload.name !== undefined) {
-    formData.append("name", payload.name);
-  }
-
-  if (payload.last_name !== undefined) {
+  if (payload.name !== undefined) formData.append("name", payload.name);
+  if (payload.last_name !== undefined)
     formData.append("last_name", payload.last_name);
-  }
-
-  if (payload.phone !== undefined) {
-    formData.append("phone", payload.phone);
-  }
-
-  if (payload.address !== undefined) {
+  if (payload.phone !== undefined) formData.append("phone", payload.phone);
+  if (payload.address !== undefined)
     formData.append("address", payload.address);
-  }
-
-  if (payload.city !== undefined) {
-    formData.append("city", payload.city);
-  }
-
-  if (payload.state !== undefined) {
-    formData.append("state", payload.state);
-  }
-
-  if (payload.zip_code !== undefined) {
+  if (payload.city !== undefined) formData.append("city", payload.city);
+  if (payload.state !== undefined) formData.append("state", payload.state);
+  if (payload.zip_code !== undefined)
     formData.append("zip_code", payload.zip_code);
-  }
-
-  if (payload.bio !== undefined) {
-    formData.append("bio", payload.bio);
-  }
+  if (payload.bio !== undefined) formData.append("bio", payload.bio);
 
   if (payload.languages?.length) {
-    payload.languages.forEach((language) => {
-      formData.append("languages[]", language);
-    });
+    payload.languages.forEach((lang) => formData.append("languages[]", lang));
   } else {
     formData.append("languages", JSON.stringify([]));
   }
 
-  if (payload.password) {
-    formData.append("password", payload.password);
+  if (payload.category_id?.length) {
+    payload.category_id.forEach((id) =>
+      formData.append("category_id[]", String(id)),
+    );
+  } else {
+    formData.append("category_id", JSON.stringify([]));
   }
 
-  if (payload.password_confirmation) {
+  if (payload.password) formData.append("password", payload.password);
+  if (payload.password_confirmation)
     formData.append("password_confirmation", payload.password_confirmation);
-  }
-
-  if (payload.image) {
-    formData.append("image", payload.image);
-  }
+  if (payload.image) formData.append("image", payload.image);
 
   return formData;
 };
@@ -372,6 +426,7 @@ const buildProfileJsonBody = (payload: ProfileUpdatePayload) => {
     zip_code: payload.zip_code,
     bio: payload.bio,
     languages: payload.languages || [],
+    category_id: payload.category_id || [],
     ...(payload.password
       ? {
           password: payload.password,
@@ -381,16 +436,17 @@ const buildProfileJsonBody = (payload: ProfileUpdatePayload) => {
   });
 };
 
+/* ─── API ─────────────────────────────────────────────────────────────────── */
+
 const profileUpdateApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    // ── GET /api/auth/me ───────────────────────────────────────────────────
     getProfile: builder.query<MeResponse, void>({
       queryFn: async () => {
         try {
           const response = await fetch("/api/auth/me", {
             method: "GET",
-            headers: {
-              Accept: "application/json",
-            },
+            headers: { Accept: "application/json" },
             credentials: "include",
             cache: "no-store",
           });
@@ -398,25 +454,18 @@ const profileUpdateApi = baseApi.injectEndpoints({
           const data = await parseJson(response);
 
           if (!response.ok) {
-            return {
-              error: createFetchError(response.status, data),
-            };
+            return { error: createFetchError(response.status, data) };
           }
 
-          return {
-            data: data as MeResponse,
-          };
+          return { data: data as MeResponse };
         } catch (error) {
-          return {
-            error: createFetchError("FETCH_ERROR", error),
-          };
+          return { error: createFetchError("FETCH_ERROR", error) };
         }
       },
 
       onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;
-
           if (data?.authenticated && data.user) {
             dispatch(setAuthUser(data.user));
           } else {
@@ -430,6 +479,7 @@ const profileUpdateApi = baseApi.injectEndpoints({
       providesTags: ["User"],
     }),
 
+    // ── PUT /api/profile/update ────────────────────────────────────────────
     updateProfile: builder.mutation<
       ProfileUpdateResponse,
       ProfileUpdatePayload
@@ -445,9 +495,7 @@ const profileUpdateApi = baseApi.injectEndpoints({
           const response = await fetch("/api/profile/update", {
             method: "PUT",
             headers: hasImage
-              ? {
-                  Accept: "application/json",
-                }
+              ? { Accept: "application/json" }
               : {
                   Accept: "application/json",
                   "Content-Type": "application/json",
@@ -459,30 +507,22 @@ const profileUpdateApi = baseApi.injectEndpoints({
           const data = await parseJson(response);
 
           if (!response.ok) {
-            return {
-              error: createFetchError(response.status, data),
-            };
+            return { error: createFetchError(response.status, data) };
           }
 
-          return {
-            data: data as ProfileUpdateResponse,
-          };
+          return { data: data as ProfileUpdateResponse };
         } catch (error) {
-          return {
-            error: createFetchError("FETCH_ERROR", error),
-          };
+          return { error: createFetchError("FETCH_ERROR", error) };
         }
       },
 
       onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;
-
           const updatedUser = getUpdatedUserFromResponse(data);
 
           if (updatedUser) {
             dispatch(setAuthUser(updatedUser));
-
             dispatch(
               profileUpdateApi.util.updateQueryData(
                 "getProfile",
@@ -501,12 +541,45 @@ const profileUpdateApi = baseApi.injectEndpoints({
 
       invalidatesTags: ["User"],
     }),
+
+    // ── POST /api/profile/passwordchange ──────────────────────────────────
+    changePassword: builder.mutation<
+      ChangePasswordResponse,
+      ChangePasswordPayload
+    >({
+      queryFn: async (payload) => {
+        try {
+          const response = await fetch("/api/profile/passwordchange", {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify(payload),
+          });
+
+          const data = await parseJson(response);
+
+          if (!response.ok) {
+            return { error: createFetchError(response.status, data) };
+          }
+
+          return { data: data as ChangePasswordResponse };
+        } catch (error) {
+          return { error: createFetchError("FETCH_ERROR", error) };
+        }
+      },
+    }),
   }),
 
   overrideExisting: true,
 });
 
-export const { useGetProfileQuery, useUpdateProfileMutation } =
-  profileUpdateApi;
+export const {
+  useGetProfileQuery,
+  useUpdateProfileMutation,
+  useChangePasswordMutation,
+} = profileUpdateApi;
 
 export default profileUpdateApi;

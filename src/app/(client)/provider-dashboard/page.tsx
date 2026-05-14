@@ -1,6 +1,5 @@
 "use client";
 
-
 import Overview from "../_components/providerdashboard/Overview";
 import Image from "next/image";
 import Editprofile from "../dashboardcomponets/editProfile-provider/EditProfile";
@@ -45,7 +44,7 @@ export default function Page() {
                         
                       "
             >
-              <Editprofile/>
+              <Editprofile />
             </div>
           </div>
 

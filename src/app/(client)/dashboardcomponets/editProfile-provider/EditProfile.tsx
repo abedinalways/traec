@@ -9,6 +9,7 @@ import StarIcon from "@/components/icons/StarIcon";
 import CalendarIcon from "@/components/icons/CalendarIcon";
 import Link from "next/link";
 import { useGetProfileQuery } from "@/app/api/profile/profileUpdateApi";
+import { Star, StarHalfIcon } from "lucide-react";
 
 const getMemberSince = (date?: string | null) => {
   if (!date) return "N/A";
@@ -82,7 +83,7 @@ export default function Editprofile() {
         <Link href="/provider-profile">
           <button
             className="
-          flex items-center cursor-pointer gap-1 text-sm px-4 py-1 
+          flex items-center cursor-pointer gap-1 text-xs px-4 py-1 
           border border-gray-200 rounded-[99px] hover:bg-gray-100 transition
         "
           >
@@ -94,30 +95,30 @@ export default function Editprofile() {
 
       {/* Name + Verified */}
       <div className="mt-3">
-        <h2 className="text-[24px] font-semibold text-gray-900 flex items-center justify-between gap-4">
+        <h2 className="sm:text-[16px] font-semibold text-gray-900 flex items-center justify-between gradient-text">
           {fullName || "User"}
-          <span className="flex items-center gap-1 bg-[#eefaf0] text-[#2DAB57] text-xs px-2 py-1 rounded-full">
+          {/* <span className="flex items-center gap-1 bg-[#eefaf0] text-[#2DAB57] text-xs px-2 py-1 rounded-full">
             <RightGreenIcon />
             Verified
-          </span>
+          </span> */}
         </h2>
 
         {/* Location + Rating */}
-        <div className="flex items-center gap-4 mt-2 text-gray-600 text-sm">
-          <span className="flex items-center gap-1 text-[14px]">
+        <div className="flex flex-col gap-4 mt-2 text-gray-600 text-xs">
+          <span className="flex items-center gap-1 text-[12px]  ml-1">
             <LocationIcon />
             {location || "Location not added"}
           </span>
 
-          <span className="flex items-center gap-1 text-[14px]">
-            <StarIcon />
+          {/* <span className="flex items-center gap-1 text-[14px]">
+            <StarHalfIcon/>
             <span className="font-medium">4.9</span>
             <span className="text-gray-500">(156 reviews)</span>
-          </span>
+          </span> */}
         </div>
 
         {/* Member Since */}
-        <p className="flex items-center gap-1 text-sm text-gray-600 mt-1 text-[14px]">
+        <p className="flex items-center gap-1 text-gray-600 mt-1 text-[12px]">
           <CalendarIcon />
           Member since {getMemberSince(user.created_at)}
         </p>
@@ -126,8 +127,8 @@ export default function Editprofile() {
       <hr className="my-4" />
 
       <div className="text-[16px] text-gray-700">
-        <h3 className="font-semibold mb-2">About me</h3>
-        <p className="leading-relaxed">
+        <h3 className="font-semibold mb-2 text-gradient">About me</h3>
+        <p className="leading-relaxed text-[12px]">
           {user.bio ||
             "No profile bio has been added yet. Update your profile to add more details about yourself."}
         </p>
@@ -136,21 +137,21 @@ export default function Editprofile() {
       <hr className="my-4" />
 
       <div>
-        <h3 className="font-semibold text-gray-800 mb-2 text-[16px]">
+        <h3 className="font-semibold text-gray-800 mb-2 text-[16px] text-gradient">
           My stats
         </h3>
 
-        <div className="flex justify-between text-[16px] py-1">
+        <div className="flex justify-between text-[12px] py-1">
           <span>Completed Orders</span>
           <span className="font-medium">8</span>
         </div>
 
-        <div className="flex justify-between text-[16px] py-1">
+        <div className="flex justify-between text-[12px] py-1">
           <span>Reviews Given</span>
           <span className="font-medium">12</span>
         </div>
 
-        <div className="flex justify-between text-[16px] py-1">
+        <div className="flex justify-between text-[12px] py-1">
           <span>Average Rating</span>
           <span className="font-medium">4.9/5</span>
         </div>
@@ -159,7 +160,7 @@ export default function Editprofile() {
       <hr className="my-4" />
 
       <div>
-        <h3 className="font-semibold text-gray-800 mb-2 text-[16px]">
+        <h3 className="font-semibold text-gradient text-gray-800 mb-2 text-[16px]">
           Languages
         </h3>
 
@@ -168,13 +169,13 @@ export default function Editprofile() {
             user.languages.map((language) => (
               <span
                 key={language}
-                className="px-3 py-1 rounded-full bg-gray-100 text-[16px]"
+                className="px-3 py-1 rounded-full bg-gray-100 text-[12px]"
               >
                 {language}
               </span>
             ))
           ) : (
-            <span className="px-3 py-1 rounded-full bg-gray-100 text-[16px]">
+            <span className="px-3 py-1 rounded-full bg-gray-100 text-[12px]">
               Not added
             </span>
           )}
@@ -182,6 +183,29 @@ export default function Editprofile() {
       </div>
 
       <hr className="my-4" />
+
+      <div>
+        <h3 className="font-semibold text-gradient text-gray-800 mb-2 text-[16px]">
+          Category
+        </h3>
+
+        <div className="flex gap-2 flex-wrap">
+          {user.categories?.length ? (
+            user.categories.map((category) => (
+              <span
+                key={category.id}
+                className="px-3 py-1 rounded-full bg-gray-100 text-[12px]"
+              >
+                {category.name}
+              </span>
+            ))
+          ) : (
+            <span className="px-3 py-1 rounded-full bg-gray-100 text-[12px]">
+              Not added
+            </span>
+          )}
+        </div>
+      </div>
 
       {/* Response Time */}
       {/* <div>

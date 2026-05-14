@@ -262,7 +262,7 @@ export default function StepPersonalInfo({
         <div className="flex justify-end pt-2">
           <Button
             type="submit"
-            className="h-[48px] w-[100px] cursor-pointer rounded-md bg-black px-5 text-[16px] text-white hover:bg-black/90"
+            className="h-[48px] w-[100px] cursor-pointer rounded-md gradient-bg px-5 text-[16px] text-white "
           >
             Next <ChevronRight className="h-6 w-6" />
           </Button>

@@ -5,6 +5,11 @@ export interface LoginParams {
   password: string;
 }
 
+export interface AuthUserCategory {
+  id: number;
+  name: string;
+  image?: string | null;
+}
 export interface AuthUser {
   id: number;
   name: string;
@@ -25,10 +30,12 @@ export interface AuthUser {
   bio?: string | null;
   languages?: string[] | null;
 
-  category_id?: number | null;
+  category_id?: number[] | null; 
+  categories?: AuthUserCategory[] | null; 
+
   plan_id?: number | null;
   plan?: unknown;
-  provider_subscription?: string | null;
+  provider_subscription?: unknown | null;
 
   created_at?: string | null;
   updated_at?: string | null;

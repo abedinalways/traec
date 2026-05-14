@@ -18,7 +18,7 @@ export default function BorderedChoice({
       onClick={() => onCheckedChange(!checked)}
       className={cn(
         "flex w-full items-center gap-3 rounded-[12px] border border-gray-200 px-4 py-3 text-left text-[12px] transition",
-        checked ? "border-1 border-black bg-white " : " bg-white ",
+        checked ? "border-1 border-orange-600 bg-white " : " bg-white ",
         "hover:border-zinc-300",
       )}
     >

@@ -344,7 +344,7 @@ export default function StepPayment({
             type="button"
             disabled={isLoading || !stripe}
             onClick={handleSendOtp}
-            className="h-[48px] w-[140px] cursor-pointer rounded-md bg-black text-white disabled:opacity-60"
+            className="h-[48px] w-[140px] cursor-pointer rounded-md gradient-bg  text-white disabled:opacity-60"
           >
             {isLoading ? "Processing..." : "Send OTP"}
             <ChevronRight className="h-5 w-5" />
@@ -406,7 +406,7 @@ export default function StepPayment({
               type="button"
               disabled={isLoading}
               onClick={handleConfirmOtp}
-              className="mt-5 h-12 w-full rounded-xl bg-black text-white disabled:opacity-60"
+              className="mt-5 h-12 w-full rounded-xl gradient-bg cursor-pointer text-white disabled:opacity-60"
             >
               {isLoading ? "Verifying..." : "Confirm & Register"}
             </Button>
