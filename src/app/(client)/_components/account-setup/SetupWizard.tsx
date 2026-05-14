@@ -137,7 +137,7 @@ export default function SetupWizard() {
           state: saved.values.state || "",
           zip: saved.values.zip || "",
 
-          // Password reload হলে intentionally blank রাখা better
+          
           password: "",
           confirmPassword: "",
         });

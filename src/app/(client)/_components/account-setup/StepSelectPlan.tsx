@@ -41,34 +41,34 @@ export default function StepSelectPlan({
               className={cn(
                 "relative min-h-[220px] rounded-2xl border p-5 text-left transition",
                 active
-                  ? "border-[#071225] bg-zinc-50"
+                  ? "border-orange-700 gradient-bg"
                   : "border-zinc-200 bg-white hover:border-zinc-400",
               )}
             >
               {active ? (
-                <span className="absolute right-4 top-4 grid h-6 w-6 place-items-center rounded-full bg-[#071225] text-white">
+                <span className="absolute right-4 top-4 grid h-6 w-6 place-items-center cursor-pointer rounded-full bg-orange-300 text-white">
                   <Check className="h-4 w-4" />
                 </span>
               ) : null}
 
-              <span className="rounded-full bg-[#071225] px-3 py-1 text-xs font-semibold uppercase text-white">
+              <span className="rounded-full bg-orange-300 px-3 py-1 text-xs font-semibold uppercase text-white">
                 {plan.package}
               </span>
 
-              <h3 className="mt-4 text-xl font-bold text-zinc-900">
+              <h3 className="mt-4 text-xl font-bold text-white">
                 {plan.title}
               </h3>
 
-              <div className="mt-2 flex items-end gap-1">
+              <div className="mt-2 flex items-end gap-1 text-white">
                 <span className="text-3xl font-bold">${plan.price}</span>
-                <span className="text-zinc-400">/{plan.package}</span>
+                <span className="text-white">/{plan.package}</span>
               </div>
 
               <ul className="mt-4 space-y-2 text-sm text-zinc-600">
                 {plan.features?.map((feature) => (
                   <li key={feature} className="flex gap-2">
-                    <Check className="mt-0.5 h-4 w-4 text-[#071225]" />
-                    <span>{feature}</span>
+                    <Check className="mt-0.5 h-4 w-4 text-white" />
+                    <span className="text-white">{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -78,13 +78,13 @@ export default function StepSelectPlan({
       </div>
 
       <div className="mt-8 flex items-center justify-between">
-        <p className="text-sm text-zinc-400">Step 1 of 4</p>
+        <p className="text-sm text-black">Step 1 of 4</p>
 
         <Button
           type="button"
           disabled={!selectedPlanId}
           onClick={onNext}
-          className="h-[48px] w-[100px] cursor-pointer rounded-md bg-black text-white disabled:opacity-60"
+          className="h-[48px] w-[100px] cursor-pointer rounded-md gradient-bg  text-white disabled:opacity-60"
         >
           Next <ChevronRight className="h-5 w-5" />
         </Button>
