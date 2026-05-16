@@ -1,6 +1,7 @@
 import { createSelector, createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "@/redux/store";
+// import { RootState } from "@/redux/store";
 import { SupportChatBootstrapPayload, SupportChatState, SupportConnectionStatus, SupportMessage } from "@/types/adminSupportChatTypes";
+import { RootState } from "@/app/store";
 
 const initialState: SupportChatState = {
   initialized: false,

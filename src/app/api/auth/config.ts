@@ -13,9 +13,9 @@ export const authRoutes = {
   forgotPassword: "/forgot-password",
   resetPassword: "/reset-password",
   signUp: "/sign-up",
-  dispatcherDashboard: "/dispatcher/dashboard",
+  clientDashboard: "/client-dashboard",
   adminDashboard: "/admin/dashboard",
-  superAdminDashboard: "/super-admin/dashboard",
+  providerDashboard: "/provider-dashboard",
 } as const;
 
 export const normalizeAuthRole = (role?: string | null): AuthRole => {
@@ -30,7 +30,7 @@ export const getDefaultRouteForRole = (role?: string | null) => {
   const normalizedRole = normalizeAuthRole(role);
 
   if (normalizedRole === "provider") {
-    return authRoutes.dispatcherDashboard;
+    return authRoutes.providerDashboard;
   }
 
   if (normalizedRole === "admin") {
@@ -38,7 +38,7 @@ export const getDefaultRouteForRole = (role?: string | null) => {
   }
 
   if (normalizedRole === "user") {
-    return authRoutes.superAdminDashboard;
+    return authRoutes.clientDashboard;
   }
 
   return authRoutes.login;
@@ -57,11 +57,11 @@ export const isAllowedRedirectForRole = (
   }
 
   if (role === "user") {
-    return pathname.startsWith("/user/dashboard");
+    return pathname.startsWith("/client-dashboard");
   }
 
   if (role === "provider") {
-    return pathname.startsWith("/provider/dashboard");
+    return pathname.startsWith("/provider-dashboard");
   }
 
   return false;

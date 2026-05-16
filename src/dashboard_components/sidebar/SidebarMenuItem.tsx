@@ -3,8 +3,12 @@
 "use client";
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { ChevronDownIcon } from "../../icons/index";
+
 import type { NavItem } from "../../lib/sidebarConfig";
+import { ChevronDownIcon } from "@/icons";
+import { ChevronDown, ChevronsDownIcon } from "lucide-react";
+
+
 
 interface SidebarMenuItemProps {
   item: NavItem;
@@ -73,7 +77,7 @@ export const SidebarMenuItem: React.FC<SidebarMenuItemProps> = ({
               <span className="flex-1 text-left text-sm font-medium">
                 {item.name}
               </span>
-              <ChevronDownIcon
+              <ChevronDown
                 className={`w-4 h-4 transition-transform ${
                   isSubmenuOpen ? "rotate-180" : ""
                 }`}

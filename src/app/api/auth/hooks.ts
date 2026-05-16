@@ -2,10 +2,10 @@
 
 
 import { useAppDispatch, useAppSelector } from "../../store";
-import { baseApi, useLoginMutation } from "../baseApi";
+import { baseApi } from "../baseApi";
 import { useLogoutUserMutation } from "./authapi";
 import { getErrorMessage } from "@/lib/getErrorMessage";
-import { logOut } from "./authSlice";
+import { logOut, selectCurrentRole, selectCurrentToken, selectIsAuthenticated } from "./authSlice";
 
 
 
@@ -14,7 +14,7 @@ export const useAuth = () => {
   const token = useAppSelector(selectCurrentToken);
   const role = useAppSelector(selectCurrentRole);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
-  const [logIn, loginState] = useLoginMutation();
+  
   const [logoutUser, logoutState] = useLogoutUserMutation();
 
   const handleLogout = async () => {
@@ -34,12 +34,11 @@ export const useAuth = () => {
     token,
     role,
     isAuthenticated,
-    logIn,
+  
     logOut: handleLogout,
-    isLoginLoading: loginState.isLoading,
+
     isLogoutLoading: logoutState.isLoading,
-    isLoading: loginState.isLoading || logoutState.isLoading,
-    loginError: loginState.error,
+
     logoutError: logoutState.error,
   };
 };
