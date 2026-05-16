@@ -5,22 +5,32 @@ import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 
 import { useSidebar } from "@/app/context/SidebarContext";
+import { useGetMeQuery } from "@/app/api/auth/authapi";
 
 import ConnectWalletButton from "@/dashboard_components/common/ConnectWalletButton";
-import NotificationDropdown from "@/dashboard_components/header/NotificationDropdown";
 import UserDropdown from "@/dashboard_components/header/UserDropdown";
-import SearchInput from "@/dashboard_components/ui/input/searchInput/SearchInput";
+
 export type AppHeaderProps = {
   role?: string;
 };
+
 const AppHeader = ({ role }: AppHeaderProps) => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const { isMobileOpen, toggleMobileSidebar } = useSidebar();
 
-  const toggleApplicationMenu = () => {
-    setApplicationMenuOpen(!isApplicationMenuOpen);
-  };
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const { data } = useGetMeQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  const user = data?.authenticated ? data.user : null;
+
+  const activeRole = role || user?.type || "";
+
+  const toggleApplicationMenu = () => {
+    setApplicationMenuOpen((prev) => !prev);
+  };
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -79,8 +89,15 @@ const AppHeader = ({ role }: AppHeaderProps) => {
               </svg>
             )}
           </button>
+
           <Link href="/" className="hidden">
-            <Image src="/images/profile/img01.png" alt="Logo" width={152} height={32} className="w-fit "/>
+            <Image
+              src="/images/profile/img01.png"
+              alt="Logo"
+              width={152}
+              height={32}
+              className="w-fit "
+            />
           </Link>
 
           <button
@@ -97,39 +114,28 @@ const AppHeader = ({ role }: AppHeaderProps) => {
               <path
                 fillRule="evenodd"
                 clipRule="evenodd"
-                d="M5.99902 10.4951C6.82745 10.4951 7.49902 11.1667 7.49902 11.9951V12.0051C7.49902 12.8335 6.82745 13.5051 5.99902 13.5051C5.1706 13.5051 4.49902 12.8335 4.49902 12.0051V11.9951C4.49902 11.1667 5.1706 10.4951 5.99902 10.4951ZM17.999 10.4951C18.8275 10.4951 19.499 11.1667 19.499 11.9951V12.0051C19.499 12.8335 18.8275 13.5051 17.999 13.5051C17.1706 13.5051 16.499 12.8335 16.499 12.0051V11.9951C16.499 11.1667 17.1706 10.4951 17.999 10.4951ZM13.499 11.9951C13.499 11.1667 12.8275 10.4951 11.999 10.4951C11.1706 10.4951 10.499 11.1667 10.499 11.9951V12.0051C10.499 12.8335 11.1706 13.5051 11.999 13.5051C12.8275 13.5051 13.499 12.8335 13.499 12.0051V11.9951Z"
+                d="M5.99902 10.4951C6.82745 10.4951 7.49902 11.1667 7.49902 11.9951V12.0051C7.49902 12.8335 6.82745 13.5051 5.99902 13.5051C5.1706 13.5051 4.49902 12.8335 4.49902 12.0051V11.9951C4.49902 11.1667 5.1706 10.4951 5.99902 10.4951ZM17.999 10.4951C18.8275 10.4951 19.499 11.1667 19.499 11.9951V12.0051C19.499 12.8335 18.8275 13.5051 17.999 13.5051C17.1706 13.5051 16.499 12.8335 16.499 12.0051V11.9951C16.499 11.1667 17.1706 10.4951 17.999 10.4951ZM13.499 11.9951C13.499 11.1667 12.8275 10.4951 11.999 10.4951C11.1706 10.4951 10.499 11.1667 10.499 11.9951V12.0051C10.499 12.8335 11.1706 13.5051 11.999 13.5051C12.8275 13.5051 13.499 12.0051 13.499 11.9951Z"
                 fill="currentColor"
               />
             </svg>
           </button>
-
-          {/* <div className="hidden lg:block">
-            <form>
-              <SearchInput
-                ref={inputRef}
-                placeholder="Search matches, players or rooms..."
-                containerClassName="xl:w-[430px]"
-                onChange={(e) => console.log(e.target.value)}
-              />
-            </form>
-          </div> */}
         </div>
+
         <div
           className={`${
             isApplicationMenuOpen ? "flex" : "hidden"
           } items-center justify-between w-full gap-4 px-5 py-2 lg:flex shadow-theme-md lg:justify-end lg:px-0 lg:shadow-none`}
         >
           <div className="flex items-center gap-2 2xsm:gap-3">
-            {role === "user" && (
+            {activeRole === "user" && (
               <ConnectWalletButton
                 onConnect={() => {
                   console.log("Wallet connect clicked");
                 }}
               />
             )}
-            {/* <NotificationDropdown /> */}
           </div>
-
+         
           <UserDropdown />
         </div>
       </div>

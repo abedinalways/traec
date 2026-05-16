@@ -28,18 +28,18 @@ export default function SettingsPage() {
             label="General Settings"
           />
 
-          <SidebarBtn
+          {/* <SidebarBtn
             active={activeTab === "security"}
             onClick={() => setActiveTab("security")}
             label="Security"
-          />
+          /> */}
         </div>
       </div>
 
       {/* ================= CONTENT ================= */}
       <div className="flex-1 p-6 bg-[#eceff3]">
         {activeTab === "general" && <GeneralSettingsSection />}
-        {activeTab === "security" && <SecuritySection />}
+        {/* {activeTab === "security" && <SecuritySection />} */}
       </div>
     </div>
   );

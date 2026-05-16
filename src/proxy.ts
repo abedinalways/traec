@@ -235,6 +235,6 @@ export const config = {
     "/forgot-password",
     "/client-dashboard/:path*",
     "/provider-dashboard/:path*",
-    "/admin-dashboard/:path*",
+    "/admin/dashboard/:path*",
   ],
 };

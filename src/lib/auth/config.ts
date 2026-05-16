@@ -185,7 +185,7 @@ export const authRoutes = {
 
   clientDashboard: "/client-dashboard",
   providerDashboard: "/provider-dashboard",
-  adminDashboard: "/admin-dashboard",
+  adminDashboard: "/admin/dashboard",
 } as const;
 
 export const normalizeAuthRole = (role?: string | null): AuthRole => {
