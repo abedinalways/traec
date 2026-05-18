@@ -1,86 +1,3 @@
-// // export const getBackendOrigin = () => {
-// //   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-
-// //   try {
-// //     const url = new URL(apiBaseUrl);
-
-// //     return `${url.protocol}//${url.host}`;
-// //   } catch {
-// //     return "";
-// //   }
-// // };
-
-// // export const getImageUrl = (
-// //   image?: string | null,
-// //   fallback = "/images/provider-profile-img.svg",
-// // ) => {
-// //   if (!image) return fallback;
-
-// //   if (
-// //     image.startsWith("http://") ||
-// //     image.startsWith("https://") ||
-// //     image.startsWith("/") ||
-// //     image.startsWith("blob:") ||
-// //     image.startsWith("data:")
-// //   ) {
-// //     return image;
-// //   }
-
-// //   const backendOrigin = getBackendOrigin();
-
-// //   if (!backendOrigin) {
-// //     return fallback;
-// //   }
-
-// //   return `${backendOrigin}/${image.replace(/^\/+/, "")}`;
-// // };
-
-// export const getBackendOrigin = () => {
-//   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-
-//   try {
-//     const url = new URL(apiBaseUrl);
-//     return `${url.protocol}//${url.host}`;
-//   } catch {
-//     return "";
-//   }
-// };
-
-// export const getImageUrl = (
-//   image?: string | null,
-//   fallback = "/images/provider-profile-img.svg",
-// ) => {
-//   if (!image) return fallback;
-
-//   if (image.startsWith("blob:") || image.startsWith("data:")) {
-//     return image;
-//   }
-
-//   if (image.startsWith("http://") || image.startsWith("https://")) {
-//     return encodeURI(image);
-//   }
-
-//   const backendOrigin = getBackendOrigin();
-
-//   if (image.startsWith("/uploads/")) {
-//     return backendOrigin ? encodeURI(`${backendOrigin}${image}`) : fallback;
-//   }
-
-//   if (image.startsWith("uploads/")) {
-//     return backendOrigin
-//       ? encodeURI(`${backendOrigin}/${image.replace(/^\/+/, "")}`)
-//       : fallback;
-//   }
-
-//   if (image.startsWith("/")) {
-//     return image;
-//   }
-
-//   return backendOrigin
-//     ? encodeURI(`${backendOrigin}/${image.replace(/^\/+/, "")}`)
-//     : fallback;
-// };
-
 const FALLBACK_BACKEND_ORIGIN = "https://traec.apphero.agency";
 
 export const getBackendOrigin = () => {
@@ -109,6 +26,7 @@ export const getBackendOrigin = () => {
 export const getImageUrl = (
   image?: string | null,
   fallback = "/images/provider-profile-img.svg",
+  cacheKey?: string | number | null,
 ) => {
   if (!image) return fallback;
 
@@ -116,15 +34,70 @@ export const getImageUrl = (
     return image;
   }
 
-  if (image.startsWith("http://") || image.startsWith("https://")) {
-    return encodeURI(image);
-  }
-
-  if (image.startsWith("/") && !image.startsWith("/uploads/")) {
+  if (
+    image.startsWith("/") &&
+    !image.startsWith("/uploads/") &&
+    !image.startsWith("/storage/")
+  ) {
     return image;
   }
 
   const backendOrigin = getBackendOrigin();
+  const cleanImage = image.replace(/^\/+/, "");
 
-  return encodeURI(`${backendOrigin}/${image.replace(/^\/+/, "")}`);
+  let fullUrl = "";
+
+  if (image.startsWith("http://") || image.startsWith("https://")) {
+    fullUrl = image;
+  } else if (
+    cleanImage.startsWith("uploads/") ||
+    cleanImage.startsWith("storage/")
+  ) {
+    fullUrl = `${backendOrigin}/${cleanImage}`;
+  } else {
+    fullUrl = `${backendOrigin}/uploads/${cleanImage}`;
+  }
+
+  if (!cacheKey) {
+    return fullUrl;
+  }
+
+  const separator = fullUrl.includes("?") ? "&" : "?";
+
+  return `${fullUrl}${separator}v=${encodeURIComponent(String(cacheKey))}`;
+};
+
+export const getImageFallbackUrls = (
+  image?: string | null,
+  fallback = "/images/provider-profile-img.svg",
+  cacheKey?: string | number | null,
+) => {
+  if (!image) return [fallback];
+
+  if (image.startsWith("blob:") || image.startsWith("data:")) {
+    return [image];
+  }
+
+  if (
+    image.startsWith("/") &&
+    !image.startsWith("/uploads/") &&
+    !image.startsWith("/storage/")
+  ) {
+    return [image, fallback];
+  }
+
+  const backendOrigin = getBackendOrigin();
+  const cleanImage = image.replace(/^\/+/, "");
+  const fileName = cleanImage.split("/").pop() || cleanImage;
+
+  const urls = [
+    getImageUrl(image, fallback, cacheKey),
+    `${backendOrigin}/${cleanImage}`,
+    `${backendOrigin}/uploads/${fileName}`,
+    `${backendOrigin}/storage/uploads/${fileName}`,
+    `${backendOrigin}/storage/${cleanImage}`,
+    fallback,
+  ];
+
+  return Array.from(new Set(urls));
 };
