@@ -4,7 +4,7 @@ import { SearchIcon, CheckCircleIcon, StarIcon } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { getImageFallbackUrls } from "@/lib/getImageUrl";
+
 import {
   HomeContent,
   useGetHomeContentQuery,
@@ -117,30 +117,24 @@ function CmsPreviewImage({
   cacheKey?: string | number;
   alt: string;
 }) {
-  const urls = preview
-    ? [preview]
-    : getImageFallbackUrls(image, fallback, cacheKey);
-
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [src, setSrc] = useState(fallback);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setActiveIndex(0);
-  }, [image, preview, cacheKey]);
+    if (preview) {
+      setSrc(preview);
+      return;
+    }
+
+    setSrc(getImageUrl(image, fallback, cacheKey));
+  }, [image, preview, fallback, cacheKey]);
 
   return (
     <img
-      src={urls[activeIndex] || fallback}
+      src={src}
       alt={alt}
       className="h-full w-full rounded-xl object-cover"
       onError={() => {
-        setActiveIndex((prev) => {
-          if (prev + 1 < urls.length) {
-            return prev + 1;
-          }
-
-          return prev;
-        });
+        setSrc(fallback);
       }}
     />
   );
@@ -317,8 +311,6 @@ function HomepageSection() {
         image_3: selectedImages.image_3,
       }).unwrap();
 
-      console.log("HOME UPDATE RESPONSE:", res);
-
       const updatedContentFromUpdate = getHomeContent(res);
 
       if (updatedContentFromUpdate) {
@@ -330,9 +322,6 @@ function HomepageSection() {
       }
 
       const freshResult = await refetch();
-
-      console.log("HOME INDEX AFTER UPDATE:", freshResult.data);
-
       const freshContent = getHomeContent(freshResult.data);
 
       if (freshContent) {
