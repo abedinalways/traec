@@ -1,17 +1,72 @@
+
+
 "use client";
 
-import { useState } from "react";
-import { ChevronLeft, Plus, X } from "lucide-react";
+import { FormEvent, useState } from "react";
+import { Plus, X } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import LeftIcon from "@/components/icons/LeftIcon";
+import { useCreateProviderServiceMutation } from "@/app/provider/providerServiceApi";
+
+
+type PricingTier = {
+  service_type: "basic" | "standard" | "premium";
+  title: string;
+  price: string;
+  duration: string;
+  description: string;
+  features: string[];
+};
+
+const initialPricing: PricingTier[] = [
+  {
+    service_type: "basic",
+    title: "Basic",
+    price: "",
+    duration: "",
+    description: "",
+    features: [""],
+  },
+  {
+    service_type: "standard",
+    title: "Standard",
+    price: "",
+    duration: "",
+    description: "",
+    features: [""],
+  },
+  {
+    service_type: "premium",
+    title: "Premium",
+    price: "",
+    duration: "",
+    description: "",
+    features: [""],
+  },
+];
+
+const allowedImageTypes = [
+  "image/png",
+  "image/jpeg",
+  "image/jpg",
+  "image/webp",
+];
 
 export default function Page() {
-  const [basicFeatures, setBasicFeatures] = useState([""]);
-  const [standardFeatures, setStandardFeatures] = useState([""]);
-  const [premiumFeatures, setPremiumFeatures] = useState([""]);
+  const router = useRouter();
 
-  // IMAGE UPLOAD STATE (5 boxes)
-  const [images, setImages] = useState<(string | null)[]>([
+  const [createService, { isLoading }] = useCreateProviderServiceMutation();
+
+  const [title, setTitle] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
+
+  const [pricing, setPricing] = useState<PricingTier[]>(initialPricing);
+
+  const [imageFiles, setImageFiles] = useState<(File | null)[]>([
     null,
     null,
     null,
@@ -19,38 +74,254 @@ export default function Page() {
     null,
   ]);
 
-  // Upload Action for a Single Box
-  const handleSingleImageUpload = (e: any, index: number) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const [imagePreviews, setImagePreviews] = useState<(string | null)[]>([
+    null,
+    null,
+    null,
+    null,
+    null,
+  ]);
 
-    // Validate Type
-    if (!["image/png", "image/jpeg", "image/jpg"].includes(file.type)) {
-      alert("Only JPG/PNG files allowed");
-      return;
+  const validateImage = (file: File) => {
+    if (!allowedImageTypes.includes(file.type)) {
+      toast.error("Only JPG, PNG or WEBP images are allowed.");
+      return false;
     }
 
-    // Validate Size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      alert("Max file size is 5MB");
-      return;
+      toast.error("Image size must be less than 5MB.");
+      return false;
     }
 
-    // Read File
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const updated = [...images];
-      updated[index] = reader.result as string;
-      setImages(updated);
-    };
-    reader.readAsDataURL(file);
+    return true;
   };
 
-  // Remove image from box
+  const setImageAtIndex = (file: File, index: number) => {
+    if (!validateImage(file)) return;
+
+    const previewUrl = URL.createObjectURL(file);
+
+    setImageFiles((prev) => {
+      const updated = [...prev];
+      updated[index] = file;
+      return updated;
+    });
+
+    setImagePreviews((prev) => {
+      const updated = [...prev];
+
+      if (updated[index]?.startsWith("blob:")) {
+        URL.revokeObjectURL(updated[index] as string);
+      }
+
+      updated[index] = previewUrl;
+      return updated;
+    });
+  };
+
+  const handleSingleImageUpload = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+  ) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    setImageAtIndex(file, index);
+    event.target.value = "";
+  };
+
+  const handleMultipleImageUpload = (files: FileList | null) => {
+    if (!files?.length) return;
+
+    const validFiles = Array.from(files).filter(validateImage);
+
+    if (!validFiles.length) return;
+
+    setImageFiles((prevFiles) => {
+      const updatedFiles = [...prevFiles];
+      const updatedPreviews = [...imagePreviews];
+
+      validFiles.forEach((file) => {
+        const emptyIndex = updatedFiles.findIndex((item) => !item);
+
+        if (emptyIndex === -1) return;
+
+        const previewUrl = URL.createObjectURL(file);
+
+        updatedFiles[emptyIndex] = file;
+
+        if (updatedPreviews[emptyIndex]?.startsWith("blob:")) {
+          URL.revokeObjectURL(updatedPreviews[emptyIndex] as string);
+        }
+
+        updatedPreviews[emptyIndex] = previewUrl;
+      });
+
+      setImagePreviews(updatedPreviews);
+      return updatedFiles;
+    });
+  };
+
   const removeImage = (index: number) => {
-    const updated = [...images];
-    updated[index] = null;
-    setImages(updated);
+    setImageFiles((prev) => {
+      const updated = [...prev];
+      updated[index] = null;
+      return updated;
+    });
+
+    setImagePreviews((prev) => {
+      const updated = [...prev];
+
+      if (updated[index]?.startsWith("blob:")) {
+        URL.revokeObjectURL(updated[index] as string);
+      }
+
+      updated[index] = null;
+      return updated;
+    });
+  };
+
+  const updatePricingField = (
+    tierIndex: number,
+    field: "price" | "duration" | "description",
+    value: string,
+  ) => {
+    setPricing((prev) =>
+      prev.map((tier, index) =>
+        index === tierIndex ? { ...tier, [field]: value } : tier,
+      ),
+    );
+  };
+
+  const updatePricingFeature = (
+    tierIndex: number,
+    featureIndex: number,
+    value: string,
+  ) => {
+    setPricing((prev) =>
+      prev.map((tier, index) => {
+        if (index !== tierIndex) return tier;
+
+        const updatedFeatures = [...tier.features];
+        updatedFeatures[featureIndex] = value;
+
+        return {
+          ...tier,
+          features: updatedFeatures,
+        };
+      }),
+    );
+  };
+
+  const addPricingFeature = (tierIndex: number) => {
+    setPricing((prev) =>
+      prev.map((tier, index) =>
+        index === tierIndex
+          ? {
+              ...tier,
+              features: [...tier.features, ""],
+            }
+          : tier,
+      ),
+    );
+  };
+
+  const removePricingFeature = (tierIndex: number, featureIndex: number) => {
+    setPricing((prev) =>
+      prev.map((tier, index) => {
+        if (index !== tierIndex) return tier;
+
+        const filteredFeatures = tier.features.filter(
+          (_, index) => index !== featureIndex,
+        );
+
+        return {
+          ...tier,
+          features: filteredFeatures.length ? filteredFeatures : [""],
+        };
+      }),
+    );
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!title.trim()) {
+      toast.error("Service title is required.");
+      return;
+    }
+
+    if (!categoryId) {
+      toast.error("Please select a category.");
+      return;
+    }
+
+    if (!location.trim()) {
+      toast.error("Location is required.");
+      return;
+    }
+
+    if (!description.trim()) {
+      toast.error("Service description is required.");
+      return;
+    }
+
+    const images = imageFiles.filter((file): file is File => Boolean(file));
+
+    if (!images.length) {
+      toast.error("Please upload at least one image.");
+      return;
+    }
+
+    const pricingPayload = pricing.map((tier) => ({
+      service_type: tier.service_type,
+      price: tier.price.trim(),
+      duration: tier.duration.trim(),
+      description: tier.description.trim(),
+      features: tier.features.filter((feature) => feature.trim()),
+    }));
+
+    const hasInvalidPricing = pricingPayload.some(
+      (tier) => !tier.price || !tier.duration,
+    );
+
+    if (hasInvalidPricing) {
+      toast.error("Please add price and duration for every pricing tier.");
+      return;
+    }
+
+    const loadingToast = toast.loading("Creating service...");
+
+    try {
+      const response = await createService({
+        title: title.trim(),
+        category_id: categoryId,
+        location: location.trim(),
+        description: description.trim(),
+        images,
+        pricing: pricingPayload,
+      }).unwrap();
+
+      toast.dismiss(loadingToast);
+      toast.success(response?.message || "Service created successfully.");
+
+      router.push("/provider-dashboard");
+      router.refresh();
+    } catch (error) {
+      toast.dismiss(loadingToast);
+
+      const errorMessage =
+        typeof error === "object" &&
+        error !== null &&
+        "data" in error &&
+        typeof (error as { data?: { message?: string } }).data?.message ===
+          "string"
+          ? (error as { data: { message: string } }).data.message
+          : "Service create failed. Please try again.";
+
+      toast.error(errorMessage);
+    }
   };
 
   return (
@@ -58,7 +329,7 @@ export default function Page() {
       {/* Back Button */}
       <Link
         href={"/provider-dashboard"}
-        className="flex items-center max-w-[168px] shape-squircle rounded-[22px] p-2 text-sm border  text-gray-black-400 mb-4 text-[16px]"
+        className="flex items-center max-w-[168px] shape-squircle rounded-[22px] p-2 text-sm border text-gray-black-400 mb-4 text-[16px]"
       >
         <LeftIcon />
         Back To Account
@@ -71,7 +342,10 @@ export default function Page() {
       </p>
 
       {/* MAIN FORM BOX */}
-      <div className="border rounded-2xl p-6 bg-white shadow-sm">
+      <form
+        onSubmit={handleSubmit}
+        className="border rounded-2xl p-6 bg-white shadow-sm"
+      >
         {/* SECTION TITLE */}
         <h2 className="text-lg font-semibold mb-5">Service Details</h2>
         <p className="text-xs text-gray-500 mb-6">Tell us about your Service</p>
@@ -84,6 +358,8 @@ export default function Page() {
             <input
               type="text"
               placeholder="Enter Service Name"
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
               className="w-full mt-1 border rounded-xl p-3 text-sm"
             />
           </div>
@@ -91,8 +367,16 @@ export default function Page() {
           {/* Category */}
           <div>
             <label className="text-sm text-gray-600">Category</label>
-            <select className="w-full mt-1 border rounded-xl p-3 text-sm">
-              <option>Enter Category Name</option>
+            <select
+              value={categoryId}
+              onChange={(event) => setCategoryId(event.target.value)}
+              className="w-full mt-1 border rounded-xl p-3 text-sm"
+            >
+              <option value="">Enter Category Name</option>
+              <option value="1">Photography</option>
+              <option value="2">Catering</option>
+              <option value="3">Event Planning</option>
+              <option value="4">Decoration</option>
             </select>
           </div>
 
@@ -102,6 +386,8 @@ export default function Page() {
             <input
               type="text"
               placeholder="Enter Location"
+              value={location}
+              onChange={(event) => setLocation(event.target.value)}
               className="w-full mt-1 border rounded-xl p-3 text-sm"
             />
           </div>
@@ -109,8 +395,25 @@ export default function Page() {
           {/* Event Duration */}
           <div>
             <label className="text-sm text-gray-600">Event Duration</label>
-            <select className="w-full mt-1 border rounded-xl p-3 text-sm">
-              <option>e.g 8 Hr</option>
+            <select
+              value={pricing[0].duration}
+              onChange={(event) => {
+                const value = event.target.value;
+
+                setPricing((prev) =>
+                  prev.map((tier) => ({
+                    ...tier,
+                    duration: tier.duration || value,
+                  })),
+                );
+              }}
+              className="w-full mt-1 border rounded-xl p-3 text-sm"
+            >
+              <option value="">e.g 8 Hr</option>
+              <option value="1 days">1 days</option>
+              <option value="2 days">2 days</option>
+              <option value="3 days">3 days</option>
+              <option value="8 Hr">8 Hr</option>
             </select>
           </div>
         </div>
@@ -120,8 +423,10 @@ export default function Page() {
           <label className="text-sm text-gray-600">About Service</label>
           <textarea
             placeholder="Write here..."
+            value={description}
+            onChange={(event) => setDescription(event.target.value)}
             className="w-full mt-1 border rounded-xl p-3 text-sm h-28"
-          ></textarea>
+          />
         </div>
 
         {/* ===========================  
@@ -130,24 +435,22 @@ export default function Page() {
         <h3 className="text-base font-semibold mb-3">Service Pricing Tiers</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
-          <PricingCard
-            title="Basic"
-            features={basicFeatures}
-            setFeatures={setBasicFeatures}
-          />
-
-          <PricingCard
-            title="Standard"
-            tag="Most Popular"
-            features={standardFeatures}
-            setFeatures={setStandardFeatures}
-          />
-
-          <PricingCard
-            title="Premium"
-            features={premiumFeatures}
-            setFeatures={setPremiumFeatures}
-          />
+          {pricing.map((tier, index) => (
+            <PricingCard
+              key={tier.service_type}
+              tierIndex={index}
+              title={tier.title}
+              tag={tier.service_type === "standard" ? "Most Popular" : ""}
+              price={tier.price}
+              duration={tier.duration}
+              description={tier.description}
+              features={tier.features}
+              onChangeField={updatePricingField}
+              onChangeFeature={updatePricingFeature}
+              onAddFeature={addPricingFeature}
+              onRemoveFeature={removePricingFeature}
+            />
+          ))}
         </div>
 
         {/* ===========================  
@@ -164,22 +467,26 @@ export default function Page() {
               {/* Hidden Input */}
               <input
                 type="file"
-                accept="image/*"
+                accept="image/png,image/jpeg,image/jpg,image/webp"
                 className="hidden"
-                onChange={(e) => handleSingleImageUpload(e, index)}
+                onChange={(event) => handleSingleImageUpload(event, index)}
               />
 
               {/* Show Preview or Plus Icon */}
-              {images[index] ? (
+              {imagePreviews[index] ? (
                 <>
                   <img
-                    src={images[index] as string}
+                    src={imagePreviews[index] as string}
+                    alt={`Service upload ${index + 1}`}
                     className="w-full h-full rounded-xl object-cover"
                   />
 
                   <button
                     type="button"
-                    onClick={() => removeImage(index)}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      removeImage(index);
+                    }}
                     className="absolute -top-2 -right-2 bg-white border rounded-full p-1 shadow"
                   >
                     <X size={12} />
@@ -197,13 +504,10 @@ export default function Page() {
         =========================== */}
         <div
           className="border border-dashed rounded-xl py-10 text-center text-gray-600 text-sm mb-8 cursor-pointer"
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => {
-            e.preventDefault();
-            handleSingleImageUpload(
-              { target: { files: e.dataTransfer.files } },
-              0,
-            );
+          onDragOver={(event) => event.preventDefault()}
+          onDrop={(event) => {
+            event.preventDefault();
+            handleMultipleImageUpload(event.dataTransfer.files);
           }}
           onClick={() => document.getElementById("dragDropInput")?.click()}
         >
@@ -214,16 +518,19 @@ export default function Page() {
           <p className="text-gray-600 font-medium">Drag & drop Image here</p>
 
           <p className="text-xs text-gray-400 mt-1">
-            Upload up to 5 photos (JPG, PNG, max 5MB each)
+            Upload up to 5 photos (JPG, PNG, WEBP, max 5MB each)
           </p>
 
           <input
             type="file"
             id="dragDropInput"
             className="hidden"
-            accept="image/*"
+            accept="image/png,image/jpeg,image/jpg,image/webp"
             multiple
-            onChange={(e) => handleSingleImageUpload(e, 0)}
+            onChange={(event) => {
+              handleMultipleImageUpload(event.target.files);
+              event.target.value = "";
+            }}
           />
         </div>
 
@@ -235,11 +542,15 @@ export default function Page() {
 
         {/* SAVE BUTTON */}
         <div className="flex justify-end">
-          <button className="bg-black text-white px-8 py-3 rounded-xl hover:bg-gray-900">
-            Create Service
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="bg-black text-white px-8 py-3 rounded-xl hover:bg-gray-900 disabled:opacity-60"
+          >
+            {isLoading ? "Creating..." : "Create Service"}
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
@@ -248,11 +559,44 @@ export default function Page() {
                 SUB COMPONENTS
 =================================================== */
 
-function PricingCard({ title, tag, features, setFeatures }: any) {
+function PricingCard({
+  title,
+  tag,
+  tierIndex,
+  price,
+  duration,
+  description,
+  features,
+  onChangeField,
+  onChangeFeature,
+  onAddFeature,
+  onRemoveFeature,
+}: {
+  title: string;
+  tag?: string;
+  tierIndex: number;
+  price: string;
+  duration: string;
+  description: string;
+  features: string[];
+  onChangeField: (
+    tierIndex: number,
+    field: "price" | "duration" | "description",
+    value: string,
+  ) => void;
+  onChangeFeature: (
+    tierIndex: number,
+    featureIndex: number,
+    value: string,
+  ) => void;
+  onAddFeature: (tierIndex: number) => void;
+  onRemoveFeature: (tierIndex: number, featureIndex: number) => void;
+}) {
   return (
     <div className="border rounded-2xl p-4 bg-white shadow-sm">
       <div className="flex justify-between items-center mb-3">
         <h3 className="font-semibold">{title}</h3>
+
         {tag && (
           <span className="bg-black text-white px-2 py-1 rounded-md text-xs">
             {tag}
@@ -263,37 +607,51 @@ function PricingCard({ title, tag, features, setFeatures }: any) {
       <input
         type="text"
         placeholder="e.g $250"
+        value={price}
+        onChange={(event) =>
+          onChangeField(tierIndex, "price", event.target.value)
+        }
+        className="w-full border rounded-xl p-3 text-sm mb-3"
+      />
+
+      <input
+        type="text"
+        placeholder="e.g 1 days"
+        value={duration}
+        onChange={(event) =>
+          onChangeField(tierIndex, "duration", event.target.value)
+        }
         className="w-full border rounded-xl p-3 text-sm mb-3"
       />
 
       <textarea
         placeholder="Write Description here..."
+        value={description}
+        onChange={(event) =>
+          onChangeField(tierIndex, "description", event.target.value)
+        }
         className="w-full border rounded-xl p-3 text-sm h-20 mb-3"
-      ></textarea>
+      />
 
       <label className="text-xs text-gray-500">Features</label>
 
       <div className="space-y-2 mt-2">
-        {features.map((item: string, index: number) => (
+        {features.map((item, index) => (
           <div key={index} className="flex gap-2">
             <input
               type="text"
               className="w-full border rounded-xl p-2 text-xs"
               placeholder="Enter feature..."
               value={item}
-              onChange={(e) => {
-                const updated = [...features];
-                updated[index] = e.target.value;
-                setFeatures(updated);
-              }}
+              onChange={(event) =>
+                onChangeFeature(tierIndex, index, event.target.value)
+              }
             />
 
             <button
+              type="button"
               className="text-gray-400 hover:text-red-500"
-              onClick={() => {
-                const updated = features.filter((_: string, i: number) => i !== index);
-                setFeatures(updated);
-              }}
+              onClick={() => onRemoveFeature(tierIndex, index)}
             >
               <X size={16} />
             </button>
@@ -301,8 +659,9 @@ function PricingCard({ title, tag, features, setFeatures }: any) {
         ))}
 
         <button
+          type="button"
           className="border rounded-md px-3 py-1 text-xs text-gray-600 hover:bg-gray-50"
-          onClick={() => setFeatures([...features, ""])}
+          onClick={() => onAddFeature(tierIndex)}
         >
           + Add Features
         </button>
@@ -311,12 +670,13 @@ function PricingCard({ title, tag, features, setFeatures }: any) {
   );
 }
 
-function Toggle({ label }: any) {
+function Toggle({ label }: { label: string }) {
   const [on, setOn] = useState(false);
 
   return (
     <div className="flex items-center gap-3">
       <button
+        type="button"
         onClick={() => setOn(!on)}
         className={`w-10 h-6 flex items-center rounded-full transition ${
           on ? "bg-black" : "bg-gray-300"
@@ -326,7 +686,7 @@ function Toggle({ label }: any) {
           className={`w-5 h-5 bg-white rounded-full shadow transform transition ${
             on ? "translate-x-4" : "translate-x-1"
           }`}
-        ></span>
+        />
       </button>
 
       <span className="text-sm text-gray-600">{label}</span>

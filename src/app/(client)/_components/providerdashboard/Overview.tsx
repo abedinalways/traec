@@ -244,7 +244,11 @@ export default function Overview() {
         </div>
       )} */}
 
-      {activeTab === "Services" && <Service services={serviceData} />}
+      {activeTab === "Services" && (
+        <div className="pt-4 w-full">
+          <Service />
+        </div>
+      )}
 
       {/* ============================  
                      MESSAGES TAB  
