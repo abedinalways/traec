@@ -13,6 +13,16 @@ const nextConfig = {
         port: "3000",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "i.ibb.co.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "i.ibb.co",
+        pathname: "/**",
+      },
     ],
   },
 };
