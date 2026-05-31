@@ -21,7 +21,7 @@ const ProviderCard = ({
 }: ProviderCardProps) => (
   <div className="bg-white p-3 rounded-2xl shadow-sm flex flex-col gap-3">
     <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl">
-      <Image src={image} alt={name} fill className="object-cover" />
+      <Image src={image} alt={name} fill className="object-cover" unoptimized/>
     </div>
     <div className="px-1">
       <div className="flex justify-between items-center mb-1">
