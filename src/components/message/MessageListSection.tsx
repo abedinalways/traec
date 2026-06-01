@@ -256,10 +256,10 @@
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { Search, SlidersHorizontal } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 
+import { useAppDispatch, useAppSelector } from "@/app/store";
 import { setActiveReceiverId } from "@/features/chat/chatSlice";
-import type { RootState } from "@/app/store";
 import {
   formatChatTime,
   getConversationAvatar,
@@ -270,9 +270,11 @@ import {
 import { useGetConversationsQuery } from "@/app/api/messages/chatApi";
 
 export default function MessageListSection() {
-  const dispatch = useDispatch();
-  const activeReceiverId = useSelector(
-    (state: RootState) => state.chat.activeReceiverId,
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const activeReceiverId = useAppSelector(
+    (state) => state.chat.activeReceiverId,
   );
 
   const { data, isLoading, isError } = useGetConversationsQuery();
@@ -286,10 +288,10 @@ export default function MessageListSection() {
     return conversations.filter((conv) => {
       const name = getConversationName(conv).toLowerCase();
       const lastMessage = getLastMessageText(conv).toLowerCase();
+      const searchValue = search.toLowerCase();
 
       const searchMatch =
-        name.includes(search.toLowerCase()) ||
-        lastMessage.includes(search.toLowerCase());
+        name.includes(searchValue) || lastMessage.includes(searchValue);
 
       if (!searchMatch) return false;
 
@@ -303,15 +305,14 @@ export default function MessageListSection() {
 
   return (
     <div className="h-full flex flex-col font-[inter]">
-      {/* Title */}
       <h3 className="text-lg font-semibold mb-4">Conversations</h3>
 
-      {/* Search + Filter */}
       <div className="relative mb-4">
         <Search
           size={16}
           className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
         />
+
         <input
           type="text"
           placeholder="Search messages..."
@@ -319,13 +320,13 @@ export default function MessageListSection() {
           onChange={(e) => setSearch(e.target.value)}
           className="w-full pl-10 pr-10 py-2 rounded-full border bg-gray-50 text-sm outline-none"
         />
+
         <SlidersHorizontal
           size={18}
           className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"
         />
       </div>
 
-      {/* Filter Tabs */}
       <div className="flex gap-2 mb-4 flex-wrap">
         {["All", "Unread", "Starred", "Spam (0)"].map((tab) => (
           <button
@@ -342,7 +343,6 @@ export default function MessageListSection() {
         ))}
       </div>
 
-      {/* Conversation List */}
       <div className="flex-1 overflow-y-auto pr-2">
         {isLoading ? (
           <p className="text-sm text-gray-500">Loading conversations...</p>
@@ -359,33 +359,33 @@ export default function MessageListSection() {
               <div
                 key={`${receiverId}-${conv.id || ""}`}
                 onClick={() => {
-                  if (receiverId) {
-                    dispatch(setActiveReceiverId(receiverId));
-                  }
+                  if (!receiverId) return;
+
+                  dispatch(setActiveReceiverId(receiverId));
+                  router.push(`/messages/${receiverId}`);
                 }}
                 className={`flex items-start gap-3 p-3 rounded-xl cursor-pointer transition border-b last:border-b-0 ${
                   isActive ? "bg-gray-100" : "hover:bg-gray-50"
                 }`}
               >
-                {/* Avatar */}
                 <div className="relative">
                   <Image
                     src={getConversationAvatar(conv)}
                     alt={getConversationName(conv)}
                     width={42}
                     height={42}
-                    className="rounded-full object-cover"
+                    className="rounded-full object-cover w-[42px] h-[42px]"
                   />
-                  {/* Online indicator */}
-                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+
+                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
                 </div>
 
-                {/* Text Content */}
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-center">
                     <p className="text-sm font-semibold truncate">
                       {getConversationName(conv)}
                     </p>
+
                     <span className="text-xs text-gray-400">
                       {formatChatTime(conv.updated_at || conv.created_at)}
                     </span>

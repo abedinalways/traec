@@ -1,6 +1,5 @@
 import { baseApi } from "../baseApi";
 
-
 export interface ApiResponse<T> {
   success?: boolean;
   status?: boolean | string;
@@ -72,11 +71,23 @@ export interface GetMessagesPayload {
   receiverId: string | number;
 }
 
+export interface StartConversationPayload {
+  receiverId: string | number;
+}
+
 export interface SendMessagePayload {
   receiverId: string | number;
   message: string;
   attachments?: File[];
 }
+
+export type MessageIndexData =
+  | Message[]
+  | {
+      messages?: Message[];
+      conversation?: Conversation;
+      receiver?: ChatUser;
+    };
 
 export const chatApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -88,7 +99,28 @@ export const chatApi = baseApi.injectEndpoints({
       providesTags: ["Chat"],
     }),
 
-    getMessages: builder.query<ApiResponse<Message[]>, GetMessagesPayload>({
+    startConversation: builder.mutation<
+      ApiResponse<MessageIndexData>,
+      StartConversationPayload
+    >({
+      query: ({ receiverId }) => ({
+        url: "/admin/message/index",
+        method: "GET",
+        params: {
+          receiver_id: receiverId,
+        },
+      }),
+
+      invalidatesTags: (result, error, arg) => [
+        "Chat",
+        { type: "Chat", id: String(arg.receiverId) },
+      ],
+    }),
+
+    getMessages: builder.query<
+      ApiResponse<MessageIndexData>,
+      GetMessagesPayload
+    >({
       query: ({ receiverId }) => ({
         url: "/admin/message/index",
         method: "GET",
@@ -137,6 +169,7 @@ export const chatApi = baseApi.injectEndpoints({
 
 export const {
   useGetConversationsQuery,
+  useStartConversationMutation,
   useGetMessagesQuery,
   useSendMessageMutation,
 } = chatApi;
