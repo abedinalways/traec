@@ -241,6 +241,7 @@ import { useParams, useRouter } from "next/navigation";
 import { CiLocationOn } from "react-icons/ci";
 import { FaStar } from "react-icons/fa";
 import { BsTrainFrontFill } from "react-icons/bs";
+import { toast } from "sonner";
 
 import AboutProvider from "@/app/(client)/_components/providers/AboutProvider";
 import Reviews from "@/app/(client)/_components/providers/Reviews";
@@ -259,35 +260,10 @@ import {
   getProviderName,
 } from "@/lib/providerHelpers";
 import { useStartConversationMutation } from "@/app/api/messages/chatApi";
+import { useGetMeQuery } from "@/app/api/auth/authapi";
+import { getErrorMessage } from "@/lib/getErrorMessage";
 
 const FALLBACK_SERVICE_IMAGE = "/images/browser/img12.png";
-
-const getClientAuthToken = () => {
-  if (typeof window === "undefined") return null;
-
-  const localStorageKeys = [
-    "token",
-    "auth_token",
-    "access_token",
-    "jr_auth_token",
-  ];
-
-  for (const key of localStorageKeys) {
-    const value = localStorage.getItem(key);
-    if (value) return value;
-  }
-
-  const cookieToken = document.cookie
-    .split("; ")
-    .find(
-      (cookie) =>
-        cookie.startsWith("token=") ||
-        cookie.startsWith("auth_token=") ||
-        cookie.startsWith("access_token="),
-    );
-
-  return cookieToken ? cookieToken.split("=")[1] : null;
-};
 
 const getMemberSinceYear = (date?: string | null) => {
   if (!date) return "N/A";
@@ -351,10 +327,17 @@ export default function ProvidersDetailsPage() {
   const { data, isLoading, isError } = useGetProviderDetailsQuery(String(id), {
     skip: !id,
   });
+  const { data: meData, isLoading: isCheckingAuth } = useGetMeQuery();
 
   const provider = data?.data?.provider;
-  const categories = data?.data?.categories || [];
-  const services = data?.data?.services || [];
+  const categories = useMemo(
+    () => data?.data?.categories || [],
+    [data?.data?.categories],
+  );
+  const services = useMemo(
+    () => data?.data?.services || [],
+    [data?.data?.services],
+  );
   const [startConversation, { isLoading: isStartingConversation }] =
     useStartConversationMutation();
   const providerName = provider ? getProviderName(provider) : "Provider";
@@ -377,24 +360,38 @@ export default function ProvidersDetailsPage() {
   }, [categories]);
 
   const handleSendMessage = async () => {
-    if (!provider?.id || isStartingConversation) return;
+    const receiverId = provider?.user_id ?? provider?.id;
 
-    const token = getClientAuthToken();
+    if (!provider || !receiverId || isStartingConversation) return;
 
-    if (!token) {
+    if (!isCheckingAuth && !meData?.authenticated) {
       const redirectUrl = `/provider-profile/details/${provider.id}`;
       router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
       return;
     }
 
+    const loadingToast = toast.loading("Opening conversation...");
+
     try {
       await startConversation({
-        receiverId: provider.id,
+        receiverId,
       }).unwrap();
 
-      router.push(`/messages/${provider.id}`);
+      toast.dismiss(loadingToast);
+      router.push(`/messages/${receiverId}`);
     } catch (error) {
+      toast.dismiss(loadingToast);
+
+      const status = (error as { status?: number }).status;
+
+      if (status === 401) {
+        const redirectUrl = `/provider-profile/details/${provider.id}`;
+        router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
+        return;
+      }
+
       console.error("Conversation start failed:", error);
+      toast.error(getErrorMessage(error, "Failed to open conversation."));
     }
   };
 

@@ -43,6 +43,7 @@ export interface ProviderService {
 
 export interface Provider {
   id: number;
+  user_id?: number | string | null;
   name?: string | null;
   last_name?: string | null;
   email?: string | null;
