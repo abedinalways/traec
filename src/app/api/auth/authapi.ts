@@ -82,6 +82,9 @@ const authApi = baseApi.injectEndpoints({
 
           if (data?.user) {
             dispatch(setAuthUser(data.user));
+            if (typeof window !== "undefined") {
+              localStorage.setItem("user", JSON.stringify(data.user));
+            }
           }
         } catch {
           // handled in component
@@ -127,11 +130,20 @@ const authApi = baseApi.injectEndpoints({
 
           if (data?.authenticated && data.user) {
             dispatch(setAuthUser(data.user));
+            if (typeof window !== "undefined") {
+              localStorage.setItem("user", JSON.stringify(data.user));
+            }
           } else {
             dispatch(clearAuthUser());
+            if (typeof window !== "undefined") {
+              localStorage.removeItem("user");
+            }
           }
         } catch {
           dispatch(clearAuthUser());
+          if (typeof window !== "undefined") {
+            localStorage.removeItem("user");
+          }
         }
       },
 
