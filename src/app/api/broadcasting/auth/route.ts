@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     }
 
     // const authUrl = buildMessageApiUrl("/broadcasting/auth");
-    const authUrl = `${process.env.SOCKET_API_URL || "https://traec.apphero.agency"}/broadcasting/auth`;
+    const authUrl = `${process.env.SOCKET_API_URL || "https://traec.apphero.agency/api"}/broadcasting/auth`;
     const backendResponse = await fetch(authUrl, {
       method: "POST",
       headers: {
