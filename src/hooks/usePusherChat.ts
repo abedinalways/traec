@@ -1,8 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-
-import Pusher from "pusher-js";
+import Pusher, { type Channel } from "pusher-js";
 import { getPusherClient } from "@/lib/pusherClient";
 import { useAppDispatch } from "@/app/store";
 import type { RootState } from "@/app/store";
@@ -14,7 +13,7 @@ import {
 } from "@/app/api/messages/chatApi";
 import { getConversationReceiverId } from "@/lib/chatHelpers";
 
-// Common event names for Laravel broadcasting - adjust based on your backend
+
 const eventNames = [
   "message.sent",
   // "MessageSent",
@@ -135,63 +134,16 @@ export default function usePusherChat() {
       return;
     }
 
-    // IMPROVED: Try multiple common Laravel channel formats
-    // Laravel typically uses: App.Models.User.{id} or private-user.{id}
-    const possibleChannels = [
-      `private-user.${currentUserId}`, // Our current format
-      `App.Models.User.${currentUserId}`, // Laravel default format
-      `user.${currentUserId}`, // Alternative format
-      `private-${currentUserId}`, // Another alternative
-    ];
+    const channelName = "conversation";
+    console.log("[Pusher] Subscribing to channel:", channelName);
 
-    console.log("[Pusher] Attempting to subscribe to channels:", possibleChannels);
-
-    // Try each channel until one works
-    let pusherChannel: Pusher.Channel | null = null;
-    let successfulChannel: string | null = null;
-
-    for (const channelName of possibleChannels) {
-      try {
-        console.log("[Pusher] Trying to subscribe to:", channelName);
-        const channel = pusher.subscribe(channelName);
-        
-        // Set up a temporary success listener
-        const successListener = () => {
-          console.log("[Pusher] Successfully subscribed to:", channelName);
-          successfulChannel = channelName;
-          // Clean up the temporary listener
-          channel.unbind("pusher:subscription_succeeded", successListener);
-        };
-        
-        channel.bind("pusher:subscription_succeeded", successListener);
-        
-        // Also set up error listener
-        const errorListener = (error: unknown) => {
-          console.error("[Pusher] Subscription error for", channelName, error);
-          channel.unbind("pusher:subscription_error", errorListener);
-        };
-        
-        channel.bind("pusher:subscription_error", errorListener);
-        
-        // If we get here without immediate error, assume it's working for now
-        // The actual success/error will be handled by the listeners
-        pusherChannel = channel;
-        break; // Exit loop if we successfully subscribed
-      } catch (subscribeError) {
-        console.error("[Pusher] Failed to subscribe to", channelName, subscribeError);
-        continue; // Try next channel
-      }
-    }
-
-    if (!pusherChannel) {
-      console.error("[Pusher] Failed to subscribe to any channel");
-      return;
-    }
-
-    console.log("[Pusher] Using channel:", successfulChannel);
+    const pusherChannel = pusher.subscribe(channelName);
 
     const handleRealtimeMessage = (payload: unknown) => {
-      console.log("[Pusher] Real-time message received:", payload);
+      console.log(
+        `[Pusher] Real-time message received on ${channelName}:`,
+        payload,
+      );
 
       const message = normalizeRealtimeMessage(payload);
 
@@ -309,12 +261,7 @@ export default function usePusherChat() {
         }),
       );
 
-      // DO NOT call invalidateTags here immediately!
-      // invalidateTags triggers a network refetch. If the backend hasn't persisted
-      // the message yet (race condition), the refetch returns stale data and
-      // OVERWRITES our optimistic update, making the real-time message disappear.
-      //
-      // Instead, schedule a delayed refetch for eventual consistency.
+      
       setTimeout(() => {
         dispatch(chatApi.util.invalidateTags([{ type: "Chat" as const }]));
         if (receiverIdForQuery) {
@@ -324,7 +271,7 @@ export default function usePusherChat() {
             ]),
           );
         }
-      }, 3000); // 3 second delay gives backend time to persist
+      }, 3000); 
     };
 
     // Bind to multiple possible event names
@@ -333,31 +280,24 @@ export default function usePusherChat() {
       pusherChannel.bind(name, handleRealtimeMessage);
     });
 
-    // CRITICAL DEBUGGING: This will show you EVERY event coming through Pusher
     pusherChannel.bind_global((name: string, data: any) => {
       if (name.startsWith("pusher:")) return;
-      console.log(`[Pusher Debug] Event Name: "${name}"`, data);
-      // If the event name here doesn't match our list, still process it
-      if (!eventNames.includes(name)) handleRealtimeMessage(data);
+      console.log(`[Pusher Global] ANY EVENT: "${name}"`, data);
     });
 
     pusherChannel.bind("pusher:subscription_succeeded", () => {
-      console.log("Pusher subscribed successfully to:", successfulChannel);
+      console.log("[Pusher] Subscribed successfully to:", channelName);
     });
 
-    pusherChannel.bind("pusher:subscription_error", (error: unknown) => {
-      console.error("Pusher subscription error on:", successfulChannel, error);
+    pusherChannel.bind("pusher:subscription_error", (status: any) => {
+      console.error("[Pusher] Subscription error on:", channelName, status);
     });
 
     // Unsubscribe on cleanup
     return () => {
-      console.log("Cleaning up Pusher subscription");
-      if (pusherChannel) {
-        eventNames.forEach((name) => {
-          pusherChannel.unbind(name, handleRealtimeMessage);
-        });
-        pusher.unsubscribe(successfulChannel || possibleChannels[0]);
-      }
+      console.log(`[Pusher] Unsubscribing from ${channelName}`);
+      pusherChannel.unbind_all();
+      pusher.unsubscribe(channelName);
     };
-  }, [dispatch, currentUserId]); // Removed activeReceiverId to prevent constant re-subscriptions
+  }, [dispatch, currentUserId]); 
 }

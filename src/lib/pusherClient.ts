@@ -17,9 +17,7 @@ export const getPusherClient = () => {
     throw new Error("NEXT_PUBLIC_PUSHER_APP_CLUSTER is missing.");
   }
 
-  // CRITICAL: Always use the local Next.js proxy for Pusher auth.
-  // The local proxy at /api/broadcasting/auth forwards httpOnly cookies to the backend.
-  // Using an external URL directly would bypass cookies (cross-origin requests don't send httpOnly cookies).
+  
   const authEndpoint = "/api/broadcasting/auth";
 
   console.log("Creating Pusher client with", {
@@ -34,8 +32,7 @@ export const getPusherClient = () => {
     cluster,
     forceTLS: true,
     authEndpoint,
-    // CRITICAL: withCredentials must be true so the browser sends httpOnly cookies
-    // with the Pusher auth XHR request to our local /api/broadcasting/auth proxy.
+    
     auth: {
       headers: {
         Accept: "application/json",
@@ -46,8 +43,7 @@ export const getPusherClient = () => {
     enabledTransports: ["ws", "wss"],
   });
 
-  // Ensure XHR sends cookies for auth requests
-  // Pusher.js respects this for same-origin auth endpoints
+ 
   (pusherClient as any).config.auth = {
     ...(pusherClient as any).config.auth,
     headers: { Accept: "application/json" },

@@ -22,14 +22,10 @@ export const getAuthToken = (request: NextRequest) => {
   return cookieToken || headerToken || null;
 };
 
-// export const getAuthHeaders = (token: string) => ({
-//   Accept: "application/json",
-//   Authorization: `Bearer ${token}`,
-//   access_token: token,
-// });
 export const getAuthHeaders = (token: string) => ({
   Accept: "application/json",
   Authorization: `Bearer ${token}`,
+  access_token: token,
 });
 
 export const unauthorizedResponse = () => {

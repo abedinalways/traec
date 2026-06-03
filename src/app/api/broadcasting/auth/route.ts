@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import {
-  buildMessageApiUrl,
   getAuthHeaders,
   getAuthToken,
   unauthorizedResponse,
@@ -18,7 +17,6 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    // Pusher sends authentication requests as application/x-www-form-urlencoded body
     const bodyText = await request.text();
 
     if (process.env.NODE_ENV === "development") {
@@ -35,6 +33,7 @@ export async function POST(request: NextRequest) {
       },
       body: bodyText,
       cache: "no-store",
+      signal: AbortSignal.timeout(10000),
     });
 
     // Log response status for debugging
@@ -42,7 +41,12 @@ export async function POST(request: NextRequest) {
       console.log(`Pusher auth response status: ${backendResponse.status}`);
     }
 
-    const data = await backendResponse.json().catch(() => null);
+    let data;
+    try {
+      data = await backendResponse.json();
+    } catch {
+      data = { success: false, message: "Invalid response from auth server" };
+    }
 
     if (process.env.NODE_ENV === "development" && data) {
       console.log("Pusher auth response data:", data);
@@ -52,10 +56,15 @@ export async function POST(request: NextRequest) {
       status: backendResponse.status,
     });
   } catch (error) {
-    console.error("Pusher broadcast auth proxy error:", error);
+    const errorId = crypto.randomUUID();
+    console.error(`Pusher broadcast auth proxy error [${errorId}]:`, error);
 
     return NextResponse.json(
-      { success: false, message: "Internal server error during channel authorization." },
+      {
+        success: false,
+        message: "Internal server error during channel authorization.",
+        errorId,
+      },
       { status: 500 },
     );
   }

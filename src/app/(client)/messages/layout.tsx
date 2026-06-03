@@ -24,8 +24,8 @@
 
 import MessageListSection from "@/components/message/MessageListSection";
 import React from "react";
-import usePusherChat from "@/hooks/usePusherChat";
 import { useGetMeQuery } from "@/app/api/auth/authapi";
+import usePusherChat from "@/hooks/usePusherChat";
 
 export default function ChatLayout({ children }: React.PropsWithChildren) {
   useGetMeQuery();

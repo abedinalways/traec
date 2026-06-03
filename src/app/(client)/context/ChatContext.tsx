@@ -11,12 +11,9 @@ import {
   useRef,
   useState,
 } from "react";
-import { getPusherClient } from "@/lib/pusherClient";
-import { chatConfig } from "@/lib/chat/chatConfig";
 import {
   ChatConversation,
   ChatMessage,
-  RawMessage,
 } from "@/lib/chat/chatType";
 import { chatApi, getChatImageUrl, normalizeMessage } from "@/lib/chat/chatApi";
 
@@ -53,23 +50,6 @@ const dedupeMessages = (messages: ChatMessage[]) => {
   });
 
   return Array.from(map.values());
-};
-
-const extractRealtimeMessage = (payload: unknown): RawMessage => {
-  const data = payload as {
-    data?: RawMessage;
-    message?: RawMessage | string;
-  };
-
-  if (data?.data && typeof data.data === "object") {
-    return data.data;
-  }
-
-  if (data?.message && typeof data.message === "object") {
-    return data.message;
-  }
-
-  return payload as RawMessage;
 };
 
 const createConversationFromMessage = (
@@ -321,50 +301,8 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     reloadConversations();
   }, [reloadConversations]);
 
-  useEffect(() => {
-    let channel: any = null;
-
-    try {
-      const pusher = getPusherClient();
-      const channelName = chatConfig.pusher.channelName;
-
-      channel = pusher.subscribe(channelName);
-
-      const handleRealtimeMessage = (payload: unknown) => {
-        const rawMessage = extractRealtimeMessage(payload);
-
-        const normalizedMessage = normalizeMessage(
-          rawMessage,
-          activeConversationIdRef.current || undefined,
-        );
-
-        appendMessage(normalizedMessage);
-      };
-
-      channel.bind(chatConfig.pusher.eventName, handleRealtimeMessage);
-
-      channel.bind("pusher:subscription_succeeded", () => {
-        console.log("Pusher subscribed:", channelName);
-      });
-
-      channel.bind(
-        "pusher:subscription_error",
-        (subscriptionError: unknown) => {
-          console.error("Pusher subscription error:", subscriptionError);
-        },
-      );
-
-      return () => {
-        if (!channel) return;
-
-        channel.unbind(chatConfig.pusher.eventName, handleRealtimeMessage);
-        pusher.unsubscribe(channelName);
-      };
-    } catch (err) {
-      console.error("Pusher setup error:", err);
-      setError(getErrorMessage(err));
-    }
-  }, [appendMessage]);
+  // Pusher subscription is handled by usePusherChat in messages/layout.tsx
+  // to avoid duplicate subscriptions on the same channel.
 
   const value: ChatContextValue = {
     conversations,
