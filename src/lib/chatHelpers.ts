@@ -1,6 +1,5 @@
 import { Conversation, Message } from "@/app/api/messages/chatApi";
 
-
 const FALLBACK_AVATAR = "/images/provider-profile-img.svg";
 
 export const getCurrentUserId = () => {
@@ -10,12 +9,10 @@ export const getCurrentUserId = () => {
 
   for (const key of possibleKeys) {
     const value = localStorage.getItem(key);
-
     if (!value) continue;
 
     try {
       const parsed = JSON.parse(value);
-
       if (parsed?.id) return String(parsed.id);
       if (parsed?.user?.id) return String(parsed.user.id);
       if (parsed?.data?.id) return String(parsed.data.id);
@@ -44,22 +41,33 @@ export const getImageUrl = (image?: string | null) => {
 const getOtherConversationUser = (
   conversation: Conversation,
   currentUserId?: string | number | null,
+  activeReceiverId?: string | number | null,
 ) => {
   const resolvedCurrentUserId = currentUserId
     ? String(currentUserId)
     : getCurrentUserId();
+  const resolvedReceiverId = activeReceiverId ? String(activeReceiverId) : null;
 
   const users = [conversation.receiver, conversation.sender, conversation.user];
 
+  // 1. Try to match by activeReceiverId — this is the most reliable way
+  if (resolvedReceiverId) {
+    const matchingUser = users.find(
+      (user) => user?.id && String(user.id) === resolvedReceiverId,
+    );
+    if (matchingUser) return matchingUser;
+  }
+
+  // 2. Try to find the user that is NOT the current user
   if (resolvedCurrentUserId) {
     const otherUser = users.find(
       (user) => user?.id && String(user.id) !== resolvedCurrentUserId,
     );
-
     if (otherUser) return otherUser;
   }
 
-  return conversation.receiver || conversation.sender || conversation.user;
+  // 3. Fallback
+  return conversation.sender || conversation.receiver || conversation.user;
 };
 
 export const getConversationReceiverId = (
@@ -82,11 +90,7 @@ export const getConversationReceiverId = (
     return senderId;
   }
 
-  if (
-    resolvedCurrentUserId &&
-    receiverId &&
-    receiverId !== resolvedCurrentUserId
-  ) {
+  if (resolvedCurrentUserId && receiverId && receiverId !== resolvedCurrentUserId) {
     return receiverId;
   }
 
@@ -106,10 +110,15 @@ export const getConversationReceiverId = (
 export const getConversationName = (
   conversation?: Conversation | null,
   currentUserId?: string | number | null,
+  activeReceiverId?: string | number | null,
 ) => {
   if (!conversation) return "Unknown User";
 
-  const user = getOtherConversationUser(conversation, currentUserId);
+  const user = getOtherConversationUser(
+    conversation,
+    currentUserId,
+    activeReceiverId,
+  );
 
   return (
     [user?.name, user?.last_name].filter(Boolean).join(" ") ||
@@ -123,18 +132,23 @@ export const getConversationName = (
 export const getConversationAvatar = (
   conversation?: Conversation | null,
   currentUserId?: string | number | null,
+  activeReceiverId?: string | number | null,
 ) => {
   if (!conversation) return FALLBACK_AVATAR;
 
-  const user = getOtherConversationUser(conversation, currentUserId);
+  const user = getOtherConversationUser(
+    conversation,
+    currentUserId,
+    activeReceiverId,
+  );
 
   return getImageUrl(
-    conversation.avatar_url ||
-      conversation.avatar ||
-      conversation.image ||
-      user?.avatar_url ||
+    user?.image ||
       user?.avatar ||
-      user?.image ||
+      user?.avatar_url ||
+      conversation.image ||
+      conversation.avatar ||
+      conversation.avatar_url ||
       null,
   );
 };
@@ -144,8 +158,10 @@ export const getLastMessageText = (conversation: Conversation) => {
     return conversation.last_message;
   }
 
-  if (conversation.last_message?.message) {
-    return conversation.last_message.message;
+  if (conversation.last_message && typeof conversation.last_message === "object") {
+    if (conversation.last_message.message) {
+      return conversation.last_message.message;
+    }
   }
 
   return conversation.message || "No messages yet";
@@ -172,9 +188,7 @@ export const isOwnMessage = (
   }
 
   const msgReceiverId =
-    message.receiver_id ||
-    (message as any).receiverId ||
-    message.receiver?.id;
+    message.receiver_id || (message as any).receiverId || message.receiver?.id;
 
   if (activeReceiverId && msgReceiverId) {
     return String(msgReceiverId) === String(activeReceiverId);
@@ -193,5 +207,6 @@ export const formatChatTime = (value?: string | null) => {
   return date.toLocaleTimeString("en-US", {
     hour: "numeric",
     minute: "2-digit",
+    hour12: true,
   });
 };

@@ -1,7 +1,6 @@
 "use client";
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import Pusher from "pusher-js";
 import { getPusherClient } from "@/lib/pusherClient";
 import { useAppDispatch } from "@/app/store";
 import type { RootState } from "@/app/store";
@@ -18,6 +17,7 @@ const asString = (value: unknown): string | undefined =>
 
 const normalizePayload = (payload: unknown): Message | null => {
   const candidates: unknown[] = [payload];
+
   if (isRecord(payload)) {
     candidates.push(
       payload.data,
@@ -27,13 +27,16 @@ const normalizePayload = (payload: unknown): Message | null => {
       isRecord(payload.data) ? payload.data.chat : null,
     );
   }
+
   const raw = candidates.find(
     (v) =>
       isRecord(v) &&
       ("sender_id" in v || "senderId" in v || "user_id" in v) &&
       ("message" in v || "text" in v || "body" in v),
   );
+
   if (!isRecord(raw)) return null;
+
   return {
     id:
       asStringOrNumber(raw.id) ||
@@ -54,117 +57,141 @@ export default function usePusherChat() {
   const dispatch = useAppDispatch();
   const activeReceiverId = useSelector((s: RootState) => s.chat.activeReceiverId);
   const currentUserId = useSelector((s: RootState) => s.auth.user?.id);
+
   const activeRef = useRef(activeReceiverId);
+  const userIdRef = useRef(currentUserId);
+  const dispatchRef = useRef(dispatch);
+
   useEffect(() => { activeRef.current = activeReceiverId; }, [activeReceiverId]);
+  useEffect(() => { userIdRef.current = currentUserId; }, [currentUserId]);
+  useEffect(() => { dispatchRef.current = dispatch; }, [dispatch]);
 
-  const handleMessage = useCallback(
-    (payload: unknown) => {
-      console.log("[Pusher] Event received:", payload);
+  const handleMessageRef = useRef<(payload: unknown) => void>(() => {});
 
-      const msg = normalizePayload(payload);
-      if (!msg) {
-        console.warn("[Pusher] Could not normalize payload:", payload);
-        dispatch(chatApi.util.invalidateTags(["Chat"]));
-        return;
-      }
+  handleMessageRef.current = (payload: unknown) => {
+    const d = dispatchRef.current;
+    console.log("[Pusher] Event received RAW:", JSON.stringify(payload)?.slice(0, 2000));
 
-      const senderId = msg.sender_id ? String(msg.sender_id) : "";
-      const receiverId = msg.receiver_id ? String(msg.receiver_id) : "";
-      const myId = currentUserId ? String(currentUserId) : "";
-      const activeId = activeRef.current ? String(activeRef.current) : "";
+    const msg = normalizePayload(payload);
+    if (!msg) {
+      console.warn("[Pusher] Could not normalize payload:", payload);
+      d(chatApi.util.invalidateTags(["Chat"]));
+      return;
+    }
 
-      let targetReceiverId = "";
-      if (myId && senderId === myId && receiverId) {
-        targetReceiverId = receiverId;
-      } else if (myId && receiverId === myId && senderId) {
-        targetReceiverId = senderId;
-      } else if (activeId && (senderId === activeId || receiverId === activeId)) {
-        targetReceiverId = activeId;
-      }
+    console.log("[Pusher] Normalized message:", { id: msg.id, sender_id: msg.sender_id, receiver_id: msg.receiver_id, message: msg.message, sender: msg.sender, receiver: msg.receiver });
 
-      if (!targetReceiverId) return;
+    const senderId = msg.sender_id ? String(msg.sender_id) : "";
+    const receiverId = msg.receiver_id ? String(msg.receiver_id) : "";
+    const myId = userIdRef.current ? String(userIdRef.current) : "";
+    const activeId = activeRef.current ? String(activeRef.current) : "";
 
-      // Update messages cache — draft.data is ApiResponse<MessageIndexData>
-      dispatch(
+    let targetReceiverId = "";
+    if (myId && senderId === myId && receiverId) {
+      targetReceiverId = receiverId;
+    } else if (myId && receiverId === myId && senderId) {
+      targetReceiverId = senderId;
+    } else if (activeId && (senderId === activeId || receiverId === activeId)) {
+      targetReceiverId = activeId;
+    }
+
+    if (!targetReceiverId) {
+      console.log("[Pusher] No targetReceiverId, invalidating all chat tags");
+      d(chatApi.util.invalidateTags(["Chat"]));
+      return;
+    }
+
+    // Update messages cache
+    try {
+      d(
         chatApi.util.updateQueryData(
           "getMessages",
           { receiverId: targetReceiverId },
           (draft: any) => {
-            const apiData = draft.data; // ApiResponse<MessageIndexData>
-            const existingMessages = getMessagesFromIndexData(apiData?.data);
-            if (existingMessages.some((m: Message) => String(m.id) === String(msg.id))) return;
-            const next = dedupeMessages([...existingMessages, msg]);
-            if (Array.isArray(apiData?.data)) {
-              apiData.data = next;
-            } else if (apiData?.data) {
-              apiData.data = { ...apiData.data, messages: next };
-            } else {
-              apiData.data = next;
+            const indexData = draft.data;
+            const existingMessages = getMessagesFromIndexData(indexData);
+
+            if (existingMessages.some((m: Message) => String(m.id) === String(msg.id))) {
+              return;
             }
+
+            const next = dedupeMessages([...existingMessages, msg]);
+
+            if (Array.isArray(indexData)) {
+              draft.data = next;
+            } else if (indexData && typeof indexData === "object") {
+              draft.data = { ...indexData, messages: next };
+            } else {
+              draft.data = next;
+            }
+
+            console.log("[Pusher] Messages cache updated for:", targetReceiverId, "total:", next.length);
           },
         ),
       );
+    } catch {
+      console.log("[Pusher] No existing messages cache for:", targetReceiverId);
+    }
 
-      // Update conversations cache — draft.data is ApiResponse<Conversation[]>
-      dispatch(
-        chatApi.util.updateQueryData("getConversations", undefined, (draft: any) => {
-          const apiData = draft.data; // ApiResponse<Conversation[]>
-          const conversations: any[] = apiData?.data || [];
-          const idx = conversations.findIndex(
-            (c: any) =>
-              String(c.sender_id) === targetReceiverId ||
-              String(c.receiver_id) === targetReceiverId,
-          );
+    // Update conversations cache — this is what drives the sidebar real-time update
+    d(
+      chatApi.util.updateQueryData("getConversations", undefined, (draft: any) => {
+        const conversations: any[] = draft.data || [];
+        const idx = conversations.findIndex(
+          (c: any) =>
+            String(c.sender_id) === targetReceiverId ||
+            String(c.receiver_id) === targetReceiverId,
+        );
 
-          if (idx === -1) {
-            const otherUser = String(msg.sender_id) !== myId ? msg.sender : msg.receiver;
-            conversations.unshift({
-              id: msg.conversation_id || `temp-${targetReceiverId}-${Date.now()}`,
-              sender_id: msg.sender_id,
-              receiver_id: msg.receiver_id,
-              last_message: msg,
-              message: msg.message,
-              created_at: msg.created_at || new Date().toISOString(),
-              updated_at: msg.created_at || new Date().toISOString(),
-              unread_count: activeId === targetReceiverId ? 0 : 1,
-              sender: msg.sender,
-              receiver: msg.receiver,
-              user: otherUser,
-            });
-          } else {
-            conversations[idx].last_message = msg;
-            conversations[idx].message = msg.message;
-            conversations[idx].updated_at = msg.created_at || new Date().toISOString();
-            if (activeId !== targetReceiverId) {
-              conversations[idx].unread_count = Number(conversations[idx].unread_count || 0) + 1;
-            }
-            const [item] = conversations.splice(idx, 1);
-            conversations.unshift(item);
+        const now = msg.created_at || new Date().toISOString();
+
+        if (idx === -1) {
+          // New conversation from Pusher — create a temporary entry
+          const otherUser = String(msg.sender_id) !== myId ? msg.sender : msg.receiver;
+          conversations.unshift({
+            id: msg.conversation_id || `temp-${targetReceiverId}-${Date.now()}`,
+            sender_id: msg.receiver_id,    // Store the OTHER user's id so receiver_id matches targetReceiverId
+            receiver_id: myId,              // Store our own id
+            last_message: msg.message,
+            message: msg.message,
+            created_at: now,
+            updated_at: now,
+            unread_count: activeId === targetReceiverId ? 0 : 1,
+            sender: msg.receiver,           // The other user's info
+            receiver: msg.sender,           // Our info
+            user: otherUser,
+          });
+        } else {
+          conversations[idx].last_message = msg.message;
+          conversations[idx].message = msg.message;
+          conversations[idx].updated_at = now;
+          if (activeId !== targetReceiverId) {
+            conversations[idx].unread_count = Number(conversations[idx].unread_count || 0) + 1;
           }
+          // Move to top
+          const [item] = conversations.splice(idx, 1);
+          conversations.unshift(item);
+        }
 
-          apiData.data = conversations;
-        }),
-      );
+        draft.data = conversations;
+      }),
+    );
 
-      // Delayed refetch for consistency
-      setTimeout(() => {
-        dispatch(chatApi.util.invalidateTags(["Chat", { type: "Chat" as const, id: targetReceiverId }]));
-      }, 2000);
-
-      console.log(`[Pusher] Message processed for receiver ${targetReceiverId}:`, msg.id);
-    },
-    [dispatch, currentUserId],
-  );
+    console.log(`[Pusher] Message processed for receiver ${targetReceiverId}:`, msg.id);
+  };
 
   useEffect(() => {
     if (!currentUserId || typeof window === "undefined") return;
 
     const pusher = getPusherClient();
-    const channelName = "conversation";
-    console.log("[Pusher] Subscribing to:", channelName);
+    const channelName = `conversation.${currentUserId}`;
+
+    console.log("[Pusher] Subscribing to:", channelName, "for user:", currentUserId);
+
     const channel = pusher.subscribe(channelName);
 
-    channel.bind("message.sent", handleMessage);
+    const boundHandler = (payload: unknown) => handleMessageRef.current(payload);
+    channel.bind("message.sent", boundHandler);
 
     channel.bind_global((name: string, data: any) => {
       if (name.startsWith("pusher:")) return;
@@ -172,7 +199,7 @@ export default function usePusherChat() {
     });
 
     channel.bind("pusher:subscription_succeeded", () => {
-      console.log("[Pusher] Subscribed to:", channelName);
+      console.log("[Pusher] Successfully subscribed to:", channelName);
     });
 
     channel.bind("pusher:subscription_error", (status: any) => {
@@ -180,9 +207,23 @@ export default function usePusherChat() {
     });
 
     return () => {
-      channel.unbind("message.sent", handleMessage);
+      channel.unbind("message.sent", boundHandler);
       pusher.unsubscribe(channelName);
       console.log("[Pusher] Unsubscribed from:", channelName);
     };
-  }, [currentUserId, handleMessage]);
+  }, [currentUserId]);
+
+  // Fallback polling
+  useEffect(() => {
+    if (!activeReceiverId || !currentUserId) return;
+
+    const interval = setInterval(() => {
+      console.log("[Poll] Refreshing messages for:", activeReceiverId);
+      dispatch(chatApi.util.invalidateTags([
+        { type: "Chat" as const, id: String(activeReceiverId) },
+      ]));
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [activeReceiverId, currentUserId, dispatch]);
 }

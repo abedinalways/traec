@@ -10,7 +10,7 @@ export default function SecuritySection() {
         </h2>
       </div>
 
-      <GeneralInfoForm />
+      {/* <GeneralInfoForm /> */}
       <NotificationSettings />
 
       <button className="bg-[#030914] text-white px-8 py-3 rounded-lg font-medium text-[15px] hover:bg-black transition-all cursor-pointer">

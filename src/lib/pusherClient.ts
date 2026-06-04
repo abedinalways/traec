@@ -32,7 +32,6 @@ export const getPusherClient = () => {
     cluster,
     forceTLS: true,
     authEndpoint,
-    
     auth: {
       headers: {
         Accept: "application/json",
@@ -42,12 +41,6 @@ export const getPusherClient = () => {
     disableStats: false,
     enabledTransports: ["ws", "wss"],
   });
-
- 
-  (pusherClient as any).config.auth = {
-    ...(pusherClient as any).config.auth,
-    headers: { Accept: "application/json" },
-  };
 
   pusherClient.connection.bind(
     "state_change",

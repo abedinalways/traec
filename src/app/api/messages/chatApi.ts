@@ -95,23 +95,39 @@ export const getMessagesFromIndexData = (
   payload?: MessageIndexData | null,
 ): Message[] => {
   if (!payload) return [];
-
   if (Array.isArray(payload)) return payload;
-
   return payload.messages || [];
 };
 
 export const dedupeMessages = (messages: Message[]) => {
   const seen = new Set<string>();
-
   return messages.filter((message) => {
     const key = String(message.id);
-
     if (seen.has(key)) return false;
-
     seen.add(key);
     return true;
   });
+};
+
+// Extract conversation array from any possible response structure
+const extractConversations = (response: unknown): Conversation[] => {
+  if (!response) return [];
+
+  const r = response as any;
+
+  // Direct array
+  if (Array.isArray(r)) return r;
+
+  // {data: [...]} — standard
+  if (Array.isArray(r.data)) return r.data;
+
+  // {data: {data: [...]}} — double nested
+  if (Array.isArray(r.data?.data)) return r.data.data;
+
+  // {data: {conversations: [...]}}
+  if (Array.isArray(r.data?.conversations)) return r.data.conversations;
+
+  return [];
 };
 
 type LocalRequestError = {
@@ -122,9 +138,7 @@ type LocalRequestError = {
 
 const parseLocalResponse = async (response: Response) => {
   const text = await response.text();
-
   if (!text) return null;
-
   try {
     return JSON.parse(text) as unknown;
   } catch {
@@ -150,13 +164,11 @@ const toBaseQueryError = (error: unknown): FetchBaseQueryError => {
         error: error.error || "Request failed.",
       };
     }
-
     return {
       status: error.status,
       data: error.data,
     };
   }
-
   return {
     status: "FETCH_ERROR",
     error: error instanceof Error ? error.message : "Request failed.",
@@ -188,7 +200,6 @@ const localApiFetch = async <T>(
     if (isLocalRequestError(error)) {
       throw error;
     }
-
     throw {
       status: "FETCH_ERROR",
       error: error instanceof Error ? error.message : "Request failed.",
@@ -198,18 +209,18 @@ const localApiFetch = async <T>(
 
 export const chatApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getConversations: builder.query<ApiResponse<Conversation[]>, void>({
+    getConversations: builder.query<Conversation[], void>({
       queryFn: async () => {
         try {
-          return {
-            data: await localApiFetch<ApiResponse<Conversation[]>>(
-              "/api/messages/conversations",
-            ),
-          };
+          const raw = await localApiFetch<unknown>("/api/messages/conversations");
+          const conversations = extractConversations(raw);
+          console.log("[CHAT API] getConversations:", conversations.length, "items");
+          if (conversations.length > 0) {
+            console.log("[CHAT API] first conv:", JSON.stringify(conversations[0])?.slice(0, 1500));
+          }
+          return { data: conversations };
         } catch (error) {
-          return {
-            error: toBaseQueryError(error),
-          };
+          return { error: toBaseQueryError(error) };
         }
       },
       providesTags: ["Chat"],
@@ -235,12 +246,9 @@ export const chatApi = baseApi.injectEndpoints({
             ),
           };
         } catch (error) {
-          return {
-            error: toBaseQueryError(error),
-          };
+          return { error: toBaseQueryError(error) };
         }
       },
-
       invalidatesTags: (result, error, arg) => [
         "Chat",
         { type: "Chat", id: String(arg.receiverId) },
@@ -253,20 +261,16 @@ export const chatApi = baseApi.injectEndpoints({
     >({
       queryFn: async ({ receiverId }) => {
         try {
-          return {
-            data: await localApiFetch<ApiResponse<MessageIndexData>>(
-              `/api/messages/${encodeURIComponent(String(receiverId))}`,
-            ),
-          };
+          const result = await localApiFetch<ApiResponse<MessageIndexData>>(
+            `/api/messages/${encodeURIComponent(String(receiverId))}`,
+          );
+          console.log("[CHAT API] getMessages for", receiverId, ":", JSON.stringify(result)?.slice(0, 1000));
+          return { data: result };
         } catch (error) {
-          return {
-            error: toBaseQueryError(error),
-          };
+          return { error: toBaseQueryError(error) };
         }
       },
-
       serializeQueryArgs: ({ queryArgs }) => String(queryArgs.receiverId),
-
       providesTags: (result, error, arg) => [
         { type: "Chat", id: String(arg.receiverId) },
       ],
@@ -275,56 +279,41 @@ export const chatApi = baseApi.injectEndpoints({
     sendMessage: builder.mutation<ApiResponse<Message>, SendMessagePayload>({
       queryFn: async ({ receiverId, message, attachments }) => {
         const formData = new FormData();
-
         formData.append("receiver_id", String(receiverId));
-
         if (message.trim()) {
           formData.append("message", message.trim());
         }
-
         attachments?.forEach((file) => {
           formData.append("attachments[]", file);
         });
 
         try {
-          return {
-            data: await localApiFetch<ApiResponse<Message>>(
-              "/api/messages/send",
-              {
-                method: "POST",
-                body: formData,
-              },
-            ),
-          };
+          const result = await localApiFetch<ApiResponse<Message>>(
+            "/api/messages/send",
+            { method: "POST", body: formData },
+          );
+          console.log("[CHAT API] sendMessage:", JSON.stringify(result)?.slice(0, 1000));
+          return { data: result };
         } catch (error) {
-          return {
-            error: toBaseQueryError(error),
-          };
+          return { error: toBaseQueryError(error) };
         }
       },
-
-      // Use onQueryStarted for optimistic update instead of invalidatesTags
-      // This avoids race conditions where invalidation refetch returns stale data
       onQueryStarted: async ({ receiverId, message }, { dispatch, queryFulfilled }) => {
         try {
           const { data: response } = await queryFulfilled;
           const sentMessage = response?.data;
 
           if (sentMessage) {
-            // Update messages cache for the conversation
             dispatch(
               chatApi.util.updateQueryData(
                 "getMessages",
                 { receiverId: String(receiverId) },
                 (draft) => {
                   const existingMessages = getMessagesFromIndexData(draft.data);
-
                   if (existingMessages.some((m) => String(m.id) === String(sentMessage.id))) {
                     return;
                   }
-
                   const nextMessages = dedupeMessages([...existingMessages, sentMessage]);
-
                   if (Array.isArray(draft.data)) {
                     draft.data = nextMessages;
                   } else if (draft.data) {
@@ -334,31 +323,29 @@ export const chatApi = baseApi.injectEndpoints({
               ),
             );
 
-            // Update conversation list with latest message
             dispatch(
-              chatApi.util.updateQueryData("getConversations", undefined, (draft) => {
-                const conversations = draft.data || [];
+              chatApi.util.updateQueryData("getConversations", undefined, (draft: any) => {
+                const conversations: Conversation[] = draft.data || [];
                 const matched = conversations.find(
-                  (c) => String(c.receiver_id) === String(receiverId) || String(c.sender_id) === String(receiverId),
+                  (c: Conversation) => String(c.receiver_id) === String(receiverId) || String(c.sender_id) === String(receiverId),
                 );
                 if (matched) {
                   matched.last_message = sentMessage;
                   matched.message = sentMessage.message;
                   matched.updated_at = sentMessage.created_at || new Date().toISOString();
                 }
+                draft.data = conversations;
               }),
             );
-          }
 
-          // Delayed refetch for eventual consistency
-          setTimeout(() => {
-            dispatch(chatApi.util.invalidateTags([
-              "Chat",
-              { type: "Chat", id: String(receiverId) },
-            ]));
-          }, 3000);
+            setTimeout(() => {
+              dispatch(chatApi.util.invalidateTags([
+                "Chat",
+                { type: "Chat", id: String(receiverId) },
+              ]));
+            }, 3000);
+          }
         } catch {
-          // If send failed, invalidate to refetch clean state
           dispatch(chatApi.util.invalidateTags([
             "Chat",
             { type: "Chat", id: String(receiverId) },

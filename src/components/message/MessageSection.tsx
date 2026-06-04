@@ -6,7 +6,6 @@ import { MessageCircle, Sparkles } from "lucide-react";
 
 import { useAppSelector } from "@/app/store";
 import {
-  formatChatTime,
   getConversationAvatar,
   getConversationName,
   getConversationReceiverId,
@@ -18,30 +17,23 @@ import {
   useGetConversationsQuery,
   useGetMessagesQuery,
 } from "@/app/api/messages/chatApi";
-
-// NOTE: usePusherChat() is already called in the parent layout.tsx
-// Do NOT call it here — duplicate subscriptions cause double event handling
+import ChatTime from "./chatTime";
 
 const getMessagesFromPayload = (payload?: MessageIndexData): Message[] => {
   if (!payload) return [];
-
   if (Array.isArray(payload)) return payload;
-
   return payload.messages || [];
 };
 
 export default function MessageSection() {
-
   const activeReceiverId = useAppSelector(
     (state) => state.chat.activeReceiverId,
   );
   const currentUserId = useAppSelector((state) => state.auth.user?.id);
-
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const { data: conversationsData } = useGetConversationsQuery();
-
-  const conversations = conversationsData?.data || [];
+  const conversations = conversationsData || [];
 
   const activeConversation = conversations.find(
     (conv) =>
@@ -59,12 +51,11 @@ export default function MessageSection() {
   );
 
   const messages = getMessagesFromPayload(messagesData?.data);
-  const activeName = getConversationName(activeConversation, currentUserId);
-  const activeAvatar = getConversationAvatar(activeConversation, currentUserId);
+  const activeName = getConversationName(activeConversation, currentUserId, activeReceiverId);
+  const activeAvatar = getConversationAvatar(activeConversation, currentUserId, activeReceiverId);
 
   useEffect(() => {
     if (!scrollRef.current) return;
-
     scrollRef.current.scrollTo({
       top: scrollRef.current.scrollHeight,
       behavior: "smooth",
@@ -74,9 +65,7 @@ export default function MessageSection() {
   if (!activeReceiverId) {
     return (
       <div className="bg-slate-50 px-6 py-6 h-full flex items-center justify-center relative overflow-hidden">
-        {/* Glow ambient background */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#4F46E5]/5 rounded-full blur-3xl" />
-
         <div className="text-center relative z-10 max-w-sm">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[#4F46E5] shadow-md border border-slate-100 animate-pulse">
             <MessageCircle size={26} />
@@ -103,9 +92,7 @@ export default function MessageSection() {
           {[1, 2, 3].map((item) => (
             <div
               key={item}
-              className={`flex gap-3 items-end ${
-                item % 2 === 0 ? "flex-row-reverse" : ""
-              }`}
+              className={`flex gap-3 items-end ${item % 2 === 0 ? "flex-row-reverse" : ""}`}
             >
               <div className="h-9 w-9 rounded-full bg-slate-200 animate-pulse flex-shrink-0" />
               <div
@@ -145,6 +132,10 @@ export default function MessageSection() {
           {messages.map((msg) => {
             const isOwn = isOwnMessage(msg, currentUserId, activeReceiverId);
 
+            // For incoming messages, try to get avatar from the message's sender data
+            const senderAvatar = msg.sender?.image || msg.sender?.avatar || msg.sender?.avatar_url;
+            const msgAvatar = isOwn ? null : (senderAvatar ? senderAvatar : activeAvatar);
+
             return (
               <div
                 key={msg.id}
@@ -153,7 +144,7 @@ export default function MessageSection() {
                 {!isOwn ? (
                   <div className="flex max-w-[82%] gap-3 sm:max-w-[70%] items-start">
                     <Image
-                      src={activeAvatar}
+                      src={msgAvatar || activeAvatar}
                       alt={activeName}
                       width={36}
                       height={36}
@@ -168,7 +159,9 @@ export default function MessageSection() {
                         </p>
                       </div>
                       <p className="mt-1 px-1 text-[10px] font-medium text-slate-400">
-                        {formatChatTime(msg.created_at)}
+                        <ChatTime
+                          timestamp={msg.updated_at || msg.created_at}
+                        />
                       </p>
                     </div>
                   </div>
@@ -180,7 +173,7 @@ export default function MessageSection() {
                       </p>
                     </div>
                     <p className="mt-1 px-1 text-[10px] font-medium text-slate-400 text-right">
-                      {formatChatTime(msg.created_at)}
+                      <ChatTime timestamp={msg.updated_at || msg.created_at} />
                     </p>
                   </div>
                 )}

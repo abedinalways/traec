@@ -1,256 +1,3 @@
-// // "use client";
-
-// // import Image from "next/image";
-// // import { useState } from "react";
-// // import { Search, SlidersHorizontal } from "lucide-react";
-// // import { useChat } from "@/app/(client)/context/ChatContext";
-
-// // export default function MessageListSection() {
-// //   const { conversations, selectConversation, activeConversation } = useChat();
-// //   const [activeFilter, setActiveFilter] = useState("All");
-
-// //   return (
-// //     <div className="h-full flex flex-col font-[inter]">
-// //       {/* Title */}
-// //       <h3 className="text-lg font-semibold mb-4">Conversations</h3>
-
-// //       {/* Search + Filter */}
-// //       <div className="relative mb-4">
-// //         <Search
-// //           size={16}
-// //           className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-// //         />
-// //         <input
-// //           type="text"
-// //           placeholder="Search messages..."
-// //           className="w-full pl-10 pr-10 py-2 rounded-full border bg-gray-50 text-sm outline-none"
-// //         />
-// //         <SlidersHorizontal
-// //           size={18}
-// //           className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"
-// //         />
-// //       </div>
-
-// //       {/* Filter Tabs */}
-// //       <div className="flex gap-2 mb-4 flex-wrap">
-// //         {["All", "Unread", "Starred", "Spam (1)"].map((tab) => (
-// //           <button
-// //             key={tab}
-// //             onClick={() => setActiveFilter(tab)}
-// //             className={`px-4 py-1.5 text-xs rounded-full transition ${
-// //               activeFilter === tab
-// //                 ? "bg-red-500 text-white"
-// //                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-// //             }`}
-// //           >
-// //             {tab}
-// //           </button>
-// //         ))}
-// //       </div>
-
-// //       {/* Conversation List */}
-// //       <div className="flex-1 overflow-y-auto pr-2">
-// //         {conversations.map((conv) => {
-// //           const lastMessage = conv.messages.at(-1);
-
-// //           return (
-// //             <div
-// //               key={conv.id}
-// //               onClick={() => selectConversation(conv.id)}
-// //               className={`flex items-start gap-3 p-3 rounded-xl cursor-pointer transition border-b last:border-b-0 ${
-// //                 activeConversation?.id === conv.id
-// //                   ? "bg-gray-100"
-// //                   : "hover:bg-gray-50"
-// //               }`}
-// //             >
-// //               {/* Avatar */}
-// //               <div className="relative">
-// //                 <Image
-// //                   src={conv.avatar}
-// //                   alt={conv.name}
-// //                   width={42}
-// //                   height={42}
-// //                   className="rounded-full object-cover"
-// //                 />
-// //                 {/* Online indicator */}
-// //                 <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
-// //               </div>
-
-// //               {/* Text Content */}
-// //               <div className="flex-1 min-w-0">
-// //                 <div className="flex justify-between items-center">
-// //                   <p className="text-sm font-semibold truncate">{conv.name}</p>
-// //                   <span className="text-xs text-gray-400">9:45 AM</span>
-// //                 </div>
-
-// //                 <p className="text-xs text-gray-500 truncate">
-// //                   {lastMessage?.text || "No messages yet"}
-// //                 </p>
-// //               </div>
-// //             </div>
-// //           );
-// //         })}
-// //       </div>
-// //     </div>
-// //   );
-// // }
-
-// "use client";
-
-// import Image from "next/image";
-// import { useMemo, useState } from "react";
-// import { Search, SlidersHorizontal } from "lucide-react";
-// import { useChat } from "@/app/(client)/context/ChatContext";
-
-// const formatTime = (value?: string | null) => {
-//   if (!value) return "";
-
-//   const date = new Date(value);
-
-//   if (Number.isNaN(date.getTime())) return "";
-
-//   return date.toLocaleTimeString("en-US", {
-//     hour: "numeric",
-//     minute: "2-digit",
-//   });
-// };
-
-// export default function MessageListSection() {
-//   const {
-//     conversations,
-//     selectConversation,
-//     activeConversation,
-//     isLoadingConversations,
-//     error,
-//   } = useChat();
-
-//   const [activeFilter, setActiveFilter] = useState("All");
-//   const [search, setSearch] = useState("");
-
-//   const spamCount = conversations.filter((conv) => conv.isSpam).length;
-
-//   const filteredConversations = useMemo(() => {
-//     return conversations.filter((conv) => {
-//       const searchMatch =
-//         conv.name.toLowerCase().includes(search.toLowerCase()) ||
-//         conv.lastMessageText.toLowerCase().includes(search.toLowerCase());
-
-//       if (!searchMatch) return false;
-
-//       if (activeFilter === "Unread") return conv.unreadCount > 0;
-//       if (activeFilter === "Starred") return conv.isStarred;
-//       if (activeFilter.startsWith("Spam")) return conv.isSpam;
-
-//       return true;
-//     });
-//   }, [activeFilter, conversations, search]);
-
-//   return (
-//     <div className="h-full flex flex-col font-[inter]">
-//       {/* Title */}
-//       <h3 className="text-lg font-semibold mb-4">Conversations</h3>
-
-//       {/* Search + Filter */}
-//       <div className="relative mb-4">
-//         <Search
-//           size={16}
-//           className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-//         />
-//         <input
-//           type="text"
-//           placeholder="Search messages..."
-//           value={search}
-//           onChange={(e) => setSearch(e.target.value)}
-//           className="w-full pl-10 pr-10 py-2 rounded-full border bg-gray-50 text-sm outline-none"
-//         />
-//         <SlidersHorizontal
-//           size={18}
-//           className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"
-//         />
-//       </div>
-
-//       {/* Filter Tabs */}
-//       <div className="flex gap-2 mb-4 flex-wrap">
-//         {["All", "Unread", "Starred", `Spam (${spamCount})`].map((tab) => (
-//           <button
-//             key={tab}
-//             onClick={() => setActiveFilter(tab)}
-//             className={`px-4 py-1.5 text-xs rounded-full transition ${
-//               activeFilter === tab
-//                 ? "bg-red-500 text-white"
-//                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-//             }`}
-//           >
-//             {tab}
-//           </button>
-//         ))}
-//       </div>
-
-//       {/* Conversation List */}
-//       <div className="flex-1 overflow-y-auto pr-2">
-//         {isLoadingConversations ? (
-//           <p className="text-sm text-gray-500">Loading conversations...</p>
-//         ) : error ? (
-//           <p className="text-sm text-red-500">{error}</p>
-//         ) : filteredConversations.length === 0 ? (
-//           <p className="text-sm text-gray-500">No conversations found.</p>
-//         ) : (
-//           filteredConversations.map((conv) => {
-//             return (
-//               <div
-//                 key={conv.id}
-//                 onClick={() => selectConversation(conv.id)}
-//                 className={`flex items-start gap-3 p-3 rounded-xl cursor-pointer transition border-b last:border-b-0 ${
-//                   activeConversation?.id === conv.id
-//                     ? "bg-gray-100"
-//                     : "hover:bg-gray-50"
-//                 }`}
-//               >
-//                 {/* Avatar */}
-//                 <div className="relative">
-//                   <Image
-//                     src={conv.avatar}
-//                     alt={conv.name}
-//                     width={42}
-//                     height={42}
-//                     className="rounded-full object-cover"
-//                   />
-//                   {/* Online indicator */}
-//                   {conv.online && (
-//                     <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
-//                   )}
-//                 </div>
-
-//                 {/* Text Content */}
-//                 <div className="flex-1 min-w-0">
-//                   <div className="flex justify-between items-center">
-//                     <p className="text-sm font-semibold truncate">
-//                       {conv.name}
-//                     </p>
-//                     <span className="text-xs text-gray-400">
-//                       {formatTime(conv.lastMessageAt)}
-//                     </span>
-//                   </div>
-
-//                   <p className="text-xs text-gray-500 truncate">
-//                     {conv.lastMessageText || "No messages yet"}
-//                   </p>
-
-//                   {conv.unreadCount > 0 && (
-//                     <span className="inline-flex mt-1 h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] text-white">
-//                       {conv.unreadCount}
-//                     </span>
-//                   )}
-//                 </div>
-//               </div>
-//             );
-//           })
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-
 "use client";
 
 import Image from "next/image";
@@ -268,6 +15,7 @@ import {
   getLastMessageText,
 } from "@/lib/chatHelpers";
 import { useGetConversationsQuery } from "@/app/api/messages/chatApi";
+import type { Conversation } from "@/app/api/messages/chatApi";
 
 export default function MessageListSection() {
   const router = useRouter();
@@ -280,32 +28,53 @@ export default function MessageListSection() {
 
   const { data, isLoading, isError } = useGetConversationsQuery();
 
+  // data is now Conversation[] directly
+  const conversationsList = data || [];
+
+  if (conversationsList.length > 0) {
+    console.log("[MessageListSection] first conv:", JSON.stringify(conversationsList[0])?.slice(0, 1500));
+  }
+  console.log("[MessageListSection] conversations:", conversationsList.length, "currentUserId:", currentUserId, "activeReceiverId:", activeReceiverId);
+
   const [activeFilter, setActiveFilter] = useState("All");
   const [search, setSearch] = useState("");
 
-  // Sort and Deduplicate conversations by other user's ID
+  // Process conversations: deduplicate and sort
   const conversations = useMemo(() => {
-    const rawList = data?.data || [];
-    
-    const sorted = [...rawList].sort((a, b) => {
+    const rawList: Conversation[] = conversationsList || [];
+
+    if (rawList.length > 0) {
+      console.log("[MessageListSection] first raw conv:", JSON.stringify(rawList[0])?.slice(0, 1500));
+    }
+
+    // Deduplicate by the other user's ID — keep the most recently updated one
+    const map = new Map<string, (typeof rawList)[number]>();
+
+    for (const conv of rawList) {
+      const rId = String(getConversationReceiverId(conv, currentUserId));
+      if (!rId) continue;
+
+      const existing = map.get(rId);
+      if (!existing) {
+        map.set(rId, conv);
+      } else {
+        const existingTime = new Date(existing.updated_at || existing.created_at || 0).getTime();
+        const convTime = new Date(conv.updated_at || conv.created_at || 0).getTime();
+        if (convTime > existingTime) {
+          map.set(rId, conv);
+        }
+      }
+    }
+
+    const result = Array.from(map.values()).sort((a, b) => {
       const dateA = new Date(a.updated_at || a.created_at || 0).getTime();
       const dateB = new Date(b.updated_at || b.created_at || 0).getTime();
       return dateB - dateA;
     });
 
-    const seen = new Set<string>();
-    const uniqueList: typeof rawList = [];
-
-    for (const conv of sorted) {
-      const rId = getConversationReceiverId(conv, currentUserId);
-      if (rId && !seen.has(rId)) {
-        seen.add(rId);
-        uniqueList.push(conv);
-      }
-    }
-
-    return uniqueList;
-  }, [data?.data, currentUserId]);
+    console.log("[MessageListSection] processed conversations:", result.length, "currentUserId:", currentUserId);
+    return result;
+  }, [conversationsList, currentUserId]);
 
   const filteredConversations = useMemo(() => {
     return conversations.filter((conv) => {
@@ -332,7 +101,6 @@ export default function MessageListSection() {
 
   return (
     <div className="h-full flex flex-col font-[inter] bg-slate-50/50 rounded-2xl">
-      {/* Sidebar Header */}
       <div className="p-4 pb-2">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
@@ -348,13 +116,11 @@ export default function MessageListSection() {
           )}
         </div>
 
-        {/* Search Field */}
         <div className="relative mb-4 group">
           <Search
             size={16}
             className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#4F46E5] transition-colors duration-200"
           />
-
           <input
             type="text"
             placeholder="Search conversations..."
@@ -364,12 +130,11 @@ export default function MessageListSection() {
           />
         </div>
 
-        {/* Filter Tabs */}
         <div className="flex gap-1.5 mb-2 bg-slate-100 p-1 rounded-xl">
           {["All", "Unread"].map((tab) => {
             const isTabActive = activeFilter === tab;
             const count = tab === "Unread" ? totalUnread : conversations.length;
-            
+
             return (
               <button
                 key={tab}
@@ -392,7 +157,6 @@ export default function MessageListSection() {
         </div>
       </div>
 
-      {/* Conversations Scrollable Container */}
       <div className="flex-1 overflow-y-auto px-2 pb-4 space-y-1 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-12 px-4 space-y-3">
@@ -410,45 +174,43 @@ export default function MessageListSection() {
           </div>
         ) : (
           filteredConversations.map((conv) => {
-            const receiverId = getConversationReceiverId(conv, currentUserId);
-            const isActive = String(activeReceiverId) === String(receiverId);
+            const receiverId = String(getConversationReceiverId(conv, currentUserId));
+            const isActive = activeReceiverId && String(activeReceiverId) === receiverId;
             const unreadCount = Number(conv.unread_count || 0);
+            const displayName = getConversationName(conv, currentUserId);
+            const displayAvatar = getConversationAvatar(conv, currentUserId);
+            const lastMsg = getLastMessageText(conv);
 
             return (
               <div
-                key={`${receiverId}-${conv.id || ""}`}
+                key={`conv-${receiverId}`}
                 onClick={() => {
                   if (!receiverId) return;
-
                   dispatch(setActiveReceiverId(receiverId));
                   router.push(`/messages/${receiverId}`);
                 }}
                 className={`group flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200 border-b border-slate-100/50 last:border-b-0 relative ${
-                  isActive 
-                    ? "bg-white shadow-sm border-l-4 border-l-[#4F46E5] pl-2" 
+                  isActive
+                    ? "bg-white shadow-sm border-l-4 border-l-[#4F46E5] pl-2"
                     : "hover:bg-white hover:shadow-xs"
                 }`}
               >
-                {/* Avatar with Status indicator */}
                 <div className="relative flex-shrink-0">
                   <Image
-                    src={getConversationAvatar(conv, currentUserId)}
-                    alt={getConversationName(conv, currentUserId)}
+                    src={displayAvatar}
+                    alt={displayName}
                     width={44}
                     height={44}
                     className="rounded-full object-cover w-[44px] h-[44px] ring-2 ring-slate-100 group-hover:scale-105 transition-transform duration-200"
                     unoptimized
                   />
-
-                  {/* Pulsing online indicator */}
                   <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full shadow-sm" />
                 </div>
 
-                {/* Info & Text Preview */}
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-center mb-1">
-                    <p className={`text-sm truncate ${isActive ? "font-bold text-[#4F46E5]" : "font-semibold text-slate-800"} group-hover:text-[#4F46E5] transition-colors`}>
-                      {getConversationName(conv, currentUserId)}
+                    <p className={`text-sm truncate max-w-[140px] ${isActive ? "font-bold text-[#4F46E5]" : "font-semibold text-slate-800"} group-hover:text-[#4F46E5] transition-colors`}>
+                      {displayName}
                     </p>
 
                     <span className="text-[10px] text-slate-400 font-medium whitespace-nowrap">
@@ -458,7 +220,7 @@ export default function MessageListSection() {
 
                   <div className="flex items-center justify-between gap-2">
                     <p className={`text-xs truncate flex-1 ${unreadCount > 0 ? "font-semibold text-slate-800" : "text-slate-400"}`}>
-                      {getLastMessageText(conv)}
+                      {lastMsg}
                     </p>
 
                     {unreadCount > 0 && (
