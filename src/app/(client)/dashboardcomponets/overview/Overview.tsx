@@ -17,7 +17,6 @@ import {
 import BoxIcon from "@/components/icons/BoxIcon";
 
 import MessagesIcon from "@/components/icons/MessagesIcon";
-import { ChatProvider } from "../../context/ChatContext";
 
 import MessageSection from "@/components/message/MessageSection";
 import MessageInput from "@/components/message/MessageInput";
@@ -181,8 +180,7 @@ export default function Overview() {
                MESSAGES TAB  
       ============================ */}
       {activeTab === "Messages" && (
-        <ChatProvider>
-          <section className="grid md:h-[calc(100dvh-190px)] grid-cols-12 md:gap-4">
+        <section className="grid md:h-[calc(100dvh-190px)] grid-cols-12 md:gap-4">
             {/* Sidebar */}
             <aside className="md:col-span-4 col-span-12 mt-4 md:mt-0 shadow-lg p-2 rounded-2xl">
               <div className="rounded-2xl bg-white md:p-6 p-4 md:max-h-[calc(100dvh-140px)] overflow-hidden">
@@ -201,8 +199,7 @@ export default function Overview() {
               <MessageInput />
             </div>
           </section>
-        </ChatProvider>
-      )}
+        )}
       {/* ============================  
                 REVIEWS TAB  
       ============================ */}

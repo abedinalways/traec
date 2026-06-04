@@ -22,7 +22,7 @@ export default function Header() {
   const conversations = data?.data || [];
 
   const activeConversation = conversations.find(
-    (conv) => getConversationReceiverId(conv, currentUserId) === activeReceiverId,
+    (conv) => String(getConversationReceiverId(conv, currentUserId)) === String(activeReceiverId),
   );
 
   if (!activeConversation) {

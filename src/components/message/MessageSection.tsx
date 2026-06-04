@@ -19,8 +19,7 @@ import {
   useGetMessagesQuery,
 } from "@/app/api/messages/chatApi";
 
-// NOTE: usePusherChat() is already called in the parent layout.tsx
-// Do NOT call it here — duplicate subscriptions cause double event handling
+
 
 const getMessagesFromPayload = (payload?: MessageIndexData): Message[] => {
   if (!payload) return [];
