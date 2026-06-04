@@ -70,7 +70,7 @@ export default function usePusherChat() {
 
   handleMessageRef.current = (payload: unknown) => {
     const d = dispatchRef.current;
-    console.log("[Pusher] Event received:", payload);
+    console.log("[Pusher] Event received RAW:", JSON.stringify(payload)?.slice(0, 2000));
 
     const msg = normalizePayload(payload);
     if (!msg) {
@@ -78,6 +78,8 @@ export default function usePusherChat() {
       d(chatApi.util.invalidateTags(["Chat"]));
       return;
     }
+
+    console.log("[Pusher] Normalized message:", { id: msg.id, sender_id: msg.sender_id, receiver_id: msg.receiver_id, message: msg.message, sender: msg.sender, receiver: msg.receiver });
 
     const senderId = msg.sender_id ? String(msg.sender_id) : "";
     const receiverId = msg.receiver_id ? String(msg.receiver_id) : "";
@@ -99,7 +101,7 @@ export default function usePusherChat() {
       return;
     }
 
-    // Update messages cache for the target receiver
+    // Update messages cache
     try {
       d(
         chatApi.util.updateQueryData(
@@ -127,53 +129,53 @@ export default function usePusherChat() {
           },
         ),
       );
-    } catch (e) {
-      console.log("[Pusher] No existing messages cache for:", targetReceiverId, "(conversation not opened yet)");
+    } catch {
+      console.log("[Pusher] No existing messages cache for:", targetReceiverId);
     }
 
-    // Update conversations cache
-    try {
-      d(
-        chatApi.util.updateQueryData("getConversations", undefined, (draft: any) => {
-          const conversations: any[] = draft.data || [];
-          const idx = conversations.findIndex(
-            (c: any) =>
-              String(c.sender_id) === targetReceiverId ||
-              String(c.receiver_id) === targetReceiverId,
-          );
+    // Update conversations cache — this is what drives the sidebar real-time update
+    d(
+      chatApi.util.updateQueryData("getConversations", undefined, (draft: any) => {
+        const conversations: any[] = draft.data || [];
+        const idx = conversations.findIndex(
+          (c: any) =>
+            String(c.sender_id) === targetReceiverId ||
+            String(c.receiver_id) === targetReceiverId,
+        );
 
-          if (idx === -1) {
-            const otherUser = String(msg.sender_id) !== myId ? msg.sender : msg.receiver;
-            conversations.unshift({
-              id: msg.conversation_id || `temp-${targetReceiverId}-${Date.now()}`,
-              sender_id: msg.sender_id,
-              receiver_id: msg.receiver_id,
-              last_message: msg,
-              message: msg.message,
-              created_at: msg.created_at || new Date().toISOString(),
-              updated_at: msg.created_at || new Date().toISOString(),
-              unread_count: activeId === targetReceiverId ? 0 : 1,
-              sender: msg.sender,
-              receiver: msg.receiver,
-              user: otherUser,
-            });
-          } else {
-            conversations[idx].last_message = msg;
-            conversations[idx].message = msg.message;
-            conversations[idx].updated_at = msg.created_at || new Date().toISOString();
-            if (activeId !== targetReceiverId) {
-              conversations[idx].unread_count = Number(conversations[idx].unread_count || 0) + 1;
-            }
-            const [item] = conversations.splice(idx, 1);
-            conversations.unshift(item);
+        const now = msg.created_at || new Date().toISOString();
+
+        if (idx === -1) {
+          // New conversation from Pusher — create a temporary entry
+          const otherUser = String(msg.sender_id) !== myId ? msg.sender : msg.receiver;
+          conversations.unshift({
+            id: msg.conversation_id || `temp-${targetReceiverId}-${Date.now()}`,
+            sender_id: msg.receiver_id,    // Store the OTHER user's id so receiver_id matches targetReceiverId
+            receiver_id: myId,              // Store our own id
+            last_message: msg.message,
+            message: msg.message,
+            created_at: now,
+            updated_at: now,
+            unread_count: activeId === targetReceiverId ? 0 : 1,
+            sender: msg.receiver,           // The other user's info
+            receiver: msg.sender,           // Our info
+            user: otherUser,
+          });
+        } else {
+          conversations[idx].last_message = msg.message;
+          conversations[idx].message = msg.message;
+          conversations[idx].updated_at = now;
+          if (activeId !== targetReceiverId) {
+            conversations[idx].unread_count = Number(conversations[idx].unread_count || 0) + 1;
           }
+          // Move to top
+          const [item] = conversations.splice(idx, 1);
+          conversations.unshift(item);
+        }
 
-          draft.data = conversations;
-        }),
-      );
-    } catch (e) {
-      console.log("[Pusher] No existing conversations cache yet");
-    }
+        draft.data = conversations;
+      }),
+    );
 
     console.log(`[Pusher] Message processed for receiver ${targetReceiverId}:`, msg.id);
   };
@@ -182,7 +184,7 @@ export default function usePusherChat() {
     if (!currentUserId || typeof window === "undefined") return;
 
     const pusher = getPusherClient();
-    const channelName = "conversation";
+    const channelName = `conversation.${currentUserId}`;
 
     console.log("[Pusher] Subscribing to:", channelName, "for user:", currentUserId);
 
@@ -211,7 +213,7 @@ export default function usePusherChat() {
     };
   }, [currentUserId]);
 
-  // Fallback: poll for new messages every 5 seconds when a conversation is active
+  // Fallback polling
   useEffect(() => {
     if (!activeReceiverId || !currentUserId) return;
 

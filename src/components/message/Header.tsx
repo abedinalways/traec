@@ -17,13 +17,30 @@ export default function Header() {
   );
   const currentUserId = useAppSelector((state) => state.auth.user?.id);
 
-  const { data } = useGetConversationsQuery();
+  const { data, isLoading } = useGetConversationsQuery();
+  const conversations = data || [];
 
-  const conversations = data?.data || [];
+  console.log("[Header] conversations:", conversations.length, "activeReceiverId:", activeReceiverId);
+  if (conversations.length > 0) {
+    console.log("[Header] first conv:", JSON.stringify(conversations[0])?.slice(0, 1000));
+  }
 
-  const activeConversation = conversations.find(
-    (conv) => String(getConversationReceiverId(conv, currentUserId)) === String(activeReceiverId),
-  );
+  const activeConversation = conversations.find((conv) => {
+    const rId = String(getConversationReceiverId(conv, currentUserId));
+    return rId === String(activeReceiverId);
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[74px] items-center gap-3 border-b border-slate-100 bg-white px-6 py-3.5 shadow-xs animate-pulse">
+        <div className="h-11 w-11 rounded-full bg-slate-200" />
+        <div className="space-y-2">
+          <div className="h-4 w-32 rounded bg-slate-200" />
+          <div className="h-3 w-20 rounded bg-slate-200" />
+        </div>
+      </div>
+    );
+  }
 
   if (!activeConversation) {
     return (
@@ -35,14 +52,16 @@ export default function Header() {
           <p className="font-semibold text-slate-800 text-sm">
             {activeReceiverId ? "New Conversation" : "Chat Workspace"}
           </p>
-          <p className="text-[10px] font-medium text-slate-400">Messages are private & secure.</p>
+          <p className="text-[10px] font-medium text-slate-400">
+            Messages are private & secure.
+          </p>
         </div>
       </div>
     );
   }
 
-  const name = getConversationName(activeConversation, currentUserId);
-  const avatar = getConversationAvatar(activeConversation, currentUserId);
+  const name = getConversationName(activeConversation, currentUserId, activeReceiverId);
+  const avatar = getConversationAvatar(activeConversation, currentUserId, activeReceiverId);
 
   return (
     <div className="flex min-h-[74px] items-center justify-between border-b border-slate-100 bg-white px-6 py-3.5 shadow-xs">
@@ -56,8 +75,7 @@ export default function Header() {
             className="h-11 w-11 rounded-full object-cover ring-2 ring-slate-100 shadow-xs"
             unoptimized
           />
-          {/* Status dot */}
-          <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full" />
+          <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full shadow-sm" />
         </div>
 
         <div className="min-w-0">
