@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -14,66 +14,81 @@ import {
   getConversationReceiverId,
   getLastMessageText,
 } from "@/lib/chatHelpers";
-import { useGetConversationsQuery } from "@/app/api/messages/chatApi";
-import type { Conversation } from "@/app/api/messages/chatApi";
+import { useGetConversationsQuery, useGetMessagesQuery } from "@/app/api/messages/chatApi";
+import type { Conversation, ChatUser } from "@/app/api/messages/chatApi";
+
+// Module-level user cache populated from API data
+const userCache = new Map<string, ChatUser>();
 
 export default function MessageListSection() {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const activeReceiverId = useAppSelector(
-    (state) => state.chat.activeReceiverId,
-  );
+  const activeReceiverId = useAppSelector((state) => state.chat.activeReceiverId);
   const currentUserId = useAppSelector((state) => state.auth.user?.id);
 
   const { data, isLoading, isError } = useGetConversationsQuery();
+  const conversationsList: Conversation[] = data || [];
 
-  // data is now Conversation[] directly
-  const conversationsList = data || [];
+  // Fetch messages for active conversation to populate user names/avatars
+  const { data: messagesData } = useGetMessagesQuery(
+    { receiverId: activeReceiverId ? String(activeReceiverId) : "" },
+    { skip: !activeReceiverId },
+  );
 
-  if (conversationsList.length > 0) {
-    console.log("[MessageListSection] first conv:", JSON.stringify(conversationsList[0])?.slice(0, 1500));
-  }
-  console.log("[MessageListSection] conversations:", conversationsList.length, "currentUserId:", currentUserId, "activeReceiverId:", activeReceiverId);
+  // Populate user cache from messages API
+  useEffect(() => {
+    if (!messagesData?.data) return;
+    const msgs = messagesData.data;
+    if (!Array.isArray(msgs)) return;
+    for (const msg of msgs) {
+      if (msg.sender?.id) userCache.set(String(msg.sender.id), msg.sender);
+      if (msg.receiver?.id) userCache.set(String(msg.receiver.id), msg.receiver);
+    }
+  }, [messagesData]);
+
+  // Also populate from conversations list
+  useEffect(() => {
+    for (const conv of conversationsList) {
+      if (conv.sender?.id) userCache.set(String(conv.sender.id), conv.sender);
+      if (conv.receiver?.id) userCache.set(String(conv.receiver.id), conv.receiver);
+    }
+  }, [conversationsList]);
 
   const [activeFilter, setActiveFilter] = useState("All");
   const [search, setSearch] = useState("");
 
-  // Process conversations: deduplicate and sort
+  // Deduplicate and sort conversations
   const conversations = useMemo(() => {
-    const rawList: Conversation[] = conversationsList || [];
+    const map = new Map<string, Conversation>();
 
-    if (rawList.length > 0) {
-      console.log("[MessageListSection] first raw conv:", JSON.stringify(rawList[0])?.slice(0, 1500));
-    }
+    for (const conv of conversationsList) {
+      const senderId = conv.sender_id ? String(conv.sender_id) : null;
+      const receiverId = conv.receiver_id ? String(conv.receiver_id) : null;
+      const myId = currentUserId ? String(currentUserId) : null;
 
-    // Deduplicate by the other user's ID — keep the most recently updated one
-    const map = new Map<string, (typeof rawList)[number]>();
+      let otherId = "";
+      if (senderId && myId && senderId !== myId) otherId = senderId;
+      else if (receiverId && myId && receiverId !== myId) otherId = receiverId;
+      else if (receiverId) otherId = receiverId;
+      else if (senderId) otherId = senderId;
+      if (!otherId) continue;
 
-    for (const conv of rawList) {
-      const rId = String(getConversationReceiverId(conv, currentUserId));
-      if (!rId) continue;
-
-      const existing = map.get(rId);
+      const existing = map.get(otherId);
       if (!existing) {
-        map.set(rId, conv);
+        map.set(otherId, conv);
       } else {
         const existingTime = new Date(existing.updated_at || existing.created_at || 0).getTime();
         const convTime = new Date(conv.updated_at || conv.created_at || 0).getTime();
-        if (convTime > existingTime) {
-          map.set(rId, conv);
-        }
+        if (convTime > existingTime) map.set(otherId, conv);
       }
     }
 
-    const result = Array.from(map.values()).sort((a, b) => {
+    return Array.from(map.values()).sort((a, b) => {
       const dateA = new Date(a.updated_at || a.created_at || 0).getTime();
       const dateB = new Date(b.updated_at || b.created_at || 0).getTime();
       return dateB - dateA;
     });
-
-    console.log("[MessageListSection] processed conversations:", result.length, "currentUserId:", currentUserId);
-    return result;
   }, [conversationsList, currentUserId]);
 
   const filteredConversations = useMemo(() => {
@@ -81,16 +96,8 @@ export default function MessageListSection() {
       const name = getConversationName(conv, currentUserId).toLowerCase();
       const lastMessage = getLastMessageText(conv).toLowerCase();
       const searchValue = search.toLowerCase();
-
-      const searchMatch =
-        name.includes(searchValue) || lastMessage.includes(searchValue);
-
-      if (!searchMatch) return false;
-
-      if (activeFilter === "Unread") {
-        return Number(conv.unread_count || 0) > 0;
-      }
-
+      if (!name.includes(searchValue) && !lastMessage.includes(searchValue)) return false;
+      if (activeFilter === "Unread") return Number(conv.unread_count || 0) > 0;
       return true;
     });
   }, [activeFilter, conversations, currentUserId, search]);
@@ -117,10 +124,7 @@ export default function MessageListSection() {
         </div>
 
         <div className="relative mb-4 group">
-          <Search
-            size={16}
-            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#4F46E5] transition-colors duration-200"
-          />
+          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#4F46E5] transition-colors duration-200" />
           <input
             type="text"
             placeholder="Search conversations..."
@@ -134,7 +138,6 @@ export default function MessageListSection() {
           {["All", "Unread"].map((tab) => {
             const isTabActive = activeFilter === tab;
             const count = tab === "Unread" ? totalUnread : conversations.length;
-
             return (
               <button
                 key={tab}
@@ -174,20 +177,39 @@ export default function MessageListSection() {
           </div>
         ) : (
           filteredConversations.map((conv) => {
-            const receiverId = String(getConversationReceiverId(conv, currentUserId));
-            const isActive = activeReceiverId && String(activeReceiverId) === receiverId;
+            const senderId = conv.sender_id ? String(conv.sender_id) : null;
+            const receiverId = conv.receiver_id ? String(conv.receiver_id) : null;
+            const myId = currentUserId ? String(currentUserId) : null;
+
+            let otherId = "";
+            if (senderId && myId && senderId !== myId) otherId = senderId;
+            else if (receiverId && myId && receiverId !== myId) otherId = receiverId;
+            else if (receiverId) otherId = receiverId;
+            else if (senderId) otherId = senderId;
+
+            const isActive = activeReceiverId && String(activeReceiverId) === otherId;
             const unreadCount = Number(conv.unread_count || 0);
-            const displayName = getConversationName(conv, currentUserId);
-            const displayAvatar = getConversationAvatar(conv, currentUserId);
             const lastMsg = getLastMessageText(conv);
+
+            // Resolve name: user cache first, then conversation data
+            const cachedUser = otherId ? userCache.get(otherId) : null;
+            const displayName = cachedUser?.name
+              ? [cachedUser.name, cachedUser.last_name].filter(Boolean).join(" ") || cachedUser.name
+              : getConversationName(conv, currentUserId);
+
+            // Resolve avatar: user cache first, then conversation data
+            const cachedImg = cachedUser?.image || cachedUser?.avatar || cachedUser?.avatar_url;
+            const displayAvatar = cachedImg
+              ? (cachedImg.startsWith("http") || cachedImg.startsWith("/") ? cachedImg : `/api/image?path=${encodeURIComponent(cachedImg)}`)
+              : getConversationAvatar(conv, currentUserId);
 
             return (
               <div
-                key={`conv-${receiverId}`}
+                key={`conv-${otherId}`}
                 onClick={() => {
-                  if (!receiverId) return;
-                  dispatch(setActiveReceiverId(receiverId));
-                  router.push(`/messages/${receiverId}`);
+                  if (!otherId) return;
+                  dispatch(setActiveReceiverId(otherId));
+                  router.push(`/messages/${otherId}`);
                 }}
                 className={`group flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200 border-b border-slate-100/50 last:border-b-0 relative ${
                   isActive
@@ -212,7 +234,6 @@ export default function MessageListSection() {
                     <p className={`text-sm truncate max-w-[140px] ${isActive ? "font-bold text-[#4F46E5]" : "font-semibold text-slate-800"} group-hover:text-[#4F46E5] transition-colors`}>
                       {displayName}
                     </p>
-
                     <span className="text-[10px] text-slate-400 font-medium whitespace-nowrap">
                       {formatChatTime(conv.updated_at || conv.created_at)}
                     </span>
@@ -222,7 +243,6 @@ export default function MessageListSection() {
                     <p className={`text-xs truncate flex-1 ${unreadCount > 0 ? "font-semibold text-slate-800" : "text-slate-400"}`}>
                       {lastMsg}
                     </p>
-
                     {unreadCount > 0 && (
                       <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#4F46E5] px-1.5 text-[9px] font-bold text-white shadow-xs">
                         {unreadCount}

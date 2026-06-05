@@ -9,7 +9,11 @@ import {
   getConversationName,
   getConversationReceiverId,
 } from "@/lib/chatHelpers";
-import { useGetConversationsQuery } from "@/app/api/messages/chatApi";
+import { useGetConversationsQuery, useGetMessagesQuery } from "@/app/api/messages/chatApi";
+import type { ChatUser } from "@/app/api/messages/chatApi";
+
+// Shared user cache
+const userCache = new Map<string, ChatUser>();
 
 export default function Header() {
   const activeReceiverId = useAppSelector(
@@ -20,14 +24,28 @@ export default function Header() {
   const { data, isLoading } = useGetConversationsQuery();
   const conversations = data || [];
 
-  console.log("[Header] conversations:", conversations.length, "activeReceiverId:", activeReceiverId);
-  if (conversations.length > 0) {
-    console.log("[Header] first conv:", JSON.stringify(conversations[0])?.slice(0, 1000));
+  // Fetch messages to populate user cache
+  const { data: messagesData } = useGetMessagesQuery(
+    { receiverId: activeReceiverId ? String(activeReceiverId) : "" },
+    { skip: !activeReceiverId },
+  );
+
+  // Populate user cache from messages
+  if (messagesData?.data && Array.isArray(messagesData.data)) {
+    for (const msg of messagesData.data) {
+      if (msg.sender?.id) userCache.set(String(msg.sender.id), msg.sender);
+      if (msg.receiver?.id) userCache.set(String(msg.receiver.id), msg.receiver);
+    }
   }
 
   const activeConversation = conversations.find((conv) => {
-    const rId = String(getConversationReceiverId(conv, currentUserId));
-    return rId === String(activeReceiverId);
+    const senderId = conv.sender_id ? String(conv.sender_id) : null;
+    const receiverId = conv.receiver_id ? String(conv.receiver_id) : null;
+    const myId = currentUserId ? String(currentUserId) : null;
+
+    if (senderId && myId && senderId !== myId && String(activeReceiverId) === senderId) return true;
+    if (receiverId && myId && receiverId !== myId && String(activeReceiverId) === receiverId) return true;
+    return false;
   });
 
   if (isLoading) {
@@ -60,8 +78,30 @@ export default function Header() {
     );
   }
 
-  const name = getConversationName(activeConversation, currentUserId, activeReceiverId);
-  const avatar = getConversationAvatar(activeConversation, currentUserId, activeReceiverId);
+  // Determine other user ID
+  const senderId = activeConversation.sender_id ? String(activeConversation.sender_id) : null;
+  const receiverId = activeConversation.receiver_id ? String(activeConversation.receiver_id) : null;
+  const myId = currentUserId ? String(currentUserId) : null;
+
+  let otherId = "";
+  if (senderId && myId && senderId !== myId) {
+    otherId = senderId;
+  } else if (receiverId && myId && receiverId !== myId) {
+    otherId = receiverId;
+  } else if (receiverId) {
+    otherId = receiverId;
+  }
+
+  // Try to get name/avatar from user cache first
+  const cachedUser = otherId ? userCache.get(otherId) : null;
+  const name = cachedUser?.name
+    ? [cachedUser.name, cachedUser.last_name].filter(Boolean).join(" ") || cachedUser.name
+    : getConversationName(activeConversation, currentUserId);
+
+  const cachedImg = cachedUser?.image || cachedUser?.avatar || cachedUser?.avatar_url;
+  const avatar = cachedImg
+    ? (cachedImg.startsWith("http") || cachedImg.startsWith("/") ? cachedImg : `/api/image?path=${encodeURIComponent(cachedImg)}`)
+    : getConversationAvatar(activeConversation, currentUserId);
 
   return (
     <div className="flex min-h-[74px] items-center justify-between border-b border-slate-100 bg-white px-6 py-3.5 shadow-xs">
