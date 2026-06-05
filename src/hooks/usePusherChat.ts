@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { getPusherClient } from "@/lib/pusherClient";
 import { useAppDispatch } from "@/app/store";
 import type { RootState } from "@/app/store";
-import { chatApi, dedupeMessages, getMessagesFromIndexData, type Message } from "@/app/api/messages/chatApi";
+import { chatApi, dedupeMessages, getMessagesFromIndexData, useGetConversationsQuery, type Message } from "@/app/api/messages/chatApi";
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null;
@@ -45,10 +45,11 @@ const normalizePayload = (payload: unknown): Message | null => {
   };
 };
 
-export default function usePusherChat() {
+export function PusherListener() {
   const dispatch = useAppDispatch();
   const activeReceiverId = useSelector((s: RootState) => s.chat.activeReceiverId);
   const currentUserId = useSelector((s: RootState) => s.auth.user?.id);
+  const { data: conversationsData } = useGetConversationsQuery();
 
   const activeRef = useRef(activeReceiverId);
   const userIdRef = useRef(currentUserId);
@@ -82,7 +83,6 @@ export default function usePusherChat() {
       return;
     }
 
-    // Update messages cache
     try {
       d(chatApi.util.updateQueryData("getMessages", { receiverId: targetReceiverId }, (draft: any) => {
         const indexData = draft.data;
@@ -95,7 +95,6 @@ export default function usePusherChat() {
       }));
     } catch { /* no cache */ }
 
-    // Update conversations cache (sidebar real-time update)
     try {
       d(chatApi.util.updateQueryData("getConversations", undefined, (draft: any) => {
         const conversations: any[] = draft.data || [];
@@ -137,21 +136,36 @@ export default function usePusherChat() {
     if (!currentUserId || typeof window === "undefined") return;
 
     const pusher = getPusherClient();
-    const channel = pusher.subscribe(`conversation.${currentUserId}`);
+    const subscribed: Array<{ name: string; ref: any }> = [];
 
-    channel.bind("message.sent", handleMessage);
-    channel.bind("pusher:subscription_succeeded", () => {});
-    channel.bind("pusher:subscription_error", () => {});
+    // User-specific channel
+    const userCh = pusher.subscribe(`conversation.${currentUserId}`);
+    userCh.bind("message.sent", handleMessage);
+    subscribed.push({ name: `conversation.${currentUserId}`, ref: userCh });
+
+    // All conversation channels (backend uses conversation.{conversationId})
+    if (Array.isArray(conversationsData)) {
+      const ids = new Set<string>();
+      for (const c of conversationsData) {
+        if (c.conversation_id) ids.add(String(c.conversation_id));
+        if (c.id) ids.add(String(c.id));
+      }
+      for (const id of ids) {
+        try {
+          const ch = pusher.subscribe(`conversation.${id}`);
+          ch.bind("message.sent", handleMessage);
+          subscribed.push({ name: `conversation.${id}`, ref: ch });
+        } catch { /* ignore */ }
+      }
+    }
 
     return () => {
-      channel.unbind("message.sent", handleMessage);
-      channel.unbind("pusher:subscription_succeeded");
-      channel.unbind("pusher:subscription_error");
-      pusher.unsubscribe(`conversation.${currentUserId}`);
+      for (const { name, ref: ch } of subscribed) {
+        try { ch.unbind("message.sent", handleMessage); pusher.unsubscribe(name); } catch { /* */ }
+      }
     };
-  }, [currentUserId, handleMessage]);
+  }, [currentUserId, handleMessage, conversationsData]);
 
-  // Polling fallback for conversations sidebar
   useEffect(() => {
     if (!activeReceiverId || !currentUserId) return;
     const interval = setInterval(() => {
@@ -159,4 +173,6 @@ export default function usePusherChat() {
     }, 3000);
     return () => clearInterval(interval);
   }, [activeReceiverId, currentUserId, dispatch]);
+
+  return null;
 }
