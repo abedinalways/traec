@@ -137,6 +137,8 @@ export default function usePusherChat() {
     d(
       chatApi.util.updateQueryData("getConversations", undefined, (draft: any) => {
         const conversations: any[] = draft.data || [];
+
+        // Find by matching sender_id OR receiver_id against targetReceiverId
         const idx = conversations.findIndex(
           (c: any) =>
             String(c.sender_id) === targetReceiverId ||
@@ -145,26 +147,32 @@ export default function usePusherChat() {
 
         const now = msg.created_at || new Date().toISOString();
 
+        // Determine who the other user is (not me)
+        const otherUser = String(msg.sender_id) !== myId ? msg.sender : msg.receiver;
+
         if (idx === -1) {
-          // New conversation from Pusher — create a temporary entry
-          const otherUser = String(msg.sender_id) !== myId ? msg.sender : msg.receiver;
+          // New conversation from Pusher — create entry
+          // Store the OTHER user as `sender` so getOtherUserFromConversation resolves correctly
           conversations.unshift({
             id: msg.conversation_id || `temp-${targetReceiverId}-${Date.now()}`,
-            sender_id: msg.receiver_id,    // Store the OTHER user's id so receiver_id matches targetReceiverId
-            receiver_id: myId,              // Store our own id
-            last_message: msg.message,
+            sender_id: targetReceiverId,
+            receiver_id: myId,
             message: msg.message,
             created_at: now,
             updated_at: now,
             unread_count: activeId === targetReceiverId ? 0 : 1,
-            sender: msg.receiver,           // The other user's info
-            receiver: msg.sender,           // Our info
-            user: otherUser,
+            sender: otherUser,
+            receiver: String(msg.sender_id) === myId ? msg.receiver : msg.sender,
+            type: msg.type || "text",
           });
         } else {
-          conversations[idx].last_message = msg.message;
+          // Update existing conversation
           conversations[idx].message = msg.message;
           conversations[idx].updated_at = now;
+          // Update sender info if available (so name/avatar resolves)
+          if (otherUser) {
+            conversations[idx].sender = otherUser;
+          }
           if (activeId !== targetReceiverId) {
             conversations[idx].unread_count = Number(conversations[idx].unread_count || 0) + 1;
           }

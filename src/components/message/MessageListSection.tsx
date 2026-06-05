@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -14,8 +14,11 @@ import {
   getConversationReceiverId,
   getLastMessageText,
 } from "@/lib/chatHelpers";
-import { useGetConversationsQuery } from "@/app/api/messages/chatApi";
-import type { Conversation } from "@/app/api/messages/chatApi";
+import { useGetConversationsQuery, useGetMessagesQuery } from "@/app/api/messages/chatApi";
+import type { Conversation, ChatUser } from "@/app/api/messages/chatApi";
+
+// Cache user info keyed by user ID, populated from messages API
+const userCache = new Map<string, ChatUser>();
 
 export default function MessageListSection() {
   const router = useRouter();
@@ -27,53 +30,101 @@ export default function MessageListSection() {
   const currentUserId = useAppSelector((state) => state.auth.user?.id);
 
   const { data, isLoading, isError } = useGetConversationsQuery();
+  const conversationsList: Conversation[] = data || [];
 
-  // data is now Conversation[] directly
-  const conversationsList = data || [];
+  // Fetch messages for active conversation to get user info
+  const { data: messagesData } = useGetMessagesQuery(
+    { receiverId: activeReceiverId ? String(activeReceiverId) : "" },
+    { skip: !activeReceiverId },
+  );
 
-  if (conversationsList.length > 0) {
-    console.log("[MessageListSection] first conv:", JSON.stringify(conversationsList[0])?.slice(0, 1500));
-  }
-  console.log("[MessageListSection] conversations:", conversationsList.length, "currentUserId:", currentUserId, "activeReceiverId:", activeReceiverId);
+  // Extract user info from messages and populate cache
+  useEffect(() => {
+    if (!messagesData?.data) return;
+    const msgs = messagesData.data;
+    if (!Array.isArray(msgs)) return;
+
+    for (const msg of msgs) {
+      if (msg.sender?.id) {
+        userCache.set(String(msg.sender.id), msg.sender);
+      }
+      if (msg.receiver?.id) {
+        userCache.set(String(msg.receiver.id), msg.receiver);
+      }
+    }
+
+    // Also extract from conversations — populate sender info
+    for (const conv of conversationsList) {
+      if (conv.sender?.id) {
+        userCache.set(String(conv.sender.id), conv.sender);
+      }
+      if (conv.receiver?.id) {
+        userCache.set(String(conv.receiver.id), conv.receiver);
+      }
+    }
+  }, [messagesData, conversationsList]);
 
   const [activeFilter, setActiveFilter] = useState("All");
   const [search, setSearch] = useState("");
+  const [showDebug, setShowDebug] = useState(true);
 
   // Process conversations: deduplicate and sort
   const conversations = useMemo(() => {
-    const rawList: Conversation[] = conversationsList || [];
-
-    if (rawList.length > 0) {
-      console.log("[MessageListSection] first raw conv:", JSON.stringify(rawList[0])?.slice(0, 1500));
-    }
-
-    // Deduplicate by the other user's ID — keep the most recently updated one
+    const rawList = conversationsList;
     const map = new Map<string, (typeof rawList)[number]>();
 
     for (const conv of rawList) {
-      const rId = String(getConversationReceiverId(conv, currentUserId));
-      if (!rId) continue;
+      // Determine the other user's ID
+      const senderId = conv.sender_id ? String(conv.sender_id) : null;
+      const receiverId = conv.receiver_id ? String(conv.receiver_id) : null;
+      const myId = currentUserId ? String(currentUserId) : null;
 
-      const existing = map.get(rId);
+      let otherId = "";
+      if (senderId && myId && senderId !== myId) {
+        otherId = senderId;
+      } else if (receiverId && myId && receiverId !== myId) {
+        otherId = receiverId;
+      } else if (receiverId) {
+        otherId = receiverId;
+      } else if (senderId) {
+        otherId = senderId;
+      }
+
+      if (!otherId) continue;
+
+      const existing = map.get(otherId);
       if (!existing) {
-        map.set(rId, conv);
+        map.set(otherId, conv);
       } else {
         const existingTime = new Date(existing.updated_at || existing.created_at || 0).getTime();
         const convTime = new Date(conv.updated_at || conv.created_at || 0).getTime();
         if (convTime > existingTime) {
-          map.set(rId, conv);
+          map.set(otherId, conv);
         }
       }
     }
 
-    const result = Array.from(map.values()).sort((a, b) => {
+    return Array.from(map.entries()).map(([otherId, conv]) => {
+      // Enrich conversation with user info from cache
+      const otherUser = userCache.get(otherId);
+      const myId = currentUserId ? String(currentUserId) : null;
+      const senderId = conv.sender_id ? String(conv.sender_id) : null;
+
+      // If the conversation's cached sender is the current user,
+      // but we have the other user info in cache, attach it
+      if (senderId === myId && otherUser) {
+        return {
+          ...conv,
+          // We don't mutate the type, just use the cache for display
+        };
+      }
+
+      return conv;
+    }).sort((a, b) => {
       const dateA = new Date(a.updated_at || a.created_at || 0).getTime();
       const dateB = new Date(b.updated_at || b.created_at || 0).getTime();
       return dateB - dateA;
     });
-
-    console.log("[MessageListSection] processed conversations:", result.length, "currentUserId:", currentUserId);
-    return result;
   }, [conversationsList, currentUserId]);
 
   const filteredConversations = useMemo(() => {
@@ -101,6 +152,18 @@ export default function MessageListSection() {
 
   return (
     <div className="h-full flex flex-col font-[inter] bg-slate-50/50 rounded-2xl">
+      {/* Debug panel */}
+      {showDebug && (
+        <div className="bg-yellow-50 border border-yellow-200 p-2 text-[10px] font-mono">
+          <div className="flex justify-between items-center mb-1">
+            <span className="font-bold text-yellow-800">DEBUG</span>
+            <button onClick={() => setShowDebug(false)} className="text-yellow-600 hover:text-yellow-800">✕</button>
+          </div>
+          <div>count: {conversations.length} | userId: {currentUserId} | active: {activeReceiverId}</div>
+          <div>userCache: {Array.from(userCache.entries()).map(([k,v]) => `${k}:${v.name}`).join(', ')}</div>
+        </div>
+      )}
+
       <div className="p-4 pb-2">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
@@ -174,20 +237,45 @@ export default function MessageListSection() {
           </div>
         ) : (
           filteredConversations.map((conv) => {
-            const receiverId = String(getConversationReceiverId(conv, currentUserId));
-            const isActive = activeReceiverId && String(activeReceiverId) === receiverId;
+            const senderId = conv.sender_id ? String(conv.sender_id) : null;
+            const receiverId = conv.receiver_id ? String(conv.receiver_id) : null;
+            const myId = currentUserId ? String(currentUserId) : null;
+
+            // Determine other user's ID
+            let otherId = "";
+            if (senderId && myId && senderId !== myId) {
+              otherId = senderId;
+            } else if (receiverId && myId && receiverId !== myId) {
+              otherId = receiverId;
+            } else if (receiverId) {
+              otherId = receiverId;
+            } else if (senderId) {
+              otherId = senderId;
+            }
+
+            const isActive = activeReceiverId && String(activeReceiverId) === otherId;
             const unreadCount = Number(conv.unread_count || 0);
-            const displayName = getConversationName(conv, currentUserId);
-            const displayAvatar = getConversationAvatar(conv, currentUserId);
             const lastMsg = getLastMessageText(conv);
+
+            // Get name: first try userCache, then fall back to conversation data
+            const cachedUser = otherId ? userCache.get(otherId) : null;
+            const displayName = cachedUser?.name
+              ? [cachedUser.name, cachedUser.last_name].filter(Boolean).join(" ") || cachedUser.name
+              : getConversationName(conv, currentUserId);
+
+            // Get avatar: first try userCache, then fall back
+            const cachedImg = cachedUser?.image || cachedUser?.avatar || cachedUser?.avatar_url;
+            const displayAvatar = cachedImg
+              ? (cachedImg.startsWith("http") || cachedImg.startsWith("/") ? cachedImg : `/api/image?path=${encodeURIComponent(cachedImg)}`)
+              : getConversationAvatar(conv, currentUserId);
 
             return (
               <div
-                key={`conv-${receiverId}`}
+                key={`conv-${otherId}`}
                 onClick={() => {
-                  if (!receiverId) return;
-                  dispatch(setActiveReceiverId(receiverId));
-                  router.push(`/messages/${receiverId}`);
+                  if (!otherId) return;
+                  dispatch(setActiveReceiverId(otherId));
+                  router.push(`/messages/${otherId}`);
                 }}
                 className={`group flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200 border-b border-slate-100/50 last:border-b-0 relative ${
                   isActive
@@ -238,3 +326,5 @@ export default function MessageListSection() {
     </div>
   );
 }
+
+

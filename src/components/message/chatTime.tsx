@@ -15,7 +15,20 @@ export default function ChatTime({ timestamp }: ChatTimeProps) {
       return;
     }
 
-    const date = new Date(timestamp);
+    let normalized = timestamp.trim();
+
+    // Backend sends "2026-06-02 03:29:12" (space separator, no timezone)
+    // or "2026-05-31T03:48:29.000000Z" (ISO with Z)
+    if (normalized.includes(" ") && !normalized.includes("T")) {
+      normalized = normalized.replace(" ", "T");
+    }
+
+    // If no timezone info, assume UTC
+    if (!normalized.endsWith("Z") && !normalized.includes("+") && !normalized.match(/-\d{2}:\d{2}$/)) {
+      normalized = normalized + "Z";
+    }
+
+    const date = new Date(normalized);
 
     if (Number.isNaN(date.getTime())) {
       setLocalTime("");

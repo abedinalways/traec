@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { MessageCircle, Sparkles } from "lucide-react";
 
 import { useAppSelector } from "@/app/store";
@@ -17,6 +17,7 @@ import {
   useGetConversationsQuery,
   useGetMessagesQuery,
 } from "@/app/api/messages/chatApi";
+import type { ChatUser } from "@/app/api/messages/chatApi";
 import ChatTime from "./chatTime";
 
 const getMessagesFromPayload = (payload?: MessageIndexData): Message[] => {
@@ -35,11 +36,11 @@ export default function MessageSection() {
   const { data: conversationsData } = useGetConversationsQuery();
   const conversations = conversationsData || [];
 
-  const activeConversation = conversations.find(
-    (conv) =>
-      String(getConversationReceiverId(conv, currentUserId)) ===
-      String(activeReceiverId),
-  );
+  const activeConversation = conversations.find((conv) => {
+    const senderId = conv.sender_id ? String(conv.sender_id) : null;
+    const receiverId = conv.receiver_id ? String(conv.receiver_id) : null;
+    return senderId === String(activeReceiverId) || receiverId === String(activeReceiverId);
+  });
 
   const {
     data: messagesData,
@@ -51,8 +52,25 @@ export default function MessageSection() {
   );
 
   const messages = getMessagesFromPayload(messagesData?.data);
-  const activeName = getConversationName(activeConversation, currentUserId, activeReceiverId);
-  const activeAvatar = getConversationAvatar(activeConversation, currentUserId, activeReceiverId);
+
+  // Build user map from messages for name/avatar resolution
+  const userMap = useMemo(() => {
+    const map = new Map<string, ChatUser>();
+    for (const msg of messages) {
+      if (msg.sender?.id) map.set(String(msg.sender.id), msg.sender);
+      if (msg.receiver?.id) map.set(String(msg.receiver.id), msg.receiver);
+    }
+    return map;
+  }, [messages]);
+
+  const activeName = getConversationName(activeConversation, currentUserId);
+
+  // Get the other user's avatar from the user map
+  const otherUserFromMap = activeReceiverId ? userMap.get(String(activeReceiverId)) : null;
+  const otherAvatarUrl = otherUserFromMap?.image || otherUserFromMap?.avatar || otherUserFromMap?.avatar_url;
+  const activeAvatar = otherAvatarUrl
+    ? (otherAvatarUrl.startsWith("http") || otherAvatarUrl.startsWith("/") ? otherAvatarUrl : `/api/image?path=${encodeURIComponent(otherAvatarUrl)}`)
+    : getConversationAvatar(activeConversation, currentUserId);
 
   useEffect(() => {
     if (!scrollRef.current) return;
@@ -112,29 +130,28 @@ export default function MessageSection() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#4F46E5]/5 rounded-full blur-2xl" />
           <div className="relative z-10">
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[#4F46E5] shadow-md border border-slate-100">
-              <Sparkles
-                size={22}
-                className="animate-spin"
-                style={{ animationDuration: "3s" }}
-              />
+              <Sparkles size={22} className="animate-spin" style={{ animationDuration: "3s" }} />
             </div>
-            <h4 className="text-sm font-bold text-slate-800 tracking-tight">
-              Say Hello!
-            </h4>
+            <h4 className="text-sm font-bold text-slate-800 tracking-tight">Say Hello!</h4>
             <p className="mt-1 text-xs text-slate-400 max-w-xs leading-relaxed">
-              No previous messages found. Type your first message below to spark
-              the conversation.
+              No previous messages found. Type your first message below to spark the conversation.
             </p>
           </div>
         </div>
       ) : (
         <div className="space-y-4">
           {messages.map((msg) => {
-            const isOwn = isOwnMessage(msg, currentUserId, activeReceiverId);
+            const isOwn = isOwnMessage(msg, currentUserId);
 
-            // For incoming messages, try to get avatar from the message's sender data
-            const senderAvatar = msg.sender?.image || msg.sender?.avatar || msg.sender?.avatar_url;
-            const msgAvatar = isOwn ? null : (senderAvatar ? senderAvatar : activeAvatar);
+            // For incoming messages, get sender avatar from message data
+            const msgSender = msg.sender;
+            const incomingAvatarSrc = (!isOwn && msgSender?.image)
+              ? msgSender.image
+              : (!isOwn && msgSender?.avatar)
+                ? msgSender.avatar
+                : (!isOwn && msgSender?.avatar_url)
+                  ? msgSender.avatar_url
+                  : activeAvatar;
 
             return (
               <div
@@ -144,33 +161,26 @@ export default function MessageSection() {
                 {!isOwn ? (
                   <div className="flex max-w-[82%] gap-3 sm:max-w-[70%] items-start">
                     <Image
-                      src={msgAvatar || activeAvatar}
-                      alt={activeName}
+                      src={incomingAvatarSrc || activeAvatar}
+                      alt={msgSender?.name || activeName}
                       width={36}
                       height={36}
                       className="h-9 w-9 rounded-full object-cover ring-2 ring-white shadow-xs flex-shrink-0"
                       unoptimized
                     />
-
                     <div>
                       <div className="rounded-2xl rounded-tl-md bg-white border border-slate-100 px-4 py-3 text-sm leading-relaxed text-slate-800 shadow-sm">
-                        <p className="whitespace-pre-wrap break-words">
-                          {msg.message || ""}
-                        </p>
+                        <p className="whitespace-pre-wrap break-words">{msg.message || ""}</p>
                       </div>
                       <p className="mt-1 px-1 text-[10px] font-medium text-slate-400">
-                        <ChatTime
-                          timestamp={msg.updated_at || msg.created_at}
-                        />
+                        <ChatTime timestamp={msg.updated_at || msg.created_at} />
                       </p>
                     </div>
                   </div>
                 ) : (
                   <div className="max-w-[82%] sm:max-w-[70%] flex flex-col items-end">
                     <div className="rounded-2xl rounded-tr-md bg-[#4F46E5] px-4 py-3 text-sm leading-relaxed text-white shadow-sm shadow-[#4F46E5]/10">
-                      <p className="whitespace-pre-wrap break-words">
-                        {msg.message || ""}
-                      </p>
+                      <p className="whitespace-pre-wrap break-words">{msg.message || ""}</p>
                     </div>
                     <p className="mt-1 px-1 text-[10px] font-medium text-slate-400 text-right">
                       <ChatTime timestamp={msg.updated_at || msg.created_at} />
