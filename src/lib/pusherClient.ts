@@ -26,7 +26,7 @@ export const getPusherClient = () => {
     authEndpoint,
   });
 
-  Pusher.logToConsole = true;
+  Pusher.logToConsole = process.env.NODE_ENV === "development";
 
   pusherClient = new Pusher(key, {
     cluster,

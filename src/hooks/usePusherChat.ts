@@ -63,11 +63,8 @@ export default function usePusherChat() {
     const myId = userIdRef.current ? String(userIdRef.current) : "";
     const activeId = activeRef.current ? String(activeRef.current) : "";
 
-    console.log("[Pusher] Event received:", JSON.stringify(payload)?.slice(0, 1000));
-
     const msg = normalizePayload(payload);
     if (!msg) {
-      console.warn("[Pusher] Could not normalize");
       d(chatApi.util.invalidateTags(["Chat"]));
       return;
     }
@@ -98,7 +95,7 @@ export default function usePusherChat() {
       }));
     } catch { /* no cache */ }
 
-    // Update conversations cache
+    // Update conversations cache (sidebar real-time update)
     try {
       d(chatApi.util.updateQueryData("getConversations", undefined, (draft: any) => {
         const conversations: any[] = draft.data || [];
@@ -131,8 +128,7 @@ export default function usePusherChat() {
         }
         draft.data = conversations;
       }));
-    } catch (e) {
-      console.error("[Pusher] Cache update failed:", e);
+    } catch {
       d(chatApi.util.invalidateTags(["Chat"]));
     }
   }, []);
@@ -141,66 +137,26 @@ export default function usePusherChat() {
     if (!currentUserId || typeof window === "undefined") return;
 
     const pusher = getPusherClient();
-
-    // Subscribe to user-specific channel (most common Laravel pattern)
     const channel = pusher.subscribe(`conversation.${currentUserId}`);
 
-    // Bind to multiple possible event names
-    const eventNames = [
-      "message.sent",
-      "App\\Events\\MessageSent",
-      "App\\Events\\NewMessage",
-      "message-sent",
-      "new-message",
-      "chat-message",
-      "App\\Events\\ChatMessage",
-    ];
-
-    for (const eventName of eventNames) {
-      channel.bind(eventName, handleMessage);
-    }
-
-    channel.bind_global((name: string, data: any) => {
-      console.log(`[Pusher Event on conversation.${currentUserId}] "${name}":`, JSON.stringify(data)?.slice(0, 500));
-    });
-
-    channel.bind("pusher:subscription_succeeded", () => {
-      console.log("[Pusher] ✓ Subscribed to conversation." + currentUserId);
-    });
-
-    channel.bind("pusher:subscription_error", (status: any) => {
-      console.error("[Pusher] ✗ Subscription error:", status);
-    });
-
-    // Also subscribe to the shared "conversation" channel
-    const sharedChannel = pusher.subscribe("conversation");
-    for (const eventName of eventNames) {
-      sharedChannel.bind(eventName, handleMessage);
-    }
-    sharedChannel.bind_global((name: string, data: any) => {
-      console.log(`[Pusher Event on conversation] "${name}":`, JSON.stringify(data)?.slice(0, 500));
-    });
+    channel.bind("message.sent", handleMessage);
+    channel.bind("pusher:subscription_succeeded", () => {});
+    channel.bind("pusher:subscription_error", () => {});
 
     return () => {
-      for (const eventName of eventNames) {
-        channel.unbind(eventName, handleMessage);
-        sharedChannel.unbind(eventName, handleMessage);
-      }
-      channel.unbind_global();
-      sharedChannel.unbind_global();
+      channel.unbind("message.sent", handleMessage);
+      channel.unbind("pusher:subscription_succeeded");
+      channel.unbind("pusher:subscription_error");
       pusher.unsubscribe(`conversation.${currentUserId}`);
-      pusher.unsubscribe("conversation");
     };
   }, [currentUserId, handleMessage]);
 
-  // Fast polling for conversations sidebar (every 3 seconds)
+  // Polling fallback for conversations sidebar
   useEffect(() => {
     if (!activeReceiverId || !currentUserId) return;
-
     const interval = setInterval(() => {
       dispatch(chatApi.util.invalidateTags(["Chat"]));
     }, 3000);
-
     return () => clearInterval(interval);
   }, [activeReceiverId, currentUserId, dispatch]);
 }
