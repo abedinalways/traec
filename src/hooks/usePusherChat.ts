@@ -64,6 +64,8 @@ export function PusherListener() {
     const myId = userIdRef.current ? String(userIdRef.current) : "";
     const activeId = activeRef.current ? String(activeRef.current) : "";
 
+    console.log("[Pusher] ✅ Event received:", JSON.stringify(payload)?.slice(0, 1000));
+
     const msg = normalizePayload(payload);
     if (!msg) {
       d(chatApi.util.invalidateTags(["Chat"]));
@@ -138,26 +140,40 @@ export function PusherListener() {
     const pusher = getPusherClient();
     const subscribed: Array<{ name: string; ref: any }> = [];
 
-    // User-specific channel
-    const userCh = pusher.subscribe(`conversation.${currentUserId}`);
-    userCh.bind("message.sent", handleMessage);
-    subscribed.push({ name: `conversation.${currentUserId}`, ref: userCh });
-
-    // All conversation channels (backend uses conversation.{conversationId})
+    // Collect all conversation IDs
+    const convIds = new Set<string>();
     if (Array.isArray(conversationsData)) {
-      const ids = new Set<string>();
       for (const c of conversationsData) {
-        if (c.conversation_id) ids.add(String(c.conversation_id));
-        if (c.id) ids.add(String(c.id));
-      }
-      for (const id of ids) {
-        try {
-          const ch = pusher.subscribe(`conversation.${id}`);
-          ch.bind("message.sent", handleMessage);
-          subscribed.push({ name: `conversation.${id}`, ref: ch });
-        } catch { /* ignore */ }
+        if (c.conversation_id) convIds.add(String(c.conversation_id));
+        if (c.id) convIds.add(String(c.id));
       }
     }
+
+    // Subscribe to each conversation channel (backend broadcasts on conversation.{conversationId})
+    for (const id of convIds) {
+      const chName = `conversation.${id}`;
+      try {
+        const ch = pusher.subscribe(chName);
+        ch.bind("message.sent", handleMessage);
+        ch.bind_global((name: string, data: any) => {
+          // console.log(`[Pusher][${chName}] ${name}:`, JSON.stringify(data)?.slice(0, 300));
+        });
+        subscribed.push({ name: chName, ref: ch });
+      } catch { /* ignore */ }
+    }
+
+    // Also subscribe to user channel
+    const userChName = `conversation.${currentUserId}`;
+    try {
+      const userCh = pusher.subscribe(userChName);
+      userCh.bind("message.sent", handleMessage);
+      userCh.bind_global((name: string, data: any) => {
+        console.log(`[Pusher][${userChName}] ${name}:`, JSON.stringify(data)?.slice(0, 300));
+      });
+      subscribed.push({ name: userChName, ref: userCh });
+    } catch { /* ignore */ }
+
+    // console.log(`[Pusher] Subscribed to ${subscribed.length} channels:`, subscribed.map(s => s.name));
 
     return () => {
       for (const { name, ref: ch } of subscribed) {
@@ -165,14 +181,6 @@ export function PusherListener() {
       }
     };
   }, [currentUserId, handleMessage, conversationsData]);
-
-  useEffect(() => {
-    if (!activeReceiverId || !currentUserId) return;
-    const interval = setInterval(() => {
-      dispatch(chatApi.util.invalidateTags(["Chat"]));
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [activeReceiverId, currentUserId, dispatch]);
 
   return null;
 }
