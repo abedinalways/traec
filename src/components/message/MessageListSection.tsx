@@ -13,6 +13,7 @@ import {
   getConversationName,
   getConversationReceiverId,
   getLastMessageText,
+  getMessagePreview,
 } from "@/lib/chatHelpers";
 import { useGetConversationsQuery, useGetMessagesQuery } from "@/app/api/messages/chatApi";
 import type { Conversation, ChatUser } from "@/app/api/messages/chatApi";

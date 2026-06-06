@@ -27,10 +27,25 @@ const normalizePayload = (payload: unknown): Message | null => {
   const raw = candidates.find(
     (v) =>
       isRecord(v) &&
-      ("sender_id" in v || "senderId" in v || "user_id" in v) &&
-      ("message" in v || "text" in v || "body" in v),
+      ("sender_id" in v || "senderId" in v || "user_id" in v),
   );
   if (!isRecord(raw)) return null;
+
+  // Extract attachments if present
+  let attachments: any[] | undefined;
+  if (isRecord(raw) && raw.attachments && Array.isArray(raw.attachments)) {
+    attachments = raw.attachments.map((att: any) => ({
+      id: att.id,
+      message_id: att.message_id,
+      file_path: att.file_path,
+      file_name: att.file_name,
+      file_type: att.file_type,
+      file_size: att.file_size,
+      created_at: att.created_at || null,
+      updated_at: att.updated_at || null,
+    }));
+  }
+
   return {
     id: asStringOrNumber(raw.id) || `rt-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
     sender_id: asStringOrNumber(raw.sender_id),
@@ -42,6 +57,7 @@ const normalizePayload = (payload: unknown): Message | null => {
     updated_at: asString(raw.updated_at) ?? null,
     sender: isRecord(raw.sender) ? raw.sender as unknown as Message["sender"] : null,
     receiver: isRecord(raw.receiver) ? raw.receiver as unknown as Message["receiver"] : null,
+    attachments,
   };
 };
 

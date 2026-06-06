@@ -1,4 +1,4 @@
-import { Conversation, Message } from "@/app/api/messages/chatApi";
+import { Conversation, Message, ChatAttachment } from "@/app/api/messages/chatApi";
 
 const FALLBACK_AVATAR = "/images/provider-profile-img.svg";
 
@@ -216,4 +216,53 @@ export const formatChatTime = (value?: string | null) => {
     minute: "2-digit",
     hour12: true,
   });
+};
+
+// ----- Attachment helpers -----
+
+export const getAttachmentUrl = (filePath?: string | null): string => {
+  if (!filePath) return "";
+  if (filePath.startsWith("http://") || filePath.startsWith("https://")) return filePath;
+  if (filePath.startsWith("/")) return filePath;
+  return `/api/image?path=${encodeURIComponent(filePath)}`;
+};
+
+export const isImageAttachment = (attachment: ChatAttachment): boolean => {
+  const type = (attachment.file_type || "").toLowerCase();
+  const name = (attachment.file_name || "").toLowerCase();
+  if (type.startsWith("image/")) return true;
+  if (/\.(jpg|jpeg|png|gif|bmp|webp|svg|ico|tiff?)$/i.test(name)) return true;
+  return false;
+};
+
+export const isPdfAttachment = (attachment: ChatAttachment): boolean => {
+  const type = (attachment.file_type || "").toLowerCase();
+  const name = (attachment.file_name || "").toLowerCase();
+  if (type === "application/pdf") return true;
+  if (name.endsWith(".pdf")) return true;
+  return false;
+};
+
+export const formatFileSize = (size?: string | number | null): string => {
+  if (!size) return "Unknown size";
+  const bytes = typeof size === "string" ? parseInt(size, 10) : size;
+  if (isNaN(bytes) || bytes <= 0) return "Unknown size";
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+};
+
+export const getMessagePreview = (msg?: Message | null): string => {
+  if (!msg) return "";
+  if (msg.attachments && msg.attachments.length > 0) {
+    const first = msg.attachments[0];
+    if (isImageAttachment(first)) {
+      const count = msg.attachments.filter(isImageAttachment).length;
+      return count === 1 ? "📷 Photo" : `📷 ${count} Photos`;
+    }
+    if (isPdfAttachment(first)) return `📄 ${first.file_name || "Document"}`;
+    const count = msg.attachments.length;
+    return count === 1 ? `📎 ${first.file_name || "File"}` : `📎 ${count} Files`;
+  }
+  return msg.message || "";
 };

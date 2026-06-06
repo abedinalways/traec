@@ -51,7 +51,8 @@ export async function POST(request: NextRequest) {
 
       const channel = `conversation.${message.conversation_id}`;
 
-      const eventData = {
+      // Build event data including attachments
+      const eventData: any = {
         id: message.id,
         sender_id: message.sender_id,
         receiver_id: message.receiver_id,
@@ -64,8 +65,22 @@ export async function POST(request: NextRequest) {
         receiver: message.receiver || null,
       };
 
+      // Include attachments if present
+      if (message.attachments && message.attachments.length > 0) {
+        eventData.attachments = message.attachments.map((att: any) => ({
+          id: att.id,
+          message_id: att.message_id,
+          file_path: att.file_path,
+          file_name: att.file_name,
+          file_type: att.file_type,
+          file_size: att.file_size,
+          created_at: att.created_at,
+          updated_at: att.updated_at,
+        }));
+      }
+
       await pusher.trigger(channel, "message.sent", eventData);
-      console.log(`[Pusher] ✅ Triggered event on channel: ${channel}, message: ${message.id}`);
+      console.log(`[Pusher] ✅ Triggered event on channel: ${channel}, message: ${message.id}, attachments: ${eventData.attachments?.length || 0}`);
     } catch (e) {
       console.error("[Pusher] Failed to trigger event:", e);
     }
