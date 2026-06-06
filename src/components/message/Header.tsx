@@ -62,7 +62,7 @@ export default function Header() {
 
   if (!activeConversation) {
     return (
-      <div className="flex min-h-[74px] items-center gap-3 border-b border-slate-100 bg-white px-6 py-3.5 shadow-xs">
+      <div className="flex min-h-[74px] items-center gap-3 border-b border-slate-100 bg-white px-6 py-3.5 shadow-xs ">
         <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-50 text-[#4F46E5] border border-slate-100">
           <MessageCircle size={20} />
         </div>
@@ -104,7 +104,7 @@ export default function Header() {
     : getConversationAvatar(activeConversation, currentUserId);
 
   return (
-    <div className="flex min-h-[74px] items-center justify-between border-b border-slate-100 bg-white px-6 py-3.5 shadow-xs">
+    <div className="flex min-h-[74px] items-center justify-between border-b border-slate-100 px-6 py-3.5 shadow-xs bg-blue-50 rounded-tl-xl rounded-tr-xl">
       <div className="flex items-center gap-3">
         <div className="relative">
           <Image

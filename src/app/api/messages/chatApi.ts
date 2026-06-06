@@ -23,11 +23,13 @@ export interface ChatUser {
 
 export interface ChatAttachment {
   id?: string | number;
-  file_url?: string;
-  url?: string;
-  type?: string;
-  name?: string;
-  size?: number;
+  message_id?: string | number;
+  file_path?: string;
+  file_name?: string;
+  file_type?: string;
+  file_size?: string | number;
+  created_at?: string | null;
+  updated_at?: string | null;
 }
 
 export interface Message {
