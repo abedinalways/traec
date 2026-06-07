@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from "next/image";
@@ -22,6 +21,7 @@ import {
   isOwnMessage,
   getAttachmentUrl,
   isImageAttachment,
+  isPdfAttachment,
   formatFileSize,
 } from "@/lib/chatHelpers";
 import {
@@ -39,19 +39,16 @@ const getMessagesFromPayload = (payload?: MessageIndexData): Message[] => {
   return payload.messages || [];
 };
 
-// File type icon helper
+// File type icon
 const getFileIcon = (attachment: ChatAttachment) => {
   const type = (attachment.file_type || "").toLowerCase();
-  if (type.startsWith("video/"))
-    return <Film size={18} className="text-purple-500" />;
-  if (type.startsWith("audio/"))
-    return <Music size={18} className="text-pink-500" />;
-  if (type === "application/pdf")
-    return <FileText size={18} className="text-red-500" />;
+  if (type.startsWith("video/")) return <Film size={18} className="text-purple-500" />;
+  if (type.startsWith("audio/")) return <Music size={18} className="text-pink-500" />;
+  if (type === "application/pdf") return <FileText size={18} className="text-red-500" />;
   return <File size={18} className="text-slate-400" />;
 };
 
-// Image lightbox
+// Image lightbox modal
 function ImageLightbox({
   src,
   alt,
@@ -75,7 +72,7 @@ function ImageLightbox({
       onClick={onClose}
     >
       <button
-        className="absolute top-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition"
+        className="absolute top-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition cursor-pointer"
         onClick={onClose}
       >
         <X size={20} />
@@ -90,6 +87,7 @@ function ImageLightbox({
   );
 }
 
+// Attachment renderer for a single message
 function MessageAttachments({
   attachments,
 }: {
@@ -101,6 +99,7 @@ function MessageAttachments({
 
   return (
     <>
+      {/* Lightbox */}
       {lightboxImage && (
         <ImageLightbox
           src={lightboxImage}
@@ -109,9 +108,16 @@ function MessageAttachments({
         />
       )}
 
+      {/* Image grid */}
       {imageAttachments.length > 0 && (
         <div
-          className={`mt-1 grid gap-1 ${imageAttachments.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}
+          className={`mt-1.5 grid gap-1 ${
+            imageAttachments.length === 1
+              ? "grid-cols-1"
+              : imageAttachments.length === 2
+                ? "grid-cols-2"
+                : "grid-cols-2"
+          }`}
         >
           {imageAttachments.slice(0, 4).map((att, idx) => {
             const url = getAttachmentUrl(att.file_path);
@@ -125,33 +131,32 @@ function MessageAttachments({
                 <img
                   src={url}
                   alt={att.file_name || "Image"}
-                  className={`object-cover w-full ${imageAttachments.length === 1 ? "max-h-48" : "h-24"} rounded-lg`}
+                  className={`object-cover w-full ${
+                    imageAttachments.length === 1
+                      ? "max-h-64 rounded-lg"
+                      : "h-28 rounded-lg"
+                  }`}
                   loading="lazy"
-                  onError={(e) => {
-                    const currentSrc = e.currentTarget.src;
-                    if (currentSrc.includes("/storage/")) {
-                      e.currentTarget.src = currentSrc.replace(
-                        "/storage/",
-                        "/",
-                      );
-                    } else if (
-                      !currentSrc.includes("/images/placeholder-image.png")
-                    ) {
-                      e.currentTarget.src = "/images/placeholder-image.png";
-                    }
-                  }}
                 />
+                {/* Hover overlay */}
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
                   <Eye
                     size={18}
                     className="text-white opacity-0 group-hover:opacity-80 transition-opacity drop-shadow-lg"
                   />
                 </div>
+                {/* +N overlay for last image */}
                 {isLast && (
                   <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-lg">
-                    <span className="text-white text-lg font-bold">
+                    <span className="text-white text-lg font-bold drop-shadow-lg">
                       +{imageAttachments.length - 4}
                     </span>
+                  </div>
+                )}
+                {/* File name tooltip on hover */}
+                {att.file_name && (
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <p className="text-[10px] text-white truncate">{att.file_name}</p>
                   </div>
                 )}
               </div>
@@ -160,6 +165,7 @@ function MessageAttachments({
         </div>
       )}
 
+      {/* File attachments */}
       {fileAttachments.length > 0 && (
         <div className="mt-1.5 flex flex-col gap-1.5">
           {fileAttachments.map((att, idx) => {
@@ -170,22 +176,21 @@ function MessageAttachments({
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 rounded-lg bg-white/90 border border-gray-100 px-3 py-2 hover:bg-white hover:border-gray-200 hover:shadow-sm transition-all group"
+                className="flex items-center gap-2.5 rounded-lg bg-white/80 border border-slate-100 px-3 py-2 hover:bg-white hover:border-slate-200 hover:shadow-sm transition-all group"
               >
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gray-50 border border-gray-100">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-50 border border-slate-100">
                   {getFileIcon(att)}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-semibold text-gray-700 truncate group-hover:text-indigo-600 transition-colors">
+                  <p className="text-xs font-semibold text-slate-700 truncate group-hover:text-[#4F46E5] transition-colors">
                     {att.file_name || "File"}
                   </p>
-                  <p className="text-[10px] text-gray-400">
+                  <p className="text-[10px] text-slate-400">
                     {formatFileSize(att.file_size)}
-                    {att.file_type &&
-                      ` · ${att.file_type.split("/")[1]?.toUpperCase() || att.file_type}`}
+                    {att.file_type && ` · ${att.file_type.split("/")[1]?.toUpperCase() || att.file_type}`}
                   </p>
                 </div>
-                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-gray-400 group-hover:bg-indigo-50 group-hover:text-indigo-500 transition">
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-slate-400 group-hover:bg-indigo-50 group-hover:text-[#4F46E5] transition">
                   <Download size={14} />
                 </div>
               </a>
@@ -227,6 +232,7 @@ export default function MessageSection() {
 
   const messages = getMessagesFromPayload(messagesData?.data);
 
+  // Build user map from messages for name/avatar resolution
   const userMap = useMemo(() => {
     const map = new Map<string, ChatUser>();
     for (const msg of messages) {
@@ -261,16 +267,18 @@ export default function MessageSection() {
 
   if (!activeReceiverId) {
     return (
-      <div className="flex-1 bg-white flex items-center justify-center">
-        <div className="text-center max-w-sm">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-indigo-500 shadow-md border border-gray-100">
+      <div className="bg-slate-50 px-6 py-6 h-full flex items-center justify-center relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#4F46E5]/5 rounded-full blur-3xl" />
+        <div className="text-center relative z-10 max-w-sm">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[#4F46E5] shadow-md border border-slate-100 animate-pulse">
             <MessageCircle size={26} />
           </div>
-          <h4 className="text-base font-bold text-gray-700">
+          <h4 className="text-base font-bold text-slate-800 tracking-tight">
             Your Event Inbox
           </h4>
-          <p className="mt-1.5 text-xs text-gray-500">
-            Choose a conversation from the left sidebar to start messaging.
+          <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">
+            Choose a provider or client conversation from the left sidebar to
+            start messaging in real-time.
           </p>
         </div>
       </div>
@@ -280,39 +288,47 @@ export default function MessageSection() {
   return (
     <div
       ref={scrollRef}
-      className="flex-1 overflow-y-auto px-4 py-4 bg-[#E5DDD5] scrollbar-thin scrollbar-thumb-gray-300"
+      className="overflow-y-auto bg-slate-50 px-4 py-4 sm:px-6 h-full scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent"
     >
       {isLoading ? (
         <div className="space-y-6">
           {[1, 2, 3].map((item) => (
             <div
               key={item}
-              className={`flex gap-3 items-end ${item % 2 === 0 ? "flex-row-reverse" : ""}`}
+              className={`flex gap-3 items-end ${
+                item % 2 === 0 ? "flex-row-reverse" : ""
+              }`}
             >
-              <div className="h-8 w-8 rounded-full bg-gray-300 animate-pulse flex-shrink-0" />
+              <div className="h-9 w-9 rounded-full bg-slate-200 animate-pulse flex-shrink-0" />
               <div
-                className={`h-10 w-40 rounded-2xl bg-gray-300 animate-pulse ${item % 2 === 0 ? "rounded-br-sm" : "rounded-bl-sm"}`}
+                className={`h-12 w-48 rounded-2xl bg-slate-200 animate-pulse ${
+                  item % 2 === 0 ? "rounded-br-sm" : "rounded-bl-sm"
+                }`}
               />
             </div>
           ))}
         </div>
       ) : isError ? (
-        <div className="rounded-xl border border-red-100 bg-red-50 p-4 text-xs text-red-600 text-center">
-          Failed to load messages. Please reload.
+        <div className="rounded-xl border border-red-100 bg-red-50/50 p-4 text-xs text-red-600 flex items-center justify-center font-medium shadow-xs">
+          Failed to load messages. Please reload the page.
         </div>
       ) : messages.length === 0 ? (
-        <div className="h-full flex items-center justify-center text-center">
-          <div>
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-indigo-500 shadow-md border border-gray-100">
+        <div className="flex h-full items-center justify-center text-center relative overflow-hidden">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#4F46E5]/5 rounded-full blur-2xl" />
+          <div className="relative z-10">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[#4F46E5] shadow-md border border-slate-100">
               <Sparkles
                 size={22}
                 className="animate-spin"
                 style={{ animationDuration: "3s" }}
               />
             </div>
-            <h4 className="text-sm font-bold text-gray-700">Say Hello!</h4>
-            <p className="mt-1 text-xs text-gray-400">
-              No messages yet. Start the conversation.
+            <h4 className="text-sm font-bold text-slate-800 tracking-tight">
+              Say Hello!
+            </h4>
+            <p className="mt-1 text-xs text-slate-400 max-w-xs leading-relaxed">
+              No previous messages found. Type your first message or share a file
+              to start the conversation.
             </p>
           </div>
         </div>
@@ -322,6 +338,7 @@ export default function MessageSection() {
             const isOwn = isOwnMessage(msg, currentUserId);
             const hasAttachments =
               msg.attachments && msg.attachments.length > 0;
+
             const msgSender = msg.sender;
             const incomingAvatarSrc =
               !isOwn && msgSender?.image
@@ -342,77 +359,76 @@ export default function MessageSection() {
                 className={`flex ${isOwn ? "justify-end" : "justify-start"}`}
               >
                 {!isOwn ? (
-                  <div className="flex max-w-[85%] gap-2 sm:max-w-[75%] items-end">
+                  <div className="flex max-w-[82%] gap-2.5 sm:max-w-[70%] items-start">
                     <Image
                       src={incomingAvatarSrc || activeAvatar}
                       alt={msgSender?.name || activeName}
-                      width={28}
-                      height={28}
-                      className="h-7 w-7 rounded-full object-cover ring-1 ring-white shadow-sm"
+                      width={32}
+                      height={32}
+                      className="h-8 w-8 rounded-full object-cover ring-2 ring-white shadow-xs flex-shrink-0 mt-0.5"
                       unoptimized
                     />
-                    <div className="relative flex-1 min-w-0">
-                      <div className="rounded-xl rounded-bl-md bg-white border border-gray-100 shadow-sm px-3 py-2 relative">
-                        <div className="absolute -left-1 bottom-0 w-2 h-2 bg-white border-l border-b border-gray-100 transform rotate-45" />
+                    <div className="flex-1 min-w-0">
+                      {/* Sender name */}
+                      <p className="mb-1 text-[10px] font-semibold text-slate-500 px-1">
+                        {msgSender?.name || "Unknown"}
+                      </p>
+                      <div className="rounded-2xl rounded-tl-md bg-white border border-slate-100 shadow-sm overflow-hidden">
+                        {/* Text content */}
                         {msg.message && (
-                          <p className="text-sm text-gray-800 break-words whitespace-pre-wrap">
-                            {msg.message}
-                          </p>
+                          <div className="px-3.5 py-2.5">
+                            <p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-slate-800">
+                              {msg.message}
+                            </p>
+                          </div>
                         )}
+                        {/* Attachments */}
                         {hasAttachments && (
-                          <div className="mt-1.5">
+                          <div
+                            className={
+                              msg.message ? "px-2 pb-2" : "p-2"
+                            }
+                          >
                             <MessageAttachments
                               attachments={msg.attachments!}
                             />
                           </div>
                         )}
-                        <div className="flex justify-end mt-1">
-                          <span className="text-[10px] text-gray-400">
-                            <ChatTime
-                              timestamp={msg.updated_at || msg.created_at}
-                            />
-                          </span>
-                        </div>
                       </div>
+                      <p className="mt-1 px-1 text-[10px] font-medium text-slate-400">
+                        <ChatTime
+                          timestamp={msg.updated_at || msg.created_at}
+                        />
+                      </p>
                     </div>
                   </div>
                 ) : (
-                  <div className="flex max-w-[85%] sm:max-w-[75%] justify-end">
-                    <div className="relative">
-                      <div className="rounded-xl rounded-br-md bg-[#DCF8C6] shadow-sm px-3 py-2 relative">
-                        <div className="absolute -right-1 bottom-0 w-2 h-2 bg-[#DCF8C6] transform rotate-45" />
-                        {msg.message && (
-                          <p className="text-sm text-gray-800 break-words whitespace-pre-wrap">
+                  <div className="max-w-[82%] sm:max-w-[70%] flex flex-col items-end">
+                    <div className="rounded-2xl rounded-tr-md bg-[#4F46E5] shadow-sm shadow-[#4F46E5]/10 overflow-hidden">
+                      {/* Text content */}
+                      {msg.message && (
+                        <div className="px-3.5 py-2.5">
+                          <p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-white">
                             {msg.message}
                           </p>
-                        )}
-                        {hasAttachments && (
-                          <div className="mt-1.5">
-                            <MessageAttachments
-                              attachments={msg.attachments!}
-                            />
-                          </div>
-                        )}
-                        <div className="flex justify-end items-center gap-1 mt-1">
-                          <span className="text-[10px] text-gray-500">
-                            <ChatTime
-                              timestamp={msg.updated_at || msg.created_at}
-                            />
-                          </span>
-                          <svg
-                            width="14"
-                            height="10"
-                            viewBox="0 0 14 10"
-                            className="text-[#4FC3F7]"
-                          >
-                            <path
-                              d="M4.5 7.5L1.5 4.5L0 6L4.5 10.5L13.5 1.5L12 0L4.5 7.5Z"
-                              fill="currentColor"
-                            />
-                          </svg>
                         </div>
-                      </div>
+                      )}
+                      {/* Attachments */}
+                      {hasAttachments && (
+                        <div
+                          className={msg.message ? "px-2 pb-2" : "p-2"}
+                        >
+                          <MessageAttachments
+                            attachments={msg.attachments!}
+                          />
+                        </div>
+                      )}
                     </div>
+                    <p className="mt-1 px-1 text-[10px] font-medium text-slate-400 text-right">
+                      <ChatTime
+                        timestamp={msg.updated_at || msg.created_at}
+                      />
+                    </p>
                   </div>
                 )}
               </div>
