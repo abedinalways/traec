@@ -91,29 +91,16 @@ export function PusherListener() {
     const senderId = msg.sender_id ? String(msg.sender_id) : "";
     const receiverId = msg.receiver_id ? String(msg.receiver_id) : "";
 
-    console.log("[Pusher] Debug:", { myId, activeId, senderId, receiverId, conversationId: msg.conversation_id });
-
-    // Determine the "other user" ID — the person we're chatting with
     let targetReceiverId = "";
-    if (myId && senderId === myId && receiverId) {
-      // I sent the message → target is the receiver
-      targetReceiverId = receiverId;
-    } else if (myId && receiverId === myId && senderId) {
-      // I received the message → target is the sender
-      targetReceiverId = senderId;
-    } else if (activeId && (senderId === activeId || receiverId === activeId)) {
-      targetReceiverId = activeId;
-    }
-
-    console.log("[Pusher] targetReceiverId:", targetReceiverId);
+    if (myId && senderId === myId && receiverId) targetReceiverId = receiverId;
+    else if (myId && receiverId === myId && senderId) targetReceiverId = senderId;
+    else if (activeId && (senderId === activeId || receiverId === activeId)) targetReceiverId = activeId;
 
     if (!targetReceiverId) {
-      console.log("[Pusher] No targetReceiverId, invalidating tags");
       d(chatApi.util.invalidateTags(["Chat"]));
       return;
     }
 
-    // Update messages cache
     try {
       d(chatApi.util.updateQueryData("getMessages", { receiverId: targetReceiverId }, (draft: any) => {
         const indexData = draft.data;
@@ -123,28 +110,19 @@ export function PusherListener() {
         if (Array.isArray(indexData)) draft.data = next;
         else if (indexData && typeof indexData === "object") draft.data = { ...indexData, messages: next };
         else draft.data = next;
-        console.log("[Pusher] Messages cache updated for:", targetReceiverId);
       }));
-    } catch (e) {
-      console.log("[Pusher] No existing messages cache for:", targetReceiverId, e);
-    }
+    } catch { /* no cache */ }
 
-    // Update conversations cache (sidebar)
     try {
       d(chatApi.util.updateQueryData("getConversations", undefined, (draft: any) => {
         const conversations: any[] = draft.data || [];
         const idx = conversations.findIndex(
-          (c: any) => {
-            const match = String(c.sender_id) === targetReceiverId || String(c.receiver_id) === targetReceiverId;
-            if (match) console.log("[Pusher] Conversation found:", c.id, "sender:", c.sender_id, "receiver:", c.receiver_id);
-            return match;
-          },
+          (c: any) => String(c.sender_id) === targetReceiverId || String(c.receiver_id) === targetReceiverId,
         );
         const now = msg.created_at || new Date().toISOString();
         const otherUser = String(msg.sender_id) !== myId ? msg.sender : msg.receiver;
 
         if (idx === -1) {
-          console.log("[Pusher] No conversation found, creating new entry");
           conversations.unshift({
             id: msg.conversation_id || `temp-${targetReceiverId}`,
             sender_id: targetReceiverId,
@@ -156,7 +134,6 @@ export function PusherListener() {
             type: msg.type || "text",
           });
         } else {
-          console.log("[Pusher] Conversation updated at index:", idx);
           conversations[idx].message = msg.message;
           conversations[idx].updated_at = now;
           if (otherUser) conversations[idx].sender = otherUser;
@@ -168,8 +145,7 @@ export function PusherListener() {
         }
         draft.data = conversations;
       }));
-    } catch (e) {
-      console.error("[Pusher] Conversations cache update failed:", e);
+    } catch {
       d(chatApi.util.invalidateTags(["Chat"]));
     }
   }, []);
