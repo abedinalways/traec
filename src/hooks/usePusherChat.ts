@@ -132,8 +132,10 @@ export function PusherListener() {
     // Update conversations cache (sidebar)
     try {
       d(chatApi.util.updateQueryData("getConversations", undefined, (draft: any) => {
-        const conversations: any[] = draft.data || [];
-        const idx = conversations.findIndex(
+        // getConversations returns Conversation[] directly — draft IS the array
+        if (!Array.isArray(draft)) return;
+
+        const idx = draft.findIndex(
           (c: any) => {
             const match = String(c.sender_id) === targetReceiverId || String(c.receiver_id) === targetReceiverId;
             if (match) console.log("[Pusher] Conversation found:", c.id, "sender:", c.sender_id, "receiver:", c.receiver_id);
@@ -145,7 +147,7 @@ export function PusherListener() {
 
         if (idx === -1) {
           console.log("[Pusher] No conversation found, creating new entry");
-          conversations.unshift({
+          draft.unshift({
             id: msg.conversation_id || `temp-${targetReceiverId}`,
             sender_id: targetReceiverId,
             receiver_id: myId,
@@ -157,16 +159,15 @@ export function PusherListener() {
           });
         } else {
           console.log("[Pusher] Conversation updated at index:", idx);
-          conversations[idx].message = msg.message;
-          conversations[idx].updated_at = now;
-          if (otherUser) conversations[idx].sender = otherUser;
+          draft[idx].message = msg.message;
+          draft[idx].updated_at = now;
+          if (otherUser) draft[idx].sender = otherUser;
           if (activeId !== targetReceiverId) {
-            conversations[idx].unread_count = Number(conversations[idx].unread_count || 0) + 1;
+            draft[idx].unread_count = Number(draft[idx].unread_count || 0) + 1;
           }
-          const [item] = conversations.splice(idx, 1);
-          conversations.unshift(item);
+          const [item] = draft.splice(idx, 1);
+          draft.unshift(item);
         }
-        draft.data = conversations;
       }));
     } catch (e) {
       console.error("[Pusher] Conversations cache update failed:", e);
