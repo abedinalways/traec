@@ -380,13 +380,10 @@ export default function MessageListSection() {
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 bg-[#F0F2F5] border-b border-gray-200">
         <div className="flex items-center gap-2">
-          <div className="p-1.5 bg-indigo-50 rounded-lg text-indigo-500">
-            <Sparkles size={18} />
-          </div>
-          <h3 className="text-lg font-bold text-gray-800">Messages</h3>
+          <h3 className="text-lg font-bold text-[#111B21]">Chats</h3>
         </div>
         {totalUnread > 0 && (
-          <span className="px-2 py-0.5 text-xs font-semibold bg-indigo-500 text-white rounded-full">
+          <span className="px-2 py-0.5 text-xs font-semibold bg-[#25D366] text-white rounded-full">
             {totalUnread} new
           </span>
         )}
@@ -401,7 +398,7 @@ export default function MessageListSection() {
             placeholder="Search or start new chat"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-white rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-200"
+            className="w-full pl-10 pr-4 py-1.5 bg-white rounded-lg text-sm outline-none focus:bg-white border-b-2 border-transparent focus:border-[#00A884] transition-colors shadow-sm"
           />
         </div>
 
@@ -413,17 +410,17 @@ export default function MessageListSection() {
               <button
                 key={tab}
                 onClick={() => setActiveFilter(tab)}
-                className={`flex-1 py-1.5 text-xs font-medium rounded-lg transition-all ${
+                className={`flex-1 py-1.5 text-xs font-medium rounded-full transition-all ${
                   isTabActive
-                    ? "bg-white text-indigo-500 shadow-sm"
-                    : "text-gray-500 hover:text-gray-800"
+                    ? "bg-[#D9FDD3] text-[#111B21] shadow-sm"
+                    : "text-[#54656F] hover:bg-gray-300/50"
                 }`}
               >
                 {tab}
                 <span
                   className={`ml-1 px-1.5 py-0.5 rounded-full text-[10px] ${
                     isTabActive
-                      ? "bg-indigo-100 text-indigo-500"
+                      ? "bg-[#25D366] text-white"
                       : "bg-gray-300 text-gray-600"
                   }`}
                 >
@@ -500,7 +497,7 @@ export default function MessageListSection() {
                   dispatch(setActiveReceiverId(otherId));
                   router.push(`/messages/${otherId}`);
                 }}
-                className={`flex items-center gap-3 px-4 py-3 cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors ${
+                className={`flex items-center gap-3 px-3 py-3 cursor-pointer hover:bg-[#F5F6F6] transition-colors ${
                   isActive ? "bg-[#F0F2F5]" : "bg-white"
                 }`}
               >
@@ -513,28 +510,28 @@ export default function MessageListSection() {
                     className="rounded-full object-cover ring-2 ring-white shadow-sm"
                     unoptimized
                   />
-                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full" />
+                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-[#25D366] border-2 border-white rounded-full" />
                 </div>
-
-                <div className="flex-1 min-w-0">
+                
+                <div className="flex-1 min-w-0 border-b border-gray-100 pb-3 pt-1">
                   <div className="flex justify-between items-center mb-0.5">
                     <p
-                      className={`text-sm font-semibold truncate ${isActive ? "text-indigo-500" : "text-gray-800"}`}
+                      className={`text-sm font-semibold truncate ${isActive ? "text-[#111B21]" : "text-[#111B21]"}`}
                     >
                       {displayName}
                     </p>
-                    <span className="text-[10px] text-gray-400 whitespace-nowrap ml-2">
+                    <span className={`text-[12px] whitespace-nowrap ml-2 ${unreadCount > 0 ? "text-[#25D366] font-medium" : "text-[#667781]"}`}>
                       {formatChatTime(conv.updated_at || conv.created_at)}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <p
-                      className={`text-xs truncate flex-1 ${unreadCount > 0 ? "font-semibold text-gray-800" : "text-gray-500"}`}
+                      className={`text-[13px] truncate flex-1 ${unreadCount > 0 ? "font-semibold text-[#111B21]" : "text-[#667781]"}`}
                     >
                       {lastMsg}
                     </p>
                     {unreadCount > 0 && (
-                      <span className="ml-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-green-500 px-1.5 text-[9px] font-bold text-white shadow-sm">
+                      <span className="ml-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#25D366] px-1.5 text-[11px] font-bold text-white shadow-sm">
                         {unreadCount}
                       </span>
                     )}
