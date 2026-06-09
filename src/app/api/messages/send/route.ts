@@ -79,8 +79,15 @@ export async function POST(request: NextRequest) {
         }));
       }
 
-      await pusher.trigger(channel, "message.sent", eventData);
-      console.log(`[Pusher] ✅ Triggered event on channel: ${channel}, message: ${message.id}, attachments: ${eventData.attachments?.length || 0}`);
+      // Broadcast to conversation channel, receiver channel, and sender channel
+      const channels = Array.from(new Set([
+        `conversation.${message.conversation_id}`,
+        `conversation.${message.receiver_id}`,
+        `conversation.${message.sender_id}`,
+      ]));
+
+      await pusher.trigger(channels, "message.sent", eventData);
+      console.log(`[Pusher] ✅ Triggered event on channels: ${channels.join(", ")}, message: ${message.id}, attachments: ${eventData.attachments?.length || 0}`);
     } catch (e) {
       console.error("[Pusher] Failed to trigger event:", e);
     }

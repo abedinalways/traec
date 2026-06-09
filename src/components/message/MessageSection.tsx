@@ -90,6 +90,43 @@ function ImageLightbox({
   );
 }
 
+function AttachmentImage({
+  att,
+  url,
+  isSingle,
+}: {
+  att: ChatAttachment;
+  url: string;
+  isSingle: boolean;
+}) {
+  const [retries, setRetries] = useState(0);
+  const [src, setSrc] = useState(url);
+
+  return (
+    <img
+      src={src}
+      alt={att.file_name || "Image"}
+      className={`object-cover w-full ${isSingle ? "max-h-48" : "h-24"} rounded-lg`}
+      loading="lazy"
+      onError={(e) => {
+        if (retries < 5) {
+          setTimeout(() => {
+            setRetries((r) => r + 1);
+            setSrc(`${url}?retry=${retries + 1}`);
+          }, 1000); // Retry every 1s, up to 5 times
+        } else {
+          const currentSrc = e.currentTarget.src;
+          if (currentSrc.includes("/storage/")) {
+            setSrc(url.replace("/storage/", "/"));
+          } else if (!currentSrc.includes("/images/placeholder-image.png")) {
+            setSrc("/images/placeholder-image.png");
+          }
+        }
+      }}
+    />
+  );
+}
+
 function MessageAttachments({
   attachments,
 }: {
@@ -122,25 +159,7 @@ function MessageAttachments({
                 className="relative group cursor-pointer rounded-lg overflow-hidden"
                 onClick={() => setLightboxImage(url)}
               >
-                <img
-                  src={url}
-                  alt={att.file_name || "Image"}
-                  className={`object-cover w-full ${imageAttachments.length === 1 ? "max-h-48" : "h-24"} rounded-lg`}
-                  loading="lazy"
-                  onError={(e) => {
-                    const currentSrc = e.currentTarget.src;
-                    if (currentSrc.includes("/storage/")) {
-                      e.currentTarget.src = currentSrc.replace(
-                        "/storage/",
-                        "/",
-                      );
-                    } else if (
-                      !currentSrc.includes("/images/placeholder-image.png")
-                    ) {
-                      e.currentTarget.src = "/images/placeholder-image.png";
-                    }
-                  }}
-                />
+                <AttachmentImage att={att} url={url} isSingle={imageAttachments.length === 1} />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
                   <Eye
                     size={18}
@@ -280,7 +299,8 @@ export default function MessageSection() {
   return (
     <div
       ref={scrollRef}
-      className="flex-1 overflow-y-auto px-4 py-4 bg-[#E5DDD5] scrollbar-thin scrollbar-thumb-gray-300"
+      className="flex-1 overflow-y-auto px-4 py-4 bg-[#EFEAE2] bg-opacity-90 scrollbar-thin scrollbar-thumb-gray-300"
+      style={{ backgroundImage: "url('https://web.whatsapp.com/img/bg-chat-tile-dark_a4be512e7195b6b733d9110b408f075d.png')", backgroundBlendMode: "overlay" }}
     >
       {isLoading ? (
         <div className="space-y-6">
@@ -352,8 +372,11 @@ export default function MessageSection() {
                       unoptimized
                     />
                     <div className="relative flex-1 min-w-0">
-                      <div className="rounded-xl rounded-bl-md bg-white border border-gray-100 shadow-sm px-3 py-2 relative">
-                        <div className="absolute -left-1 bottom-0 w-2 h-2 bg-white border-l border-b border-gray-100 transform rotate-45" />
+                      <div className="rounded-xl rounded-tl-none bg-white shadow-sm px-3 py-1.5 relative">
+                        <svg viewBox="0 0 8 13" width="8" height="13" className="absolute -left-2 top-0 text-white">
+                          <path opacity=".13" d="M5.188 1H0v11.193l6.467-8.625C7.526 2.156 6.958 1 5.188 1z"/>
+                          <path fill="currentColor" d="M5.188 0H0v11.193l6.467-8.625C7.526 1.156 6.958 0 5.188 0z"/>
+                        </svg>
                         {msg.message && (
                           <p className="text-sm text-gray-800 break-words whitespace-pre-wrap">
                             {msg.message}
@@ -379,8 +402,11 @@ export default function MessageSection() {
                 ) : (
                   <div className="flex max-w-[85%] sm:max-w-[75%] justify-end">
                     <div className="relative">
-                      <div className="rounded-xl rounded-br-md bg-[#DCF8C6] shadow-sm px-3 py-2 relative">
-                        <div className="absolute -right-1 bottom-0 w-2 h-2 bg-[#DCF8C6] transform rotate-45" />
+                      <div className="rounded-xl rounded-tr-none bg-[#D9FDD3] shadow-sm px-3 py-1.5 relative">
+                        <svg viewBox="0 0 8 13" width="8" height="13" className="absolute -right-2 top-0 text-[#D9FDD3]">
+                          <path opacity=".13" fill="#0000000" d="M5.188 1H0v11.193l6.467-8.625C7.526 2.156 6.958 1 5.188 1z"/>
+                          <path fill="currentColor" d="M5.188 0H0v11.193l6.467-8.625C7.526 1.156 6.958 0 5.188 0z" transform="matrix(-1 0 0 1 8 0)"/>
+                        </svg>
                         {msg.message && (
                           <p className="text-sm text-gray-800 break-words whitespace-pre-wrap">
                             {msg.message}
@@ -393,22 +419,14 @@ export default function MessageSection() {
                             />
                           </div>
                         )}
-                        <div className="flex justify-end items-center gap-1 mt-1">
-                          <span className="text-[10px] text-gray-500">
+                        <div className="flex justify-end items-center gap-1 mt-0.5">
+                          <span className="text-[10px] text-[#667781]">
                             <ChatTime
                               timestamp={msg.updated_at || msg.created_at}
                             />
                           </span>
-                          <svg
-                            width="14"
-                            height="10"
-                            viewBox="0 0 14 10"
-                            className="text-[#4FC3F7]"
-                          >
-                            <path
-                              d="M4.5 7.5L1.5 4.5L0 6L4.5 10.5L13.5 1.5L12 0L4.5 7.5Z"
-                              fill="currentColor"
-                            />
+                          <svg viewBox="0 0 16 15" width="16" height="15" className="text-[#53bdeb] ml-0.5">
+                            <path fill="currentColor" d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.879a.32.32 0 0 1-.484.033l-.358-.325a.32.32 0 0 0-.484.032l-.378.483a.418.418 0 0 0 .036.541l1.32 1.266c.143.14.361.125.484-.033l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.879a.32.32 0 0 1-.484.033L1.891 7.769a.366.366 0 0 0-.515.006l-.423.433a.364.364 0 0 0 .006.514l3.258 3.185c.143.14.361.125.484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z" />
                           </svg>
                         </div>
                       </div>

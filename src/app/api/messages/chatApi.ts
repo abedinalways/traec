@@ -637,39 +637,6 @@ export const chatApi = baseApi.injectEndpoints({
           const sentMessage = response?.data;
 
           if (sentMessage) {
-           
-            dispatch(
-              chatApi.util.updateQueryData(
-                "getMessages",
-                { receiverId: String(receiverId) },
-                (draft) => {
-                  if (!draft || !draft.data) return;
-
-                  const existingMessages = getMessagesFromIndexData(draft.data);
-                  if (
-                    !existingMessages.some(
-                      (m) => String(m.id) === String(sentMessage.id),
-                    )
-                  ) {
-                    const nextMessages = dedupeMessages([
-                      ...existingMessages,
-                      sentMessage,
-                    ]);
-
-                    if (Array.isArray(draft.data)) {
-                      draft.data = nextMessages;
-                    } else if (
-                      typeof draft.data === "object" &&
-                      draft.data !== null
-                    ) {
-                      draft.data.messages = nextMessages;
-                    }
-                  }
-                },
-              ),
-            );
-
-          
             dispatch(
               chatApi.util.updateQueryData(
                 "getConversations",

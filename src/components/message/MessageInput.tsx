@@ -702,7 +702,7 @@ export default function MessageInput() {
 
   return (
     <div
-      className="bg-white px-3 py-2  border-gray-200 shrink-0"
+      className="bg-[#F0F2F5] px-3 py-2 border-gray-200 shrink-0"
       onDragOver={onDragOver}
       onDragLeave={onDragLeave}
       onDrop={onDrop}
@@ -792,57 +792,51 @@ export default function MessageInput() {
         </div>
       )}
 
-      <div className="flex items-center gap-1.5 rounded-3xl bg-white px-3 py-2 shadow-sm">
-        <button
-          type="button"
-          disabled={!activeReceiverId}
-          onClick={() => imgInputRef.current?.click()}
-          className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-gray-400 transition hover:bg-gray-100 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
-        >
-          <ImageIcon size={18} />
-        </button>
+      <div className="flex items-center gap-2">
         <button
           type="button"
           disabled={!activeReceiverId}
           onClick={() => fileInputRef.current?.click()}
-          className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-gray-400 transition hover:bg-gray-100 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
+          className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full text-[#54656F] transition hover:bg-gray-200/50 disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          <Paperclip size={18} />
+          <Paperclip size={20} />
         </button>
 
-        <textarea
-          ref={textareaRef}
-          value={text}
-          rows={1}
-          placeholder={activeReceiverId ? "Message" : "Select a chat…"}
-          disabled={!activeReceiverId || isLoading}
-          className="max-h-[100px] min-h-[20px] flex-1 resize-none bg-transparent px-1 py-0.5 text-sm leading-relaxed text-gray-700 outline-none placeholder:text-gray-400 disabled:cursor-not-allowed"
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              handleSend();
-            }
-          }}
-        />
+        <div className="flex-1 flex items-center rounded-xl bg-white px-4 py-2 shadow-sm min-h-[40px]">
+          <textarea
+            ref={textareaRef}
+            value={text}
+            rows={1}
+            placeholder={activeReceiverId ? "Type a message" : ""}
+            disabled={!activeReceiverId || isLoading}
+            className="max-h-[100px] min-h-[20px] flex-1 resize-none bg-transparent py-0.5 text-[15px] leading-relaxed text-[#111B21] outline-none placeholder:text-[#667781] disabled:cursor-not-allowed"
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
+              }
+            }}
+          />
 
-        {pending.length > 0 && (
-          <div className="flex shrink-0 items-center gap-0.5 rounded-full bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-500">
-            <Check size={9} />
-            {pending.length}
-          </div>
-        )}
+          {pending.length > 0 && (
+            <div className="flex shrink-0 items-center gap-0.5 rounded-full bg-[#D9FDD3] px-2 py-0.5 text-[10px] font-medium text-[#111B21] ml-2">
+              <Check size={10} />
+              {pending.length}
+            </div>
+          )}
+        </div>
 
         <button
           type="button"
           onClick={handleSend}
           disabled={!canSend}
-          className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full bg-[#00A884] text-white shadow-sm transition-all duration-150 hover:bg-[#008F6B] active:scale-95 disabled:bg-gray-300 disabled:text-gray-500 disabled:shadow-none disabled:cursor-not-allowed"
+          className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full text-[#54656F] transition-all duration-150 hover:bg-gray-200/50 active:scale-95 disabled:text-gray-400 disabled:cursor-not-allowed"
         >
           {isLoading ? (
-            <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#00A884]/30 border-t-[#00A884]" />
           ) : (
-            <Send size={15} />
+            <Send size={20} className={canSend ? "text-[#00A884]" : "text-[#54656F]"} />
           )}
         </button>
       </div>
