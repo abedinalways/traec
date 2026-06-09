@@ -115,15 +115,15 @@ export function PusherListener() {
 
     try {
       d(chatApi.util.updateQueryData("getConversations", undefined, (draft: any) => {
-        const conversations: any[] = draft.data || [];
-        const idx = conversations.findIndex(
+        if (!Array.isArray(draft)) return;
+        const idx = draft.findIndex(
           (c: any) => String(c.sender_id) === targetReceiverId || String(c.receiver_id) === targetReceiverId,
         );
         const now = msg.created_at || new Date().toISOString();
         const otherUser = String(msg.sender_id) !== myId ? msg.sender : msg.receiver;
 
         if (idx === -1) {
-          conversations.unshift({
+          draft.unshift({
             id: msg.conversation_id || `temp-${targetReceiverId}`,
             sender_id: targetReceiverId,
             receiver_id: myId,
@@ -134,16 +134,15 @@ export function PusherListener() {
             type: msg.type || "text",
           });
         } else {
-          conversations[idx].message = msg.message;
-          conversations[idx].updated_at = now;
-          if (otherUser) conversations[idx].sender = otherUser;
+          draft[idx].message = msg.message;
+          draft[idx].updated_at = now;
+          if (otherUser) draft[idx].sender = otherUser;
           if (activeId !== targetReceiverId) {
-            conversations[idx].unread_count = Number(conversations[idx].unread_count || 0) + 1;
+            draft[idx].unread_count = Number(draft[idx].unread_count || 0) + 1;
           }
-          const [item] = conversations.splice(idx, 1);
-          conversations.unshift(item);
+          const [item] = draft.splice(idx, 1);
+          draft.unshift(item);
         }
-        draft.data = conversations;
       }));
     } catch {
       d(chatApi.util.invalidateTags(["Chat"]));
