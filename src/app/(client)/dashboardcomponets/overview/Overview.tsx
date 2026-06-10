@@ -22,6 +22,7 @@ import MessageSection from "@/components/message/MessageSection";
 import MessageInput from "@/components/message/MessageInput";
 import MessageListSection from "@/components/message/MessageListSection";
 import Header from "@/components/message/Header";
+import { PusherListener } from "@/hooks/usePusherChat";
 
 export default function Overview() {
   const [activeTab, setActiveTab] = useState("Overview");
@@ -181,6 +182,7 @@ export default function Overview() {
       ============================ */}
       {activeTab === "Messages" && (
         <section className="grid md:h-[calc(100dvh-190px)] grid-cols-12 md:gap-4">
+          <PusherListener />
             {/* Sidebar */}
             <aside className="md:col-span-4 col-span-12 mt-4 md:mt-0 shadow-lg p-2 rounded-2xl">
               <div className="rounded-2xl bg-white md:p-6 p-4 md:max-h-[calc(100dvh-140px)] overflow-hidden">
