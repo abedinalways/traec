@@ -653,7 +653,6 @@ export const chatApi = baseApi.injectEndpoints({
                   if (matched) {
                     matched.last_message = sentMessage;
                     matched.message = sentMessage.message;
-                    matched.attachments = sentMessage.attachments;
                     matched.updated_at =
                       sentMessage.created_at || new Date().toISOString();
                   }

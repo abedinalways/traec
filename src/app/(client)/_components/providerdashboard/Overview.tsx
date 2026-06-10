@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import MyOrder from "../../../(client)/dashboardcomponets/myorder/myorder";
 
-// import ReviewPage from "../review/review"
+import ReviewPage from "../../dashboardcomponets/review/review"
 
 import {
   CalendarDays,
@@ -23,13 +23,17 @@ import MessageInput from "@/components/message/MessageInput";
 import MessageListSection from "@/components/message/MessageListSection";
 import Header from "@/components/message/Header";
 import { PusherListener } from "@/hooks/usePusherChat";
-import ReviewPage from "../../dashboardcomponets/review/review";
+import { PusherNotificationListener } from "@/hooks/usePusherNotification";
+import { useGetUnreadCountQuery } from "@/app/api/notification/notificationApi";
 import ServiceSection from "./service";
 
 export default function Overview() {
   const [activeTab, setActiveTab] = useState("Overview");
 
   const tabs = ["Overview", "My Orders", "Services", "Messages", "Reviews"];
+
+  const { data: unreadData } = useGetUnreadCountQuery();
+  const unreadCount = unreadData?.total_unread_count ?? 0;
 
   return (
     <div className="w-full  bg-white p-5 rounded ">
@@ -66,7 +70,7 @@ export default function Overview() {
             />
             <StatBox
               icon={<MessagesIcon />}
-              value="06"
+              value={unreadCount > 0 ? unreadCount.toString() : "06"}
               label="Unread Messages"
               bg="bg-green-100"
             />
@@ -192,6 +196,7 @@ export default function Overview() {
       {activeTab === "Messages" && (
         <section className="grid md:h-[calc(100dvh-190px)] grid-cols-12 md:gap-4">
           <PusherListener />
+          <PusherNotificationListener />
           {/* Sidebar */}
           <aside className="md:col-span-4 col-span-12 mt-4 md:mt-0 shadow-lg p-2 rounded-2xl">
             <div className="rounded-2xl bg-white md:p-6 p-4 md:max-h-[calc(100dvh-140px)] overflow-y-auto">

@@ -23,11 +23,16 @@ import MessageInput from "@/components/message/MessageInput";
 import MessageListSection from "@/components/message/MessageListSection";
 import Header from "@/components/message/Header";
 import { PusherListener } from "@/hooks/usePusherChat";
+import { PusherNotificationListener } from "@/hooks/usePusherNotification";
+import { useGetUnreadCountQuery } from "@/app/api/notification/notificationApi";
 
 export default function Overview() {
   const [activeTab, setActiveTab] = useState("Overview");
 
   const tabs = ["Overview", "My Orders", "Messages", "Reviews"];
+
+  const { data: unreadData } = useGetUnreadCountQuery();
+  const unreadCount = unreadData?.total_unread_count ?? 0;
 
   return (
     <div className="w-full  bg-white p-5 rounded ">
@@ -47,7 +52,7 @@ export default function Overview() {
         ))}
         
       </div>
- 
+  
       {activeTab === "Overview" && (
         <div className="py-6 w-full">
           {/* ======= TOP 4 STATS ======= */}
@@ -66,7 +71,7 @@ export default function Overview() {
             />
             <StatBox
               icon={<MessagesIcon />}
-              value="06"
+              value={unreadCount > 0 ? unreadCount.toString() : "06"}
               label="Unread Messages"
               bg="bg-green-100"
             />
@@ -86,28 +91,28 @@ export default function Overview() {
 
               <div className="space-y-3">
                 <OrderItem
-                  title="Emma’s 7th Birthday"
+                  title="Emma's 7th Birthday"
                   vendor="Princess Castle Bounce House by Part Pro Rentals"
                   date="Dec 20, 2024"
                   status="Progress"
                   statusColor="blue"
                 />
                 <OrderItem
-                  title="Emma’s 7th Birthday"
+                  title="Emma's 7th Birthday"
                   vendor="Princess Castle Bounce House by Part Pro Rentals"
                   date="Dec 20, 2024"
                   status="Pending"
                   statusColor="yellow"
                 />
                 <OrderItem
-                  title="Emma’s 7th Birthday"
+                  title="Emma's 7th Birthday"
                   vendor="Princess Castle Bounce House by Part Pro Rentals"
                   date="Dec 20, 2024"
                   status="Cancel"
                   statusColor="red"
                 />
                 <OrderItem
-                  title="Emma’s 7th Birthday"
+                  title="Emma's 7th Birthday"
                   vendor="Princess Castle Bounce House by Part Pro Rentals"
                   date="Dec 20, 2024"
                   status="Complete"
@@ -169,7 +174,7 @@ export default function Overview() {
       )}
 
       {/* ============================  
-              MY ORDERS TAB CONTENT  
+                MY ORDERS TAB CONTENT  
       ============================ */}
       {activeTab === "My Orders" && (
         <div className="pt-4 w-full">
@@ -178,14 +183,15 @@ export default function Overview() {
       )}
 
       {/* ============================  
-               MESSAGES TAB  
+                 MESSAGES TAB  
       ============================ */}
       {activeTab === "Messages" && (
         <section className="grid md:h-[calc(100dvh-190px)] grid-cols-12 md:gap-4">
           <PusherListener />
+          <PusherNotificationListener />
             {/* Sidebar */}
             <aside className="md:col-span-4 col-span-12 mt-4 md:mt-0 shadow-lg p-2 rounded-2xl">
-              <div className="rounded-2xl bg-white md:p-6 p-4 md:max-h-[calc(100dvh-140px)] overflow-hidden">
+              <div className="rounded-2xl bg-white md:p-6 p-4 md:max-h-[calc(100dvh-140px)] overflow-y-auto">
                 <MessageListSection />
               </div>
             </aside>
@@ -194,7 +200,7 @@ export default function Overview() {
             <div className="md:h-[calc(100dvh-100px)]  md:col-span-8 col-span-12 bg-white md:p-6 p-2 md:grid md:grid-rows-[130px_1fr_86px] rounded-2xl shadow-lg overflow-y-auto">
               <Header />
 
-              <div className="flex-1 overflow-hidden">
+              <div className="flex overflow-hidden">
                 <MessageSection />
               </div>
 
@@ -203,7 +209,7 @@ export default function Overview() {
           </section>
         )}
       {/* ============================  
-                REVIEWS TAB  
+                  REVIEWS TAB  
       ============================ */}
       {activeTab === "Reviews" && (
         // <div className="pt-4 w-full min-h-[80vh]">

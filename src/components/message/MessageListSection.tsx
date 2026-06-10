@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from "next/image";
@@ -18,6 +17,10 @@ import {
   useGetConversationsQuery,
   useGetMessagesQuery,
 } from "@/app/api/messages/chatApi";
+import {
+  useGetChatUnreadCountQuery,
+  useMarkNotificationReadMutation,
+} from "@/app/api/notification/notificationApi";
 import type { Conversation, ChatUser } from "@/app/api/messages/chatApi";
 
 const userCache = new Map<string, ChatUser>();
@@ -31,7 +34,10 @@ export default function MessageListSection() {
   );
   const currentUserId = useAppSelector((state) => state.auth.user?.id);
 
-  const { data, isLoading, isError } = useGetConversationsQuery();
+  const { data, isLoading, isError, refetch } = useGetConversationsQuery();
+  const { data: chatUnreadData, refetch: refetchChatUnread } = useGetChatUnreadCountQuery();
+  const [markNotificationRead] = useMarkNotificationReadMutation();
+
   const conversationsList: Conversation[] = data || [];
 
   const { data: messagesData } = useGetMessagesQuery(
@@ -58,7 +64,9 @@ export default function MessageListSection() {
     }
   }, [conversationsList]);
 
-
+  useEffect(() => {
+    refetchChatUnread();
+  }, [refetchChatUnread]);
 
   const [activeFilter, setActiveFilter] = useState("All");
   const [search, setSearch] = useState("");
@@ -102,6 +110,16 @@ export default function MessageListSection() {
     });
   }, [conversationsList, currentUserId]);
 
+  const chatUnreadMap = useMemo(() => {
+    const map = new Map<string, number>();
+    if (chatUnreadData?.data) {
+      for (const item of chatUnreadData.data) {
+        map.set(String(item.sender_id), item.unread_count);
+      }
+    }
+    return map;
+  }, [chatUnreadData]);
+
   const filteredConversations = useMemo(() => {
     return conversations.filter((conv) => {
       const name = getConversationName(conv, currentUserId).toLowerCase();
@@ -109,17 +127,52 @@ export default function MessageListSection() {
       const searchValue = search.toLowerCase();
       if (!name.includes(searchValue) && !lastMessage.includes(searchValue))
         return false;
-      if (activeFilter === "Unread") return Number(conv.unread_count || 0) > 0;
+      if (activeFilter === "Unread") {
+        const senderId = conv.sender_id ? String(conv.sender_id) : null;
+        const receiverId = conv.receiver_id ? String(conv.receiver_id) : null;
+        const myId = currentUserId ? String(currentUserId) : null;
+        let otherId = "";
+        if (senderId && myId && senderId !== myId) otherId = senderId;
+        else if (receiverId && myId && receiverId !== myId) otherId = receiverId;
+
+        const unreadCount = Number(chatUnreadMap.get(otherId) ?? conv.unread_count ?? 0);
+        return unreadCount > 0;
+      }
       return true;
     });
-  }, [activeFilter, conversations, currentUserId, search]);
+  }, [activeFilter, conversations, currentUserId, search, chatUnreadMap]);
 
   const totalUnread = useMemo(() => {
-    return conversations.reduce(
-      (sum, conv) => sum + Number(conv.unread_count || 0),
-      0,
-    );
-  }, [conversations]);
+    let sum = 0;
+    for (const conv of conversations) {
+      const senderId = conv.sender_id ? String(conv.sender_id) : null;
+      const receiverId = conv.receiver_id ? String(conv.receiver_id) : null;
+      const myId = currentUserId ? String(currentUserId) : null;
+      let otherId = "";
+      if (senderId && myId && senderId !== myId) otherId = senderId;
+      else if (receiverId && myId && receiverId !== myId) otherId = receiverId;
+      else if (receiverId) otherId = receiverId;
+      else if (senderId) otherId = senderId;
+
+      const unreadCount = chatUnreadMap.get(otherId) ?? 0;
+      sum += Number(unreadCount);
+    }
+    return sum;
+  }, [conversations, currentUserId, chatUnreadMap]);
+
+  const handleConversationClick = async (otherId: string) => {
+    dispatch(setActiveReceiverId(otherId));
+    router.push(`/messages/${otherId}`);
+
+    if (otherId) {
+      try {
+        await markNotificationRead({ sender_id: Number(otherId) }).unwrap();
+        refetch();
+      } catch (error) {
+        console.error("Failed to mark notifications as read:", error);
+      }
+    }
+  };
 
   return (
     <div className="h-full flex flex-col bg-white rounded-2xl overflow-hidden">
@@ -215,7 +268,7 @@ export default function MessageListSection() {
 
             const isActive =
               activeReceiverId && String(activeReceiverId) === otherId;
-            const unreadCount = Number(conv.unread_count || 0);
+            const unreadCount = chatUnreadMap.get(otherId) ?? Number(conv.unread_count ?? 0);
             const lastMsg = getLastMessageText(conv);
 
             const cachedUser = otherId ? userCache.get(otherId) : null;
@@ -236,11 +289,7 @@ export default function MessageListSection() {
             return (
               <div
                 key={`conv-${otherId}`}
-                onClick={() => {
-                  if (!otherId) return;
-                  dispatch(setActiveReceiverId(otherId));
-                  router.push(`/messages/${otherId}`);
-                }}
+                onClick={() => handleConversationClick(otherId)}
                 className={`flex items-center gap-3 px-3 py-3 cursor-pointer hover:bg-[#F5F6F6] transition-colors ${isActive ? "bg-[#F0F2F5]" : "bg-white"
                   }`}
               >

@@ -5,6 +5,7 @@ import { getPusherClient } from "@/lib/pusherClient";
 import { useAppDispatch } from "@/app/store";
 import type { RootState } from "@/app/store";
 import { chatApi, dedupeMessages, getMessagesFromIndexData, useGetConversationsQuery, type Message } from "@/app/api/messages/chatApi";
+import { notificationApi } from "@/app/api/notification/notificationApi";
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null;
@@ -85,6 +86,7 @@ export function PusherListener() {
     const msg = normalizePayload(payload);
     if (!msg) {
       d(chatApi.util.invalidateTags(["Chat"]));
+      d(notificationApi.util.invalidateTags(["Notifications"]));
       return;
     }
 

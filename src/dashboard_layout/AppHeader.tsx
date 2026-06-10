@@ -9,6 +9,8 @@ import { useGetMeQuery } from "@/app/api/auth/authapi";
 
 import ConnectWalletButton from "@/dashboard_components/common/ConnectWalletButton";
 import UserDropdown from "@/dashboard_components/header/UserDropdown";
+import NotificationDropdown from "@/dashboard_components/header/NotificationDropdown";
+import { PusherNotificationListener } from "@/hooks/usePusherNotification";
 
 export type AppHeaderProps = {
   role?: string;
@@ -49,6 +51,7 @@ const AppHeader = ({ role }: AppHeaderProps) => {
 
   return (
     <header className="font-[inter] fixed top-0 left-0 right-0 flex w-full bg-white dark:bg-[#0B151D] z-99 border-b border-gray-200 ">
+      <PusherNotificationListener />
       <div className="flex flex-col items-center justify-between grow lg:flex-row lg:px-3">
         <div className="flex items-center justify-between w-full gap-2 px-3  border-b border-gray-200 dark:border-[#26344B] sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-4">
           {/* Mobile Toggle Button */}
@@ -134,8 +137,9 @@ const AppHeader = ({ role }: AppHeaderProps) => {
                 }}
               />
             )}
+            <NotificationDropdown />
           </div>
-         
+
           <UserDropdown />
         </div>
       </div>
