@@ -132,10 +132,14 @@ export function PusherListener() {
             unread_count: activeId === targetReceiverId ? 0 : 1,
             sender: otherUser,
             type: msg.type || "text",
+            attachments: msg.attachments,
+            last_message: msg,
           });
         } else {
           draft[idx].message = msg.message;
           draft[idx].updated_at = now;
+          draft[idx].attachments = msg.attachments;
+          draft[idx].last_message = msg;
           if (otherUser) draft[idx].sender = otherUser;
           if (activeId !== targetReceiverId) {
             draft[idx].unread_count = Number(draft[idx].unread_count || 0) + 1;

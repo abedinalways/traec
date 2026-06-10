@@ -37,11 +37,10 @@ export default function Overview() {
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`pb-2 text-sm font-medium transition-all ${
-              activeTab === tab
-                ? "text-black border-b-2 border-black"
-                : "text-gray-500 hover:text-gray-700 cursor-pointer"
-            }`}
+            className={`pb-2 text-sm font-medium transition-all ${activeTab === tab
+              ? "text-black border-b-2 border-black"
+              : "text-gray-500 hover:text-gray-700 cursor-pointer"
+              }`}
           >
             {tab}
           </button>
@@ -193,7 +192,7 @@ export default function Overview() {
         <section className="grid md:h-[calc(100dvh-190px)] grid-cols-12 md:gap-4">
           {/* Sidebar */}
           <aside className="md:col-span-4 col-span-12 mt-4 md:mt-0 shadow-lg p-2 rounded-2xl">
-            <div className="rounded-2xl bg-white md:p-6 p-4 md:max-h-[calc(100dvh-140px)] overflow-hidden">
+            <div className="rounded-2xl bg-white md:p-6 p-4 md:max-h-[calc(100dvh-140px)] overflow-y-auto">
               <MessageListSection />
             </div>
           </aside>
@@ -202,7 +201,7 @@ export default function Overview() {
           <div className="md:h-[calc(100dvh-100px)]  md:col-span-8 col-span-12 bg-white md:p-6 p-2 md:grid md:grid-rows-[130px_1fr_86px] rounded-2xl shadow-lg overflow-y-auto">
             <Header />
 
-            <div className="flex-1 overflow-hidden">
+            <div className="flex overflow-hidden">
               <MessageSection />
             </div>
 
