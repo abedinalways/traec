@@ -120,19 +120,7 @@ export const getConversationAvatar = (
   return getImageUrl(convImg);
 };
 
-export const getLastMessageText = (conversation: Conversation): string => {
-  if (conversation.message) return conversation.message;
-  if (typeof conversation.last_message === "string")
-    return conversation.last_message;
-  if (
-    conversation.last_message &&
-    typeof conversation.last_message === "object"
-  ) {
-    if (conversation.last_message.message)
-      return conversation.last_message.message;
-  }
-  return "No messages yet";
-};
+
 
 export const isOwnMessage = (
   message: Message,
@@ -225,4 +213,39 @@ export const getMessagePreview = (msg?: Message | null): string => {
       : `📎 ${count} Files`;
   }
   return msg.message || "";
+};
+
+export const getLastMessageText = (conversation: Conversation): string => {
+  if (
+    conversation.last_message &&
+    typeof conversation.last_message === "object"
+  ) {
+    if (
+      conversation.last_message.attachments &&
+      conversation.last_message.attachments.length > 0
+    ) {
+      const first = conversation.last_message.attachments[0];
+      if (isImageAttachment(first)) {
+        return "📷 Image";
+      }
+      return "📎 Attachment";
+    }
+    if (conversation.last_message.message)
+      return conversation.last_message.message;
+  }
+
+  const convAny = conversation as any;
+  if (convAny.attachments && convAny.attachments.length > 0) {
+    const first = convAny.attachments[0];
+    if (isImageAttachment(first)) {
+      return "📷 Image";
+    }
+    return "📎 Attachment";
+  }
+
+  if (conversation.message) return conversation.message;
+  if (typeof conversation.last_message === "string")
+    return conversation.last_message;
+
+  return "No messages yet";
 };

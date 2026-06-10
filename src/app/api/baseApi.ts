@@ -418,6 +418,7 @@ export const baseApi = createApi({
     "DirectorNotice",
     "Chat",
     "Providers",
+    "Notifications",
   ],
 
   endpoints: () => ({}),

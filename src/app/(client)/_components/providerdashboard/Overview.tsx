@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import MyOrder from "../../../(client)/dashboardcomponets/myorder/myorder";
 
-// import ReviewPage from "../review/review"
+import ReviewPage from "../../dashboardcomponets/review/review"
 
 import {
   CalendarDays,
@@ -22,13 +22,18 @@ import MessageSection from "@/components/message/MessageSection";
 import MessageInput from "@/components/message/MessageInput";
 import MessageListSection from "@/components/message/MessageListSection";
 import Header from "@/components/message/Header";
-import ReviewPage from "../../dashboardcomponets/review/review";
+import { PusherListener } from "@/hooks/usePusherChat";
+import { PusherNotificationListener } from "@/hooks/usePusherNotification";
+import { useGetUnreadCountQuery } from "@/app/api/notification/notificationApi";
 import ServiceSection from "./service";
 
 export default function Overview() {
   const [activeTab, setActiveTab] = useState("Overview");
 
   const tabs = ["Overview", "My Orders", "Services", "Messages", "Reviews"];
+
+  const { data: unreadData } = useGetUnreadCountQuery();
+  const unreadCount = unreadData?.total_unread_count ?? 0;
 
   return (
     <div className="w-full  bg-white p-5 rounded ">
@@ -37,11 +42,10 @@ export default function Overview() {
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`pb-2 text-sm font-medium transition-all ${
-              activeTab === tab
-                ? "text-black border-b-2 border-black"
-                : "text-gray-500 hover:text-gray-700 cursor-pointer"
-            }`}
+            className={`pb-2 text-sm font-medium transition-all ${activeTab === tab
+              ? "text-black border-b-2 border-black"
+              : "text-gray-500 hover:text-gray-700 cursor-pointer"
+              }`}
           >
             {tab}
           </button>
@@ -66,7 +70,7 @@ export default function Overview() {
             />
             <StatBox
               icon={<MessagesIcon />}
-              value="06"
+              value={unreadCount > 0 ? unreadCount.toString() : "06"}
               label="Unread Messages"
               bg="bg-green-100"
             />
@@ -191,9 +195,11 @@ export default function Overview() {
       ============================ */}
       {activeTab === "Messages" && (
         <section className="grid md:h-[calc(100dvh-190px)] grid-cols-12 md:gap-4">
+          <PusherListener />
+          <PusherNotificationListener />
           {/* Sidebar */}
           <aside className="md:col-span-4 col-span-12 mt-4 md:mt-0 shadow-lg p-2 rounded-2xl">
-            <div className="rounded-2xl bg-white md:p-6 p-4 md:max-h-[calc(100dvh-140px)] overflow-hidden">
+            <div className="rounded-2xl bg-white md:p-6 p-4 md:max-h-[calc(100dvh-140px)] overflow-y-auto">
               <MessageListSection />
             </div>
           </aside>
@@ -202,7 +208,7 @@ export default function Overview() {
           <div className="md:h-[calc(100dvh-100px)]  md:col-span-8 col-span-12 bg-white md:p-6 p-2 md:grid md:grid-rows-[130px_1fr_86px] rounded-2xl shadow-lg overflow-y-auto">
             <Header />
 
-            <div className="flex-1 overflow-hidden">
+            <div className="flex overflow-hidden">
               <MessageSection />
             </div>
 

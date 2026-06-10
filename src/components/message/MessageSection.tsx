@@ -13,6 +13,7 @@ import {
   Download,
   Eye,
   X,
+  User,
 } from "lucide-react";
 
 import { useAppSelector } from "@/app/store";
@@ -280,7 +281,7 @@ export default function MessageSection() {
 
   if (!activeReceiverId) {
     return (
-      <div className="flex-1 bg-white flex items-center justify-center">
+      <div className="flex flex-col w-full flex items-center justify-center">
         <div className="text-center max-w-sm">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-indigo-500 shadow-md border border-gray-100">
             <MessageCircle size={26} />
@@ -363,19 +364,34 @@ export default function MessageSection() {
               >
                 {!isOwn ? (
                   <div className="flex max-w-[85%] gap-2 sm:max-w-[75%] items-end">
-                    <Image
-                      src={incomingAvatarSrc || activeAvatar}
-                      alt={msgSender?.name || activeName}
-                      width={28}
-                      height={28}
-                      className="h-7 w-7 rounded-full object-cover ring-1 ring-white shadow-sm"
-                      unoptimized
-                    />
+                    {(() => {
+                      const finalAvatar = incomingAvatarSrc || activeAvatar;
+                      if (
+                        finalAvatar?.includes("provider-profile-img.svg") ||
+                        finalAvatar?.includes("placeholder-image.png")
+                      ) {
+                        return (
+                          <div className="h-7 w-7 rounded-full bg-gray-100 flex items-center justify-center ring-1 ring-white shadow-sm flex-shrink-0">
+                            <User className="text-gray-400" size={16} />
+                          </div>
+                        );
+                      }
+                      return (
+                        <Image
+                          src={finalAvatar}
+                          alt={msgSender?.name || activeName}
+                          width={28}
+                          height={28}
+                          className="h-7 w-7 rounded-full object-cover ring-1 ring-white shadow-sm"
+                          unoptimized
+                        />
+                      );
+                    })()}
                     <div className="relative flex-1 min-w-0">
                       <div className="rounded-xl rounded-tl-none bg-white shadow-sm px-3 py-1.5 relative">
                         <svg viewBox="0 0 8 13" width="8" height="13" className="absolute -left-2 top-0 text-white">
-                          <path opacity=".13" d="M5.188 1H0v11.193l6.467-8.625C7.526 2.156 6.958 1 5.188 1z"/>
-                          <path fill="currentColor" d="M5.188 0H0v11.193l6.467-8.625C7.526 1.156 6.958 0 5.188 0z"/>
+                          <path opacity=".13" d="M5.188 1H0v11.193l6.467-8.625C7.526 2.156 6.958 1 5.188 1z" />
+                          <path fill="currentColor" d="M5.188 0H0v11.193l6.467-8.625C7.526 1.156 6.958 0 5.188 0z" />
                         </svg>
                         {msg.message && (
                           <p className="text-sm text-gray-800 break-words whitespace-pre-wrap">
@@ -404,8 +420,8 @@ export default function MessageSection() {
                     <div className="relative">
                       <div className="rounded-xl rounded-tr-none bg-[#D9FDD3] shadow-sm px-3 py-1.5 relative">
                         <svg viewBox="0 0 8 13" width="8" height="13" className="absolute -right-2 top-0 text-[#D9FDD3]">
-                          <path opacity=".13" fill="#0000000" d="M5.188 1H0v11.193l6.467-8.625C7.526 2.156 6.958 1 5.188 1z"/>
-                          <path fill="currentColor" d="M5.188 0H0v11.193l6.467-8.625C7.526 1.156 6.958 0 5.188 0z" transform="matrix(-1 0 0 1 8 0)"/>
+                          <path opacity=".13" fill="#0000000" d="M5.188 1H0v11.193l6.467-8.625C7.526 2.156 6.958 1 5.188 1z" />
+                          <path fill="currentColor" d="M5.188 0H0v11.193l6.467-8.625C7.526 1.156 6.958 0 5.188 0z" transform="matrix(-1 0 0 1 8 0)" />
                         </svg>
                         {msg.message && (
                           <p className="text-sm text-gray-800 break-words whitespace-pre-wrap">
