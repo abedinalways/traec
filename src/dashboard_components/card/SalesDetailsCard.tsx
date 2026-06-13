@@ -1,9 +1,6 @@
 "use client";
 
-import { Select } from "@/components/ui/select";
 import DropdownIcon from "@/icons/DropdownIcon";
-import { ChevronDown } from "lucide-react";
-import { useState } from "react";
 import {
   LineChart,
   Line,
@@ -14,47 +11,21 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-/* =========================
-   DATA
-========================= */
-
-const yearlyData = [
-  { label: "Jan", date: "Jan 2025", last: 0.2, this: 0.1 },
-  { label: "Feb", date: "Feb 2025", last: 0.6, this: 0.8 },
-  { label: "Mar", date: "Mar 2025", last: 0.7, this: 1.0 },
-  { label: "Apr", date: "Apr 2025", last: 0.8, this: 1.3 },
-  { label: "May", date: "May 2025", last: 1.3, this: 2.0 },
-  { label: "Jun", date: "Jun 2025", last: 1.0, this: 1.8 },
-  { label: "Jul", date: "Jul 2025", last: 1.4, this: 2.5 },
-  { label: "Aug", date: "Aug 2025", last: 1.2, this: 2.9 },
-  { label: "Sep", date: "Sep 2025", last: 1.3, this: 3.0 },
-  { label: "Oct", date: "Oct 2025", last: 1.7, this: 3.0 },
-  { label: "Nov", date: "Nov 2025", last: 1.8, this: 4.0 },
-  { label: "Dec", date: "Dec 2025", last: 1.9, this: 3.9 },
-];
-
-const monthlyData = [
-  { label: "Week 1", date: "Jul 07, 2025", last: 0.4, this: 0.6 },
-  { label: "Week 2", date: "Jul 14, 2025", last: 0.8, this: 1.2 },
-  { label: "Week 3", date: "Jul 21, 2025", last: 1.1, this: 1.6 },
-  { label: "Week 4", date: "Jul 28, 2025", last: 1.5, this: 2.1 },
-];
-
-/* =========================
-   FORMATTER
-========================= */
+type SalesDetailsProps = {
+  salesData?: {
+    labels: string[];
+    last: number[];
+    this: number[];
+  };
+};
 
 const formatValue = (value: number) => {
   if (value >= 1) return `${value.toFixed(2)}M`;
   return `${(value * 1000).toFixed(2)}K`;
 };
 
-/* =========================
-   CUSTOM TOOLTIP
-========================= */
-
 const CustomTooltip = ({ active, payload }: any) => {
-  if (!active || !payload || !payload.length) return null;
+  if (!active || !payload?.length) return null;
 
   const data = payload[1]?.payload || payload[0]?.payload;
   const current = payload[1]?.value ?? payload[0]?.value;
@@ -83,14 +54,14 @@ const CustomTooltip = ({ active, payload }: any) => {
   );
 };
 
-/* =========================
-   COMPONENT
-========================= */
-
-export default function SalesDetailsCard() {
-  const [view, setView] = useState<"yearly" | "monthly">("yearly");
-
-  const chartData = view === "yearly" ? yearlyData : monthlyData;
+export default function SalesDetailsCard({ salesData }: SalesDetailsProps) {
+  const chartData =
+    salesData?.labels?.map((label, index) => ({
+      label,
+      date: label,
+      last: salesData.last?.[index] ?? 0,
+      this: salesData.this?.[index] ?? 0,
+    })) || [];
 
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-6 w-full">
@@ -105,43 +76,36 @@ export default function SalesDetailsCard() {
               <span className="w-2 h-2 rounded-full bg-blue-500" />
               <span className="text-gray-600">Last Year</span>
             </div>
+
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-green-500" />
               <span className="text-gray-600">This Year</span>
             </div>
           </div>
 
-          {/* Dropdown */}
+          {/* Static Dropdown UI */}
           <div className="relative inline-block">
             <select
-              value={view}
-              onChange={(e) => setView(e.target.value as "yearly" | "monthly")}
+              disabled
               className="
-      appearance-none
-      bg-white
-      border border-gray-200
-      hover:border-gray-300
-      focus:border-gray-400
-      focus:ring-2 focus:ring-gray-200
-      text-sm text-gray-700
-      rounded-lg
-      px-4 pr-10 py-2
-      transition-all
-      cursor-pointer
-      outline-none
-    "
+                appearance-none
+                bg-white
+                border border-gray-200
+                text-sm text-gray-700
+                rounded-lg
+                px-4 pr-10 py-2
+                outline-none
+              "
             >
-              <option value="yearly">Yearly</option>
-              <option value="monthly">Monthly</option>
+              <option>Yearly</option>
             </select>
 
-            {/* Custom Icon */}
             <DropdownIcon
               className="
-      absolute right-3 top-1/2 -translate-y-1
-      
-      pointer-events-none
-    "
+                absolute right-3 top-1/2
+                -translate-y-1/2
+                pointer-events-none
+              "
             />
           </div>
         </div>
@@ -168,7 +132,10 @@ export default function SalesDetailsCard() {
 
             <Tooltip
               content={<CustomTooltip />}
-              cursor={{ stroke: "#9CA3AF", strokeDasharray: "4 4" }}
+              cursor={{
+                stroke: "#9CA3AF",
+                strokeDasharray: "4 4",
+              }}
             />
 
             <Line

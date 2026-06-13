@@ -15,11 +15,12 @@ import ReportIcon from "@/icons/ReportIcon";
 import SalesDetailsCard from "../card/SalesDetailsCard";
 import SubscriptionDetailsCard from "../card/SubscriptionDetailsCard";
 import UserSummaryTable from "../tables/UserSummaryTable";
+import { useGetDashboardOverviewQuery } from "@/app/api/admin/admin-dashboard/dashboardApi";
 
 const DashBoardContainer = () => {
     const [timeRange, setTimeRange] = useState<TimeRange>("24H");
     const [txVolumeTimeRange, setTxVolumeTimeRange] = useState<TimeRange>("24H");
-
+    const { data, isLoading } = useGetDashboardOverviewQuery("yearly");
     const engagementData = useMemo(
         () => GameEngagementDataService.getDataByRange(timeRange),
         [timeRange]
@@ -40,40 +41,39 @@ const DashBoardContainer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <StatsCard
             title="Total Users"
-            value="2.3M"
-            change="+12.5%"
+            value={data?.overview?.total_users ?? 0}
             icon={<PeopleIcon />}
           />
+
           <StatsCard
             title="Total Revenue"
-            value="$24,560"
-            change="+9%"
+            value={data?.overview?.total_revenue ?? "$0"}
             icon={<ReveneuIcon />}
           />
+
           <StatsCard
             title="Active Orders"
-            value="200"
-            change="+8.2%"
+            value={data?.overview?.active_orders ?? 0}
             icon={<BoxIcon />}
           />
+
           <StatsCard
             title="Reviews or Reports"
-            value="80"
-            change="-12.5%"
+            value={0}
             icon={<ReportIcon />}
           />
         </div>
         {/* stats */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <SalesDetailsCard/>
+            <SalesDetailsCard salesData={data?.sales_details} />
           </div>
           <div>
             <SubscriptionDetailsCard />
           </div>
         </div>
         {/* table */}
-        <UserSummaryTable/>
+        <UserSummaryTable />
       </div>
     );
 };
