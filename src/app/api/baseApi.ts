@@ -419,6 +419,7 @@ export const baseApi = createApi({
     "Chat",
     "Providers",
     "Notifications",
+    "Orders",
   ],
 
   endpoints: () => ({}),

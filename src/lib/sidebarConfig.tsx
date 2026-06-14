@@ -3,13 +3,13 @@
 import React from "react";
 import {
   UserIcon,
-  
+
   MyMatchIcon,
   Live,
   SettingsIcon,
   ActiveOnGoinMatch,
   TimeIcon,
-  
+
 } from "../icons/index";
 import { Download, Wallet } from "lucide-react";
 import DashboardIcon from "@/icons/DashboardIcon";
@@ -73,11 +73,11 @@ export const adminSidebarConfig: SidebarConfig = {
           path: "/admin/dashboard/user-management/seller-providers",
           icon: <PaymentIcon />,
         },
-        {
-          name: "New Account Approval",
-          path: "/admin/dashboard/user-management/new-account-approval",
-          icon: <PaymentIcon />,
-        },
+        // {
+        //   name: "New Account Approval",
+        //   path: "/admin/dashboard/user-management/new-account-approval",
+        //   icon: <PaymentIcon />,
+        // },
       ],
     },
 
