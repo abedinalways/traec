@@ -3,6 +3,7 @@
 import { SidebarProvider } from "@/app/context/SidebarContext";
 import AdminDashboardShell from "@/sharedComponents/layouts/AdminDashboardShell";
 import React from "react";
+import { Toaster } from "sonner";
 
 export default function AdminDashboardLayout({
   children,
@@ -11,6 +12,7 @@ export default function AdminDashboardLayout({
     <div className="font-[inter]">
       <SidebarProvider>
         <AdminDashboardShell>
+          <Toaster position="top-right" richColors />
           {children}
         </AdminDashboardShell>
       </SidebarProvider>

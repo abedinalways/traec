@@ -32,6 +32,12 @@ const nextConfig = {
         hostname: "i.ibb.co",
         pathname: "/**",
       },
+      {
+        protocol: 'http',
+        hostname: '10.10.9.53',
+        port: '8000',
+        pathname: '/uploads/**',
+      },
     ],
   },
 };

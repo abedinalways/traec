@@ -12,6 +12,8 @@ import {
 } from "recharts";
 
 type SalesDetailsProps = {
+  filter: "yearly" | "monthly";
+  onFilterChange: (value: "yearly" | "monthly") => void;
   salesData?: {
     labels: string[];
     last: number[];
@@ -39,11 +41,10 @@ const CustomTooltip = ({ active, payload }: any) => {
         <span>Sales</span>
 
         <span
-          className={`text-xs px-2 py-1 rounded-md flex items-center gap-1 ${
-            isPositive
-              ? "bg-green-100 text-green-600"
-              : "bg-red-100 text-red-600"
-          }`}
+          className={`text-xs px-2 py-1 rounded-md flex items-center gap-1 ${isPositive
+            ? "bg-green-100 text-green-600"
+            : "bg-red-100 text-red-600"
+            }`}
         >
           {formatValue(current)} {isPositive ? "↗" : "↘"}
         </span>
@@ -54,7 +55,9 @@ const CustomTooltip = ({ active, payload }: any) => {
   );
 };
 
-export default function SalesDetailsCard({ salesData }: SalesDetailsProps) {
+export default function SalesDetailsCard({ salesData,
+  filter,
+  onFilterChange, }: SalesDetailsProps) {
   const chartData =
     salesData?.labels?.map((label, index) => ({
       label,
@@ -83,29 +86,33 @@ export default function SalesDetailsCard({ salesData }: SalesDetailsProps) {
             </div>
           </div>
 
-          {/* Static Dropdown UI */}
           <div className="relative inline-block">
             <select
-              disabled
+              value={filter}
+              onChange={(e) =>
+                onFilterChange(e.target.value as "yearly" | "monthly")
+              }
               className="
-                appearance-none
-                bg-white
-                border border-gray-200
-                text-sm text-gray-700
-                rounded-lg
-                px-4 pr-10 py-2
-                outline-none
-              "
+      appearance-none
+      bg-white
+      border border-gray-200
+      text-sm text-gray-700
+      rounded-lg
+      px-4 pr-10 py-2
+      outline-none
+      cursor-pointer
+    "
             >
-              <option>Yearly</option>
+              <option value="yearly">Yearly</option>
+              <option value="monthly">Monthly</option>
             </select>
 
             <DropdownIcon
               className="
-                absolute right-3 top-1/2
-                -translate-y-1/2
-                pointer-events-none
-              "
+      absolute right-3 top-1/2
+      -translate-y-1/2
+      pointer-events-none
+    "
             />
           </div>
         </div>

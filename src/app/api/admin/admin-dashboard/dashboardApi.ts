@@ -177,7 +177,7 @@ export const dashboardApi = baseApi.injectEndpoints({
           const per_page = params?.per_page || 10;
 
           const response = await fetch(
-            `/api/admin/user-summary/index?search=${search}&period=${period}&page=${page}&per_page=${per_page}`,
+            `/api/admin/admin-order/index?search=${search}&period=${period}&page=${page}&per_page=${per_page}`,
             {
               method: "GET",
               headers: {
