@@ -1,45 +1,49 @@
+
+import { Suspense } from "react";
 import OrderHistory from "../../_components/profile/OrdersHistory";
+export const dynamic = "force-dynamic";
 
-export default function Page() {
-  const orders = [
-    {
-      id: 1,
-      title: "Sofia's 7th Birthday Pri...",
-      vendor: "Part Pro Rentals",
-      date: "1/15/2024",
-      price: 545,
-      status: "Complete",
-      thumbnail: "/images/orderWomanImg.png",
-    },
-    {
-      id: 2,
-      title: "Sofia's 7th Birthday Pri...",
-      vendor: "Part Pro Rentals",
-      date: "1/15/2024",
-      price: 545,
-      status: "Complete",
-      thumbnail: "/images/orderWomanImg.png",
-    },
-    {
-      id: 3,
-      title: "Sofia's 7th Birthday Pri...",
-      vendor: "Part Pro Rentals",
-      date: "1/15/2024",
-      price: 545,
-      status: "Complete",
-      thumbnail: "/images/orderManImg.png",
-    },
-    {
-      id: 4,
-      title: "Sofia's 7th Birthday Pri...",
-      vendor: "Part Pro Rentals",
-      date: "1/15/2024",
-      price: 545,
-      status: "Progress",
-      thumbnail: "/images/orderWomanImg.png",
-    },
-  ];
+const orders = [
+  {
+    id: 1,
+    title: "Sofia's 7th Birthday Pri...",
+    vendor: "Part Pro Rentals",
+    date: "1/15/2024",
+    price: 545,
+    status: "Complete",
+    thumbnail: "/images/orderWomanImg.png",
+  },
+  {
+    id: 2,
+    title: "Sofia's 7th Birthday Pri...",
+    vendor: "Part Pro Rentals",
+    date: "1/15/2024",
+    price: 545,
+    status: "Complete",
+    thumbnail: "/images/orderWomanImg.png",
+  },
+  {
+    id: 3,
+    title: "Sofia's 7th Birthday Pri...",
+    vendor: "Part Pro Rentals",
+    date: "1/15/2024",
+    price: 545,
+    status: "Complete",
+    thumbnail: "/images/orderManImg.png",
+  },
+  {
+    id: 4,
+    title: "Sofia's 7th Birthday Pri...",
+    vendor: "Part Pro Rentals",
+    date: "1/15/2024",
+    price: 545,
+    status: "Progress",
+    thumbnail: "/images/orderWomanImg.png",
+  },
+];
 
+
+function OrdersHistoryContent() {
   return (
     <div className="w-full max-w-5xl mx-auto px-4 py-10">
       <OrderHistory
@@ -55,5 +59,18 @@ export default function Page() {
         orders={orders}
       />
     </div>
+  );
+}
+
+
+export default function Page() {
+  return (
+    <Suspense
+      fallback={
+        <div className="p-10 text-center">Loading orders history...</div>
+      }
+    >
+      <OrdersHistoryContent />
+    </Suspense>
   );
 }
