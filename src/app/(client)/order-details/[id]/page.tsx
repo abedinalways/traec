@@ -20,136 +20,89 @@ type TimelineStep = {
   status: TimelineStatus;
 };
 
-const normalizeTimelineStatus = (status?: string | null): TimelineStatus => {
-  if (status === "done") return "done";
-  return "pending";
+export type MappedQuestionnaireItem = {
+  key: string;
+  question: string;
 };
 
 const getOrderDetails = (response: unknown): RawOrder | null => {
-  const res = response as {
-    data?: RawOrder;
-    order?: RawOrder;
-  };
-
+  const res = response as { data?: RawOrder; order?: RawOrder };
   return res?.data || res?.order || null;
 };
 
-const getImageUrl = (image?: string | null) => {
+const getImageUrl = (image?: string | null): string => {
   if (!image) return fallbackImage;
-
-  if (image.startsWith("http://") || image.startsWith("https://")) {
-    return image;
-  }
-
-  if (image.startsWith("/")) {
-    return image;
-  }
-
+  if (image.startsWith("http://") || image.startsWith("https://")) return image;
+  if (image.startsWith("/")) return image;
   return `/api/image?path=${encodeURIComponent(image)}`;
 };
 
-const formatPrice = (value: unknown) => {
-  if (value === null || value === undefined || value === "") return "—";
-
-  const numericValue = Number(value);
-
-  if (!Number.isNaN(numericValue)) {
-    return `$${numericValue}`;
-  }
-
-  return String(value);
-};
-
-const formatStatus = (status?: string | null) => {
+const formatStatus = (status?: string | null): string => {
   if (!status) return "Pending";
-
-  return status
-    .replace(/_/g, " ")
-    .replace(/\b\w/g, (letter) => letter.toUpperCase());
-};
-
-const formatDate = (value?: string | null) => {
-  if (!value) return "—";
-
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
-
-  return date.toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-  });
+  return status.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 };
 
 const buildTimeline = (order: RawOrder): TimelineStep[] => {
-  if (Array.isArray(order.timeline) && order.timeline.length > 0) {
-    return order.timeline.map(
-      (item): TimelineStep => ({
-        label: item.label || "Order update",
-        time: item.time || "—",
-        status: normalizeTimelineStatus(item.status),
-      }),
-    );
-  }
-
+  const details = order.order_details;
   return [
     {
-      label: "Order placed",
-      time: order.created_at || "—",
+      label: "Order Placed",
+      time: details?.order_number || "—",
       status: "done",
     },
     {
-      label: formatStatus(order.status),
-      time: order.updated_at || "—",
+      label: formatStatus(details?.status),
+      time: "—",
       status: "done",
     },
     {
-      label: "Complete order",
-      time: order.completed_at || "—",
-      status: order.completed_at ? "done" : "pending",
+      label: "Complete Order",
+      time: details?.end_date || "—",
+      status: details?.status === "completed" ? "done" : "pending",
     },
   ];
 };
 
 const mapOrderDetails = (order: RawOrder) => {
-  const id = order.id || order.order_id || "";
+  const id = String(order.id || "");
+  const details = order.order_details;
+  const contact = order["location & contact"];
+  const evDets = order.event_details;
+  const started = order.order_started;
 
-  const vendorName =
-    order.provider_name ||
-    order.vendor_name ||
-    [order.provider?.name, order.provider?.last_name]
-      .filter(Boolean)
-      .join(" ") ||
-    [order.service?.provider?.name, order.service?.provider?.last_name]
-      .filter(Boolean)
-      .join(" ") ||
-    "Unknown Provider";
-
-  const image =
-    order.image ||
-    order.event_image ||
-    order.service?.image ||
-    order.service?.images?.[0] ||
-    null;
+  // questionnaire is Record<string, string> — convert to array
+  const questionnaire: MappedQuestionnaireItem[] = order.questionnaire
+    ? Object.entries(order.questionnaire).map(([key, question]) => ({
+        key,
+        question,
+      }))
+    : [];
 
   return {
-    eventImage: getImageUrl(image),
-    eventTitle:
-      order.title ||
-      order.event_title ||
-      order.service_title ||
-      order.service?.title ||
-      `Order #${id}`,
-    vendorName,
-    orderStatus: formatStatus(order.status),
-    orderNumber: order.order_number || `#${id}`,
-    completedDate: formatDate(order.completed_at || order.updated_at),
-    amountPaid: formatPrice(
-      order.amount_paid || order.amount || order.total || order.price,
-    ),
+    // ── RightCard ──
+    eventImage: getImageUrl(details?.service_image?.[0] ?? null),
+    eventTitle: details?.event_name || started?.event_name || `Order #${id}`,
+    vendorName: details?.order_by || started?.order_by || "Unknown",
+    orderStatus: formatStatus(details?.status),
+    orderNumber: details?.order_number || `#${id}`,
+    completedDate: details?.end_date || "—",
+    amountPaid: details?.amount_paid || "—",
     timeline: buildTimeline(order),
+
+    // ── MainOrder ──
+    id,
+    placedBy: started?.order_by || details?.order_by || null,
+    eventName: started?.event_name || details?.event_name || null,
+    fullName: contact?.full_name || null,
+    email: contact?.email || null,
+    phone: contact?.phone || null,
+    location: contact?.address || null,
+    eventType: evDets?.event_type || null,
+    eventDetailName: evDets?.event_name || null,
+    duration: evDets?.duration || null,
+    guests: evDets?.guests || null,
+    serviceDescription: evDets?.description || null,
+    questionnaire,
   };
 };
 
@@ -166,29 +119,49 @@ export default function OrderdetailsPage() {
 
   return (
     <main className="custom-container min-h-screen bg-white px-4 sm:px-6 md:px-10 lg:px-16 py-8 font-[inter]">
-      {/* HEADER BREADCRUMB */}
+      {/* Breadcrumb */}
       <p className="text-[16px] text-gray-500 mb-6 flex items-center gap-1">
         My orders{" "}
-        <span className="text-gray-400 ">
+        <span className="text-gray-400">
           <NextArrow />
         </span>{" "}
         Order Details
       </p>
 
       {isLoading ? (
-        <p className="text-sm text-gray-500">Loading order details...</p>
+        <div className="space-y-4">
+          {[1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="w-full h-28 bg-gray-100 rounded-2xl animate-pulse"
+            />
+          ))}
+        </div>
       ) : isError || !orderDetails ? (
         <p className="text-sm text-red-500">Order details not found.</p>
       ) : (
         <>
-          {/* TWO COLUMN LAYOUT */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            {/* LEFT SIDE – MAIN ORDER DETAILS */}
+            {/* LEFT */}
             <div className="lg:col-span-2 space-y-8">
-              <MainOrder />
+              <MainOrder
+                id={orderDetails.id}
+                placedBy={orderDetails.placedBy}
+                eventName={orderDetails.eventName}
+                fullName={orderDetails.fullName}
+                email={orderDetails.email}
+                phone={orderDetails.phone}
+                location={orderDetails.location}
+                eventType={orderDetails.eventType}
+                eventDetailName={orderDetails.eventDetailName}
+                duration={orderDetails.duration}
+                guests={orderDetails.guests}
+                serviceDescription={orderDetails.serviceDescription}
+                questionnaire={orderDetails.questionnaire}
+              />
             </div>
 
-            {/* RIGHT SIDE – STATUS CARD */}
+            {/* RIGHT */}
             <div className="lg:col-span-1 pt-11">
               <RightCard
                 eventImage={orderDetails.eventImage}
@@ -203,11 +176,8 @@ export default function OrderdetailsPage() {
             </div>
           </div>
 
-          {/* QUICK RESPONSE BOX UNDER BOTH COLUMNS */}
-          <div
-            className="custom-container w-full max-w-3xl mx-auto mt-10"
-            style={{ marginLeft: 0, marginRight: 0 }}
-          >
+          {/* Quick Response */}
+          <div className="w-full max-w-3xl mt-10">
             <QuickResponse
               onSend={(message) => {
                 console.log("Sent message:", message);

@@ -2,56 +2,55 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 import { baseApi } from "../baseApi";
 
 export type RawOrder = {
-  id?: number | string;
-  order_id?: number | string;
-  order_number?: string | null;
-  title?: string | null;
-  event_title?: string | null;
-  service_title?: string | null;
-  image?: string | null;
-  event_image?: string | null;
-  status?: string | null;
+  // ── INDEX (list) API — flat fields ──
+  order_id?: number | string | null;
+  service_image?: string[] | null;
+  event_name?: string | null;
+  order_by?: string | null;
+  price?: string | null;
   due_in?: string | null;
-  due_date?: string | null;
-  price?: number | string | null;
-  amount?: number | string | null;
-  amount_paid?: number | string | null;
-  total?: number | string | null;
-  created_at?: string | null;
-  updated_at?: string | null;
-  completed_at?: string | null;
+  status?: string | null;
 
-  provider_name?: string | null;
-  vendor_name?: string | null;
-  provider?: {
-    name?: string | null;
-    last_name?: string | null;
+  // ── SHOW (detail) API — nested fields ──
+  id?: number | string | null;
+
+  order_started?: {
+    order_by?: string | null;
+    event_name?: string | null;
+  } | null;
+
+  "location & contact"?: {
+    full_name?: string | null;
     email?: string | null;
+    phone?: string | null;
+    address?: string | null;
   } | null;
 
-  service?: {
-    title?: string | null;
-    image?: string | null;
-    images?: string[] | null;
+  event_details?: {
+    event_type?: string | null;
+    event_name?: string | null;
+    duration?: string | null;
+    guests?: number | string | null;
     description?: string | null;
-    provider?: {
-      name?: string | null;
-      last_name?: string | null;
-    } | null;
   } | null;
 
-  timeline?: {
-    label?: string;
-    time?: string;
-    status?: string;
-  }[];
+  questionnaire?: Record<string, string> | null;
+
+  order_details?: {
+    service_image?: string[] | null;
+    event_name?: string | null;
+    order_by?: string | null;
+    status?: string | null;
+    order_number?: string | null;
+    end_date?: string | null;
+    amount_paid?: string | null;
+  } | null;
 };
 
 export type AdminOrderListResponse = {
   success?: boolean;
   message?: string;
-  data?: RawOrder[] | { data?: RawOrder[]; orders?: RawOrder[] };
-  orders?: RawOrder[];
+  data?: RawOrder[];
 };
 
 export type AdminOrderDetailsResponse = {
@@ -63,9 +62,7 @@ export type AdminOrderDetailsResponse = {
 
 const parseJson = async (response: Response) => {
   const text = await response.text();
-
   if (!text) return null;
-
   try {
     return JSON.parse(text);
   } catch {
@@ -86,11 +83,7 @@ const createFetchError = (
           : String(dataOrMessage || "Request failed"),
     };
   }
-
-  return {
-    status,
-    data: dataOrMessage,
-  };
+  return { status, data: dataOrMessage };
 };
 
 const adminOrderApi = baseApi.injectEndpoints({
@@ -100,28 +93,17 @@ const adminOrderApi = baseApi.injectEndpoints({
         try {
           const response = await fetch("/api/admin/order/index", {
             method: "GET",
-            headers: {
-              Accept: "application/json",
-            },
+            headers: { Accept: "application/json" },
             credentials: "include",
             cache: "no-store",
           });
-
           const data = await parseJson(response);
-
           if (!response.ok) {
-            return {
-              error: createFetchError(response.status, data),
-            };
+            return { error: createFetchError(response.status, data) };
           }
-
-          return {
-            data: data as AdminOrderListResponse,
-          };
+          return { data: data as AdminOrderListResponse };
         } catch (error) {
-          return {
-            error: createFetchError("FETCH_ERROR", error),
-          };
+          return { error: createFetchError("FETCH_ERROR", error) };
         }
       },
       providesTags: ["User"],
@@ -132,28 +114,17 @@ const adminOrderApi = baseApi.injectEndpoints({
         try {
           const response = await fetch(`/api/admin/order/show/${id}`, {
             method: "GET",
-            headers: {
-              Accept: "application/json",
-            },
+            headers: { Accept: "application/json" },
             credentials: "include",
             cache: "no-store",
           });
-
           const data = await parseJson(response);
-
           if (!response.ok) {
-            return {
-              error: createFetchError(response.status, data),
-            };
+            return { error: createFetchError(response.status, data) };
           }
-
-          return {
-            data: data as AdminOrderDetailsResponse,
-          };
+          return { data: data as AdminOrderDetailsResponse };
         } catch (error) {
-          return {
-            error: createFetchError("FETCH_ERROR", error),
-          };
+          return { error: createFetchError("FETCH_ERROR", error) };
         }
       },
       providesTags: ["User"],

@@ -10,15 +10,12 @@ const buildApiUrl = (path: string) => {
       "API_BASE_URL is missing. Please set NEXT_PUBLIC_API_BASE_URL in .env.local",
     );
   }
-
   return `${API_BASE_URL.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
 };
 
 const parseJson = async (response: Response) => {
   const text = await response.text();
-
   if (!text) return null;
-
   try {
     return JSON.parse(text);
   } catch {
@@ -37,20 +34,14 @@ export async function GET(
 
     if (!token) {
       return NextResponse.json(
-        {
-          success: false,
-          message: "Unauthorized. Please login again.",
-        },
+        { success: false, message: "Unauthorized. Please login again." },
         { status: 401 },
       );
     }
 
     if (!id) {
       return NextResponse.json(
-        {
-          success: false,
-          message: "Order id is required.",
-        },
+        { success: false, message: "Order id is required." },
         { status: 400 },
       );
     }
@@ -72,10 +63,7 @@ export async function GET(
 
     if (!backendResponse.ok) {
       return NextResponse.json(
-        data || {
-          success: false,
-          message: "Failed to load order details.",
-        },
+        data || { success: false, message: "Failed to load order details." },
         { status: backendResponse.status },
       );
     }
@@ -83,7 +71,6 @@ export async function GET(
     return NextResponse.json(data, { status: 200 });
   } catch (error) {
     console.error("ADMIN ORDER SHOW ROUTE ERROR:", error);
-
     return NextResponse.json(
       {
         success: false,
