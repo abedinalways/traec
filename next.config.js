@@ -33,10 +33,11 @@ const nextConfig = {
         pathname: "/**",
       },
       {
-        protocol: 'http',
-        hostname: '10.10.9.53',
-        port: '8000',
-        pathname: '/uploads/**',
+        protocol: "http",
+        hostname: "10.10.9.53",
+        port: "8000",
+        
+        pathname: "/**",
       },
     ],
   },

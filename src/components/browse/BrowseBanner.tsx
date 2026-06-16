@@ -1,6 +1,29 @@
+"use client";
+
+
+import { PublicCategoryItem, useGetPublicCategoriesQuery } from "@/app/api/categories/publicCategoryApi";
 import { Banner } from "../reusable/Banner";
 
-const BrowseBanner = () => {
+interface BrowseBannerProps {
+  selectedCategory: string;
+  onCategorySelect: (category: string) => void;
+}
+
+const BrowseBanner = ({
+  selectedCategory = "",
+  onCategorySelect = () => {},
+}: BrowseBannerProps) => {
+  const { data: categoryResponse, isLoading } = useGetPublicCategoriesQuery();
+
+  const categoriesList = categoryResponse?.data || [];
+
+  const dynamicButtons = categoriesList.map((cat: PublicCategoryItem) => ({
+    label: cat.name,
+    onClick: () => {
+      onCategorySelect(selectedCategory === cat.name ? "" : cat.name);
+    },
+  }));
+
   return (
     <Banner
       title="Browse Event Services"
@@ -9,16 +32,9 @@ const BrowseBanner = () => {
       decorationLeft="/left-decoration.png"
       decorationRight="/right-decoration.png"
       backgroundImage="/images/banner.png"
-      buttons={[
-        
-          { label: "Catering & Food Services" },
-          { label: "Decor & Event Design" },
-          { label: "Entertainment" },
-          { label: "Photography & Videography" },
-          { label: "Rentals" },
-          { label: "Venues" },
-        
-      ]}
+      buttons={
+        isLoading ? [{ label: "Loading Categories..." }] : dynamicButtons
+      }
     />
   );
 };

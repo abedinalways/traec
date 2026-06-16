@@ -1,38 +1,41 @@
 "use client";
 
 import { useState } from "react";
-import {
-  ChevronDown,
-  ChevronRight,
-  ChevronUp,
-  
-  Check,
-} from "lucide-react";
+import { ChevronDown, ChevronRight, Check } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import LocationIcon from "../icons/LocationIcon";
+import { PublicCategoryItem, useGetPublicCategoriesQuery } from "@/app/api/categories/publicCategoryApi";
 
 
+interface FiltersSidebarProps {
+  activeCategory: string;
+  onCategoryChange: (category: string) => void;
+  onSearchChange: (value: string) => void;
+}
 
-export default function FiltersSidebar() {
+export default function FiltersSidebar({
+  activeCategory,
+  onCategoryChange,
+  onSearchChange,
+}: FiltersSidebarProps) {
   const [openCategories, setOpenCategories] = useState(true);
   const [openRadius, setOpenRadius] = useState(true);
   const [openPrice, setOpenPrice] = useState(true);
   const [openLocation, setOpenLocation] = useState(true);
 
 
-  /* Subcategory state */
-  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
-    Catering: true,
-    "DJ Services": false,
-    Decorators: false,
-    Rentals: false,
-    Photography: false,
-    Entertainment: false,
-  });
+  const { data: categoryResponse } = useGetPublicCategoriesQuery();
+  const categoriesList = categoryResponse?.data || [];
 
-  /* Location Tags */
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const locationTags = [
+    "Banquet halls",
+    "Beaches",
+    "Ballrooms",
+    "Villas",
+    "Outdoor spaces",
+  ];
 
   const toggleTag = (label: string) => {
     setSelectedTags((prev) =>
@@ -42,74 +45,11 @@ export default function FiltersSidebar() {
     );
   };
 
-  const toggleSection = (section: string) => {
-    setOpenSections((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }));
-  };
-
-  const locationTags = [
-    "Banquet halls",
-    "Beaches",
-    "Ballrooms",
-    "Villas",
-    "Outdoor spaces",
-  ];
-
-  const categoryData = {
-    "Catering & Food Services": [
-      "Private Chefs",
-      "Food Trucks",
-      "Bartending Services",
-      "Dessert Tables / Specialty Treats",
-    ],
-
-    "Decor & Event Design": [
-      "Event Decorators",
-      "Floral Designers",
-      "Balloon Designers",
-      "Luxury Event Styling",
-      "Solo Musicians",
-      "Backdrop & Prop Rentals",
-    ],
-
-    Entertainment: [
-      "DJs",
-      "Live Bands",
-      "MCs / Hosts",
-      "Cultural Performers",
-      "Children’s Entertainment",
-    ],
-
-    "Photography & Videography": [
-      "Wedding Photographers",
-      "Videographers",
-      "Drone Videography",
-      "Photo Booth Rentals",
-    ],
-
-    Rentals: [
-      "Tent Rentals",
-      "Chair & Table Rentals",
-      "Luxury Furniture Rentals",
-      "Stage & Sound Equipment",
-      "Inflatables / Bounce Houses",
-    ],
-
-    Venues: [
-      "Banquet Halls",
-      "Outdoor / Beach Venues",
-      "Hotels with Event Space",
-      "Conference Centers",
-      "Private Estates",
-    ],
-  };
-
   return (
     <aside className="w-full md:w-72 bg-[#FBFCFD] rounded-3xl shadow-sm p-6 space-y-8 border border-gray-200 font-[inter]">
       <h2 className="text-xl font-semibold">Filters</h2>
 
+      {/* Location */}
       <CollapsibleSection
         title="Location"
         isOpen={openLocation}
@@ -119,11 +59,11 @@ export default function FiltersSidebar() {
           <input
             type="text"
             placeholder="Enter city, state, or zip code"
-            className="w-full h-12 pl-10 pr-4 rounded-xl border border-gray-300 placeholder:text-xs"
+            onChange={(e) => onSearchChange(e.target.value)}
+            className="w-full h-12 pl-10 pr-4 rounded-xl border border-gray-300 placeholder:text-xs outline-none"
           />
           <LocationIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
         </div>
-
         <div className="flex flex-wrap gap-2">
           {locationTags.map((tag) => (
             <Tag
@@ -136,35 +76,40 @@ export default function FiltersSidebar() {
         </div>
       </CollapsibleSection>
 
+      {/* Dynamic All Categories */}
       <CollapsibleSection
         title="All Categories"
         isOpen={openCategories}
         onToggle={() => setOpenCategories((prev) => !prev)}
       >
-        {Object.entries(categoryData).map(([section, options]) => (
-          <SubCategory
-            key={section}
-            title={section}
-            options={options}
-            isOpen={openSections[section]}
-            onToggle={() => toggleSection(section)}
-          />
-        ))}
+        <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
+          {categoriesList.map((cat: PublicCategoryItem) => (
+            <label
+              key={cat.id}
+              onClick={() =>
+                onCategoryChange(activeCategory === cat.name ? "" : cat.name)
+              }
+              className="flex items-center gap-2 text-gray-700 text-sm cursor-pointer select-none py-1 hover:text-black transition-colors"
+            >
+              <Checkbox checked={activeCategory === cat.name} />
+              {cat.name}
+            </label>
+          ))}
+        </div>
       </CollapsibleSection>
 
+      {/* Search Radius */}
       <CollapsibleSection
         title="Search Radius"
         isOpen={openRadius}
         onToggle={() => setOpenRadius((prev) => !prev)}
       >
         <div className="relative">
-          <select className="w-full h-12 pl-4 pr-10 rounded-xl border border-gray-300 appearance-none text-gray-700">
+          <select className="w-full h-12 pl-4 pr-10 rounded-xl border border-gray-300 appearance-none text-gray-700 outline-none">
             <option>Within 10 miles</option>
             <option>Within 20 miles</option>
             <option>Within 50 miles</option>
-            <option>Within 100 miles</option>
           </select>
-
           <ChevronDown
             size={18}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 pointer-events-none"
@@ -172,24 +117,23 @@ export default function FiltersSidebar() {
         </div>
       </CollapsibleSection>
 
+      {/* Price Range */}
       <CollapsibleSection
         title="Price Range"
         isOpen={openPrice}
         onToggle={() => setOpenPrice((prev) => !prev)}
       >
         <div className="space-y-3">
-          <Slider defaultValue={[40]} max={100} step={1} />
+          <Slider defaultValue={[200]} max={600} step={10} />
           <div className="flex justify-between text-sm text-gray-600">
             <span>$0</span>
-            <span>$500</span>
+            <span>$600</span>
           </div>
         </div>
       </CollapsibleSection>
     </aside>
   );
 }
-
-
 
 function CollapsibleSection({
   title,
@@ -206,45 +150,12 @@ function CollapsibleSection({
     <div className="space-y-3">
       <button
         onClick={onToggle}
-        className="flex justify-between w-full text-lg font-medium cursor-pointer"
+        className="flex justify-between w-full text-lg font-medium cursor-pointer items-center"
       >
         {title}
         {isOpen ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
       </button>
-
       {isOpen && <div className="space-y-4">{children}</div>}
-    </div>
-  );
-}
-
-function SubCategory({
-  title,
-  options,
-  isOpen,
-  onToggle,
-}: {
-  title: string;
-  options: string[];
-  isOpen: boolean;
-  onToggle: () => void;
-}) {
-  return (
-    <div>
-      <button
-        onClick={onToggle}
-        className="flex items-center gap-2 text-gray-700 cursor-pointer"
-      >
-        {isOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-        {title}
-      </button>
-
-      {isOpen && (
-        <div className="pl-6 border-l border-gray-200 space-y-2 mt-2">
-          {options.map((option) => (
-            <CheckboxItem key={option} label={option} />
-          ))}
-        </div>
-      )}
     </div>
   );
 }
@@ -265,7 +176,7 @@ function Tag({
       className={`px-3 py-1.5 rounded-full cursor-pointer text-sm border transition-all duration-200 flex items-center gap-1 ${
         active
           ? "bg-black text-white border-black"
-          : "bg-white text-gray-700 border-gray-300 hover:border-black"
+          : "bg-white text-gray-700 border-gray-300"
       }`}
     >
       {active && (
@@ -273,19 +184,5 @@ function Tag({
       )}
       {label}
     </button>
-  );
-}
-
-function CheckboxItem({ label }: { label: string }) {
-  const [checked, setChecked] = useState(false);
-
-  return (
-    <label
-      onClick={() => setChecked((prev) => !prev)}
-      className="flex items-center gap-2 text-gray-700 text-sm cursor-pointer select-none"
-    >
-      <Checkbox checked={checked} />
-      {label}
-    </label>
   );
 }
