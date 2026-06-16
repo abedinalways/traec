@@ -2,11 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { MdKeyboardArrowLeft } from "react-icons/md";
-import { FiBox } from "react-icons/fi";
-import { FaHandHoldingDollar } from "react-icons/fa6";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { BiTask } from "react-icons/bi";
+
 import LeftIcon from "@/components/icons/LeftIcon";
 import CubeIcon from "@/components/icons/CubeIcon";
 import CompleteIcon from "@/components/icons/CompleteIcon";

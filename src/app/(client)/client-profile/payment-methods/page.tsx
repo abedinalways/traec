@@ -12,7 +12,8 @@ import LeftIcon from "@/components/icons/LeftIcon";
 import ShieldIcon from "@/components/icons/ShieldIcon";
 import DelIcon from "@/components/icons/DelIcon";
 import DelRedIcon from "@/components/icons/DelRedIcon";
-
+export const dynamic = "force-dynamic";
+export const runtime = "edge";
 export default function Page() {
   const [isAddCardModal, setIsAddCardModal] = useState(false);
   const [isDeleteCardModal, setIsDeleteCardModal] = useState(false);

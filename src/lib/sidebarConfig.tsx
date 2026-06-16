@@ -94,20 +94,9 @@ export const adminSidebarConfig: SidebarConfig = {
 
     {
       icon: <SubscriptionIcon />,
-      name: "Subscription & Payment",
-      submenuStyle: "tree",
-      subItems: [
-        {
-          name: "Subscription",
-          path: "/admin/dashboard/subscription-payment/subscription",
-          icon: <PaymentIcon />,
-        },
-        {
-          name: "Payment",
-          path: "/admin/dashboard/subscription-payment/payment",
-          icon: <PaymentIcon />,
-        },
-      ],
+      name: "Subscription",
+      path: "/admin/dashboard/subscription-payment/subscription"
+     
     },
     {
       icon: <UsersIcondashboard />,

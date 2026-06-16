@@ -16,6 +16,7 @@ import localFont from "next/font/local";
 import { AuthModalProvider } from "./context/AuthModalContext";
 import ReduxProvider from "./ReduxProvider";
 import { Toaster } from "@/components/ui/sonner";
+import { Suspense } from "react";
 
 
 
@@ -98,7 +99,9 @@ export default function RootLayout({
       >
         <ReduxProvider>
           <main className="mt-16">
-            <AuthModalProvider> {children}</AuthModalProvider>
+            <Suspense fallback={<div>Loading...</div>}>
+              <AuthModalProvider>{children}</AuthModalProvider>
+            </Suspense>
           </main>
 
           <Toaster
