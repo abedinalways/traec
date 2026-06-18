@@ -3,14 +3,14 @@
 import { FC, ReactNode, use } from "react";
 import ServiceBreadcrumb from "./_components/ServiceBreadcrumb";
 import BookingSidebar from "./_components/BookingSidebar";
-import BookingProvider, { useBooking } from "../context/BookingContext";
+import { useBooking } from "../context/BookingContext";
 
 interface BookingLayoutProps<T> {
   children: ReactNode;
   params: Promise<T>;
 }
 
-const BookingLayout: FC<BookingLayoutProps<{ serviceSlug: string }>> = ({
+const BookingServiceLayout: FC<BookingLayoutProps<{ serviceSlug: string }>> = ({
   children,
   params,
 }) => {
@@ -18,9 +18,7 @@ const BookingLayout: FC<BookingLayoutProps<{ serviceSlug: string }>> = ({
   const { serviceSlug } = resolvedParams;
 
   return (
-    <BookingProvider>
-      <Wrapper serviceSlug={serviceSlug}>{children}</Wrapper>
-    </BookingProvider>
+    <Wrapper serviceSlug={serviceSlug}>{children}</Wrapper>
   );
 };
 
@@ -62,4 +60,4 @@ function Wrapper({
   );
 }
 
-export default BookingLayout;
+export default BookingServiceLayout;

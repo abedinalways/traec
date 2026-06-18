@@ -19,6 +19,7 @@ export interface ServiceDetailsResponse {
   };
 }
 export interface PricingItem {
+  id: number;
   type: string;
   duration: string;
   price: string | number;

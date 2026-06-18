@@ -1,10 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import LeftArrow from "@/components/icons/LeftArrow";
 import TrackIcon from "@/components/icons/TrackIcon";
 import { Button } from "@/components/ui/button";
-import TicketIcon from "@/components/ui/TicketIcon";
-import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 
 interface Step6Props {
@@ -50,7 +49,6 @@ interface Step6Props {
   onPrevious: () => void;
 }
 
-// Same as screenshot
 const ADDONS_LABELS = [
   { id: 1, title: "Generator Rental", price: 75 },
   { id: 2, title: "Post-Event Cleaning", price: 75 },
@@ -65,6 +63,7 @@ export default function Step6Review({
   onPrevious,
 }: Step6Props) {
   const { step1, step2, step3, step4, step5 } = allData;
+  const [agreeTerms, setAgreeTerms] = useState(false);
 
   return (
     <div className="space-y-8">
@@ -78,7 +77,7 @@ export default function Step6Review({
         </div>
         <div>
           <p className="font-inter font-medium text-[16px] text-black">
-            DJ Santa’s Party Productions
+            DJ Santa's Party Productions
           </p>
           <p className="font-inter text-[16px] text-[#777980]">
             Party Pro Rentals
@@ -105,16 +104,12 @@ export default function Step6Review({
           <span>Guests:</span> {step2.guestsCount}
         </p>
 
-        {/* Description */}
         <div className="flex flex-col">
           <p className="text-[#4a4c56]">Description:</p>
           <p className="text-[#4a4c56] whitespace-pre-line">
             {step2.eventDescription}
           </p>
         </div>
-
-        {/* If screenshot fields missing (commented) */}
-        {/* <p className="text-[#4a4c56]"><b>Setup:</b> {step2.setup}</p> */}
       </div>
 
       {/* === DATE & TIME CARD === */}
@@ -124,11 +119,10 @@ export default function Step6Review({
         </h2>
 
         <p className="text-[#4a4c56] text-base leading-6 tracking-[0.01em]">
-          <span>Date:</span> {step3.eventStartDate} – {step3.eventEndDate}
-          {step2.eventType}
+          <span>Date:</span> {step3.eventStartDate} &ndash; {step3.eventEndDate}
         </p>
         <p className="text-[#4a4c56]">
-          <span>Time:</span> {step3.eventStartTime} – {step3.eventEndTime}
+          <span>Time:</span> {step3.eventStartTime} &ndash; {step3.eventEndTime}
         </p>
       </div>
 
@@ -177,8 +171,7 @@ export default function Step6Review({
                 What kind of music you Preference?
               </span>
               <span>
-                Preferred Genres: {step4.partyTheme}
-                {step4.musicPreference}
+                Preferred Genres: {step4.musicPreference}
               </span>
             </div>
           </div>
@@ -207,7 +200,7 @@ export default function Step6Review({
             <p className="font-medium">5.</p>
             <div className="flex flex-col">
               <span className="font-medium text-gray-800">
-                How would you like the birthday child&apos;s entrance to be?
+                How would you like the birthday child's entrance to be?
               </span>
               <span>{step4.entranceStyle}</span>
             </div>
@@ -237,7 +230,7 @@ export default function Step6Review({
         </div>
 
         <div className="flex justify-between text-[#4a4c56]">
-          <span>Add-ons (Early Setup):</span>
+          <span>Add-ons:</span>
           <span>${step5.addons.length * 75}</span>
         </div>
 
@@ -246,15 +239,21 @@ export default function Step6Review({
           <span>${step5.totalPrice}</span>
         </div>
 
-        {/* Checkboxes (Screenshot bottom) */}
+        {/* Terms Checkboxes */}
         <div className="space-y-2 pt-4">
-          <label className="flex gap-2 text-[#4a4c56] text-sm">
-            <input type="checkbox" /> I agree to the Terms of Service and
-            Privacy Policy
+          <label className="flex gap-2 text-[#4a4c56] text-sm items-start">
+            <input
+              type="checkbox"
+              checked={agreeTerms}
+              onChange={(e) => setAgreeTerms(e.target.checked)}
+              className="mt-0.5"
+            />{" "}
+            I agree to the Terms of Service and Privacy Policy
           </label>
 
-          <label className="flex gap-2 text-[#4a4c56] text-sm">
-            <input type="checkbox" /> I understand the cancellation policy.
+          <label className="flex gap-2 text-[#4a4c56] text-sm items-start">
+            <input type="checkbox" className="mt-0.5" /> I understand the
+            cancellation policy.
           </label>
         </div>
       </div>
@@ -265,13 +264,23 @@ export default function Step6Review({
           onClick={onPrevious}
           className="capitalize font-inter text-base text-black bg-[#f6f8fa] hover:bg-[#f6f8fa] p-6"
         >
-          <LeftArrow/>
+          <LeftArrow />
           previous
         </Button>
 
         <Link
-          href={`/book/checkout`}
-          className="capitalize font-inter text-base text-white py-3 px-6 rounded-[12px] bg-black"
+          href={
+            agreeTerms ? `/book/checkout?plan=${plan}` : "#"
+          }
+          onClick={(e) => {
+            if (!agreeTerms) {
+              e.preventDefault();
+              alert("Please agree to the Terms of Service and Privacy Policy first.");
+            }
+          }}
+          className={`capitalize font-inter text-base text-white py-3 px-6 rounded-[12px] ${
+            agreeTerms ? "bg-black" : "bg-gray-400 cursor-not-allowed"
+          }`}
         >
           Proceed to Payment
         </Link>

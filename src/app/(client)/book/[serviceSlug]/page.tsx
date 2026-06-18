@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSearchParams, useParams } from "next/navigation";
 
 import Step6Review from "./_components/steps/Step6Review";
@@ -10,11 +10,11 @@ import Step3DateTime from "./_components/steps/Step3DateTime";
 import Step2EventDetails from "./_components/steps/Step2EventDetails";
 import Step1Location from "./_components/steps/Step1Location";
 
-import { BookingData } from "@/types/global";
 import { useBooking } from "../context/BookingContext";
+import { useGetServiceDetailsQuery } from "@/app/api/services/serviceManagementApi";
 
 export default function BookingPage() {
-  const { step, setStep } = useBooking();
+  const { step, setStep, bookingData, setBookingData, setServiceId, setPricingId } = useBooking();
 
   const params = useParams();
   const serviceSlug = params?.serviceSlug as string;
@@ -22,52 +22,29 @@ export default function BookingPage() {
   const searchParams = useSearchParams();
   const plan = searchParams.get("plan") || "basic";
 
-  const [bookingData, setBookingData] = useState<BookingData>({
-    step1: {
-      streetAddress: "",
-      city: "",
-      state: "",
-      zipCode: "",
-      firstName: "",
-      lastName: "",
-      email: "",
-      phoneNumber: "",
-    },
-    step2: {
-      eventType: "",
-      eventName: "",
-      guestsCount: 0,
-      eventDuration: 0,
-      eventDescription: "",
-    },
-    step3: {
-      eventStartDate: "",
-      eventEndDate: "",
-      eventStartTime: "",
-      eventEndTime: "",
-    },
-    step4: {
-      partyTheme: "",
-      musicPreference: "",
-      mustPlaySongs: "",
-      partyGames: "",
-      entranceStyle: "",
-      additionalNotes: "",
-    },
-    step5: {
-      addons: [],
-      totalPrice: 0,
-    },
-    step6: {},
-  });
+  const { data: serviceData } = useGetServiceDetailsQuery(serviceSlug, { skip: !serviceSlug });
+  const service = serviceData?.data;
+
+  // Set serviceId and pricingId from the service details
+  useEffect(() => {
+    if (service?.id) {
+      setServiceId(service.id);
+    }
+    if (service?.pricings?.length) {
+      const pricing = service.pricings.find(
+        (p) => p.type.toLowerCase() === plan.toLowerCase()
+      ) || service.pricings[0];
+      setPricingId(Number(pricing.id) || 0);
+    }
+  }, [service, plan, setServiceId, setPricingId]);
 
   useEffect(() => {
     console.log("Booking Data Updated:", bookingData);
   }, [bookingData]);
 
-  const handleNext = <K extends keyof BookingData>(
+  const handleNext = <K extends keyof typeof bookingData>(
     stepKey: K,
-    data: Partial<BookingData[K]>,
+    data: Partial<(typeof bookingData)[K]>,
   ) => {
     setBookingData((prev) => ({
       ...prev,
