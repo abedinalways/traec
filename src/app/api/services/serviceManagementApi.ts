@@ -4,6 +4,20 @@ import { baseApi } from "../baseApi";
 /* =========================
    TYPES
 ========================= */
+
+export interface FaqItem {
+  id: number;
+  question: string;
+  answer: string;
+}
+
+export interface ServiceDetailsResponse {
+  success: boolean;
+  message: string;
+  data: ServiceItem & {
+    faqs?: FaqItem[];
+  };
+}
 export interface PricingItem {
   type: string;
   duration: string;
@@ -113,9 +127,32 @@ export const serviceManagementApi = baseApi.injectEndpoints({
       },
       providesTags: ["Providers"],
     }),
+
+    getServiceDetails: builder.query<ServiceDetailsResponse, string | number>({
+      queryFn: async (id) => {
+        try {
+          const response = await fetch(`/api/services/${id}`, {
+            method: "GET",
+            headers: { Accept: "application/json" },
+            credentials: "include",
+            cache: "no-store",
+          });
+
+          const data = await parseJson(response);
+          if (!response.ok)
+            return { error: createFetchError(response.status, data) };
+
+          return { data: data as ServiceDetailsResponse };
+        } catch (error) {
+          return { error: createFetchError("FETCH_ERROR", error) };
+        }
+      },
+      providesTags: (result, error, id) => [{ type: "Providers", id }],
+    }),
+  
   }),
   overrideExisting: true,
 });
 
-export const { useGetServicesListQuery } = serviceManagementApi;
+export const { useGetServicesListQuery, useGetServiceDetailsQuery } = serviceManagementApi;
 export default serviceManagementApi;
