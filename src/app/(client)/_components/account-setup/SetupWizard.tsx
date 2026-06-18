@@ -162,7 +162,7 @@ export default function SetupWizard() {
         state: values.state,
         zip: values.zip,
 
-        // Security reason: password sessionStorage এ save করবো না
+        
         password: "",
         confirmPassword: "",
       },
