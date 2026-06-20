@@ -10,10 +10,12 @@ import {
   useGetProviderServicesQuery,
   useUpdateProviderServiceMutation,
 } from "@/app/provider/providerServiceApi";
+import { useRouter } from "next/navigation";
 
 /* ─────────────────────── helpers ─────────────────────── */
 
 type ServiceSectionProps = { services?: ProviderService[] };
+
 
 const getServices = (response?: unknown): ProviderService[] => {
   const res = response as {
@@ -76,7 +78,7 @@ const buildInitialPricing = (service: ProviderService): PricingTier[] => {
       description: existing?.description ?? "",
       features:
         existing?.features && existing.features.length > 0
-          ? existing.features
+        ? existing.features
           : [""],
     };
   });
@@ -90,7 +92,7 @@ const allowedImageTypes = [
 ];
 
 /* ═══════════════════════════════════════════════════════
-   EDIT MODAL
+EDIT MODAL
 ═══════════════════════════════════════════════════════ */
 
 function EditServiceModal({
@@ -113,7 +115,8 @@ function EditServiceModal({
   const [pricing, setPricing] = useState<PricingTier[]>(
     buildInitialPricing(service),
   );
-
+ 
+  
   const [imageFiles, setImageFiles] = useState<(File | null)[]>([
     null,
     null,
@@ -249,6 +252,7 @@ function EditServiceModal({
         description: description.trim(),
         images: newImages,
         pricing: pricingPayload,
+        faqs: (service.faqs || []).map(f => ({ question: f.question, answer: f.answer })),
       }).unwrap();
 
       toast.dismiss(loading);
@@ -479,7 +483,7 @@ export default function ServiceSection({
 
   const apiServices = getServices(data);
   const services = apiServices.length > 0 ? apiServices : propServices;
-
+   const router = useRouter();
   return (
     <div className="pt-4 w-full">
       {/* Header */}
@@ -557,6 +561,9 @@ export default function ServiceSection({
                     </button>
                     <button
                       type="button"
+                      onClick={() =>
+                        router.push(`/provider/services/${service.id}`)
+                      }
                       className="border px-3 py-1 rounded-md text-xs text-gray-700 hover:bg-gray-50"
                     >
                       View Details
