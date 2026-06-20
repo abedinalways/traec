@@ -36,8 +36,11 @@ export interface CreateOrderPayload {
 }
 
 export interface CreateOrderResponse {
-  success: boolean;
+  success?: boolean;
+  status?: boolean;
   message: string;
+  order_id?: number;
+  payment_status?: string;
   data?: {
     order_id: number;
     order_number: string;

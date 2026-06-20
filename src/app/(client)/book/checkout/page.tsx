@@ -143,9 +143,9 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
 
       toast.dismiss(loadingToast);
 
-      if (res.success) {
+      if (res.success || res.status) {
         toast.success(res.message || "Booking confirmed successfully!");
-        setOrderNumber(res.data?.order_number || "");
+        setOrderNumber(res.order_id?.toString() || res.data?.order_number || "");
         setBookingConfirmed(true);
         onSuccess();
       } else {
@@ -169,35 +169,70 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
   };
 
   if (bookingConfirmed) {
+    const handleDownload = async () => {
+      if (!orderNumber) {
+        toast.error("Order ID is missing.");
+        return;
+      }
+      
+      const loadingToast = toast.loading("Downloading receipt...");
+      try {
+        const response = await fetch(`/api/order/invoice/${orderNumber}`);
+        if (!response.ok) throw new Error("Failed to download");
+        
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `Receipt-${orderNumber}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        toast.dismiss(loadingToast);
+        toast.success("Receipt downloaded successfully!");
+      } catch (err) {
+        toast.dismiss(loadingToast);
+        toast.error("Failed to download receipt.");
+      }
+    };
+
     return (
-      <div className="text-center py-20">
-        <div>
-          <Image
-            src="/images/profile/img111.png"
-            alt="Booking Confirmed"
-            width={94}
-            height={94}
-            className="mx-auto mb-6"
-          />
+      <div className="text-center py-20 flex flex-col items-center justify-center">
+        <div className="mb-6 relative">
+          <div className="w-24 h-24 relative mx-auto">
+            {/* You can replace this with the exact confetti icon from the screenshot if available */}
+            <Image
+              src="/images/profile/img111.png"
+              alt="Booking Confirmed"
+              layout="fill"
+              objectFit="contain"
+            />
+          </div>
         </div>
-        <h2 className="text-green-600 text-2xl font-bold">
+        <h2 className="text-[#00B047] text-[28px] font-semibold mb-2">
           Booking Confirmed!
         </h2>
-        <p className="text-[16px]">
+        <p className="text-gray-600 text-[16px] mb-6">
           Your party rental has been successfully booked!
         </p>
-        <span className="inline-block mt-2 rounded-full border border-green-400 p-2 text-[14px]">
-          Order ID #{orderNumber}
+        <span className="inline-block rounded-full border border-[#00B047] px-4 py-1.5 text-[#00B047] text-[14px] font-medium mb-8">
+          OrderID #{orderNumber}
         </span>
-        <button className="mt-6 bg-black cursor-pointer text-white px-6 py-3 rounded-lg flex items-center gap-2 mx-auto">
-          Download Receipt <MdOutlineFileDownload />
-        </button>
-
-        <Link href="/order-details">
-          <button className="mt-4 border px-6 py-3 cursor-pointer rounded-lg flex items-center gap-2 mx-auto">
-            Go to order page <IoIosArrowForward />
+        <div className="flex flex-col gap-4 w-full max-w-[320px] mx-auto">
+          <button
+            onClick={handleDownload}
+            className="w-full bg-black hover:bg-gray-800 transition-colors cursor-pointer text-white px-6 py-3.5 rounded-xl flex items-center justify-center gap-2 font-medium"
+          >
+            Download Receipt <MdOutlineFileDownload className="text-xl" />
           </button>
-        </Link>
+
+          <Link href="/order-details" className="w-full">
+            <button className="w-full border border-gray-200 hover:bg-gray-50 transition-colors px-6 py-3.5 cursor-pointer rounded-xl flex items-center justify-center gap-2 font-medium text-gray-700">
+              Go to order page <IoIosArrowForward />
+            </button>
+          </Link>
+        </div>
       </div>
     );
   }
