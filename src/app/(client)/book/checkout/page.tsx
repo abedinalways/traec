@@ -72,7 +72,7 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
     const loadingToast = toast.loading("Processing payment...");
 
     try {
-      // 1. Create Stripe PaymentMethod
+      // Create Stripe PaymentMethod (same as account-setup StepPayment)
       const paymentResult = await stripe.createPaymentMethod({
         type: "card",
         card: cardNumber,
@@ -97,11 +97,19 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
       }
 
       const paymentMethodId = paymentResult.paymentMethod.id;
+      console.log("Stripe PaymentMethod:", paymentMethodId);
 
       // 2. Build the order payload matching the API requirement
+      console.log("=== CHECKOUT PAYLOAD BUILD ===");
+      console.log("serviceId:", serviceId, "pricingId:", pricingId);
+
+      // Use pricingId from context, fallback to 1
+      const finalPricingId = pricingId > 0 ? pricingId : 1;
+      console.log("finalPricingId used:", finalPricingId);
+
       const payload = {
         service_id: serviceId,
-        service_pricing_id: pricingId,
+        service_pricing_id: finalPricingId,
         address: bookingData.step1.streetAddress,
         city: bookingData.step1.city,
         state: bookingData.step1.state,
@@ -124,7 +132,7 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
         question_four: bookingData.step4.partyGames,
         question_five: bookingData.step4.entranceStyle,
         question_six: bookingData.step4.additionalNotes,
-        include_order_ids: bookingData.step5.addons,
+        include_order_ids: [],
         agree_terms: true,
         payment_method: "stripe",
         payment_method_id: paymentMethodId,
@@ -331,12 +339,17 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
 /* =========================
    Parent Checkout Page
    ========================= */
+const FALLBACK_STRIPE_KEY = "pk_test_51TFnVf0qYxeJDp8UdM5ocdOIljWuZm9liC0LYhQ2tF0NVm5kwiLUkIveQ2eTSyV7F5e5SV8pODjCXdQGHxLOs2A700Llw3XL0L";
+
 export default function CheckoutPage() {
   const searchParams = useSearchParams();
   const plan = searchParams.get("plan") || "basic";
 
   const { data: configData } = useGetProviderConfigQuery();
-  const stripePublicKey = configData?.data?.stripe_public_key;
+  const apiKey = configData?.data?.stripe_public_key;
+  const stripePublicKey = apiKey || FALLBACK_STRIPE_KEY;
+
+  console.log("Stripe publishable key used:", stripePublicKey, "(from API:", !!apiKey, ")");
 
   const [stripePromise, setStripePromise] =
     React.useState<Promise<Stripe | null> | null>(null);
