@@ -227,7 +227,7 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
             Download Receipt <MdOutlineFileDownload className="text-xl" />
           </button>
 
-          <Link href="/order-details" className="w-full">
+          <Link href="/client-dashboard" className="w-full">
             <button className="w-full border border-gray-200 hover:bg-gray-50 transition-colors px-6 py-3.5 cursor-pointer rounded-xl flex items-center justify-center gap-2 font-medium text-gray-700">
               Go to order page <IoIosArrowForward />
             </button>
