@@ -22,21 +22,52 @@ export default function BookingPage() {
   const searchParams = useSearchParams();
   const plan = searchParams.get("plan") || "basic";
 
-  const { data: serviceData } = useGetServiceDetailsQuery(serviceSlug, { skip: !serviceSlug });
+  // serviceSlug = serviceId (from browse details page: /book/${id}?plan=title)
+  const serviceIdFromSlug = parseInt(serviceSlug, 10);
+
+  // Set serviceId from slug immediately
+  useEffect(() => {
+    if (!isNaN(serviceIdFromSlug)) {
+      setServiceId(serviceIdFromSlug);
+    }
+  }, [serviceIdFromSlug, setServiceId]);
+
+  // Fetch service details for pricing info
+  const { data: serviceData } = useGetServiceDetailsQuery(serviceSlug, { 
+    skip: !serviceSlug || isNaN(serviceIdFromSlug) 
+  });
   const service = serviceData?.data;
 
-  // Set serviceId and pricingId from the service details
+  // Log full service data to debug
   useEffect(() => {
-    if (service?.id) {
-      setServiceId(service.id);
-    }
+    console.log("SERVICE DATA RECEIVED:", JSON.stringify(service, null, 2));
+  }, [service]);
+
+  // Set pricingId from service details
+  useEffect(() => {
     if (service?.pricings?.length) {
+      console.log("ALL PRICINGS:", JSON.stringify(service.pricings, null, 2));
+      
       const pricing = service.pricings.find(
         (p) => p.type.toLowerCase() === plan.toLowerCase()
       ) || service.pricings[0];
-      setPricingId(Number(pricing.id) || 0);
+      
+      // Try all possible field names for pricing ID
+      const pricingObj = pricing as unknown as Record<string, unknown>;
+      const pricingId = Number(
+        pricingObj.pricing_id || 
+        pricingObj.id ||
+        pricingObj.ID ||
+        pricingObj.price_id || 
+        0
+      );
+      setPricingId(pricingId);
+      
+      console.log("SELECTED PRICING:", pricing, "PRICING_ID set to:", pricingId);
+    } else {
+      console.log("No pricings found in service data");
     }
-  }, [service, plan, setServiceId, setPricingId]);
+  }, [service, plan, setPricingId]);
 
   useEffect(() => {
     console.log("Booking Data Updated:", bookingData);

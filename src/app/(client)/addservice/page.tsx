@@ -1,15 +1,12 @@
-
-
 "use client";
 
 import { FormEvent, useState } from "react";
-import { Plus, X } from "lucide-react";
+import { Plus, X, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import LeftIcon from "@/components/icons/LeftIcon";
 import { useCreateProviderServiceMutation } from "@/app/provider/providerServiceApi";
-
 
 type PricingTier = {
   service_type: "basic" | "standard" | "premium";
@@ -18,6 +15,11 @@ type PricingTier = {
   duration: string;
   description: string;
   features: string[];
+};
+
+type FaqItem = {
+  question: string;
+  answer: string;
 };
 
 const initialPricing: PricingTier[] = [
@@ -47,6 +49,8 @@ const initialPricing: PricingTier[] = [
   },
 ];
 
+const initialFaqs: FaqItem[] = [{ question: "", answer: "" }];
+
 const allowedImageTypes = [
   "image/png",
   "image/jpeg",
@@ -65,6 +69,8 @@ export default function Page() {
   const [description, setDescription] = useState("");
 
   const [pricing, setPricing] = useState<PricingTier[]>(initialPricing);
+
+  const [faqs, setFaqs] = useState<FaqItem[]>(initialFaqs);
 
   const [imageFiles, setImageFiles] = useState<(File | null)[]>([
     null,
@@ -244,6 +250,31 @@ export default function Page() {
     );
   };
 
+  /* ─────────────────────── FAQ handlers ─────────────────────── */
+
+  const updateFaqField = (
+    faqIndex: number,
+    field: "question" | "answer",
+    value: string,
+  ) => {
+    setFaqs((prev) =>
+      prev.map((faq, index) =>
+        index === faqIndex ? { ...faq, [field]: value } : faq,
+      ),
+    );
+  };
+
+  const addFaq = () => {
+    setFaqs((prev) => [...prev, { question: "", answer: "" }]);
+  };
+
+  const removeFaq = (faqIndex: number) => {
+    setFaqs((prev) => {
+      const filtered = prev.filter((_, index) => index !== faqIndex);
+      return filtered.length ? filtered : [{ question: "", answer: "" }];
+    });
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -291,6 +322,13 @@ export default function Page() {
       return;
     }
 
+    const faqsPayload = faqs
+      .map((faq) => ({
+        question: faq.question.trim(),
+        answer: faq.answer.trim(),
+      }))
+      .filter((faq) => faq.question && faq.answer);
+
     const loadingToast = toast.loading("Creating service...");
 
     try {
@@ -301,6 +339,7 @@ export default function Page() {
         description: description.trim(),
         images,
         pricing: pricingPayload,
+        faqs: faqsPayload,
       }).unwrap();
 
       toast.dismiss(loadingToast);
@@ -534,6 +573,38 @@ export default function Page() {
           />
         </div>
 
+        {/* ===========================  
+                FAQ SECTION  
+        =========================== */}
+        <h3 className="text-base font-semibold mb-3">
+          Frequently Asked Questions
+        </h3>
+        <p className="text-xs text-gray-500 mb-4">
+          Add common questions your customers might have about this service
+        </p>
+
+        <div className="space-y-3 mb-8">
+          {faqs.map((faq, index) => (
+            <FaqEditorItem
+              key={index}
+              index={index}
+              question={faq.question}
+              answer={faq.answer}
+              onChangeField={updateFaqField}
+              onRemove={removeFaq}
+            />
+          ))}
+
+          <button
+            type="button"
+            onClick={addFaq}
+            className="flex items-center gap-1 border rounded-md px-3 py-2 text-xs text-gray-600 hover:bg-gray-50"
+          >
+            <Plus size={14} />
+            Add FAQ
+          </button>
+        </div>
+
         {/* TOGGLES */}
         <div className="flex items-center gap-10 mb-6">
           <Toggle label="Feature this service" />
@@ -666,6 +737,74 @@ function PricingCard({
           + Add Features
         </button>
       </div>
+    </div>
+  );
+}
+
+function FaqEditorItem({
+  index,
+  question,
+  answer,
+  onChangeField,
+  onRemove,
+}: {
+  index: number;
+  question: string;
+  answer: string;
+  onChangeField: (
+    faqIndex: number,
+    field: "question" | "answer",
+    value: string,
+  ) => void;
+  onRemove: (faqIndex: number) => void;
+}) {
+  const [open, setOpen] = useState(true);
+
+  return (
+    <div className="border rounded-xl p-4 bg-white">
+      <div className="flex items-start gap-3 mb-3">
+        <button
+          type="button"
+          onClick={() => setOpen((prev) => !prev)}
+          className="mt-2 w-6 h-6 flex-shrink-0 rounded-full border flex items-center justify-center text-gray-500 hover:bg-gray-50"
+          aria-label={open ? "Collapse answer" : "Expand answer"}
+        >
+          <ChevronDown
+            size={14}
+            className={`transition-transform ${open ? "rotate-180" : ""}`}
+          />
+        </button>
+
+        <input
+          type="text"
+          placeholder="Enter question..."
+          value={question}
+          onChange={(event) =>
+            onChangeField(index, "question", event.target.value)
+          }
+          className="w-full border rounded-xl p-3 text-sm"
+        />
+
+        <button
+          type="button"
+          onClick={() => onRemove(index)}
+          className="text-gray-400 hover:text-red-500 mt-2 flex-shrink-0"
+        >
+          <X size={16} />
+        </button>
+      </div>
+
+      {open && (
+        <textarea
+          placeholder="Enter answer..."
+          value={answer}
+          onChange={(event) =>
+            onChangeField(index, "answer", event.target.value)
+          }
+          className="w-full border rounded-xl p-3 text-sm h-20 ml-9"
+          style={{ width: "calc(100% - 2.25rem)" }}
+        />
+      )}
     </div>
   );
 }
