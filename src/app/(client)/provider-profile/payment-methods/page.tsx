@@ -2,17 +2,25 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { MdKeyboardArrowLeft } from "react-icons/md";
-import { Trash2 } from "lucide-react";
+import { Trash2, CreditCard, Loader2, CheckCircle2 } from "lucide-react";
 import { PiShieldWarningBold } from "react-icons/pi";
 import { ActionDialog } from "@/components/reusable/ActionDialog";
 import { useState } from "react";
 import { AddCardDialog } from "@/components/profile/AddCardDialog";
+import { StripeSetupDialog } from "@/components/profile/StripeSetupDialog";
 import LeftIcon from "@/components/icons/LeftIcon";
+import { useGetProviderStripeQuery } from "@/app/api/provider/providerStripeApi";
 
 export default function Page() {
   const [isAddCardModal, setIsAddCardModal] = useState(false);
   const [isDeleteCardModal, setIsDeleteCardModal] = useState(false);
+  const [isStripeSetupModal, setIsStripeSetupModal] = useState(false);
+
+  const { data: stripeData, isLoading: isStripeLoading } =
+    useGetProviderStripeQuery();
+
+  const stripeMode = stripeData?.data?.stripe_mode ?? null;
+  const stripePublicKey = stripeData?.data?.stripe_public_key ?? null;
 
   const cards = [
     {
@@ -36,61 +44,85 @@ export default function Page() {
       {/* Back Button */}
       <Link
         href={"/provider-profile"}
-        className="flex items-center max-w-[168px] shape-squircle rounded-[22px] p-2 text-sm border  text-gray-black-400 mb-4 text-[16px]"
+        className="flex items-center max-w-[168px] shape-squircle rounded-[22px] p-2 text-sm border text-gray-black-400 mb-4 text-[16px]"
       >
-        <LeftIcon/>
+        <LeftIcon />
         Back To Account
       </Link>
 
       {/* Header */}
       <div className="flex md:flex-row flex-col items-start md:items-center gap-3 justify-start md:justify-between mb-6">
-        <div>
+        {/* <div>
           <h1 className="text-xl md:text-2xl font-semibold text-gray-900">
             Payment Methods
           </h1>
           <p className="text-gray-500 mt-1">
             Manage your payment methods for bookings
           </p>
-        </div>
+        </div> */}
 
         {/* Add Card Button */}
-        <button
+        {/* <button
           onClick={() => setIsAddCardModal(true)}
           className="bg-black text-white cursor-pointer px-5 py-2 rounded-xl hover:bg-black/90 flex items-center gap-2"
         >
           <span className="text-lg">+</span> Add Card
-        </button>
+        </button> */}
       </div>
 
       {/* Card List */}
-      <div className="space-y-4">
-        {cards.map((card) => (
-          <div
-            key={card.id}
-            className="flex items-center justify-between p-4 rounded-xl border hover:bg-gray-50 transition"
-          >
-            <div className="flex items-center gap-3">
-              <Image src={card.brand} alt="card brand" width={46} height={46} />
+      
 
-              <div>
-                <p className="text-lg font-semibold tracking-wider">
-                  ********{card.last4}
-                </p>
-                <p className="text-gray-500 text-sm">
-                  {card.name} • Expires {card.exp}
-                </p>
-              </div>
+      {/* ============================= */}
+      {/* STRIPE SETUP SECTION          */}
+      {/* ============================= */}
+      <div className="border rounded-xl p-6 mt-8 bg-white">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0 mt-1">
+              <CreditCard className="text-purple-600" size={22} />
             </div>
+            <div>
+              <h3 className="font-semibold text-gray-900 text-lg">
+                Stripe Payment Gateway
+              </h3>
+              <p className="text-gray-500 text-sm mt-1 leading-relaxed">
+                Connect your Stripe account to accept online payments from
+                customers. Your customers will pay securely via Stripe.
+              </p>
 
-            {/* DELETE CARD BUTTON (KEPT!) */}
-            <button
-              onClick={() => setIsDeleteCardModal(true)}
-              className="p-2 hover:bg-gray-100 cursor-pointer rounded-md transition"
-            >
-              <Trash2 className="text-gray-500 hover:text-black" size={20} />
-            </button>
+              {/* Stripe Status Indicator */}
+              {isStripeLoading ? (
+                <div className="flex items-center gap-2 mt-3 text-sm text-gray-500">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Checking Stripe status...
+                </div>
+              ) : stripePublicKey ? (
+                <div className="flex items-center gap-2 mt-3 text-sm text-green-600">
+                  <CheckCircle2 size={18} />
+                  <span>
+                    Stripe connected —{" "}
+                    <span className="font-medium uppercase">{stripeMode}</span>{" "}
+                    mode
+                  </span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 mt-3 text-sm text-amber-600">
+                  <span className="w-2 h-2 rounded-full bg-amber-500 inline-block" />
+                  <span>Stripe not configured yet</span>
+                </div>
+              )}
+            </div>
           </div>
-        ))}
+
+          {/* Setup / Edit Button */}
+          <button
+            onClick={() => setIsStripeSetupModal(true)}
+            className="flex-shrink-0 bg-black text-white cursor-pointer px-5 py-2.5 rounded-xl hover:bg-black/90 text-sm font-medium transition"
+          >
+            {stripePublicKey ? "Edit Stripe Keys" : "Setup Stripe"}
+          </button>
+        </div>
       </div>
 
       {/* Security Info Box */}
@@ -128,6 +160,10 @@ export default function Page() {
         onSubmit={() => {
           console.log("Card Added");
         }}
+      />
+      <StripeSetupDialog
+        open={isStripeSetupModal}
+        setOpen={setIsStripeSetupModal}
       />
     </div>
   );

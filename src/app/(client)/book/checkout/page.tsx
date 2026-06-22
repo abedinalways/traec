@@ -14,7 +14,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useBooking } from "../context/BookingContext";
 import { useCreateOrderMutation } from "@/app/api/booking/bookingApi";
-import { useGetProviderConfigQuery } from "@/app/api/provider/providerRegistrationApi";
+import { useGetProviderStripeQuery } from "@/app/api/provider/providerStripeApi";
 import { toast } from "sonner";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
@@ -201,7 +201,7 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
       <div className="text-center py-20 flex flex-col items-center justify-center">
         <div className="mb-6 relative">
           <div className="w-24 h-24 relative mx-auto">
-            {/* You can replace this with the exact confetti icon from the screenshot if available */}
+            
             <Image
               src="/images/profile/img111.png"
               alt="Booking Confirmed"
@@ -374,17 +374,19 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
 /* =========================
    Parent Checkout Page
    ========================= */
-const FALLBACK_STRIPE_KEY = "pk_test_51TFnVf0qYxeJDp8UdM5ocdOIljWuZm9liC0LYhQ2tF0NVm5kwiLUkIveQ2eTSyV7F5e5SV8pODjCXdQGHxLOs2A700Llw3XL0L";
-
 export default function CheckoutPage() {
   const searchParams = useSearchParams();
   const plan = searchParams.get("plan") || "basic";
 
-  const { data: configData } = useGetProviderConfigQuery();
-  const apiKey = configData?.data?.stripe_public_key;
-  const stripePublicKey = apiKey || FALLBACK_STRIPE_KEY;
+  const { data: stripeData, isLoading: isStripeKeyLoading } =
+    useGetProviderStripeQuery();
+  const stripePublicKey = stripeData?.data?.stripe_public_key ?? null;
 
-  console.log("Stripe publishable key used:", stripePublicKey, "(from API:", !!apiKey, ")");
+  console.log(
+    "Checkout Stripe key:",
+    stripePublicKey ? stripePublicKey.substring(0, 12) + "..." : "NOT FOUND",
+    "(from provider config)",
+  );
 
   const [stripePromise, setStripePromise] =
     React.useState<Promise<Stripe | null> | null>(null);
@@ -395,6 +397,9 @@ export default function CheckoutPage() {
   }, [stripePublicKey]);
 
   const [confirmed, setConfirmed] = useState(false);
+
+  // No Stripe key found and not loading — show warning
+  const showNoStripeWarning = !isStripeKeyLoading && !stripePublicKey;
 
   return (
     <div className="my-10 font-[inter]">
@@ -409,7 +414,21 @@ export default function CheckoutPage() {
           </p>
         </div>
 
-        {stripePromise ? (
+        {showNoStripeWarning ? (
+          <div className="text-center py-16 max-w-md mx-auto">
+            <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl">⚠️</span>
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Payment Not Available
+            </h3>
+            <p className="text-gray-500 text-sm leading-relaxed">
+              The provider has not configured their payment gateway yet. Please
+              contact the provider to complete their Stripe setup before
+              proceeding with payment.
+            </p>
+          </div>
+        ) : stripePromise ? (
           <Elements stripe={stripePromise}>
             <StripePaymentForm onSuccess={() => setConfirmed(true)} />
           </Elements>
