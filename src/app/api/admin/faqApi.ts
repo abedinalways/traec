@@ -75,7 +75,7 @@ const faqApi = baseApi.injectEndpoints({
     getFaqs: builder.query<FAQListResponse, void>({
       queryFn: async () => {
         try {
-          const response = await fetch("/admin/content/faq_index", {
+          const response = await fetch("/api/admin/content/faq_index", {
             method: "GET",
             headers: {
               Accept: "application/json",
@@ -107,7 +107,7 @@ const faqApi = baseApi.injectEndpoints({
     saveFaq: builder.mutation<FAQSaveResponse, FAQSavePayload>({
       queryFn: async (payload) => {
         try {
-          const response = await fetch("/admin/content/faq_store", {
+          const response = await fetch("/api/admin/content/faq_store", {
             method: "POST",
             headers: {
               Accept: "application/json",
@@ -140,7 +140,7 @@ const faqApi = baseApi.injectEndpoints({
     deleteFaq: builder.mutation<FAQDeleteResponse, number | string>({
       queryFn: async (id) => {
         try {
-          const response = await fetch(`/admin/content/faq_delete/${id}`, {
+          const response = await fetch(`/api/admin/content/faq_delete/${id}`, {
             method: "DELETE",
             headers: {
               Accept: "application/json",

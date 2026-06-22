@@ -59,7 +59,7 @@ const privacyPolicyApi = baseApi.injectEndpoints({
     getPrivacyPolicy: builder.query<PrivacyPolicyResponse, void>({
       queryFn: async () => {
         try {
-          const response = await fetch("/admin/content/privacy_index", {
+          const response = await fetch("/api/admin/content/privacy_index", {
             method: "GET",
             headers: {
               Accept: "application/json",
@@ -94,7 +94,7 @@ const privacyPolicyApi = baseApi.injectEndpoints({
     >({
       queryFn: async (payload) => {
         try {
-          const response = await fetch("/admin/content/privacy_update", {
+          const response = await fetch("/api/admin/content/privacy_update", {
             method: "POST",
             headers: {
               Accept: "application/json",

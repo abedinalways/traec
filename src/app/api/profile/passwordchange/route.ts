@@ -1,17 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authCookieNames } from "@/lib/auth/config";
-
-const API_BASE_URL =
-  process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || "";
-
-const buildApiUrl = (path: string) => {
-  if (!API_BASE_URL) {
-    throw new Error(
-      "API_BASE_URL is missing. Please set NEXT_PUBLIC_API_BASE_URL in .env.local",
-    );
-  }
-  return `${API_BASE_URL.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
-};
+import { buildApiUrl } from "@/lib/apiUrl";
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,8 +15,20 @@ export async function POST(request: NextRequest) {
 
     const jsonBody = await request.json();
 
-    const backendResponse = await fetch(
-      buildApiUrl("/profile/passwordchange"),
+    const passwordUrl = buildApiUrl("/profile/passwordchange");
+
+    if (!passwordUrl) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "API_BASE_URL is missing. Please set NEXT_PUBLIC_API_BASE_URL",
+        },
+        { status: 500 },
+      );
+    }
+
+    const backendResponse = await fetch(passwordUrl,
       {
         method: "POST",
         headers: {

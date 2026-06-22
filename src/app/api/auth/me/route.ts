@@ -5,6 +5,9 @@ const API_BASE_URL =
   process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || "";
 
 const buildApiUrl = (path: string) => {
+  if (!API_BASE_URL) {
+    return null;
+  }
   return `${API_BASE_URL.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
 };
 
@@ -22,7 +25,20 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const backendResponse = await fetch(buildApiUrl("/me"), {
+    const meUrl = buildApiUrl("/me");
+
+    if (!meUrl) {
+      return NextResponse.json(
+        {
+          authenticated: false,
+          user: null,
+          message: "API_BASE_URL is missing. Please set NEXT_PUBLIC_API_BASE_URL",
+        },
+        { status: 500 },
+      );
+    }
+
+    const backendResponse = await fetch(meUrl, {
       method: "GET",
       headers: {
         Accept: "application/json",

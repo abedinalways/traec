@@ -67,7 +67,7 @@ const homeResponseApi = baseApi.injectEndpoints({
     getLandingHomeResponse: builder.query<LandingHomeResponse, void>({
       queryFn: async () => {
         try {
-          const response = await fetch("/home_response", {
+          const response = await fetch("/api/home_response", {
             method: "GET",
             headers: {
               Accept: "application/json",

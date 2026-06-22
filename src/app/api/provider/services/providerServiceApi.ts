@@ -1,5 +1,6 @@
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
-import { baseApi } from "../api/baseApi";
+import { baseApi } from "../../baseApi";
+
 
 export type ServicePricing = {
   type?: string | null;
@@ -37,10 +38,10 @@ export type ProviderServicesResponse = {
   status?: boolean;
   message?: string;
   data?:
-    | {
-        services?: ProviderService[];
-      }
-    | ProviderService[];
+  | {
+    services?: ProviderService[];
+  }
+  | ProviderService[];
   services?: ProviderService[];
 };
 
@@ -190,7 +191,7 @@ const providerServiceApi = baseApi.injectEndpoints({
     getProviderServices: builder.query<ProviderServicesResponse, void>({
       queryFn: async () => {
         try {
-          const response = await fetch("/provider/services", {
+          const response = await fetch("/api/provider/services", {
             method: "GET",
             headers: { Accept: "application/json" },
             credentials: "include",
@@ -213,7 +214,7 @@ const providerServiceApi = baseApi.injectEndpoints({
     >({
       queryFn: async (id) => {
         try {
-          const response = await fetch(`/provider/services/${id}`, {
+          const response = await fetch(`/api/provider/services/${id}`, {
             method: "GET",
             headers: { Accept: "application/json" },
             credentials: "include",
@@ -237,7 +238,7 @@ const providerServiceApi = baseApi.injectEndpoints({
       queryFn: async (payload) => {
         try {
           const formData = buildServiceFormData(payload);
-          const response = await fetch("/provider/services/store", {
+          const response = await fetch("/api/provider/services/store", {
             method: "POST",
             headers: { Accept: "application/json" },
             credentials: "include",
@@ -262,7 +263,7 @@ const providerServiceApi = baseApi.injectEndpoints({
         try {
           const formData = buildServiceFormData(payload);
           formData.append("_method", "PUT");
-          const response = await fetch(`/provider/services/${payload.id}`, {
+          const response = await fetch(`/api/provider/services/${payload.id}`, {
             method: "POST",
             headers: { Accept: "application/json" },
             credentials: "include",

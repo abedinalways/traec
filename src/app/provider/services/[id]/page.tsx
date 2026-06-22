@@ -5,7 +5,8 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { ChevronDown, MapPin, Tag, User, Calendar } from "lucide-react";
 import LeftIcon from "@/components/icons/LeftIcon";
-import { useGetProviderServiceDetailsQuery } from "@/app/provider/providerServiceApi";
+import { useGetProviderServiceDetailsQuery } from "@/app/api/provider/services/providerServiceApi";
+
 
 export default function Page() {
   const params = useParams<{ id: string }>();
@@ -19,6 +20,7 @@ export default function Page() {
   );
 
   const service = data?.data;
+  console.log(service, "0000000000000000000000000")
 
   const [activeImage, setActiveImage] = useState(0);
 
@@ -92,11 +94,10 @@ export default function Page() {
                     key={index}
                     type="button"
                     onClick={() => setActiveImage(index)}
-                    className={`w-16 h-16 rounded-xl overflow-hidden border-2 ${
-                      activeImage === index
+                    className={`w-16 h-16 rounded-xl overflow-hidden border-2 ${activeImage === index
                         ? "border-black"
                         : "border-transparent"
-                    }`}
+                      }`}
                   >
                     <img
                       src={image}
@@ -282,9 +283,8 @@ function FaqViewItem({
         <span className="text-sm font-medium text-gray-800">{question}</span>
 
         <span
-          className={`w-6 h-6 flex-shrink-0 rounded-full border flex items-center justify-center text-gray-500 transition-transform ${
-            open ? "rotate-45" : ""
-          }`}
+          className={`w-6 h-6 flex-shrink-0 rounded-full border flex items-center justify-center text-gray-500 transition-transform ${open ? "rotate-45" : ""
+            }`}
         >
           +
         </span>

@@ -23,13 +23,13 @@ export type HomeContentResponse = {
   status?: boolean;
   message?: string;
   data?:
-    | HomeContent
-    | HomeContent[]
-    | {
-        content?: HomeContent;
-        other_data?: HomeOtherData;
-        data?: HomeContent;
-      };
+  | HomeContent
+  | HomeContent[]
+  | {
+    content?: HomeContent;
+    other_data?: HomeOtherData;
+    data?: HomeContent;
+  };
   content?: HomeContent;
   other_data?: HomeOtherData;
 };
@@ -104,7 +104,7 @@ const cmsContentApi = baseApi.injectEndpoints({
     getHomeContent: builder.query<HomeContentResponse, void>({
       queryFn: async () => {
         try {
-          const response = await fetch("/admin/content/home_index", {
+          const response = await fetch("/api/admin/content/home_index", {
             method: "GET",
             headers: {
               Accept: "application/json",
@@ -141,7 +141,7 @@ const cmsContentApi = baseApi.injectEndpoints({
         try {
           const formData = buildHomeContentFormData(payload);
 
-          const response = await fetch("/admin/content/home_update", {
+          const response = await fetch("/api/admin/content/home_update", {
             method: "POST",
             headers: {
               Accept: "application/json",

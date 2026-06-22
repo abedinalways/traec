@@ -95,7 +95,7 @@ const categoryApi = baseApi.injectEndpoints({
     getServiceCategories: builder.query<CategoryListResponse, void>({
       queryFn: async () => {
         try {
-          const response = await fetch("/admin/category/index", {
+          const response = await fetch("/api/admin/category/index", {
             method: "GET",
             headers: {
               Accept: "application/json",
@@ -132,7 +132,7 @@ const categoryApi = baseApi.injectEndpoints({
         try {
           const formData = buildCategoryFormData(payload);
 
-          const response = await fetch("/admin/category/store", {
+          const response = await fetch("/api/admin/category/store", {
             method: "POST",
             headers: {
               Accept: "application/json",
@@ -169,7 +169,7 @@ const categoryApi = baseApi.injectEndpoints({
         try {
           const formData = buildCategoryFormData(payload);
 
-          const response = await fetch(`/admin/category/update/${id}`, {
+          const response = await fetch(`/api/admin/category/update/${id}`, {
             method: "POST",
             headers: {
               Accept: "application/json",
@@ -204,7 +204,7 @@ const categoryApi = baseApi.injectEndpoints({
     >({
       queryFn: async (id) => {
         try {
-          const response = await fetch(`/admin/category/delete/${id}`, {
+          const response = await fetch(`/api/admin/category/delete/${id}`, {
             method: "DELETE",
             headers: {
               Accept: "application/json",

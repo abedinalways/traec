@@ -1,17 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authCookieNames } from "@/lib/auth/config";
+import { buildApiUrl } from "@/lib/apiUrl";
 
-const API_BASE_URL =
-  process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || "";
-
-const buildApiUrl = (path: string) => {
-  if (!API_BASE_URL) {
-    throw new Error(
-      "API_BASE_URL is missing. Please set NEXT_PUBLIC_API_BASE_URL in .env.local",
-    );
+const parseJson = async (response: Response) => {
+  const text = await response.text();
+  if (!text) return null;
+  try {
+    return JSON.parse(text);
+  } catch {
+    return text;
   }
-
-  return `${API_BASE_URL.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
 };
 
 export async function POST(
@@ -20,63 +18,56 @@ export async function POST(
 ) {
   try {
     const token = request.cookies.get(authCookieNames.token)?.value;
-    const { id } = await params;
-
-    const body = await request.json().catch(() => ({}));
-
-    const cancelType =
-      body?.cancel_type === "right_away" ? "right_away" : "after_this_month";
 
     if (!token) {
       return NextResponse.json(
-        {
-          success: false,
-          message: "Unauthorized. Please login again.",
-        },
+        { success: false, message: "Unauthorized" },
         { status: 401 },
       );
     }
 
-    const backendPath =
-      cancelType === "right_away"
-        ? `/admin/subscriptions/providers/${id}/cancel-now`
-        : `/admin/subscriptions/providers/${id}/cancel`;
+    const { id } = await params;
 
-    const backendResponse = await fetch(buildApiUrl(backendPath), {
+    const cancelUrl = buildApiUrl(`/admin/provider-subscriptions/${id}/cancel`);
+
+    if (!cancelUrl) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "API_BASE_URL is missing. Please set NEXT_PUBLIC_API_BASE_URL",
+        },
+        { status: 500 },
+      );
+    }
+
+    const backendResponse = await fetch(cancelUrl, {
       method: "POST",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         access_token: token,
       },
-      body: JSON.stringify(body),
       cache: "no-store",
     });
 
-    const data = await backendResponse.json().catch(() => null);
+    const data = await parseJson(backendResponse);
 
     if (!backendResponse.ok) {
       return NextResponse.json(
-        data || {
-          success: false,
-          message: "Failed to cancel subscription.",
-        },
+        data || { success: false, message: "Failed to cancel subscription" },
         { status: backendResponse.status },
       );
     }
 
     return NextResponse.json(data, { status: 200 });
   } catch (error) {
-    console.error("CANCEL SUBSCRIPTION ROUTE ERROR:", error);
-
+    console.error("CANCEL SUBSCRIPTION API ERROR:", error);
     return NextResponse.json(
       {
         success: false,
         message:
-          error instanceof Error
-            ? error.message
-            : "Something went wrong while cancelling subscription.",
+          error instanceof Error ? error.message : "Something went wrong",
       },
       { status: 500 },
     );

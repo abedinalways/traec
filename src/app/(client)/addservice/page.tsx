@@ -6,7 +6,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import LeftIcon from "@/components/icons/LeftIcon";
-import { useCreateProviderServiceMutation } from "@/app/provider/providerServiceApi";
+import { useCreateProviderServiceMutation } from "@/app/api/provider/services/providerServiceApi";
+
 
 type PricingTier = {
   service_type: "basic" | "standard" | "premium";
@@ -225,9 +226,9 @@ export default function Page() {
       prev.map((tier, index) =>
         index === tierIndex
           ? {
-              ...tier,
-              features: [...tier.features, ""],
-            }
+            ...tier,
+            features: [...tier.features, ""],
+          }
           : tier,
       ),
     );
@@ -352,9 +353,9 @@ export default function Page() {
 
       const errorMessage =
         typeof error === "object" &&
-        error !== null &&
-        "data" in error &&
-        typeof (error as { data?: { message?: string } }).data?.message ===
+          error !== null &&
+          "data" in error &&
+          typeof (error as { data?: { message?: string } }).data?.message ===
           "string"
           ? (error as { data: { message: string } }).data.message
           : "Service create failed. Please try again.";
@@ -817,14 +818,12 @@ function Toggle({ label }: { label: string }) {
       <button
         type="button"
         onClick={() => setOn(!on)}
-        className={`w-10 h-6 flex items-center rounded-full transition ${
-          on ? "bg-black" : "bg-gray-300"
-        }`}
+        className={`w-10 h-6 flex items-center rounded-full transition ${on ? "bg-black" : "bg-gray-300"
+          }`}
       >
         <span
-          className={`w-5 h-5 bg-white rounded-full shadow transform transition ${
-            on ? "translate-x-4" : "translate-x-1"
-          }`}
+          className={`w-5 h-5 bg-white rounded-full shadow transform transition ${on ? "translate-x-4" : "translate-x-1"
+            }`}
         />
       </button>
 

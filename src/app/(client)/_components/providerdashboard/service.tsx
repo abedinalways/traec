@@ -5,12 +5,11 @@ import { Star, X, Plus } from "lucide-react";
 import { useState, FormEvent } from "react";
 import { toast } from "sonner";
 import { getImageUrl } from "@/lib/getImageUrl";
-import {
-  ProviderService,
-  useGetProviderServicesQuery,
-  useUpdateProviderServiceMutation,
-} from "@/app/provider/providerServiceApi";
+
 import { useRouter } from "next/navigation";
+import { ProviderService, useGetProviderServicesQuery, useUpdateProviderServiceMutation } from "@/app/api/provider/services/providerServiceApi";
+
+
 
 /* ─────────────────────── helpers ─────────────────────── */
 
@@ -59,10 +58,10 @@ const buildInitialPricing = (service: ProviderService): PricingTier[] => {
     service_type: "basic" | "standard" | "premium";
     title: string;
   }> = [
-    { service_type: "basic", title: "Basic" },
-    { service_type: "standard", title: "Standard" },
-    { service_type: "premium", title: "Premium" },
-  ];
+      { service_type: "basic", title: "Basic" },
+      { service_type: "standard", title: "Standard" },
+      { service_type: "premium", title: "Premium" },
+    ];
 
   const pricing = service.pricings || service.pricing || [];
 
@@ -78,7 +77,7 @@ const buildInitialPricing = (service: ProviderService): PricingTier[] => {
       description: existing?.description ?? "",
       features:
         existing?.features && existing.features.length > 0
-        ? existing.features
+          ? existing.features
           : [""],
     };
   });
@@ -115,8 +114,8 @@ function EditServiceModal({
   const [pricing, setPricing] = useState<PricingTier[]>(
     buildInitialPricing(service),
   );
- 
-  
+
+
   const [imageFiles, setImageFiles] = useState<(File | null)[]>([
     null,
     null,
@@ -262,9 +261,9 @@ function EditServiceModal({
       toast.dismiss(loading);
       const msg =
         typeof err === "object" &&
-        err !== null &&
-        "data" in err &&
-        typeof (err as { data?: { message?: string } }).data?.message ===
+          err !== null &&
+          "data" in err &&
+          typeof (err as { data?: { message?: string } }).data?.message ===
           "string"
           ? (err as { data: { message: string } }).data.message
           : "Update failed. Please try again.";
@@ -483,7 +482,7 @@ export default function ServiceSection({
 
   const apiServices = getServices(data);
   const services = apiServices.length > 0 ? apiServices : propServices;
-   const router = useRouter();
+  const router = useRouter();
   return (
     <div className="pt-4 w-full">
       {/* Header */}

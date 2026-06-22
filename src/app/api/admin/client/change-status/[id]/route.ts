@@ -1,20 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authCookieNames } from "@/lib/auth/config";
+import { buildApiUrl } from "@/lib/apiUrl";
 
-const API_BASE_URL =
-    process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || "";
-
-const buildApiUrl = (path: string) => {
-    if (!API_BASE_URL) {
-        throw new Error("API_BASE_URL is missing. Please set NEXT_PUBLIC_API_BASE_URL");
+const parseJson = async (response: Response) => {
+    const text = await response.text();
+    if (!text) return null;
+    try {
+        return JSON.parse(text);
+    } catch {
+        return text;
     }
-    return `${API_BASE_URL.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
 };
 
-// Next.js 16 এ params একটি Promise টাইপ হিসেবে ডিফাইন করতে হয়
-export async function PATCH(
+export async function POST(
     request: NextRequest,
-    context: { params: Promise<{ id: string }> },
+    { params }: { params: Promise<{ id: string }> },
 ) {
     try {
         const token = request.cookies.get(authCookieNames.token)?.value;
@@ -26,50 +26,51 @@ export async function PATCH(
             );
         }
 
-        // রিকোয়েস্ট ৪MD৪ হওয়া আটকাতে params কে অবশ্যই await করতে হবে
-        const resolvedParams = await context.params;
-        const { id } = resolvedParams;
+        const { id } = await params;
+        const body = await request.json();
 
-        if (!id) {
+        const statusUrl = buildApiUrl(`/admin/client/change-status/${id}`);
+
+        if (!statusUrl) {
             return NextResponse.json(
-                { success: false, message: "Missing required ID parameter" },
-                { status: 400 },
+                {
+                    success: false,
+                    message:
+                        "API_BASE_URL is missing. Please set NEXT_PUBLIC_API_BASE_URL",
+                },
+                { status: 500 },
             );
         }
 
-        const body = await request.json().catch(() => ({}));
-
-        const backendResponse = await fetch(
-            buildApiUrl(`/admin/client/change-status/${id}`),
-            {
-                method: "PATCH",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                    access_token: token, // আপনার ব্যাকএন্ড যেভাবে টোকেন এক্সপেক্ট করে
-                },
-                body: JSON.stringify(body),
+        const backendResponse = await fetch(statusUrl, {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+                access_token: token,
             },
-        );
+            body: JSON.stringify(body),
+            cache: "no-store",
+        });
 
-        const data = await backendResponse.json().catch(() => null);
+        const data = await parseJson(backendResponse);
 
         if (!backendResponse.ok) {
             return NextResponse.json(
-                data || { success: false, message: "Failed to update status" },
+                data || { success: false, message: "Failed to change status" },
                 { status: backendResponse.status },
             );
         }
 
         return NextResponse.json(data, { status: 200 });
     } catch (error) {
-        console.error("CHANGE STATUS API ERROR:", error);
-
+        console.error("CLIENT STATUS CHANGE API ERROR:", error);
         return NextResponse.json(
             {
                 success: false,
-                message: error instanceof Error ? error.message : "Something went wrong",
+                message:
+                    error instanceof Error ? error.message : "Something went wrong",
             },
             { status: 500 },
         );

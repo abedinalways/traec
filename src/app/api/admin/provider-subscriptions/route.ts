@@ -1,17 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authCookieNames } from "@/lib/auth/config";
+import { buildApiUrl } from "@/lib/apiUrl";
 
-const API_BASE_URL =
-  process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || "";
-
-const buildApiUrl = (path: string) => {
-  if (!API_BASE_URL) {
-    throw new Error(
-      "API_BASE_URL is missing. Please set NEXT_PUBLIC_API_BASE_URL in .env.local",
-    );
+const parseJson = async (response: Response) => {
+  const text = await response.text();
+  if (!text) return null;
+  try {
+    return JSON.parse(text);
+  } catch {
+    return text;
   }
-
-  return `${API_BASE_URL.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
 };
 
 export async function GET(request: NextRequest) {
@@ -20,55 +18,51 @@ export async function GET(request: NextRequest) {
 
     if (!token) {
       return NextResponse.json(
-        {
-          success: false,
-          message: "Unauthorized. Please login again.",
-        },
+        { success: false, message: "Unauthorized" },
         { status: 401 },
       );
     }
 
-    const page = request.nextUrl.searchParams.get("page") || "1";
-    const perPage = request.nextUrl.searchParams.get("per_page") || "5";
+    const subscriptionsUrl = buildApiUrl("/admin/provider-subscriptions");
 
-    const backendResponse = await fetch(
-      buildApiUrl(
-        `/admin/subscriptions/providers?page=${page}&per_page=${perPage}`,
-      ),
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-          access_token: token,
+    if (!subscriptionsUrl) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "API_BASE_URL is missing. Please set NEXT_PUBLIC_API_BASE_URL",
         },
-        cache: "no-store",
-      },
-    );
+        { status: 500 },
+      );
+    }
 
-    const data = await backendResponse.json().catch(() => null);
+    const backendResponse = await fetch(subscriptionsUrl, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+        access_token: token,
+      },
+      cache: "no-store",
+    });
+
+    const data = await parseJson(backendResponse);
 
     if (!backendResponse.ok) {
       return NextResponse.json(
-        data || {
-          success: false,
-          message: "Failed to load subscriptions.",
-        },
+        data || { success: false, message: "Failed to load subscriptions" },
         { status: backendResponse.status },
       );
     }
 
     return NextResponse.json(data, { status: 200 });
   } catch (error) {
-    console.error("ALL SUBSCRIPTIONS ROUTE ERROR:", error);
-
+    console.error("PROVIDER SUBSCRIPTIONS API ERROR:", error);
     return NextResponse.json(
       {
         success: false,
         message:
-          error instanceof Error
-            ? error.message
-            : "Something went wrong while loading subscriptions.",
+          error instanceof Error ? error.message : "Something went wrong",
       },
       { status: 500 },
     );

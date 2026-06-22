@@ -8,9 +8,7 @@ const API_BASE_URL =
 
 const buildApiUrl = (path: string) => {
   if (!API_BASE_URL) {
-    throw new Error(
-      "API_BASE_URL is missing. Please set NEXT_PUBLIC_API_BASE_URL in .env.local",
-    );
+    return null;
   }
 
   return `${API_BASE_URL.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
@@ -35,6 +33,17 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     const loginUrl = buildApiUrl("/login");
+
+    if (!loginUrl) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "API_BASE_URL is missing. Please set NEXT_PUBLIC_API_BASE_URL in .env.local",
+        },
+        { status: 500 },
+      );
+    }
 
     console.log("LOGIN API URL:", loginUrl);
     console.log("LOGIN BODY:", body);
@@ -101,7 +110,7 @@ export async function POST(request: NextRequest) {
     );
 
     response.cookies.set(authCookieNames.token, token, {
-      httpOnly: true,
+      httpOnly: false,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
@@ -109,7 +118,7 @@ export async function POST(request: NextRequest) {
     });
 
     response.cookies.set(authCookieNames.role, role, {
-      httpOnly: true,
+      httpOnly: false,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",

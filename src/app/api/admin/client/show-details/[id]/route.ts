@@ -1,19 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authCookieNames } from "@/lib/auth/config";
+import { buildApiUrl } from "@/lib/apiUrl";
 
-const API_BASE_URL =
-    process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || "";
-
-const buildApiUrl = (path: string) => {
-    if (!API_BASE_URL) {
-        throw new Error("API_BASE_URL is missing. Please set NEXT_PUBLIC_API_BASE_URL");
+const parseJson = async (response: Response) => {
+    const text = await response.text();
+    if (!text) return null;
+    try {
+        return JSON.parse(text);
+    } catch {
+        return text;
     }
-    return `${API_BASE_URL.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
 };
 
 export async function GET(
     request: NextRequest,
-    context: { params: Promise<{ id: string }> },
+    { params }: { params: Promise<{ id: string }> },
 ) {
     try {
         const token = request.cookies.get(authCookieNames.token)?.value;
@@ -25,45 +26,48 @@ export async function GET(
             );
         }
 
-        const resolvedParams = await context.params;
-        const { id } = resolvedParams;
+        const { id } = await params;
 
-        if (!id) {
+        const clientUrl = buildApiUrl(`/admin/client/show-details/${id}`);
+
+        if (!clientUrl) {
             return NextResponse.json(
-                { success: false, message: "Missing required ID parameter" },
-                { status: 400 },
+                {
+                    success: false,
+                    message:
+                        "API_BASE_URL is missing. Please set NEXT_PUBLIC_API_BASE_URL",
+                },
+                { status: 500 },
             );
         }
 
-        const backendResponse = await fetch(
-            buildApiUrl(`/admin/client/show-details/${id}`),
-            {
-                method: "GET",
-                headers: {
-                    Accept: "application/json",
-                    Authorization: `Bearer ${token}`,
-                    access_token: token,
-                },
-                cache: "no-store",
+        const backendResponse = await fetch(clientUrl, {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`,
+                access_token: token,
             },
-        );
+            cache: "no-store",
+        });
 
-        const data = await backendResponse.json().catch(() => null);
+        const data = await parseJson(backendResponse);
 
         if (!backendResponse.ok) {
             return NextResponse.json(
-                data || { success: false, message: "Failed to fetch user details" },
+                data || { success: false, message: "Failed to load client details" },
                 { status: backendResponse.status },
             );
         }
 
         return NextResponse.json(data, { status: 200 });
     } catch (error) {
-        console.error("SHOW DETAILS API ERROR:", error);
+        console.error("CLIENT DETAILS API ERROR:", error);
         return NextResponse.json(
             {
                 success: false,
-                message: error instanceof Error ? error.message : "Something went wrong",
+                message:
+                    error instanceof Error ? error.message : "Something went wrong",
             },
             { status: 500 },
         );
