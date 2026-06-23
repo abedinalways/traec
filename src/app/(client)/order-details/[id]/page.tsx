@@ -350,13 +350,13 @@ export default function OrderdetailsPage() {
           )}
 
           {/* Quick Response */}
-          <div className="w-full max-w-3xl mt-10">
+          {/* <div className="w-full max-w-3xl mt-10">
             <QuickResponse
               onSend={(message) => {
                 console.log("Sent message:", message);
               }}
             />
-          </div>
+          </div> */}
         </>
       )}
     </main>

@@ -207,7 +207,7 @@ export default function RightCard({
         {/* COMPLETED SECTION: Download + Order Again + Review */}
         {isCompleted && (
           <>
-            <button className="mt-6 w-full flex items-center justify-center gap-2 border cursor-pointer px-4 py-2 rounded-xl text-gray-700">
+            {/* <button className="mt-6 w-full flex items-center justify-center gap-2 border cursor-pointer px-4 py-2 rounded-xl text-gray-700">
               <Download size={16} /> Download Receipt
             </button>
             <div className="mt-4 flex gap-3">
@@ -217,7 +217,7 @@ export default function RightCard({
               <button className="border px-4 py-2 rounded-lg text-sm">
                 Share Review
               </button>
-            </div>
+            </div> */}
           </>
         )}
       </div>
