@@ -208,7 +208,7 @@ export default function ServiceDetailsPage() {
                   title={activePricing.type}
                   price={Number(activePricing.price)}
                   description={activePricing.description || "No plan description provided."}
-                  features={activePricing.features || []}
+                  features={activePricing.features ? (Array.isArray(activePricing.features) ? activePricing.features : []) : []}
                   serviceId={service.id}
                 />
               ) : (
@@ -277,7 +277,7 @@ function PackageCard({
 
       <p className="text-sm text-gray-600 mb-4 break-words">{description}</p>
 
-      {features.length > 0 && (
+      {Array.isArray(features) && features.length > 0 && (
         <ul className="space-y-2 mb-6">
           {features.map((feature, index) => (
             <li key={index} className="flex items-center gap-2 text-sm">

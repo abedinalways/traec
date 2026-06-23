@@ -14,7 +14,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useBooking } from "../context/BookingContext";
 import { useCreateOrderMutation } from "@/app/api/booking/bookingApi";
-import { useGetProviderStripeQuery } from "@/app/api/provider/providerStripeApi";
+import { useGetProviderStripePublicKeyQuery } from "@/app/api/stripe/stripePublicKeyApi";
 import { toast } from "sonner";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
@@ -378,28 +378,41 @@ export default function CheckoutPage() {
   const searchParams = useSearchParams();
   const plan = searchParams.get("plan") || "basic";
 
-  const { data: stripeData, isLoading: isStripeKeyLoading } =
-    useGetProviderStripeQuery();
-  const stripePublicKey = stripeData?.data?.stripe_public_key ?? null;
+  // Get the provider's Stripe public key from BookingContext
+  // (set during booking flow from service details API response)
+  const { stripePublicKey, serviceId } = useBooking();
+
+  // Fallback: fetch the provider's Stripe public key via API when context has none
+  const { data: stripeApiData, isFetching: isStripeKeyLoading } =
+    useGetProviderStripePublicKeyQuery(serviceId, {
+      skip: !serviceId || !!stripePublicKey,
+    });
+
+  const stripeApiPublicKey = stripeApiData?.public_key ?? null;
+
+  // Use context key first, fall back to API-fetched key
+  const effectiveStripeKey = stripePublicKey || stripeApiPublicKey;
 
   console.log(
     "Checkout Stripe key:",
-    stripePublicKey ? stripePublicKey.substring(0, 12) + "..." : "NOT FOUND",
-    "(from provider config)",
+    effectiveStripeKey ? effectiveStripeKey.substring(0, 12) + "..." : "NOT FOUND",
+    effectiveStripeKey === stripePublicKey
+      ? "(from booking context)"
+      : "(from API fallback)",
   );
 
   const [stripePromise, setStripePromise] =
     React.useState<Promise<Stripe | null> | null>(null);
 
   React.useEffect(() => {
-    if (!stripePublicKey) return;
-    setStripePromise(loadStripe(stripePublicKey));
-  }, [stripePublicKey]);
+    if (!effectiveStripeKey) return;
+    setStripePromise(loadStripe(effectiveStripeKey));
+  }, [effectiveStripeKey]);
 
   const [confirmed, setConfirmed] = useState(false);
 
-  // No Stripe key found and not loading — show warning
-  const showNoStripeWarning = !isStripeKeyLoading && !stripePublicKey;
+  // If no Stripe key available (and not loading), show warning
+  const showNoStripeWarning = !isStripeKeyLoading && !effectiveStripeKey;
 
   return (
     <div className="my-10 font-[inter]">

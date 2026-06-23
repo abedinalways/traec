@@ -38,6 +38,7 @@ export interface ServiceItem {
   category: string;
   pricings: PricingItem[];
   created_at: string;
+  stripe_public_key?: string;
 }
 
 export interface ServiceMeta {
