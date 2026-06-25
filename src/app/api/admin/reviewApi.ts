@@ -1,5 +1,6 @@
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 import { baseApi } from "../baseApi";
+import { env } from "@/lib/env";
 
 export interface StoreReviewPayload {
   order_id: number;
@@ -52,11 +53,21 @@ const reviewApi = baseApi.injectEndpoints({
     storeReview: builder.mutation<StoreReviewResponse, StoreReviewPayload>({
       queryFn: async (body) => {
         try {
-          const response = await fetch("/api/admin/review/store", {
+          const token = typeof document !== "undefined"
+            ? decodeURIComponent(
+                document.cookie
+                  .split("; ")
+                  .find((row) => row.startsWith("jr_auth_token="))
+                  ?.split("=")[1] || ""
+              )
+            : undefined;
+
+          const response = await fetch(`${env.apiBaseUrl}/admin/review/store`, {
             method: "POST",
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
+              ...(token ? { Authorization: `Bearer ${token}`, access_token: token } : {}),
             },
             credentials: "include",
             body: JSON.stringify(body),
@@ -80,11 +91,21 @@ const reviewApi = baseApi.injectEndpoints({
     >({
       queryFn: async ({ id, reply }) => {
         try {
-          const response = await fetch(`/api/admin/review/reply/${id}`, {
-            method: "POST",
+          const token = typeof document !== "undefined"
+            ? decodeURIComponent(
+                document.cookie
+                  .split("; ")
+                  .find((row) => row.startsWith("jr_auth_token="))
+                  ?.split("=")[1] || ""
+              )
+            : undefined;
+
+          const response = await fetch(`${env.apiBaseUrl}/admin/review/reply/${id}`, {
+            method: "PATCH",
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
+              ...(token ? { Authorization: `Bearer ${token}`, access_token: token } : {}),
             },
             credentials: "include",
             body: JSON.stringify({ reply }),

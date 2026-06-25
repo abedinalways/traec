@@ -27,6 +27,16 @@ export interface PricingItem {
   features: string[] | null;
 }
 
+export interface ServiceReview {
+  id: number;
+  reviewer_name: string;
+  rating: number;
+  review: string;
+  reply: string | null;
+  has_replied: boolean;
+  created_at: string;
+}
+
 export interface ServiceItem {
   id: number;
   title: string;
@@ -39,6 +49,7 @@ export interface ServiceItem {
   pricings: PricingItem[];
   created_at: string;
   stripe_public_key?: string;
+  reviews?: ServiceReview[];
 }
 
 export interface ServiceMeta {

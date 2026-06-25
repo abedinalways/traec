@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useParams } from "next/navigation";
@@ -12,19 +10,22 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { AiOutlineCheckCircle } from "react-icons/ai";
-import { IoIosArrowBack, IoIosInformationCircleOutline } from "react-icons/io";
+import { IoIosArrowBack } from "react-icons/io";
 import { useGetServiceDetailsQuery } from "@/app/api/services/serviceManagementApi";
 
 export default function ServiceDetailsPage() {
   const { id } = useParams();
-  const { data: apiResponse, isLoading, isError } = useGetServiceDetailsQuery(id as string);
-  
+  const {
+    data: apiResponse,
+    isLoading,
+    isError,
+  } = useGetServiceDetailsQuery(id as string);
+
   const service = apiResponse?.data;
-  
+
   const [mainImage, setMainImage] = useState("/images/browser/img07.png");
   const [activeTab, setActiveTab] = useState<string>("basic");
 
-  
   useEffect(() => {
     if (service?.images && service.images.length > 0) {
       setMainImage(service.images[0]);
@@ -44,15 +45,17 @@ export default function ServiceDetailsPage() {
   if (isError || !service) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-xl text-red-500">Failed to load service details or service not found.</p>
+        <p className="text-xl text-red-500">
+          Failed to load service details or service not found.
+        </p>
       </div>
     );
   }
 
-  
-  const activePricing = service.pricings?.find(
-    (p) => p.type.toLowerCase() === activeTab.toLowerCase()
-  ) || service.pricings?.[0];
+  const activePricing =
+    service.pricings?.find(
+      (p) => p.type.toLowerCase() === activeTab.toLowerCase(),
+    ) || service.pricings?.[0];
 
   const handleThumbnailClick = (image: string) => {
     setMainImage(image);
@@ -68,12 +71,13 @@ export default function ServiceDetailsPage() {
         </Link>
 
         <div className="flex flex-col lg:flex-row gap-5">
+          {/* ================= LEFT SIDE ================= */}
           <div className="w-full lg:w-[70%]">
             <div>
               <h3 className="text-3xl md:text-[40px] leading-[120%] font-bold my-2 font-[glory]">
                 {service.title}
               </h3>
-              
+
               <div className="flex items-center gap-2 mb-3">
                 <Image
                   src={service.image_url || "/images/default_provider.png"}
@@ -113,7 +117,9 @@ export default function ServiceDetailsPage() {
                     <div
                       key={idx}
                       className={`relative w-20 h-20 overflow-hidden cursor-pointer rounded-md border-2 ${
-                        mainImage === img ? "border-blue-500" : "border-transparent"
+                        mainImage === img
+                          ? "border-blue-500"
+                          : "border-transparent"
                       }`}
                       onClick={() => handleThumbnailClick(img)}
                     >
@@ -134,48 +140,20 @@ export default function ServiceDetailsPage() {
             <div className="space-y-6 rounded-xl border border-gray-200 bg-white mt-5 p-4">
               <h2 className="text-3xl font-semibold mb-6">About</h2>
               <p className="text-lg text-gray-700 mb-4 whitespace-pre-line">
-                {service.description || "No description provided for this service."}
-              </p>
-
-              
-              {service.faqs && service.faqs.length > 0 && (
-                <div className="mt-6">
-                  <h3 className="text-2xl font-semibold mb-4">Frequently Asked Questions</h3>
-                  <div className="space-y-2">
-                    {service.faqs.map((faq) => (
-                      <div key={faq.id} className="border-b pb-3">
-                        <p className="font-medium text-gray-900">Q: {faq.question}</p>
-                        <p className="text-gray-600 mt-1">A: {faq.answer}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="space-y-6 rounded-xl border border-gray-200 bg-white mt-5 p-4">
-              <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                <IoIosInformationCircleOutline />
-                Event Setup Preference
-              </h2>
-              <p className="text-lg text-gray-700 mb-4">
-                Please let us know if you have any special preferences for setup style, sound levels, or lighting effects. For example: quieter background music during dinner, spotlight for the entrance, or bubble machine for kids’ parties.
+                {service.description ||
+                  "No description provided for this service."}
               </p>
             </div>
 
-            <div className="space-y-6 rounded-xl border border-gray-200 bg-white mt-5 p-4">
-              <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                <IoIosInformationCircleOutline />
-                Respect Venue & Sound Rules
-              </h2>
-              <p className="text-lg text-gray-700 mb-4">
-                Please inform us of any venue restrictions such as sound curfews, power limits, or noise regulations. We will adjust our equipment and performance style accordingly to ensure compliance and avoid interruptions.
-              </p>
-            </div>
+            {/* Dynamic FAQ Accordion Implementation */}
+            <Accordion04 faqs={service.faqs} />
 
-            <Accordion04 />
-            <CustomerReviewsSummary />
-            <ServicesReviews />
+            <CustomerReviewsSummary reviews={service.reviews} />
+            <ServicesReviews
+              reviews={service.reviews}
+              providerName={service.provider_name}
+              providerImage={service.image_url}
+            />
           </div>
 
           {/* ================= RIGHT SIDE ================= */}
@@ -184,7 +162,9 @@ export default function ServiceDetailsPage() {
               {/* Tabs dynamically mapped from types available in API */}
               <div className="grid grid-cols-3">
                 {["basic", "standard", "premium"].map((tab) => {
-                  const hasPlan = service.pricings?.some((p) => p.type.toLowerCase() === tab);
+                  const hasPlan = service.pricings?.some(
+                    (p) => p.type.toLowerCase() === tab,
+                  );
                   return (
                     <button
                       key={tab}
@@ -207,12 +187,22 @@ export default function ServiceDetailsPage() {
                 <PackageCard
                   title={activePricing.type}
                   price={Number(activePricing.price)}
-                  description={activePricing.description || "No plan description provided."}
-                  features={activePricing.features ? (Array.isArray(activePricing.features) ? activePricing.features : []) : []}
+                  description={
+                    activePricing.description || "No plan description provided."
+                  }
+                  features={
+                    activePricing.features
+                      ? Array.isArray(activePricing.features)
+                        ? activePricing.features
+                        : []
+                      : []
+                  }
                   serviceId={service.id}
                 />
               ) : (
-                <div className="p-6 text-center text-gray-500">No pricing plans available.</div>
+                <div className="p-6 text-center text-gray-500">
+                  No pricing plans available.
+                </div>
               )}
             </div>
 
@@ -237,7 +227,9 @@ export default function ServiceDetailsPage() {
                 </div>
               </div>
 
-              <p className="text-sm text-gray-600">Usually responds within 1 hour</p>
+              <p className="text-sm text-gray-600">
+                Usually responds within 1 hour
+              </p>
 
               <Link href={`/provider-profile/details/${service.id}`}>
                 <button className="w-full mt-4 border py-3 rounded-lg text-gray-700 font-medium cursor-pointer">
