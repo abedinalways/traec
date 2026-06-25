@@ -49,6 +49,8 @@ interface BookingContextProps {
   setServiceId: (id: number) => void;
   pricingId: number;
   setPricingId: (id: number) => void;
+  stripePublicKey: string | null;
+  setStripePublicKey: (key: string | null) => void;
 }
 
 const defaultBookingData: BookingFormData = {
@@ -108,6 +110,7 @@ export default function BookingProvider({ children }: ProviderProps) {
     useState<BookingFormData>(defaultBookingData);
   const [serviceId, setServiceId] = useState<number>(0);
   const [pricingId, setPricingId] = useState<number>(0);
+  const [stripePublicKey, setStripePublicKey] = useState<string | null>(null);
 
   return (
     <BookingContext.Provider
@@ -120,6 +123,8 @@ export default function BookingProvider({ children }: ProviderProps) {
         setServiceId,
         pricingId,
         setPricingId,
+        stripePublicKey,
+        setStripePublicKey,
       }}
     >
       {children}

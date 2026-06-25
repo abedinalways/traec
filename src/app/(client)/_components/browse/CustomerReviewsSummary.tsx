@@ -1,38 +1,58 @@
 import React from "react";
 import { FaStar } from "react-icons/fa";
+import { ServiceReview } from "@/app/api/services/serviceManagementApi";
 
-export default function CustomerReviewsSummary() {
-  const ratings = [
-    { label: "5 Stars", value: 90, count: 31 },
-    { label: "4 Stars", value: 30, count: 8 },
-    { label: "3 Stars", value: 20, count: 6 },
-    { label: "2 Stars", value: 10, count: 4 },
-    { label: "1 Star", value: 5, count: 1 },
-  ];
+function buildRatings(reviews: ServiceReview[]) {
+  const counts = [0, 0, 0, 0, 0];
+  reviews.forEach((r) => {
+    const idx = Math.min(Math.max(r.rating - 1, 0), 4);
+    counts[idx] += 1;
+  });
+  const total = reviews.length || 1;
+  return [5, 4, 3, 2, 1].map((star) => ({
+    label: `${star} Star${star === 1 ? "" : "s"}`,
+    value: Math.round((counts[star - 1] / total) * 100),
+    count: counts[star - 1],
+  }));
+}
+
+function averageRating(reviews: ServiceReview[]) {
+  if (!reviews.length) return 0;
+  return reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+}
+
+export default function CustomerReviewsSummary({
+  reviews,
+}: {
+  reviews?: ServiceReview[];
+}) {
+  const list = reviews ?? [];
+  const ratings = buildRatings(list);
+  const avg = averageRating(list);
 
   const breakdown = [
-    { title: "Communication", rating: 4.7 },
-    { title: "Service Quality", rating: 4.5 },
-    { title: "Value of Service", rating: 4.6 },
-    { title: "Performance", rating: 4.8 },
+    { title: "Communication", rating: avg },
+    { title: "Service Quality", rating: avg },
+    { title: "Value of Service", rating: avg },
+    { title: "Performance", rating: avg },
   ];
 
   return (
     <div className="w-full bg-white rounded-xl border p-6 md:p-8 my-5">
-      <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold mb-4">Customer Reviews</h2>
         <div className="flex items-center">
           {[...Array(5)].map((_, i) => (
             <span
               key={i}
               className={`text-xl ${
-                i < 5 ? "text-yellow-400" : "text-gray-300"
+                i < Math.round(avg) ? "text-yellow-400" : "text-gray-300"
               }`}
             >
               ★
             </span>
           ))}
-          <span className="ml-2">4.6/5</span>
+          <span className="ml-2">{avg.toFixed(1)}/5</span>
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

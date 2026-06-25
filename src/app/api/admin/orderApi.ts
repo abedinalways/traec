@@ -1,6 +1,15 @@
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 import { baseApi } from "../baseApi";
 
+export type RawOrderReview = {
+  id: number;
+  rating: number;
+  review: string;
+  reply: string | null;
+  has_replied: boolean;
+  reviewed_at: string;
+} | null;
+
 export type RawOrder = {
   // ── INDEX (list) API — flat fields ──
   order_id?: number | string | null;
@@ -44,6 +53,16 @@ export type RawOrder = {
     order_number?: string | null;
     end_date?: string | null;
     amount_paid?: string | null;
+    can_review?: boolean | null;
+    review_id?: number | null;
+    review?: {
+      id: number;
+      rating: number;
+      review: string;
+      reply: string | null;
+      has_replied: boolean;
+      reviewed_at: string;
+    } | null;
   } | null;
 };
 

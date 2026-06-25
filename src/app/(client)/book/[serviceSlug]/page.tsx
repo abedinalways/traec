@@ -14,7 +14,7 @@ import { useBooking } from "../context/BookingContext";
 import { useGetServiceDetailsQuery } from "@/app/api/services/serviceManagementApi";
 
 export default function BookingPage() {
-  const { step, setStep, bookingData, setBookingData, setServiceId, setPricingId } = useBooking();
+  const { step, setStep, bookingData, setBookingData, setServiceId, setPricingId, setStripePublicKey } = useBooking();
 
   const params = useParams();
   const serviceSlug = params?.serviceSlug as string;
@@ -68,6 +68,14 @@ export default function BookingPage() {
       console.log("No pricings found in service data");
     }
   }, [service, plan, setPricingId]);
+
+  // Store provider's Stripe public key from service details
+  useEffect(() => {
+    if (service?.stripe_public_key) {
+      setStripePublicKey(service.stripe_public_key);
+      console.log("Stripe public key set from service data:", service.stripe_public_key.substring(0, 12) + "...");
+    }
+  }, [service, setStripePublicKey]);
 
   useEffect(() => {
     console.log("Booking Data Updated:", bookingData);
