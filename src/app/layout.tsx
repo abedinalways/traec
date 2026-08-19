@@ -17,6 +17,7 @@ import { AuthModalProvider } from "./context/AuthModalContext";
 import ReduxProvider from "./ReduxProvider";
 import { Toaster } from "@/components/ui/sonner";
 import { Suspense } from "react";
+import SmoothScroll from "@/lib/SmoothScroll";
 
 
 
@@ -98,6 +99,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${glory.variable} ${openSans.variable} ${geistMono.variable} ${inter.variable} ${brittney.variable} ${brittney_regular.variable} antialiased`}
       >
         <ReduxProvider>
+          <SmoothScroll>
+
           <main className="mt-16">
             <Suspense fallback={<div>Loading...</div>}>
               <AuthModalProvider>{children}</AuthModalProvider>
@@ -109,7 +112,8 @@ export default function RootLayout({
             richColors
             closeButton
             duration={3000}
-          />
+            />
+            </SmoothScroll>
         </ReduxProvider>
       </body>
     </html>
