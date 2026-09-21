@@ -30,8 +30,8 @@ export interface AuthUser {
   bio?: string | null;
   languages?: string[] | null;
 
-  category_id?: number[] | null; 
-  categories?: AuthUserCategory[] | null; 
+  category_id?: number[] | null;
+  categories?: AuthUserCategory[] | null;
 
   plan_id?: number | null;
   plan?: unknown;
@@ -52,6 +52,7 @@ export interface LoginResponse {
   success: boolean;
   message: string;
   user: AuthUser;
+  token?: string;
 }
 
 export interface MeResponse {
