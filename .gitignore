@@ -2,8 +2,6 @@
 node_modules/
 
 # Env files
-.env
-.env.local
 .env.development.local
 .env.test.local
 .env.production.local
@@ -17,6 +15,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+temp_auto_push.bat
 logs/
 *.log
 
@@ -29,10 +28,11 @@ dist/
 build/
 
 # Editor
-.vscode/
 .idea/
 *.swp
 
 # sample line for resolve conflict, delete this line after seeing it
 .vercel
-.env*
+config.bat
+.gitignore
+branch_structure.json
