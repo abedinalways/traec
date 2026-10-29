@@ -1,5 +1,3 @@
-
-
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 import { baseApi } from "../baseApi";
 
@@ -45,6 +43,7 @@ type BasicApiResponse = {
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    // ── LOGIN — KEEP as queryFn (server-side cookie management) ───────────
     loginUser: builder.mutation<LoginResponse, LoginParams>({
       queryFn: async (credentials) => {
         try {
@@ -81,7 +80,12 @@ const authApi = baseApi.injectEndpoints({
           const { data } = await queryFulfilled;
 
           if (data?.user) {
-            dispatch(setAuthUser(data.user));
+            dispatch(
+              setAuthUser({
+                user: data.user,
+                token: data.token,
+              }),
+            );
             if (typeof window !== "undefined") {
               localStorage.setItem("user", JSON.stringify(data.user));
             }
@@ -94,7 +98,8 @@ const authApi = baseApi.injectEndpoints({
       invalidatesTags: ["User"],
     }),
 
-    getMe: builder.query<MeResponse, void>({
+    // ── GET ME — session rehydration via httpOnly cookie handler ───────
+    getMe: builder.query<MeResponse & { token?: string }, void>({
       queryFn: async () => {
         try {
           const response = await fetch("/api/auth/me", {
@@ -115,7 +120,7 @@ const authApi = baseApi.injectEndpoints({
           }
 
           return {
-            data: data as MeResponse,
+            data: data as MeResponse & { token?: string },
           };
         } catch (error) {
           return {
@@ -129,7 +134,7 @@ const authApi = baseApi.injectEndpoints({
           const { data } = await queryFulfilled;
 
           if (data?.authenticated && data.user) {
-            dispatch(setAuthUser(data.user));
+            dispatch(setAuthUser({ user: data.user, token: data.token }));
             if (typeof window !== "undefined") {
               localStorage.setItem("user", JSON.stringify(data.user));
             }
@@ -173,6 +178,7 @@ const authApi = baseApi.injectEndpoints({
       invalidatesTags: ["User"],
     }),
 
+    // ── LOGOUT — KEEP as queryFn (server-side cookie clearing) ───────────
     logoutUser: builder.mutation<{ success?: boolean; message?: string }, void>(
       {
         queryFn: async () => {

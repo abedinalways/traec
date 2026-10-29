@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import Pusher from "pusher";
 
 import {
   buildMessageApiUrl,
@@ -7,18 +8,47 @@ import {
   unauthorizedResponse,
 } from "../_utils";
 
-// Server-side Pusher instance (created once, reused)
-let pusherInstance: any = null;
+type Attachment = {
+  id?: number | string;
+  message_id?: number | string;
+  file_path?: string;
+  file_name?: string;
+  file_type?: string;
+  file_size?: number | string;
+  created_at?: string;
+  updated_at?: string;
+};
 
-function getPusherInstance() {
+type PusherEventData = {
+  id: number | string;
+  sender_id: number | string;
+  receiver_id: number | string;
+  conversation_id: number | string;
+  message: string;
+  type: string;
+  created_at: string;
+  updated_at: string;
+  sender: unknown;
+  receiver: unknown;
+  attachments?: Attachment[];
+};
+
+let pusherInstance: Pusher | null = null;
+
+function getPusherInstance(): Pusher {
   if (pusherInstance) return pusherInstance;
 
-  const Pusher = require("pusher");
   pusherInstance = new Pusher({
     appId: process.env.PUSHER_APP_ID || "",
-    key: process.env.PUSHER_APP_KEY || process.env.NEXT_PUBLIC_PUSHER_APP_KEY || "",
+    key:
+      process.env.PUSHER_APP_KEY ||
+      process.env.NEXT_PUBLIC_PUSHER_APP_KEY ||
+      "",
     secret: process.env.PUSHER_APP_SECRET || "",
-    cluster: process.env.PUSHER_APP_CLUSTER || process.env.NEXT_PUBLIC_PUSHER_APP_CLUSTER || "mt1",
+    cluster:
+      process.env.PUSHER_APP_CLUSTER ||
+      process.env.NEXT_PUBLIC_PUSHER_APP_CLUSTER ||
+      "mt1",
     useTLS: true,
   });
 
@@ -34,12 +64,15 @@ export async function POST(request: NextRequest) {
 
   const formData = await request.formData();
 
-  const backendResponse = await fetch(buildMessageApiUrl("/admin/message/send"), {
-    method: "POST",
-    headers: getAuthHeaders(token),
-    body: formData,
-    cache: "no-store",
-  });
+  const backendResponse = await fetch(
+    buildMessageApiUrl("/admin/message/send"),
+    {
+      method: "POST",
+      headers: getAuthHeaders(token),
+      body: formData,
+      cache: "no-store",
+    },
+  );
 
   const data = await backendResponse.json();
 
@@ -49,10 +82,8 @@ export async function POST(request: NextRequest) {
       const message = data.data;
       const pusher = getPusherInstance();
 
-      const channel = `conversation.${message.conversation_id}`;
-
       // Build event data including attachments
-      const eventData: any = {
+      const eventData: PusherEventData = {
         id: message.id,
         sender_id: message.sender_id,
         receiver_id: message.receiver_id,
@@ -67,7 +98,7 @@ export async function POST(request: NextRequest) {
 
       // Include attachments if present
       if (message.attachments && message.attachments.length > 0) {
-        eventData.attachments = message.attachments.map((att: any) => ({
+        eventData.attachments = message.attachments.map((att: Attachment) => ({
           id: att.id,
           message_id: att.message_id,
           file_path: att.file_path,
@@ -80,14 +111,15 @@ export async function POST(request: NextRequest) {
       }
 
       // Broadcast to conversation channel, receiver channel, and sender channel
-      const channels = Array.from(new Set([
-        `conversation.${message.conversation_id}`,
-        `conversation.${message.receiver_id}`,
-        `conversation.${message.sender_id}`,
-      ]));
+      const channels = Array.from(
+        new Set([
+          `conversation.${message.conversation_id}`,
+          `conversation.${message.receiver_id}`,
+          `conversation.${message.sender_id}`,
+        ]),
+      );
 
       await pusher.trigger(channels, "message.sent", eventData);
-      console.log(`[Pusher] ✅ Triggered event on channels: ${channels.join(", ")}, message: ${message.id}, attachments: ${eventData.attachments?.length || 0}`);
     } catch (e) {
       console.error("[Pusher] Failed to trigger event:", e);
     }

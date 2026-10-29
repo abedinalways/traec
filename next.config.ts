@@ -1,14 +1,27 @@
-import type { NextConfig } from 'next';
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['i.ibb.co'], // Add the valid image domain here
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'i.ibb.co.com',
-        port: '',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "i.ibb.co",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "traec.apphero.agency",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
+        pathname: "/**",
       },
     ],
   },

@@ -6,6 +6,7 @@ import { useAppDispatch } from "@/app/store";
 import type { RootState } from "@/app/store";
 import { notificationApi } from "@/app/api/notification/notificationApi";
 import { chatApi } from "@/app/api/messages/chatApi";
+import type { Channel } from "pusher-js";
 
 export function PusherNotificationListener() {
   const dispatch = useAppDispatch();
@@ -14,13 +15,15 @@ export function PusherNotificationListener() {
   const userIdRef = useRef(currentUserId);
   const dispatchRef = useRef(dispatch);
 
-  useEffect(() => { userIdRef.current = currentUserId; }, [currentUserId]);
-  useEffect(() => { dispatchRef.current = dispatch; }, [dispatch]);
+  useEffect(() => {
+    userIdRef.current = currentUserId;
+  }, [currentUserId]);
+  useEffect(() => {
+    dispatchRef.current = dispatch;
+  }, [dispatch]);
 
-  const handleNotification = useCallback((payload: unknown) => {
+  const handleNotification = useCallback((_payload: unknown) => {
     const d = dispatchRef.current;
-
-    console.log("[Pusher] ✅ Notification received:", JSON.stringify(payload)?.slice(0, 1000));
 
     d(notificationApi.util.invalidateTags(["Notifications"]));
     d(chatApi.util.invalidateTags(["Chat"]));
@@ -30,18 +33,26 @@ export function PusherNotificationListener() {
     if (!currentUserId || typeof window === "undefined") return;
 
     const pusher = getPusherClient();
-    const subscribed: Array<{ name: string; ref: any }> = [];
+    if (!pusher) return;
+    const subscribed: Array<{ name: string; ref: Channel }> = [];
 
     const userChName = `notification.${currentUserId}`;
     try {
       const userCh = pusher.subscribe(userChName);
       userCh.bind("notification.created", handleNotification);
       subscribed.push({ name: userChName, ref: userCh });
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
 
     return () => {
       for (const { name, ref: ch } of subscribed) {
-        try { ch.unbind("notification.created", handleNotification); pusher.unsubscribe(name); } catch { /* */ }
+        try {
+          ch.unbind("notification.created", handleNotification);
+          pusher.unsubscribe(name);
+        } catch {
+          /* */
+        }
       }
     };
   }, [currentUserId, handleNotification]);

@@ -1,4 +1,3 @@
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 import { baseApi } from "../baseApi";
 
 export type HomeContent = {
@@ -23,13 +22,13 @@ export type HomeContentResponse = {
   status?: boolean;
   message?: string;
   data?:
-  | HomeContent
-  | HomeContent[]
-  | {
-    content?: HomeContent;
-    other_data?: HomeOtherData;
-    data?: HomeContent;
-  };
+    | HomeContent
+    | HomeContent[]
+    | {
+        content?: HomeContent;
+        other_data?: HomeOtherData;
+        data?: HomeContent;
+      };
   content?: HomeContent;
   other_data?: HomeOtherData;
 };
@@ -42,38 +41,6 @@ export type UpdateHomeContentPayload = {
   image_1?: File | null;
   image_2?: File | null;
   image_3?: File | null;
-};
-
-const parseJson = async (response: Response) => {
-  const text = await response.text();
-
-  if (!text) return null;
-
-  try {
-    return JSON.parse(text);
-  } catch {
-    return text;
-  }
-};
-
-const createFetchError = (
-  status: number | "FETCH_ERROR",
-  dataOrMessage: unknown,
-): FetchBaseQueryError => {
-  if (status === "FETCH_ERROR") {
-    return {
-      status: "FETCH_ERROR",
-      error:
-        dataOrMessage instanceof Error
-          ? dataOrMessage.message
-          : String(dataOrMessage || "Request failed"),
-    };
-  }
-
-  return {
-    status,
-    data: dataOrMessage,
-  };
 };
 
 const buildHomeContentFormData = (payload: UpdateHomeContentPayload) => {
@@ -102,34 +69,7 @@ const buildHomeContentFormData = (payload: UpdateHomeContentPayload) => {
 const cmsContentApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getHomeContent: builder.query<HomeContentResponse, void>({
-      queryFn: async () => {
-        try {
-          const response = await fetch("/api/admin/content/home_index", {
-            method: "GET",
-            headers: {
-              Accept: "application/json",
-            },
-            credentials: "include",
-            cache: "no-store",
-          });
-
-          const data = await parseJson(response);
-
-          if (!response.ok) {
-            return {
-              error: createFetchError(response.status, data),
-            };
-          }
-
-          return {
-            data: data as HomeContentResponse,
-          };
-        } catch (error) {
-          return {
-            error: createFetchError("FETCH_ERROR", error),
-          };
-        }
-      },
+      query: () => "/admin/content/home_index",
       providesTags: ["User"],
     }),
 
@@ -137,35 +77,13 @@ const cmsContentApi = baseApi.injectEndpoints({
       HomeContentResponse,
       UpdateHomeContentPayload
     >({
-      queryFn: async (payload) => {
-        try {
-          const formData = buildHomeContentFormData(payload);
-
-          const response = await fetch("/api/admin/content/home_update", {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-            },
-            credentials: "include",
-            body: formData,
-          });
-
-          const data = await parseJson(response);
-
-          if (!response.ok) {
-            return {
-              error: createFetchError(response.status, data),
-            };
-          }
-
-          return {
-            data: data as HomeContentResponse,
-          };
-        } catch (error) {
-          return {
-            error: createFetchError("FETCH_ERROR", error),
-          };
-        }
+      query: (payload) => {
+        const formData = buildHomeContentFormData(payload);
+        return {
+          url: "/admin/content/home_update",
+          method: "POST",
+          body: formData,
+        };
       },
       invalidatesTags: ["User"],
     }),

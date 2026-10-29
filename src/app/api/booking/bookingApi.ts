@@ -1,4 +1,3 @@
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 import { baseApi } from "../baseApi";
 
 /* =========================
@@ -50,61 +49,16 @@ export interface CreateOrderResponse {
 }
 
 /* =========================
-   HELPERS
-   ========================= */
-const parseJson = async (response: Response) => {
-  const text = await response.text();
-  if (!text) return null;
-  try {
-    return JSON.parse(text);
-  } catch {
-    return text;
-  }
-};
-
-const createFetchError = (
-  status: number | "FETCH_ERROR",
-  dataOrMessage: unknown,
-): FetchBaseQueryError => {
-  if (status === "FETCH_ERROR") {
-    return {
-      status: "FETCH_ERROR",
-      error:
-        dataOrMessage instanceof Error
-          ? dataOrMessage.message
-          : String(dataOrMessage || "Request failed"),
-    };
-  }
-  return { status, data: dataOrMessage };
-};
-
-/* =========================
    API ENDPOINTS
    ========================= */
 const bookingApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createOrder: builder.mutation<CreateOrderResponse, CreateOrderPayload>({
-      queryFn: async (body) => {
-        try {
-          const response = await fetch("/api/admin/order/create-order", {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify(body),
-          });
-
-          const data = await parseJson(response);
-          if (!response.ok)
-            return { error: createFetchError(response.status, data) };
-
-          return { data: data as CreateOrderResponse };
-        } catch (error) {
-          return { error: createFetchError("FETCH_ERROR", error) };
-        }
-      },
+      query: (body) => ({
+        url: "/admin/order/create-order",
+        method: "POST",
+        body,
+      }),
       invalidatesTags: ["Orders"],
     }),
   }),

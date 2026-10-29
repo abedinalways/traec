@@ -1,18 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authCookieNames, normalizeAuthRole } from "@/lib/auth/config";
+import { buildApiUrl } from "@/lib/apiUrl";
 
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
-
-const API_BASE_URL =
-  process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || "";
-
-const buildApiUrl = (path: string) => {
-  if (!API_BASE_URL) {
-    return null;
-  }
-
-  return `${API_BASE_URL.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
-};
 
 type BackendLoginResponse = {
   user?: {
@@ -45,9 +35,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log("LOGIN API URL:", loginUrl);
-    console.log("LOGIN BODY:", body);
-
     const backendResponse = await fetch(loginUrl, {
       method: "POST",
       headers: {
@@ -61,9 +48,6 @@ export async function POST(request: NextRequest) {
     const data = (await backendResponse
       .json()
       .catch(() => null)) as BackendLoginResponse | null;
-
-    console.log("BACKEND LOGIN STATUS:", backendResponse.status);
-    console.log("BACKEND LOGIN RESPONSE:", data);
 
     if (!backendResponse.ok || !data) {
       return NextResponse.json(
@@ -83,7 +67,6 @@ export async function POST(request: NextRequest) {
         {
           success: false,
           message: "Login response did not include token.",
-          backendResponse: data,
         },
         { status: 502 },
       );
@@ -94,7 +77,6 @@ export async function POST(request: NextRequest) {
         {
           success: false,
           message: `Invalid user role: ${data.user?.type}`,
-          backendResponse: data,
         },
         { status: 502 },
       );
@@ -105,12 +87,13 @@ export async function POST(request: NextRequest) {
         success: true,
         message: data.message || "Login successful",
         user: data.user,
+        token: data.token,
       },
       { status: 200 },
     );
 
     response.cookies.set(authCookieNames.token, token, {
-      httpOnly: false,
+      httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
@@ -118,7 +101,7 @@ export async function POST(request: NextRequest) {
     });
 
     response.cookies.set(authCookieNames.role, role, {
-      httpOnly: false,
+      httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",

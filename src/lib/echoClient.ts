@@ -6,11 +6,11 @@ import Pusher from "pusher-js";
 declare global {
   interface Window {
     Pusher: typeof Pusher;
-    Echo?: Echo<any>;
+    Echo?: Echo<"pusher">;
   }
 }
 
-let echoClient: Echo<any> | null = null;
+let echoClient: Echo<"pusher"> | null = null;
 let lastToken: string | null = null;
 
 const getLocalToken = (): string | null => {
@@ -68,11 +68,14 @@ export const getEchoClient = (token?: string | null) => {
 
   window.Echo = echoClient;
 
-  // Debug logs
-  echoClient.connector.pusher.connection.bind("state_change", (states: any) => {
-    console.log("[Echo/Pusher] state:", states.previous, "→", states.current);
-  });
-  echoClient.connector.pusher.connection.bind("error", (err: any) => {
+  // Connection logs
+  echoClient.connector.pusher.connection.bind(
+    "state_change",
+    (states: { previous: string; current: string }) => {
+      // connection state updated
+    },
+  );
+  echoClient.connector.pusher.connection.bind("error", (err: unknown) => {
     console.error("[Echo/Pusher] connection error:", err);
   });
 

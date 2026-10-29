@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import MyOrder from "../../../(client)/dashboardcomponets/myorder/myorder";
 
-import ReviewPage from "../review/review"
+import ReviewPage from "../review/review";
 
 import {
   CalendarDays,
@@ -50,9 +50,8 @@ export default function Overview() {
             {tab}
           </button>
         ))}
-        
       </div>
-  
+
       {activeTab === "Overview" && (
         <div className="py-6 w-full">
           {/* ======= TOP 4 STATS ======= */}
@@ -189,25 +188,25 @@ export default function Overview() {
         <section className="grid md:h-[calc(100dvh-190px)] grid-cols-12 md:gap-4">
           <PusherListener />
           <PusherNotificationListener />
-            {/* Sidebar */}
-            <aside className="md:col-span-4 col-span-12 mt-4 md:mt-0 shadow-lg p-2 rounded-2xl">
-              <div className="rounded-2xl bg-white md:p-6 p-4 md:max-h-[calc(100dvh-140px)] overflow-y-auto">
-                <MessageListSection />
-              </div>
-            </aside>
-
-            {/* Chat Area */}
-            <div className="md:h-[calc(100dvh-100px)]  md:col-span-8 col-span-12 bg-white md:p-6 p-2 md:grid md:grid-rows-[130px_1fr_86px] rounded-2xl shadow-lg overflow-y-auto">
-              <Header />
-
-              <div className="flex overflow-hidden">
-                <MessageSection />
-              </div>
-
-              <MessageInput />
+          {/* Sidebar */}
+          <aside className="md:col-span-4 col-span-12 mt-4 md:mt-0 shadow-lg p-2 rounded-2xl">
+            <div className="rounded-2xl bg-white md:p-6 p-4 md:max-h-[calc(100dvh-140px)] overflow-y-auto">
+              <MessageListSection />
             </div>
-          </section>
-        )}
+          </aside>
+
+          {/* Chat Area */}
+          <div className="md:h-[calc(100dvh-100px)]  md:col-span-8 col-span-12 bg-white md:p-6 p-2 md:grid md:grid-rows-[130px_1fr_86px] rounded-2xl shadow-lg overflow-y-auto">
+            <Header />
+
+            <div className="flex overflow-hidden">
+              <MessageSection />
+            </div>
+
+            <MessageInput />
+          </div>
+        </section>
+      )}
       {/* ============================  
                   REVIEWS TAB  
       ============================ */}
@@ -224,10 +223,19 @@ export default function Overview() {
    HELPER COMPONENTS
 ====================================================== */
 
-function StatBox({ icon, value, label, bg }: any) {
+interface StatBoxProps {
+  icon: React.ReactNode;
+  value: string | number;
+  label: string;
+  bg: string;
+}
+
+function StatBox({ icon, value, label, bg }: StatBoxProps) {
   return (
     <div className="rounded-2xl border p-4 flex items-center gap-3 bg-white shadow-sm w-full">
-      <div className={`w-10 h-10 rounded-xl ${bg} flex items-center justify-center`}>
+      <div
+        className={`w-10 h-10 rounded-xl ${bg} flex items-center justify-center`}
+      >
         {icon}
       </div>
 
@@ -239,7 +247,11 @@ function StatBox({ icon, value, label, bg }: any) {
   );
 }
 
-function SectionTitle({ title }: any) {
+interface SectionTitleProps {
+  title: string;
+}
+
+function SectionTitle({ title }: SectionTitleProps) {
   return (
     <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
       <span className="w-1 h-4 bg-yellow-400 rounded-full" />
@@ -248,7 +260,21 @@ function SectionTitle({ title }: any) {
   );
 }
 
-function OrderItem({ title, vendor, date, status, statusColor }: any) {
+interface OrderItemProps {
+  title: string;
+  vendor: string;
+  date: string;
+  status: string;
+  statusColor: string;
+}
+
+function OrderItem({
+  title,
+  vendor,
+  date,
+  status,
+  statusColor,
+}: OrderItemProps) {
   const badgeColor = {
     blue: "bg-blue-100 text-blue-600",
     yellow: "bg-yellow-100 text-yellow-600",
@@ -268,7 +294,9 @@ function OrderItem({ title, vendor, date, status, statusColor }: any) {
       </div>
 
       <div className="text-right flex flex-col justify-between gap-2 md:gap-6 ">
-        <span className={`px-3 py-1 rounded-full text-xs ${badgeColor[String(statusColor) as keyof typeof badgeColor]}`}>
+        <span
+          className={`px-3 py-1 rounded-full text-xs ${badgeColor[String(statusColor) as keyof typeof badgeColor] || "bg-gray-100 text-gray-600"}`}
+        >
           {status}
         </span>
 
@@ -280,7 +308,13 @@ function OrderItem({ title, vendor, date, status, statusColor }: any) {
   );
 }
 
-function ActivityItem({ text, time, dotColor }: any) {
+interface ActivityItemProps {
+  text: string;
+  time: string;
+  dotColor: string;
+}
+
+function ActivityItem({ text, time, dotColor }: ActivityItemProps) {
   const dotClass = {
     green: "text-green-500",
     yellow: "text-yellow-500",
@@ -290,7 +324,13 @@ function ActivityItem({ text, time, dotColor }: any) {
   return (
     <div className="flex justify-between items-center py-2 w-full">
       <p className="flex items-center gap-2 text-sm text-gray-700">
-        <Dot size={20} className={dotClass[String(dotColor) as keyof typeof dotClass]} />
+        <Dot
+          size={20}
+          className={
+            dotClass[String(dotColor) as keyof typeof dotClass] ||
+            "text-gray-500"
+          }
+        />
         {text}
       </p>
       <span className="text-xs text-gray-400">{time}</span>
@@ -298,11 +338,23 @@ function ActivityItem({ text, time, dotColor }: any) {
   );
 }
 
-function MessageItem({ image, name, text }: any) {
+interface MessageItemProps {
+  image: string;
+  name: string;
+  text: string;
+}
+
+function MessageItem({ image, name, text }: MessageItemProps) {
   return (
     <div className="flex justify-between items-center py-3 cursor-pointer hover:bg-gray-50 rounded-xl px-2 w-full">
       <div className="flex items-center gap-3">
-        <Image src={image} alt={name} width={40} height={40} className="rounded-full object-cover" />
+        <Image
+          src={image}
+          alt={name}
+          width={40}
+          height={40}
+          className="rounded-full object-cover"
+        />
 
         <div>
           <p className="font-medium text-sm text-gray-900">{name}</p>

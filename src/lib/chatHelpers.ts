@@ -1,5 +1,3 @@
-
-
 import {
   Conversation,
   Message,
@@ -120,8 +118,6 @@ export const getConversationAvatar = (
   return getImageUrl(convImg);
 };
 
-
-
 export const isOwnMessage = (
   message: Message,
   currentUserId?: string | number | null,
@@ -162,7 +158,6 @@ export const formatChatTime = (value?: string | null) => {
     hour12: true,
   });
 };
-
 
 export const getAttachmentUrl = (filePath?: string | null): string => {
   if (!filePath) return "/images/placeholder-image.png";
@@ -234,9 +229,12 @@ export const getLastMessageText = (conversation: Conversation): string => {
       return conversation.last_message.message;
   }
 
-  const convAny = conversation as any;
-  if (convAny.attachments && convAny.attachments.length > 0) {
-    const first = convAny.attachments[0];
+  const convRecord = conversation as Record<string, unknown>;
+  const convAttachments = convRecord.attachments as
+    | ChatAttachment[]
+    | undefined;
+  if (convAttachments && convAttachments.length > 0) {
+    const first = convAttachments[0];
     if (isImageAttachment(first)) {
       return "📷 Image";
     }

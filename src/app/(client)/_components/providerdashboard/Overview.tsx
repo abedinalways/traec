@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import MyOrder from "../../../(client)/dashboardcomponets/myorder/myorder";
 
-import ReviewPage from "../../dashboardcomponets/review/review"
+import ReviewPage from "../../dashboardcomponets/review/review";
 
 import {
   CalendarDays,
@@ -42,10 +42,11 @@ export default function Overview() {
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`pb-2 text-sm font-medium transition-all ${activeTab === tab
-              ? "text-black border-b-2 border-black"
-              : "text-gray-500 hover:text-gray-700 cursor-pointer"
-              }`}
+            className={`pb-2 text-sm font-medium transition-all ${
+              activeTab === tab
+                ? "text-black border-b-2 border-black"
+                : "text-gray-500 hover:text-gray-700 cursor-pointer"
+            }`}
           >
             {tab}
           </button>
@@ -232,7 +233,14 @@ export default function Overview() {
    HELPER COMPONENTS
 ====================================================== */
 
-function StatBox({ icon, value, label, bg }: any) {
+interface StatBoxProps {
+  icon: React.ReactNode;
+  value: string | number;
+  label: string;
+  bg: string;
+}
+
+function StatBox({ icon, value, label, bg }: StatBoxProps) {
   return (
     <div className="rounded-2xl border p-4 flex items-center gap-3 bg-white shadow-sm w-full">
       <div
@@ -249,7 +257,11 @@ function StatBox({ icon, value, label, bg }: any) {
   );
 }
 
-function SectionTitle({ title }: any) {
+interface SectionTitleProps {
+  title: string;
+}
+
+function SectionTitle({ title }: SectionTitleProps) {
   return (
     <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
       <span className="w-1 h-4 bg-yellow-400 rounded-full" />
@@ -258,7 +270,21 @@ function SectionTitle({ title }: any) {
   );
 }
 
-function OrderItem({ title, vendor, date, status, statusColor }: any) {
+interface OrderItemProps {
+  title: string;
+  vendor: string;
+  date: string;
+  status: string;
+  statusColor: string;
+}
+
+function OrderItem({
+  title,
+  vendor,
+  date,
+  status,
+  statusColor,
+}: OrderItemProps) {
   const badgeColor = {
     blue: "bg-blue-100 text-blue-600",
     yellow: "bg-yellow-100 text-yellow-600",
@@ -279,7 +305,7 @@ function OrderItem({ title, vendor, date, status, statusColor }: any) {
 
       <div className="text-right flex flex-col justify-between gap-2 md:gap-6 ">
         <span
-          className={`px-3 py-1 rounded-full text-xs ${badgeColor[String(statusColor) as keyof typeof badgeColor]}`}
+          className={`px-3 py-1 rounded-full text-xs ${badgeColor[String(statusColor) as keyof typeof badgeColor] || "bg-gray-100 text-gray-600"}`}
         >
           {status}
         </span>
@@ -292,7 +318,13 @@ function OrderItem({ title, vendor, date, status, statusColor }: any) {
   );
 }
 
-function ActivityItem({ text, time, dotColor }: any) {
+interface ActivityItemProps {
+  text: string;
+  time: string;
+  dotColor: string;
+}
+
+function ActivityItem({ text, time, dotColor }: ActivityItemProps) {
   const dotClass = {
     green: "text-green-500",
     yellow: "text-yellow-500",
@@ -304,7 +336,10 @@ function ActivityItem({ text, time, dotColor }: any) {
       <p className="flex items-center gap-2 text-sm text-gray-700">
         <Dot
           size={20}
-          className={dotClass[String(dotColor) as keyof typeof dotClass]}
+          className={
+            dotClass[String(dotColor) as keyof typeof dotClass] ||
+            "text-gray-500"
+          }
         />
         {text}
       </p>
@@ -313,7 +348,13 @@ function ActivityItem({ text, time, dotColor }: any) {
   );
 }
 
-function MessageItem({ image, name, text }: any) {
+interface MessageItemProps {
+  image: string;
+  name: string;
+  text: string;
+}
+
+function MessageItem({ image, name, text }: MessageItemProps) {
   return (
     <div className="flex justify-between items-center py-3 cursor-pointer hover:bg-gray-50 rounded-xl px-2 w-full">
       <div className="flex items-center gap-3">

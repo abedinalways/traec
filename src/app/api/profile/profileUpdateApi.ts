@@ -1,6 +1,3 @@
-
-
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 import { baseApi } from "../baseApi";
 import type { AuthUser, MeResponse } from "@/types/auth";
 import { clearAuthUser, setAuthUser } from "../auth/authSlice";
@@ -42,32 +39,6 @@ export type ChangePasswordResponse = {
 };
 
 /* ─── Helpers ─────────────────────────────────────────────────────────────── */
-
-const parseJson = async (response: Response) => {
-  const text = await response.text();
-  if (!text) return null;
-  try {
-    return JSON.parse(text);
-  } catch {
-    return text;
-  }
-};
-
-const createFetchError = (
-  status: number | "FETCH_ERROR",
-  dataOrMessage: unknown,
-): FetchBaseQueryError => {
-  if (status === "FETCH_ERROR") {
-    return {
-      status: "FETCH_ERROR",
-      error:
-        dataOrMessage instanceof Error
-          ? dataOrMessage.message
-          : String(dataOrMessage || "Request failed"),
-    };
-  }
-  return { status, data: dataOrMessage };
-};
 
 const getUpdatedUserFromResponse = (
   response?: ProfileUpdateResponse,
@@ -114,52 +85,21 @@ const buildProfileFormData = (payload: ProfileUpdatePayload) => {
   return formData;
 };
 
-const buildProfileJsonBody = (payload: ProfileUpdatePayload) => {
-  return JSON.stringify({
-    name: payload.name,
-    last_name: payload.last_name,
-    phone: payload.phone,
-    address: payload.address,
-    city: payload.city,
-    state: payload.state,
-    zip_code: payload.zip_code,
-    bio: payload.bio,
-    languages: payload.languages || [],
-    category_id: payload.category_id || [],
-    ...(payload.password
-      ? {
-          password: payload.password,
-          password_confirmation: payload.password_confirmation,
-        }
-      : {}),
-  });
-};
-
 /* ─── API ─────────────────────────────────────────────────────────────────── */
 
 const profileUpdateApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // ── GET /api/auth/me ───────────────────────────────────────────────────
+    // ── GET /me ───────────────────────────────────────────────────
     getProfile: builder.query<MeResponse, void>({
-      queryFn: async () => {
-        try {
-          const response = await fetch("/api/auth/me", {
-            method: "GET",
-            headers: { Accept: "application/json" },
-            credentials: "include",
-            cache: "no-store",
-          });
-
-          const data = await parseJson(response);
-
-          if (!response.ok) {
-            return { error: createFetchError(response.status, data) };
-          }
-
-          return { data: data as MeResponse };
-        } catch (error) {
-          return { error: createFetchError("FETCH_ERROR", error) };
-        }
+      query: () => "/me",
+      transformResponse: (response: Record<string, unknown>): MeResponse => {
+        const rData = response.data as Record<string, unknown> | undefined;
+        const user =
+          (response.user as AuthUser) ||
+          (rData?.user as AuthUser) ||
+          (rData as unknown as AuthUser) ||
+          (response as unknown as AuthUser);
+        return { authenticated: true, user };
       },
 
       onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
@@ -178,41 +118,39 @@ const profileUpdateApi = baseApi.injectEndpoints({
       providesTags: ["User"],
     }),
 
-    // ── PUT /api/profile/update ────────────────────────────────────────────
+    // ── PUT /profile/update ────────────────────────────────────────────
     updateProfile: builder.mutation<
       ProfileUpdateResponse,
       ProfileUpdatePayload
     >({
-      queryFn: async (payload) => {
-        try {
-          const hasImage = payload.image instanceof File;
+      query: (payload) => {
+        const hasImage = payload.image instanceof File;
+        const body = hasImage
+          ? buildProfileFormData(payload)
+          : {
+              name: payload.name,
+              last_name: payload.last_name,
+              phone: payload.phone,
+              address: payload.address,
+              city: payload.city,
+              state: payload.state,
+              zip_code: payload.zip_code,
+              bio: payload.bio,
+              languages: payload.languages || [],
+              category_id: payload.category_id || [],
+              ...(payload.password
+                ? {
+                    password: payload.password,
+                    password_confirmation: payload.password_confirmation,
+                  }
+                : {}),
+            };
 
-          const body = hasImage
-            ? buildProfileFormData(payload)
-            : buildProfileJsonBody(payload);
-
-          const response = await fetch("/api/profile/update", {
-            method: "PUT",
-            headers: hasImage
-              ? { Accept: "application/json" }
-              : {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                },
-            credentials: "include",
-            body,
-          });
-
-          const data = await parseJson(response);
-
-          if (!response.ok) {
-            return { error: createFetchError(response.status, data) };
-          }
-
-          return { data: data as ProfileUpdateResponse };
-        } catch (error) {
-          return { error: createFetchError("FETCH_ERROR", error) };
-        }
+        return {
+          url: "/profile/update",
+          method: "PUT",
+          body,
+        };
       },
 
       onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
@@ -241,34 +179,16 @@ const profileUpdateApi = baseApi.injectEndpoints({
       invalidatesTags: ["User"],
     }),
 
-    // ── POST /api/profile/passwordchange ──────────────────────────────────
+    // ── POST /profile/passwordchange ──────────────────────────────────
     changePassword: builder.mutation<
       ChangePasswordResponse,
       ChangePasswordPayload
     >({
-      queryFn: async (payload) => {
-        try {
-          const response = await fetch("/api/profile/passwordchange", {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify(payload),
-          });
-
-          const data = await parseJson(response);
-
-          if (!response.ok) {
-            return { error: createFetchError(response.status, data) };
-          }
-
-          return { data: data as ChangePasswordResponse };
-        } catch (error) {
-          return { error: createFetchError("FETCH_ERROR", error) };
-        }
-      },
+      query: (payload) => ({
+        url: "/profile/passwordchange",
+        method: "POST",
+        body: payload,
+      }),
     }),
   }),
 

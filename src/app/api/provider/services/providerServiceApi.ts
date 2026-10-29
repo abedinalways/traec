@@ -1,6 +1,4 @@
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 import { baseApi } from "../../baseApi";
-
 
 export type ServicePricing = {
   type?: string | null;
@@ -38,10 +36,10 @@ export type ProviderServicesResponse = {
   status?: boolean;
   message?: string;
   data?:
-  | {
-    services?: ProviderService[];
-  }
-  | ProviderService[];
+    | {
+        services?: ProviderService[];
+      }
+    | ProviderService[];
   services?: ProviderService[];
 };
 
@@ -117,35 +115,6 @@ export type UpdateProviderServiceResponse = {
 
 /* ─────────────────────── helpers ─────────────────────── */
 
-const parseJson = async (response: Response) => {
-  const text = await response.text();
-  if (!text) return null;
-  try {
-    return JSON.parse(text);
-  } catch {
-    return text;
-  }
-};
-
-const createFetchError = (
-  status: number | "FETCH_ERROR",
-  dataOrMessage: unknown,
-): FetchBaseQueryError => {
-  if (status === "FETCH_ERROR") {
-    return {
-      status: "FETCH_ERROR",
-      error:
-        dataOrMessage instanceof Error
-          ? dataOrMessage.message
-          : String(dataOrMessage || "Request failed"),
-    };
-  }
-  return {
-    status,
-    data: dataOrMessage,
-  };
-};
-
 const buildServiceFormData = (
   payload: CreateProviderServicePayload | UpdateProviderServicePayload,
 ) => {
@@ -189,69 +158,27 @@ const buildServiceFormData = (
 const providerServiceApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getProviderServices: builder.query<ProviderServicesResponse, void>({
-      queryFn: async () => {
-        try {
-          const response = await fetch("/api/provider/services", {
-            method: "GET",
-            headers: { Accept: "application/json" },
-            credentials: "include",
-            cache: "no-store",
-          });
-          const data = await parseJson(response);
-          if (!response.ok) {
-            return { error: createFetchError(response.status, data) };
-          }
-          return { data: data as ProviderServicesResponse };
-        } catch (error) {
-          return { error: createFetchError("FETCH_ERROR", error) };
-        }
-      },
+      query: () => "/provider/services",
     }),
 
     getProviderServiceDetails: builder.query<
       ProviderServiceDetailsResponse,
       number | string
     >({
-      queryFn: async (id) => {
-        try {
-          const response = await fetch(`/api/provider/services/${id}`, {
-            method: "GET",
-            headers: { Accept: "application/json" },
-            credentials: "include",
-            cache: "no-store",
-          });
-          const data = await parseJson(response);
-          if (!response.ok) {
-            return { error: createFetchError(response.status, data) };
-          }
-          return { data: data as ProviderServiceDetailsResponse };
-        } catch (error) {
-          return { error: createFetchError("FETCH_ERROR", error) };
-        }
-      },
+      query: (id) => `/provider/services/${id}`,
     }),
 
     createProviderService: builder.mutation<
       CreateProviderServiceResponse,
       CreateProviderServicePayload
     >({
-      queryFn: async (payload) => {
-        try {
-          const formData = buildServiceFormData(payload);
-          const response = await fetch("/api/provider/services/store", {
-            method: "POST",
-            headers: { Accept: "application/json" },
-            credentials: "include",
-            body: formData,
-          });
-          const data = await parseJson(response);
-          if (!response.ok) {
-            return { error: createFetchError(response.status, data) };
-          }
-          return { data: data as CreateProviderServiceResponse };
-        } catch (error) {
-          return { error: createFetchError("FETCH_ERROR", error) };
-        }
+      query: (payload) => {
+        const formData = buildServiceFormData(payload);
+        return {
+          url: "/provider/services/store",
+          method: "POST",
+          body: formData,
+        };
       },
     }),
 
@@ -259,24 +186,14 @@ const providerServiceApi = baseApi.injectEndpoints({
       UpdateProviderServiceResponse,
       UpdateProviderServicePayload
     >({
-      queryFn: async (payload) => {
-        try {
-          const formData = buildServiceFormData(payload);
-          formData.append("_method", "PUT");
-          const response = await fetch(`/api/provider/services/${payload.id}`, {
-            method: "POST",
-            headers: { Accept: "application/json" },
-            credentials: "include",
-            body: formData,
-          });
-          const data = await parseJson(response);
-          if (!response.ok) {
-            return { error: createFetchError(response.status, data) };
-          }
-          return { data: data as UpdateProviderServiceResponse };
-        } catch (error) {
-          return { error: createFetchError("FETCH_ERROR", error) };
-        }
+      query: (payload) => {
+        const formData = buildServiceFormData(payload);
+        formData.append("_method", "PUT");
+        return {
+          url: `/provider/services/${payload.id}`,
+          method: "POST",
+          body: formData,
+        };
       },
     }),
   }),

@@ -1,4 +1,3 @@
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 import { baseApi } from "../baseApi";
 
 /* =========================
@@ -74,35 +73,6 @@ export interface ServiceQueryParams {
 }
 
 /* =========================
-   HELPERS
-========================= */
-const parseJson = async (response: Response) => {
-  const text = await response.text();
-  if (!text) return null;
-  try {
-    return JSON.parse(text);
-  } catch {
-    return text;
-  }
-};
-
-const createFetchError = (
-  status: number | "FETCH_ERROR",
-  dataOrMessage: unknown,
-): FetchBaseQueryError => {
-  if (status === "FETCH_ERROR") {
-    return {
-      status: "FETCH_ERROR",
-      error:
-        dataOrMessage instanceof Error
-          ? dataOrMessage.message
-          : String(dataOrMessage || "Request failed"),
-    };
-  }
-  return { status, data: dataOrMessage };
-};
-
-/* =========================
    API ENDPOINTS
 ========================= */
 export const serviceManagementApi = baseApi.injectEndpoints({
@@ -111,61 +81,26 @@ export const serviceManagementApi = baseApi.injectEndpoints({
       ServiceListResponse,
       ServiceQueryParams | void
     >({
-      queryFn: async (params) => {
-        try {
-          const search = params?.search ?? "";
-          const category = params?.category ?? "";
-          const page = params?.page ?? 1;
-          const per_page = params?.per_page ?? 9;
-
-          
-          const response = await fetch(
-            `/api/services?search=${encodeURIComponent(search)}&category=${encodeURIComponent(category)}&page=${page}&per_page=${per_page}`,
-            {
-              method: "GET",
-              headers: { Accept: "application/json" },
-              credentials: "include",
-              cache: "no-store",
-            },
-          );
-
-          const data = await parseJson(response);
-          if (!response.ok)
-            return { error: createFetchError(response.status, data) };
-
-          return { data: data as ServiceListResponse };
-        } catch (error) {
-          return { error: createFetchError("FETCH_ERROR", error) };
-        }
-      },
+      query: (params) => ({
+        url: "/services",
+        params: {
+          search: params?.search ?? "",
+          category: params?.category ?? "",
+          page: params?.page ?? 1,
+          per_page: params?.per_page ?? 9,
+        },
+      }),
       providesTags: ["Providers"],
     }),
 
     getServiceDetails: builder.query<ServiceDetailsResponse, string | number>({
-      queryFn: async (id) => {
-        try {
-          const response = await fetch(`/api/services/${id}`, {
-            method: "GET",
-            headers: { Accept: "application/json" },
-            credentials: "include",
-            cache: "no-store",
-          });
-
-          const data = await parseJson(response);
-          if (!response.ok)
-            return { error: createFetchError(response.status, data) };
-
-          return { data: data as ServiceDetailsResponse };
-        } catch (error) {
-          return { error: createFetchError("FETCH_ERROR", error) };
-        }
-      },
+      query: (id) => `/services/${id}`,
       providesTags: (result, error, id) => [{ type: "Providers", id }],
     }),
-  
   }),
   overrideExisting: true,
 });
 
-export const { useGetServicesListQuery, useGetServiceDetailsQuery } = serviceManagementApi;
+export const { useGetServicesListQuery, useGetServiceDetailsQuery } =
+  serviceManagementApi;
 export default serviceManagementApi;

@@ -2,8 +2,6 @@
 node_modules/
 
 # Env files
-.env
-.env.local
 .env.development.local
 .env.test.local
 .env.production.local
@@ -29,13 +27,13 @@ dist/
 build/
 
 # Editor
-.vscode/
 .idea/
 *.swp
 
 # sample line for resolve conflict, delete this line after seeing it
 .vercel
-.env*
 branch_structure.json
 temp_auto_push.bat
 temp_interactive_push.bat
+config.bat
+.gitignore
