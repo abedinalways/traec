@@ -26,7 +26,6 @@ export default function ProfileCard({
   email,
   verified = false,
 }: ProfileCardProps) {
-  console.log(avatar, "=======================")
   return (
     <Card className="p-4 md:p-6 shadow-none flex md:flex-row items-center gap-6 font-[inter]">
       <Link href="/client-dashboard">
@@ -66,5 +65,3 @@ export default function ProfileCard({
     </Card>
   );
 }
-
-

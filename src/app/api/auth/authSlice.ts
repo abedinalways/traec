@@ -178,18 +178,30 @@ const initialState: AuthState = {
   refreshToken: null,
 };
 
+export type SetAuthUserPayload =
+  | AuthUser
+  | { user: AuthUser; token?: string | null };
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setAuthUser: (state, action: PayloadAction<AuthUser>) => {
-      const role = normalizeAuthRole(action.payload.type);
+    setAuthUser: (state, action: PayloadAction<SetAuthUserPayload>) => {
+      const payload = action.payload;
+      const user =
+        "user" in payload && payload.user
+          ? payload.user
+          : (payload as AuthUser);
+      const token = "token" in payload ? payload.token : null;
 
-      state.user = action.payload;
+      const role = normalizeAuthRole(user?.type);
+
+      state.user = user;
       state.role = role;
       state.isAuthenticated = Boolean(role);
-      state.token = null;
-      state.refreshToken = null;
+      if (token) {
+        state.token = token;
+      }
     },
 
     clearAuthUser: (state) => {

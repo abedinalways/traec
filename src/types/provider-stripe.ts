@@ -4,7 +4,7 @@ export interface StripeCredentials {
   stripe_public_key: string;
 }
 
-export interface StripeUpsertPayload extends StripeCredentials {}
+export type StripeUpsertPayload = StripeCredentials;
 
 export interface StripeData extends StripeCredentials {
   id: number;
