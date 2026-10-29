@@ -1,0 +1,33 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "abedin",
+    "barik",
+    "development",
+    "fixed/homepage",
+    "main",
+    "razwan",
+    "refactor",
+    "shipan"
+  ],
+  "parent": {
+    "abedin": "main",
+    "barik": "main",
+    "development": "main",
+    "fixed/homepage": "main",
+    "main": null,
+    "razwan": "main",
+    "refactor": "main",
+    "shipan": "main"
+  },
+  "order": [
+    "main",
+    "abedin",
+    "barik",
+    "development",
+    "fixed/homepage",
+    "razwan",
+    "refactor",
+    "shipan"
+  ]
+}

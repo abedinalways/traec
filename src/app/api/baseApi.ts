@@ -1,5 +1,3 @@
-
-
 import {
   BaseQueryFn,
   FetchArgs,
@@ -9,30 +7,26 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import { env } from "@/lib/env";
 import { buildDesignModeResponse } from "./designMode";
+import { clearAuthUser } from "./auth/authSlice";
+
+import type { RootState } from "@/app/store";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: env.apiBaseUrl,
-  prepareHeaders: (headers) => {
+  prepareHeaders: (headers, { getState }) => {
     headers.set("accept", "application/json");
-    headers.set("Content-Type", "application/json");
 
-    if (typeof document !== "undefined") {
-      const token = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("jr_auth_token="))
-        ?.split("=")[1];
-
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-        headers.set("access_token", token);
-      }
+    const token = (getState() as RootState).auth?.token;
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
+      headers.set("access_token", token);
     }
 
     return headers;
   },
 });
 
-const baseQueryWithDesignMode: BaseQueryFn<
+const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
   unknown,
   FetchBaseQueryError
@@ -43,13 +37,23 @@ const baseQueryWithDesignMode: BaseQueryFn<
     };
   }
 
-  return baseQuery(args, api, extraOptions);
+  const result = await baseQuery(args, api, extraOptions);
+
+  if (result.error && result.error.status === 401) {
+    // Session expired or token invalid -> clear store & cookies
+    api.dispatch(clearAuthUser());
+    if (typeof window !== "undefined") {
+      fetch("/api/auth/logout", { method: "POST" }).catch(() => null);
+    }
+  }
+
+  return result;
 };
 
 export const baseApi = createApi({
   reducerPath: "baseApi",
 
-  baseQuery: baseQueryWithDesignMode,
+  baseQuery: baseQueryWithReauth,
 
   tagTypes: [
     "User",

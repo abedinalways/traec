@@ -1,15 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authCookieNames } from "@/lib/auth/config";
-
-const API_BASE_URL =
-  process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || "";
-
-const buildApiUrl = (path: string) => {
-  if (!API_BASE_URL) {
-    return null;
-  }
-  return `${API_BASE_URL.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
-};
+import { buildApiUrl } from "@/lib/apiUrl";
 
 export async function GET(request: NextRequest) {
   try {
@@ -20,23 +11,13 @@ export async function GET(request: NextRequest) {
         {
           authenticated: false,
           user: null,
+          token: null,
         },
         { status: 401 },
       );
     }
 
     const meUrl = buildApiUrl("/me");
-
-    if (!meUrl) {
-      return NextResponse.json(
-        {
-          authenticated: false,
-          user: null,
-          message: "API_BASE_URL is missing. Please set NEXT_PUBLIC_API_BASE_URL",
-        },
-        { status: 500 },
-      );
-    }
 
     const backendResponse = await fetch(meUrl, {
       method: "GET",
@@ -51,14 +32,20 @@ export async function GET(request: NextRequest) {
     const data = await backendResponse.json().catch(() => null);
 
     if (!backendResponse.ok) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         {
           authenticated: false,
           user: null,
+          token: null,
           message: data?.message || "Unable to fetch current user.",
         },
         { status: backendResponse.status },
       );
+
+      // Clear stale cookies on auth failure
+      response.cookies.delete(authCookieNames.token);
+      response.cookies.delete(authCookieNames.role);
+      return response;
     }
 
     const user = data?.user || data?.data?.user || data?.data || data;
@@ -67,6 +54,7 @@ export async function GET(request: NextRequest) {
       {
         authenticated: true,
         user,
+        token,
       },
       { status: 200 },
     );
@@ -77,6 +65,7 @@ export async function GET(request: NextRequest) {
       {
         authenticated: false,
         user: null,
+        token: null,
         message: "Unable to load current user.",
       },
       { status: 500 },

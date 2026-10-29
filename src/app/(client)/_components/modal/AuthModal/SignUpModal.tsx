@@ -10,9 +10,6 @@ import { toast } from "sonner"; // or your toast lib
 import Modal from "../Modal";
 import { useRegisterUserMutation } from "@/app/api/auth/authapi";
 
-
-
-
 interface SignUpModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -42,11 +39,13 @@ export default function SignUpModal({
 
   const [registerUser, { isLoading }] = useRegisterUserMutation();
 
-
   const getErrorMessage = (err: unknown) => {
     if (typeof err === "object" && err !== null && "data" in err) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const data = (err as { data?: any }).data;
+      const data = (
+        err as {
+          data?: { message?: string; errors?: Record<string, string[]> };
+        }
+      ).data;
 
       if (typeof data?.message === "string") {
         return data.message;

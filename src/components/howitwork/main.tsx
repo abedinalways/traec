@@ -14,8 +14,7 @@ export default function HowItWorks() {
 
     const ctx = gsap.context(() => {
       // LEFT IMAGES – animate left → center
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      gsap.utils.toArray(".how-image-left").forEach((img: any) => {
+      gsap.utils.toArray<HTMLElement>(".how-image-left").forEach((img) => {
         gsap.fromTo(
           img,
           { x: -100, opacity: 0 },
@@ -31,13 +30,12 @@ export default function HowItWorks() {
               onEnterBack: () =>
                 gsap.to(img, { x: 0, opacity: 1, duration: 1 }),
             },
-          }
+          },
         );
       });
 
       // RIGHT IMAGES – animate right → center
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      gsap.utils.toArray(".how-image-right").forEach((img: any) => {
+      gsap.utils.toArray<HTMLElement>(".how-image-right").forEach((img) => {
         gsap.fromTo(
           img,
           { x: 100, opacity: 0 },
@@ -53,13 +51,12 @@ export default function HowItWorks() {
               onEnterBack: () =>
                 gsap.to(img, { x: 0, opacity: 1, duration: 1 }),
             },
-          }
+          },
         );
       });
 
       // TEXT – fade + float upward
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      gsap.utils.toArray(".how-text").forEach((text: any) => {
+      gsap.utils.toArray<HTMLElement>(".how-text").forEach((text) => {
         gsap.fromTo(
           text,
           { y: 40, opacity: 0 },
@@ -75,7 +72,7 @@ export default function HowItWorks() {
               onEnterBack: () =>
                 gsap.to(text, { y: 0, opacity: 1, duration: 1 }),
             },
-          }
+          },
         );
       });
     }, sectionRef);

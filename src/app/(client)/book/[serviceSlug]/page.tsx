@@ -14,7 +14,15 @@ import { useBooking } from "../context/BookingContext";
 import { useGetServiceDetailsQuery } from "@/app/api/services/serviceManagementApi";
 
 export default function BookingPage() {
-  const { step, setStep, bookingData, setBookingData, setServiceId, setPricingId, setStripePublicKey } = useBooking();
+  const {
+    step,
+    setStep,
+    bookingData,
+    setBookingData,
+    setServiceId,
+    setPricingId,
+    setStripePublicKey,
+  } = useBooking();
 
   const params = useParams();
   const serviceSlug = params?.serviceSlug as string;
@@ -33,39 +41,28 @@ export default function BookingPage() {
   }, [serviceIdFromSlug, setServiceId]);
 
   // Fetch service details for pricing info
-  const { data: serviceData } = useGetServiceDetailsQuery(serviceSlug, { 
-    skip: !serviceSlug || isNaN(serviceIdFromSlug) 
+  const { data: serviceData } = useGetServiceDetailsQuery(serviceSlug, {
+    skip: !serviceSlug || isNaN(serviceIdFromSlug),
   });
   const service = serviceData?.data;
-
-  // Log full service data to debug
-  useEffect(() => {
-    console.log("SERVICE DATA RECEIVED:", JSON.stringify(service, null, 2));
-  }, [service]);
 
   // Set pricingId from service details
   useEffect(() => {
     if (service?.pricings?.length) {
-      console.log("ALL PRICINGS:", JSON.stringify(service.pricings, null, 2));
-      
-      const pricing = service.pricings.find(
-        (p) => p.type.toLowerCase() === plan.toLowerCase()
-      ) || service.pricings[0];
-      
-      // Try all possible field names for pricing ID
+      const pricing =
+        service.pricings.find(
+          (p) => p.type.toLowerCase() === plan.toLowerCase(),
+        ) || service.pricings[0];
+
       const pricingObj = pricing as unknown as Record<string, unknown>;
       const pricingId = Number(
-        pricingObj.pricing_id || 
-        pricingObj.id ||
-        pricingObj.ID ||
-        pricingObj.price_id || 
-        0
+        pricingObj.pricing_id ||
+          pricingObj.id ||
+          pricingObj.ID ||
+          pricingObj.price_id ||
+          0,
       );
       setPricingId(pricingId);
-      
-      console.log("SELECTED PRICING:", pricing, "PRICING_ID set to:", pricingId);
-    } else {
-      console.log("No pricings found in service data");
     }
   }, [service, plan, setPricingId]);
 
@@ -73,13 +70,8 @@ export default function BookingPage() {
   useEffect(() => {
     if (service?.stripe_public_key) {
       setStripePublicKey(service.stripe_public_key);
-      console.log("Stripe public key set from service data:", service.stripe_public_key.substring(0, 12) + "...");
     }
   }, [service, setStripePublicKey]);
-
-  useEffect(() => {
-    console.log("Booking Data Updated:", bookingData);
-  }, [bookingData]);
 
   const handleNext = <K extends keyof typeof bookingData>(
     stepKey: K,

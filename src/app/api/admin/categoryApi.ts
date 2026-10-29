@@ -1,4 +1,3 @@
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 import { baseApi } from "../baseApi";
 
 export type ServiceCategoryItem = {
@@ -44,38 +43,6 @@ export type DeleteCategoryResponse = {
   message?: string;
 };
 
-const parseJson = async (response: Response) => {
-  const text = await response.text();
-
-  if (!text) return null;
-
-  try {
-    return JSON.parse(text);
-  } catch {
-    return text;
-  }
-};
-
-const createFetchError = (
-  status: number | "FETCH_ERROR",
-  dataOrMessage: unknown,
-): FetchBaseQueryError => {
-  if (status === "FETCH_ERROR") {
-    return {
-      status: "FETCH_ERROR",
-      error:
-        dataOrMessage instanceof Error
-          ? dataOrMessage.message
-          : String(dataOrMessage || "Request failed"),
-    };
-  }
-
-  return {
-    status,
-    data: dataOrMessage,
-  };
-};
-
 const buildCategoryFormData = (payload: CategoryFormPayload) => {
   const formData = new FormData();
 
@@ -93,34 +60,7 @@ const buildCategoryFormData = (payload: CategoryFormPayload) => {
 const categoryApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getServiceCategories: builder.query<CategoryListResponse, void>({
-      queryFn: async () => {
-        try {
-          const response = await fetch("/api/admin/category/index", {
-            method: "GET",
-            headers: {
-              Accept: "application/json",
-            },
-            credentials: "include",
-            cache: "no-store",
-          });
-
-          const data = await parseJson(response);
-
-          if (!response.ok) {
-            return {
-              error: createFetchError(response.status, data),
-            };
-          }
-
-          return {
-            data: data as CategoryListResponse,
-          };
-        } catch (error) {
-          return {
-            error: createFetchError("FETCH_ERROR", error),
-          };
-        }
-      },
+      query: () => "/admin/category/index",
       providesTags: ["User"],
     }),
 
@@ -128,35 +68,13 @@ const categoryApi = baseApi.injectEndpoints({
       CategoryMutationResponse,
       CategoryFormPayload
     >({
-      queryFn: async (payload) => {
-        try {
-          const formData = buildCategoryFormData(payload);
-
-          const response = await fetch("/api/admin/category/store", {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-            },
-            credentials: "include",
-            body: formData,
-          });
-
-          const data = await parseJson(response);
-
-          if (!response.ok) {
-            return {
-              error: createFetchError(response.status, data),
-            };
-          }
-
-          return {
-            data: data as CategoryMutationResponse,
-          };
-        } catch (error) {
-          return {
-            error: createFetchError("FETCH_ERROR", error),
-          };
-        }
+      query: (payload) => {
+        const formData = buildCategoryFormData(payload);
+        return {
+          url: "/admin/category/store",
+          method: "POST",
+          body: formData,
+        };
       },
       invalidatesTags: ["User"],
     }),
@@ -165,35 +83,13 @@ const categoryApi = baseApi.injectEndpoints({
       CategoryMutationResponse,
       UpdateCategoryPayload
     >({
-      queryFn: async ({ id, ...payload }) => {
-        try {
-          const formData = buildCategoryFormData(payload);
-
-          const response = await fetch(`/api/admin/category/update/${id}`, {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-            },
-            credentials: "include",
-            body: formData,
-          });
-
-          const data = await parseJson(response);
-
-          if (!response.ok) {
-            return {
-              error: createFetchError(response.status, data),
-            };
-          }
-
-          return {
-            data: data as CategoryMutationResponse,
-          };
-        } catch (error) {
-          return {
-            error: createFetchError("FETCH_ERROR", error),
-          };
-        }
+      query: ({ id, ...payload }) => {
+        const formData = buildCategoryFormData(payload);
+        return {
+          url: `/admin/category/update/${id}`,
+          method: "POST",
+          body: formData,
+        };
       },
       invalidatesTags: ["User"],
     }),
@@ -202,34 +98,10 @@ const categoryApi = baseApi.injectEndpoints({
       DeleteCategoryResponse,
       number | string
     >({
-      queryFn: async (id) => {
-        try {
-          const response = await fetch(`/api/admin/category/delete/${id}`, {
-            method: "DELETE",
-            headers: {
-              Accept: "application/json",
-            },
-            credentials: "include",
-            cache: "no-store",
-          });
-
-          const data = await parseJson(response);
-
-          if (!response.ok) {
-            return {
-              error: createFetchError(response.status, data),
-            };
-          }
-
-          return {
-            data: data as DeleteCategoryResponse,
-          };
-        } catch (error) {
-          return {
-            error: createFetchError("FETCH_ERROR", error),
-          };
-        }
-      },
+      query: (id) => ({
+        url: `/admin/category/delete/${id}`,
+        method: "DELETE",
+      }),
       invalidatesTags: ["User"],
     }),
   }),
